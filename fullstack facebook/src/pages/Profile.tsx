@@ -9,7 +9,7 @@ const Profile = () => {
 
   return (
     <div>
-      <h1>Profile for all users</h1>
+      <h1 className="text-3xl">Profile for all users</h1>
       <ul>
         {users.map((user: UserType) => {
           return (
