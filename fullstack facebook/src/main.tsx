@@ -8,6 +8,8 @@ import Profile from "./pages/Profile.tsx";
 import { Provider } from "react-redux";
 import { store } from "./app/store.ts";
 
+
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -18,6 +20,7 @@ const router = createBrowserRouter([
     path: "/profile",
     element: <Profile />,
   },
+  
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

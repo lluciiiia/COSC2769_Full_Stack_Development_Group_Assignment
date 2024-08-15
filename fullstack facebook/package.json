@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@iconify/iconify": "^3.1.1",
     "@reduxjs/toolkit": "^2.2.7",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",

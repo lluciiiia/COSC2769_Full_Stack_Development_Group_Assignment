@@ -3,8 +3,7 @@ import { UserType } from "../features/userSlice";
 import { AppState } from "../app/store";
 
 const Profile = () => {
-  //this is the test profile for all users,
-  //later on, create the User component to test each user
+  
   const users: UserType[] = useSelector((state: AppState) => state.users);
 
   return (
