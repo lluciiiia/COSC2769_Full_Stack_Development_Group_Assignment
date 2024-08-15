@@ -7,6 +7,7 @@ import ErrorPage from "./pages/ErrorPage.tsx";
 import Profile from "./pages/Profile.tsx";
 import { Provider } from "react-redux";
 import { store } from "./app/store.ts";
+import OfflinePage from "./pages/OfflinePage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
   {
     path: "/profile",
     element: <Profile />,
+  },
+  {
+    path: "/offline",
+    element: <OfflinePage />,
   },
 ]);
 
