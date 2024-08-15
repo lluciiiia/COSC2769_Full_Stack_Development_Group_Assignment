@@ -1,10 +1,9 @@
-// IMAGE IMPORT
-import logo from "../assets/logo.png";
-import notificationIcon from "../assets/notificationIcon.png";
-import profileLogo from "../assets/profileLogo.png";
-import homeLogo from "../assets/homeLogo.png";
-import groupLogo from "../assets/groupLogo.png";
-import createPostLogo from "../assets/createPostLogo.png";
+import logo from "../assets/images/icons/logo.png";
+import notificationIcon from "../assets/images/icons/notificationIcon.png";
+import profileIcon from "../assets/images/icons/profileIcon.png";
+import homeIcon from "../assets/images/icons/homeIcon.png";
+import groupIcon from "../assets/images/icons/groupIcon.png";
+import createPostIcon from "../assets/images/icons/createPostIcon.png";
 
 // ------------------------------------------------------
 
@@ -21,14 +20,14 @@ const Navbar = () => {
       </div>
 
       <div className="flex gap-5 justify-around flex-grow max-w-xs flex-1 ">
-        <NavItem src={homeLogo} label={"Home"} />
-        <NavItem src={groupLogo} label="Group" />
-        <NavItem src={createPostLogo} label="Create Post" />
+        <NavItem src={homeIcon} label={"Home"} />
+        <NavItem src={groupIcon} label="Group" />
+        <NavItem src={createPostIcon} label="Create Post" />
       </div>
 
       <div className="flex justify-between gap-5 mr-6">
         <NavItem src={notificationIcon} label={"Notification"} />
-        <NavItem src={profileLogo} label={"Profile"} />
+        <NavItem src={profileIcon} label={"Profile"} />
       </div>
     </nav>
   );

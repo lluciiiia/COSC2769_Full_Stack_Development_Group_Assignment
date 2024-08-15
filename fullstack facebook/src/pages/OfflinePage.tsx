@@ -1,4 +1,4 @@
-import logo from "../assets/logo2.png";
+import logo from "../assets/images/icons/logo.png";
 
 const OfflinePage = () => {
   return (
