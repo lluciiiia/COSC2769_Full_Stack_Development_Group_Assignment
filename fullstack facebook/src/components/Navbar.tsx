@@ -1,9 +1,9 @@
-import logo from "../assets/images/icons/logo.png";
-import notificationIcon from "../assets/images/icons/notificationIcon.png";
-import profileIcon from "../assets/images/icons/profileIcon.png";
-import homeIcon from "../assets/images/icons/homeIcon.png";
-import groupIcon from "../assets/images/icons/groupIcon.png";
-import createPostIcon from "../assets/images/icons/createPostIcon.png";
+import logo from "../assets/icons/logo.png";
+import notificationIcon from "../assets/icons/notificationIcon.png";
+import profileIcon from "../assets/icons/profileIcon.png";
+import homeIcon from "../assets/icons/homeIcon.png";
+import groupIcon from "../assets/icons/groupIcon.png";
+import createPostIcon from "../assets/icons/createPostIcon.png";
 
 // ------------------------------------------------------
 
