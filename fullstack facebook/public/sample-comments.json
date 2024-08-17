@@ -1,48 +1,80 @@
 [
   {
+    "id": "1",
     "userId": "user1",
+    "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
+    "profileName": "User One",
+    "profileLink": "sampleid/user1",
     "postId": "2",
     "createdAt": "2024-08-17T12:30:00Z",
     "content": "Great post! Really enjoyed reading it."
   },
   {
+    "id": "2",
     "userId": "user2",
+    "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
+    "profileName": "User Two",
+    "profileLink": "sampleid/user2",
     "postId": "2",
     "createdAt": "2024-08-16T15:00:00Z",
     "content": "I agree, this was very informative."
   },
   {
+    "id": "3",
     "userId": "user2",
+    "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
+    "profileName": "User Two",
+    "profileLink": "sampleid/user2",
+    "postId": "2",
+    "createdAt": "2024-08-16T15:00:00Z",
+    "content": "Thanks for sharing this!"
+  },
+  {
+    "id": "4",
+    "userId": "user2",
+    "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
+    "profileName": "User Two",
+    "profileLink": "sampleid/user2",
     "postId": "2",
     "createdAt": "2024-08-16T15:00:00Z",
     "content": "I agree, this was very informative."
   },
   {
+    "id": "5",
     "userId": "user2",
+    "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
+    "profileName": "User Two",
+    "profileLink": "sampleid/user2",
     "postId": "2",
     "createdAt": "2024-08-16T15:00:00Z",
     "content": "I agree, this was very informative."
   },
   {
+    "id": "6",
     "userId": "user2",
+    "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
+    "profileName": "User Two",
+    "profileLink": "sampleid/user2",
     "postId": "2",
     "createdAt": "2024-08-16T15:00:00Z",
     "content": "I agree, this was very informative."
   },
   {
-    "userId": "user2",
-    "postId": "2",
-    "createdAt": "2024-08-16T15:00:00Z",
-    "content": "I agree, this was very informative."
-  },
-  {
+    "id": "7",
     "userId": "user3",
+    "profileImage": "sampleid/profile3.jpg",
+    "profileName": "User Three",
+    "profileLink": "sampleid/user3",
     "postId": "2",
     "createdAt": "2024-08-15T09:45:00Z",
     "content": "Thanks for sharing this!"
   },
   {
+    "id": "8",
     "userId": "user4",
+    "profileImage": "sampleid/profile4.jpg",
+    "profileName": "User Four",
+    "profileLink": "sampleid/user4",
     "postId": "3",
     "createdAt": "2024-08-14T18:20:00Z",
     "content": "Looking forward to more posts like this."
