@@ -60,7 +60,8 @@ const CommentContainer: React.FC<CommentContainerProps> = ({ postId }) => {
     <div className="h-full w-full max-w-md">
       <div className="h-[550px] w-[760px] rounded-lg bg-gray-100 p-4 shadow-md">
         <h2 className="mb-4 text-xl font-bold">Comments</h2>
-        <div className="space-y-4">
+        <div className="flex h-[300px] flex-col gap-2 overflow-y-auto">
+          {" "}
           {comments.map((comment, index) => (
             <div key={index} className="rounded-md bg-white p-2 shadow-sm">
               <p className="text-sm text-gray-500">
