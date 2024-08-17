@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import { store } from "./app/store.ts";
 import Signup from "./pages/SignUp.tsx";
 import Login from "./pages/Login.tsx";
+import PostDetail from "./pages/PostDetail.tsx";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,11 @@ const router = createBrowserRouter([
     element: <Home />,
     errorElement: <ErrorPage />,
   },
+  {
+    path: "/posts",
+    element: <PostDetail />,
+  },
+
   {
     path: "/profile",
     element: <Profile />,
@@ -26,7 +32,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <Login/>,
+    element: <Login />,
   },
 ]);
 
@@ -35,5 +41,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <Provider store={store}>
       <RouterProvider router={router} />
     </Provider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

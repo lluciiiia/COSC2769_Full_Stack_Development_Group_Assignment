@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import Navbar from "../components/Navbar";
 import Post from "../components/Post.tsx";
 import { PostParams } from "../interfaces/Posts.tsx";
@@ -12,7 +11,8 @@ const Home = () => {
       try {
         // const response = await fetch("/api/posts");
         // const data = await response.json();
-        const response = await fetch("/sample-data.json"); // Path to the static JSON file
+        // TODO: replace Sample data version
+        const response = await fetch("/sample-data.json");
         const data: PostParams[] = await response.json();
         setPosts(data);
       } catch (error) {
@@ -30,9 +30,9 @@ const Home = () => {
         <div className="mt-[64px] flex-1 overflow-y-auto">
           {posts.length > 0 ? (
             <div className="flex flex-col items-center gap-6">
-              {posts.map((post, index) => (
+              {posts.map((post) => (
                 <Post
-                  key={index}
+                  id={post.id}
                   profileImage={post.profileImage}
                   profileName={post.profileName}
                   postContent={post.postContent}
