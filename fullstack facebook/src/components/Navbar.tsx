@@ -1,10 +1,9 @@
-// IMAGE IMPORT
-import logo from "../assets/logo.png";
-import notificationIcon from "../assets/notificationIcon.png";
-import profileLogo from "../assets/profileLogo.png";
-import homeLogo from "../assets/homeLogo.png";
-import groupLogo from "../assets/groupLogo.png";
-import createPostLogo from "../assets/createPostLogo.png";
+import logo from "../assets/icons/logo.png";
+import notificationIcon from "../assets/icons/notificationIcon.png";
+import profileIcon from "../assets/icons/profileIcon.png";
+import homeIcon from "../assets/icons/homeIcon.png";
+import groupIcon from "../assets/icons/groupIcon.png";
+import createPostIcon from "../assets/icons/createPostIcon.png";
 
 // ------------------------------------------------------
 
@@ -19,16 +18,15 @@ const Navbar = () => {
         />
         <h1 className="text-2xl font-bold">BuZzNet</h1>
       </div>
-
-      <div className="flex max-w-xs flex-1 flex-grow justify-around gap-5">
-        <NavItem src={homeLogo} label={"Home"} />
-        <NavItem src={groupLogo} label="Group" />
-        <NavItem src={createPostLogo} label="Create Post" />
+      <div className="flex gap-5 justify-around flex-grow max-w-xs flex-1 ">
+        <NavItem src={homeIcon} label={"Home"} />
+        <NavItem src={groupIcon} label="Group" />
+        <NavItem src={createPostIcon} label="Create Post" />
       </div>
 
       <div className="mr-6 flex justify-between gap-5">
         <NavItem src={notificationIcon} label={"Notification"} />
-        <NavItem src={profileLogo} label={"Profile"} />
+        <NavItem src={profileIcon} label={"Profile"} />
       </div>
     </nav>
   );
