@@ -1,5 +1,6 @@
 [
   {
+    "id": "1",
     "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
     "profileName": "Aqua konosuba",
     "postContent": "Receive grades yesterday",
@@ -7,6 +8,7 @@
     "profileLink": "https://example.com/profile/Konosuba"
   },
   {
+    "id": "2",
     "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
     "profileName": "Seokyung Kim",
     "postContent": "HD Let's go",
@@ -14,6 +16,7 @@
     "profileLink": "https://example.com/profile/Konosuba"
   },
   {
+    "id": "3",
     "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
     "profileName": "Shirin",
     "postContent": "Full stack is fun",
@@ -21,6 +24,7 @@
     "profileLink": "https://example.com/profile/Konosuba"
   },
   {
+    "id": "4",
     "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
     "profileName": "Hehe",
     "postContent": "yo...",
@@ -28,6 +32,7 @@
     "profileLink": "https://example.com/profile/Konosuba"
   },
   {
+    "id": "5",
     "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
     "profileName": "hahaha",
     "postContent": "hehehe",
