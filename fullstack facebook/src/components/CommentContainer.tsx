@@ -82,7 +82,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({ postId }) => {
                       href={comment.profileLink}
                       className="text-sm text-gray-500 hover:underline"
                     >
-                      @{comment.profileName}
+                      @{comment.profileLink}
                     </a>
                   </div>
                 </div>

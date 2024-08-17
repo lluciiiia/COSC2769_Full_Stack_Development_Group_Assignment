@@ -4,7 +4,7 @@
     "userId": "user1",
     "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
     "profileName": "User One",
-    "profileLink": "https://example.com/user1",
+    "profileLink": "sampleid/user1",
     "postId": "2",
     "createdAt": "2024-08-17T12:30:00Z",
     "content": "Great post! Really enjoyed reading it."
@@ -14,7 +14,7 @@
     "userId": "user2",
     "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
     "profileName": "User Two",
-    "profileLink": "https://example.com/user2",
+    "profileLink": "sampleid/user2",
     "postId": "2",
     "createdAt": "2024-08-16T15:00:00Z",
     "content": "I agree, this was very informative."
@@ -24,7 +24,7 @@
     "userId": "user2",
     "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
     "profileName": "User Two",
-    "profileLink": "https://example.com/user2",
+    "profileLink": "sampleid/user2",
     "postId": "2",
     "createdAt": "2024-08-16T15:00:00Z",
     "content": "Thanks for sharing this!"
@@ -34,7 +34,7 @@
     "userId": "user2",
     "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
     "profileName": "User Two",
-    "profileLink": "https://example.com/user2",
+    "profileLink": "sampleid/user2",
     "postId": "2",
     "createdAt": "2024-08-16T15:00:00Z",
     "content": "I agree, this was very informative."
@@ -44,7 +44,7 @@
     "userId": "user2",
     "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
     "profileName": "User Two",
-    "profileLink": "https://example.com/user2",
+    "profileLink": "sampleid/user2",
     "postId": "2",
     "createdAt": "2024-08-16T15:00:00Z",
     "content": "I agree, this was very informative."
@@ -54,7 +54,7 @@
     "userId": "user2",
     "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
     "profileName": "User Two",
-    "profileLink": "https://example.com/user2",
+    "profileLink": "sampleid/user2",
     "postId": "2",
     "createdAt": "2024-08-16T15:00:00Z",
     "content": "I agree, this was very informative."
@@ -62,9 +62,9 @@
   {
     "id": "7",
     "userId": "user3",
-    "profileImage": "https://example.com/profile3.jpg",
+    "profileImage": "sampleid/profile3.jpg",
     "profileName": "User Three",
-    "profileLink": "https://example.com/user3",
+    "profileLink": "sampleid/user3",
     "postId": "2",
     "createdAt": "2024-08-15T09:45:00Z",
     "content": "Thanks for sharing this!"
@@ -72,9 +72,9 @@
   {
     "id": "8",
     "userId": "user4",
-    "profileImage": "https://example.com/profile4.jpg",
+    "profileImage": "sampleid/profile4.jpg",
     "profileName": "User Four",
-    "profileLink": "https://example.com/user4",
+    "profileLink": "sampleid/user4",
     "postId": "3",
     "createdAt": "2024-08-14T18:20:00Z",
     "content": "Looking forward to more posts like this."
