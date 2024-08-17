@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { PostParams } from "../interfaces/Posts";
 import Post from "../components/Post";
-import CommentContainer from "../components/CommentContainer";
+import CommentContainer from "../components/comments/CommentContainer";
 
 const PostDetail: React.FC = () => {
   const [post, setPost] = useState<PostParams | null>(null);

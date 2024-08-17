@@ -1,5 +1,5 @@
 import React from "react";
-import { CommentFormProps } from "../interfaces/Comments";
+import { CommentFormProps } from "../../interfaces/Comments";
 
 const CommentForm: React.FC<CommentFormProps> = ({
   newComment,

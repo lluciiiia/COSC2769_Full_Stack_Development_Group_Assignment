@@ -1,6 +1,6 @@
 import React from "react";
-import { CommentProps } from "../interfaces/Comments.tsx";
-import { formatRelativeTime } from "../utils/formatRelativeTime.ts";
+import { CommentProps } from "../../interfaces/Comments.tsx";
+import { formatRelativeTime } from "../../utils/formatRelativeTime.ts";
 
 const CommentItem: React.FC<CommentProps> = ({ comment }) => (
   <div className="rounded-md bg-white p-2 shadow-sm">
