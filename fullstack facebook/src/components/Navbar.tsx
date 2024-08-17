@@ -5,11 +5,9 @@ import homeIcon from "../assets/icons/homeIcon.png";
 import groupIcon from "../assets/icons/groupIcon.png";
 import createPostIcon from "../assets/icons/createPostIcon.png";
 
-// ------------------------------------------------------
-
 const Navbar = () => {
   return (
-    <nav className="flex items-center justify-between bg-[#FFC123] p-2">
+    <nav className="fixed left-0 right-0 top-0 flex items-center justify-between bg-[#FFC123] p-2">
       <div className="flex items-center gap-2">
         <img
           src={logo}
@@ -18,7 +16,7 @@ const Navbar = () => {
         />
         <h1 className="text-2xl font-bold">BuZzNet</h1>
       </div>
-      <div className="flex gap-5 justify-around flex-grow max-w-xs flex-1 ">
+      <div className="flex max-w-xs flex-1 flex-grow justify-around gap-5">
         <NavItem src={homeIcon} label={"Home"} />
         <NavItem src={groupIcon} label="Group" />
         <NavItem src={createPostIcon} label="Create Post" />
