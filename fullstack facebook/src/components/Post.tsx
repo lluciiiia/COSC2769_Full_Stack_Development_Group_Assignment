@@ -1,19 +1,7 @@
 import React from "react";
 import { LikeIcon } from "../assets/icons/LikeIcon";
 import { CommentIcon } from "../assets/icons/CommentIcon";
-
-interface PostParams {
-  profileImage: string;
-  profileName: string;
-  postContent: string;
-  postImage: string;
-  profileLink: string;
-}
-interface ProfileSectionParams {
-  profileImage: string;
-  profileName: string;
-  profileLink: string;
-}
+import { PostParams, ProfileSectionParams } from "../interfaces/Posts";
 
 const ProfileSection: React.FC<ProfileSectionParams> = ({
   profileImage,
@@ -21,18 +9,18 @@ const ProfileSection: React.FC<ProfileSectionParams> = ({
   profileLink,
 }) => (
   <div className="flex items-start p-6">
-    <div className="flex-shrink-0 mr-4">
+    <div className="mr-4 flex-shrink-0">
       <img
         src={profileImage}
         alt="Profile"
-        className="rounded-full h-[50px] w-[50px]"
+        className="h-[50px] w-[50px] rounded-full"
       />
     </div>
     <div>
       <div className="font-bold">{profileName}</div>
       <a
         href={profileLink}
-        className="text-gray-500 hover:underline text-sm mt-1"
+        className="mt-1 text-sm text-gray-500 hover:underline"
       >
         @{profileName}
       </a>
@@ -42,11 +30,11 @@ const ProfileSection: React.FC<ProfileSectionParams> = ({
 
 const ReactionSection: React.FC = () => (
   <div className="flex justify-between p-4">
-    <button className="flex items-center space-x-2 text-gray-500 hover:bg-blue-100 rounded px-3 py-1">
-      <LikeIcon className="w-5 h-5" fill="currentColor" />
+    <button className="flex items-center space-x-2 rounded px-3 py-1 text-gray-500 hover:bg-blue-100">
+      <LikeIcon className="h-5 w-5" fill="currentColor" />
       <span>Like</span>
     </button>
-    <button className="flex items-center space-x-2 text-gray-500 hover:bg-gray-100 rounded px-3 py-1">
+    <button className="flex items-center space-x-2 rounded px-3 py-1 text-gray-500 hover:bg-gray-100">
       <CommentIcon />
       <span>Comment</span>
     </button>
@@ -61,21 +49,21 @@ const Post: React.FC<PostParams> = ({
   profileLink,
 }) => {
   return (
-    <div className="max-w-md mx-auto bg-white rounded-lg overflow-hidden shadow-md">
+    <div className="mx-auto max-w-md overflow-hidden rounded-lg bg-white shadow-md">
       <ProfileSection
         profileImage={profileImage}
         profileName={profileName}
         profileLink={profileLink}
       />
-    {/* Post Content */}
+      {/* Post Content */}
       <div className="text-center">
-        <p className="text-lg text-left font-semibold mb-2 ml-5">
+        <p className="mb-2 ml-5 text-left text-lg font-semibold">
           {postContent}
         </p>
         <img
           src={postImage}
           alt="Post Content"
-          className="w-full rounded-lg h-[300px]"
+          className="h-[300px] w-full rounded-lg"
         />
       </div>
 
