@@ -1,10 +1,5 @@
-import React, { ChangeEvent, FormEvent } from "react";
-
-interface CommentFormProps {
-  newComment: string;
-  onCommentChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-  onSubmit: (e: FormEvent<HTMLFormElement>) => void;
-}
+import React from "react";
+import { CommentFormProps } from "../interfaces/Comments";
 
 const CommentForm: React.FC<CommentFormProps> = ({
   newComment,

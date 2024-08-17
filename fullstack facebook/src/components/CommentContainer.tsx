@@ -1,6 +1,5 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { Comment, CommentContainerProps } from "../interfaces/Comments.tsx";
-import { formatRelativeTime } from "../utils/formatRelativeTime.ts";
 import CommentItem from "./CommentItem.tsx";
 import CommentForm from "./CommentForm.tsx";
 
