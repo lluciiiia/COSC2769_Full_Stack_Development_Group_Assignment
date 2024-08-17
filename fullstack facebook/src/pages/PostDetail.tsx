@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { PostParams } from "../interfaces/Posts";
 import Post from "../components/Post";
+import CommentContainer from "../components/CommentContainer";
 
 const PostDetail: React.FC = () => {
   const [post, setPost] = useState<PostParams | null>(null);
@@ -39,17 +40,19 @@ const PostDetail: React.FC = () => {
   return (
     <>
       <Navbar />
-      <div className="mt-[70px] flex h-full flex-col items-center gap-6 overflow-y-auto">
-        <Post
-          id={post.id}
-          profileImage={post.profileImage}
-          profileName={post.profileName}
-          postContent={post.postContent}
-          postImage={post.postImage}
-          profileLink={post.profileLink}
-          isDetail={true}
-        />
-        {/* <CommentContainer/> */}
+      <div className="mt-[120px] flex h-full items-center justify-center overflow-y-auto">
+        <div className="mr-[300px] flex items-center justify-center gap-28">
+          <Post
+            id={post.id}
+            profileImage={post.profileImage}
+            profileName={post.profileName}
+            postContent={post.postContent}
+            postImage={post.postImage}
+            profileLink={post.profileLink}
+            isDetail={true}
+          />
+          <CommentContainer postId={post.id} />
+        </div>
       </div>
     </>
   );
