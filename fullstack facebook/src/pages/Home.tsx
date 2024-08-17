@@ -2,6 +2,7 @@ import Navbar from "../components/Navbar";
 import  Post  from "../components/Post.tsx";
 
 
+
 const Home = () => {
   return (
     <div>

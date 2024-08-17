@@ -8,7 +8,8 @@ import Profile from "./pages/Profile.tsx";
 import { Provider } from "react-redux";
 import { store } from "./app/store.ts";
 import Signup from "./pages/SignUp.tsx";
-import Login from "./pages/Login.tsx"
+import Login from "./pages/Login.tsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
