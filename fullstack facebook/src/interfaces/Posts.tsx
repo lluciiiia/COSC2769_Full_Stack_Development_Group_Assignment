@@ -5,6 +5,7 @@ export interface PostParams {
   postContent: string;
   postImage: string;
   profileLink: string;
+  isDetail: boolean;
 }
 
 export interface ProfileSectionParams {

@@ -38,6 +38,7 @@ const Home = () => {
                   postContent={post.postContent}
                   postImage={post.postImage}
                   profileLink={post.profileLink}
+                  isDetail={false}
                 />
               ))}
             </div>

@@ -56,6 +56,7 @@ const Post: React.FC<PostParams> = ({
   postContent,
   postImage,
   profileLink,
+  isDetail,
 }) => {
   const navigate = useNavigate();
 
@@ -64,7 +65,11 @@ const Post: React.FC<PostParams> = ({
   };
 
   return (
-    <div className="mx-auto max-w-md overflow-hidden rounded-lg bg-white shadow-md">
+    <div
+      className={`mx-auto max-w-md overflow-hidden rounded-lg bg-white ${
+        isDetail ? "" : "shadow-md"
+      }`}
+    >
       <ProfileSection
         profileImage={profileImage}
         profileName={profileName}
@@ -78,7 +83,7 @@ const Post: React.FC<PostParams> = ({
         <img
           src={postImage}
           alt="Post Content"
-          className="h-[300px] w-full rounded-lg"
+          className={`h-[300px] w-full ${isDetail ? "" : "rounded-lg"}`}
         />
       </div>
 
