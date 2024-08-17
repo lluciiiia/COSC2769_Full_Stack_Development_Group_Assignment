@@ -1,6 +1,8 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { Comment, CommentContainerProps } from "../interfaces/Comments.tsx";
 import { formatRelativeTime } from "../utils/formatRelativeTime.ts";
+import CommentItem from "./CommentItem.tsx";
+import CommentForm from "./CommentForm.tsx";
 
 const CommentContainer: React.FC<CommentContainerProps> = ({ postId }) => {
   const [comments, setComments] = useState<Comment[]>([]);
@@ -65,54 +67,15 @@ const CommentContainer: React.FC<CommentContainerProps> = ({ postId }) => {
       <div className="h-[550px] w-[760px] rounded-lg bg-gray-100 p-4 shadow-md">
         <h2 className="mb-4 text-xl font-bold">Comments</h2>
         <div className="flex h-[300px] flex-col gap-2 overflow-y-auto">
-          {comments.map((comment, index) => (
-            <div key={comment.id} className="rounded-md bg-white p-2 shadow-sm">
-              <div className="flex">
-                <div className="mr-2 flex-shrink-0">
-                  <img
-                    src={comment.profileImage}
-                    alt="Profile"
-                    className="h-[30px] w-[30px] rounded-full"
-                  />
-                </div>
-                <div>
-                  <div className="flex items-center">
-                    <div className="mr-2 font-bold">{comment.profileName}</div>
-                    <a
-                      href={comment.profileLink}
-                      className="text-sm text-gray-500 hover:underline"
-                    >
-                      @{comment.profileLink}
-                    </a>
-                  </div>
-                </div>
-                <p className="ml-auto text-sm text-gray-500">
-                  {formatRelativeTime(comment.createdAt)}
-                </p>
-              </div>
-
-              <p>{comment.content}</p>
-            </div>
+          {comments.map((comment) => (
+            <CommentItem key={comment.id} comment={comment} />
           ))}
         </div>
-        <form
+        <CommentForm
+          newComment={newComment}
+          onCommentChange={handleCommentChange}
           onSubmit={handleSubmit}
-          className="mt-4 flex flex-col items-center"
-        >
-          <textarea
-            value={newComment}
-            onChange={handleCommentChange}
-            placeholder="Add a comment..."
-            className="w-full rounded-md border border-gray-300 p-2"
-            rows={4}
-          />
-          <button
-            type="submit"
-            className="mt-2 rounded-md bg-[#FFC123] px-4 py-2 text-white"
-          >
-            Post Comment
-          </button>
-        </form>
+        />
       </div>
     </div>
   );
