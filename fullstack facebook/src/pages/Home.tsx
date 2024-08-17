@@ -1,32 +1,52 @@
+import { useEffect, useState } from "react";
+
 import Navbar from "../components/Navbar";
 import Post from "../components/Post.tsx";
+import { PostParams } from "../interfaces/Posts.tsx";
 
 const Home = () => {
+  const [posts, setPosts] = useState<PostParams[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // const response = await fetch("/api/posts");
+        // const data = await response.json();
+        const response = await fetch("/sample-data.json"); // Path to the static JSON file
+        const data: PostParams[] = await response.json();
+        setPosts(data);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <Navbar />
-      <div className="mt-[70px] flex h-full flex-col items-center gap-6 overflow-y-auto">
-        <Post
-          profileImage="https://i.redd.it/07cowjrlyhda1.jpg"
-          profileName="Aqua konosuba"
-          postContent="Receive grades yesterday"
-          postImage="https://steamuserimages-a.akamaihd.net/ugc/1013818009148019610/187908C668F299A58F2E07A25874D7075CE5F17F/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false"
-          profileLink="https://example.com/profile/Konosuba"
-        />
-        <Post
-          profileImage="https://i.redd.it/07cowjrlyhda1.jpg"
-          profileName="Aqua konosuba"
-          postContent="Receive grades yesterday"
-          postImage="https://steamuserimages-a.akamaihd.net/ugc/1013818009148019610/187908C668F299A58F2E07A25874D7075CE5F17F/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false"
-          profileLink="https://example.com/profile/Konosuba"
-        />
-        <Post
-          profileImage="https://i.redd.it/07cowjrlyhda1.jpg"
-          profileName="Aqua konosuba"
-          postContent="Receive grades yesterday"
-          postImage="https://steamuserimages-a.akamaihd.net/ugc/1013818009148019610/187908C668F299A58F2E07A25874D7075CE5F17F/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false"
-          profileLink="https://example.com/profile/Konosuba"
-        />
+      <div className="flex h-screen">
+        <div className="mt-[64px] flex-1 overflow-y-auto">
+          {posts.length > 0 ? (
+            <div className="flex flex-col items-center gap-6">
+              {posts.map((post, index) => (
+                <Post
+                  key={index}
+                  profileImage={post.profileImage}
+                  profileName={post.profileName}
+                  postContent={post.postContent}
+                  postImage={post.postImage}
+                  profileLink={post.profileLink}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="flex h-full items-center justify-center">
+              <p className="text-center">No posts available</p>
+            </div>
+          )}
+        </div>
       </div>
     </>
   );
