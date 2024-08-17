@@ -1,10 +1,12 @@
 import Navbar from "../components/Navbar";
 import  Post  from "../components/Post.tsx";
 
+
 const Home = () => {
   return (
     <div>
       <Navbar />
+
       <h1>Home</h1>
       <Post
             profileImage="https://i.redd.it/07cowjrlyhda1.jpg"
