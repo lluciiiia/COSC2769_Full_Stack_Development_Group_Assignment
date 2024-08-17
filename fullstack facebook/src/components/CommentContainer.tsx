@@ -43,7 +43,11 @@ const CommentContainer: React.FC<CommentContainerProps> = ({ postId }) => {
 
       // Simulate adding a new comment
       const newCommentData = {
+        id: "",
         userId: "currentUserId",
+        profileImage: "https://example.com/profile3.jpg",
+        profileName: "User Three",
+        profileLink: "https://example.com/user3",
         postId: postId,
         createdAt: new Date(),
         content: newComment,
@@ -61,12 +65,32 @@ const CommentContainer: React.FC<CommentContainerProps> = ({ postId }) => {
       <div className="h-[550px] w-[760px] rounded-lg bg-gray-100 p-4 shadow-md">
         <h2 className="mb-4 text-xl font-bold">Comments</h2>
         <div className="flex h-[300px] flex-col gap-2 overflow-y-auto">
-          {" "}
           {comments.map((comment, index) => (
-            <div key={index} className="rounded-md bg-white p-2 shadow-sm">
-              <p className="text-sm text-gray-500">
-                {formatRelativeTime(comment.createdAt)}
-              </p>
+            <div key={comment.id} className="rounded-md bg-white p-2 shadow-sm">
+              <div className="flex">
+                <div className="mr-2 flex-shrink-0">
+                  <img
+                    src={comment.profileImage}
+                    alt="Profile"
+                    className="h-[30px] w-[30px] rounded-full"
+                  />
+                </div>
+                <div>
+                  <div className="flex items-center">
+                    <div className="mr-2 font-bold">{comment.profileName}</div>
+                    <a
+                      href={comment.profileLink}
+                      className="text-sm text-gray-500 hover:underline"
+                    >
+                      @{comment.profileName}
+                    </a>
+                  </div>
+                </div>
+                <p className="ml-auto text-sm text-gray-500">
+                  {formatRelativeTime(comment.createdAt)}
+                </p>
+              </div>
+
               <p>{comment.content}</p>
             </div>
           ))}
