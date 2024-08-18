@@ -28,7 +28,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center bg-gray-100">
+    <div className="flex min-h-screen flex-col items-center bg-white">
       <ProfileHeader />
 
       <div className="mt-16 w-full px-10">
