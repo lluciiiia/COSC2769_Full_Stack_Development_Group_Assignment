@@ -30,7 +30,7 @@ const About = () => {
           {["Overview", "Work", "Education", "Contact", "Relationship"].map(
             (tab: string) => {
               return (
-                <li className="mb-2">
+                <li className="mb-2" key={tab}>
                   <button
                     onClick={() => setActiveTab(tab)}
                     className={`w-full rounded-md px-3 py-2 text-left text-sm font-semibold ${tab === activeTab ? "bg-yellow-300" : "opacity-50 hover:bg-gray-100"}`}

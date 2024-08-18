@@ -12,7 +12,7 @@ import relationshipIcon from "../../../assets/icons/profileIcon/relationshipIcon
 interface OverviewItemProps {
   defaultText: string;
   icon: string;
-  data: string;
+  data: string | undefined;
 }
 
 const OverviewInformation = () => {

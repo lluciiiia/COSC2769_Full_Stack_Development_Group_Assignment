@@ -24,7 +24,7 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/posts/:userId",
+        path: "/posts",
         element: <PostDetail />,
       },
       {
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
         element: <GroupPage/>
       },
       {
-        path: "/profile",
+        path: "/profile/:userId",
         element: <Profile />,
       },
       {
