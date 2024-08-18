@@ -18,7 +18,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/posts",
+    path: "/posts/:postId",
     element: <PostDetail />,
   },
 
