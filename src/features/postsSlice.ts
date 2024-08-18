@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { PostParams } from "../interfaces/Posts";
+import { PostState } from "../interfaces/Posts";
 
 export const fetchPosts = createAsyncThunk<PostParams[]>(
   "posts/fetchPosts",
@@ -13,15 +14,8 @@ export const fetchPosts = createAsyncThunk<PostParams[]>(
     return data;
   }
 );
-
-interface PostState {
-  posts: PostParams[];
-}
-
 const initialState: PostState = {
   posts: [],
-
-
 };
 
 const postSlice = createSlice({

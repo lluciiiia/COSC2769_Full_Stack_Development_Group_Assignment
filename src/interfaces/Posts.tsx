@@ -28,3 +28,8 @@ export interface PostProps {
   isDetail: boolean;
   likes: number;
 }
+
+
+export interface PostState {
+  posts: PostParams[];
+}
