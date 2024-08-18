@@ -1,16 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { AppState } from "../app/store";
 
 export type UserType = {
   id: number;
   name: string;
   email: string;
   password: string;
-  profilePictureURL: string;
-  introduction: string;
-  address: string;
-  age: number;
-  phoneNumber: string;
+  profilePictureURL: string | undefined;
+  introduction: string | undefined;
+  address: string | undefined;
+  age: number | undefined;
   activeStatus: boolean;
+  education: string | undefined;
+  location: string | undefined;
+  phoneNumber: string | undefined;
+  relationship: string | undefined;
+  job: string | undefined;
 };
 
 const initialState: UserType[] = [
@@ -23,8 +28,12 @@ const initialState: UserType[] = [
     introduction: "I am Software Engineering Student",
     address: "District 7, Ho Chi Minh",
     age: 20,
-    phoneNumber: "09991113233",
     activeStatus: true,
+    education: "RMIT University",
+    location: "HCMC, Vietnam",
+    phoneNumber: "09991113233",
+    relationship: "Single",
+    job: "Tech Innovatiors",
   },
   {
     id: 2,
@@ -35,8 +44,12 @@ const initialState: UserType[] = [
     introduction: "I am IT Student",
     address: "District 7, Ho Chi Minh",
     age: 99,
-    phoneNumber: "02932332",
     activeStatus: true,
+    education: undefined,
+    location: undefined,
+    phoneNumber: "02932332",
+    relationship: undefined,
+    job: undefined,
   },
 ];
 
@@ -56,6 +69,16 @@ const userSlice = createSlice({
   },
 });
 
-export const changePassword = userSlice.actions;
+//set single user (return UserType or undefined when cannot find)
+export const getUserById = (
+  state: AppState,
+  id: number,
+): UserType | undefined => {
+  const user = state.users.find((u: UserType) => {
+    return u.id === id;
+  });
+
+  return user;
+};
 
 export default userSlice.reducer;
