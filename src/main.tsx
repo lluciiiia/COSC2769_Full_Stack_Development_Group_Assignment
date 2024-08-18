@@ -5,34 +5,45 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home.tsx";
 import ErrorPage from "./pages/ErrorPage.tsx";
 import Profile from "./pages/Profile.tsx";
-import { Provider } from "react-redux";
-import { store } from "./app/store.ts";
 import Signup from "./pages/SignUp.tsx";
 import Login from "./pages/Login.tsx";
 import PostDetail from "./pages/PostDetail.tsx";
+import GroupPage from "./pages/GroupPage.tsx";
+import { Provider } from "react-redux";
+import { store } from "./app/store.ts";
+// import Layout from "./components/Layout.tsx";  
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    // element: <Layout />,  //Setting global navbar for the page
     errorElement: <ErrorPage />,
-  },
-  {
-    path: "/posts/:postId",
-    element: <PostDetail />,
-  },
-
-  {
-    path: "/profile",
-    element: <Profile />,
-  },
-  {
-    path: "/signUp",
-    element: <Signup />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/posts",
+        element: <PostDetail />,
+      },
+      {
+        path: "/groupPage/:groupId",
+        element: <GroupPage/>
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
+      },
+      {
+        path: "/signUp",
+        element: <Signup />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+    ],
   },
 ]);
 
