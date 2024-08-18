@@ -2,7 +2,7 @@ import { Outlet, NavLink } from "react-router-dom";
 
 const GroupPage = () => {
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 min-w-9">
       <header
         className="relative h-[250px] bg-cover bg-center"
         style={{ backgroundImage: `url('/fruit_desktop.png')` }}

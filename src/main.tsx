@@ -11,7 +11,7 @@ import PostDetail from "./pages/PostDetail.tsx";
 import GroupPage from "./pages/GroupPage.tsx";
 import { Provider } from "react-redux";
 import Members from "./components/group/member.tsx";
-import Discussion from "./components/group/discusstion.tsx";
+import Discussion from "./components/group/discussion.tsx";
 import About from "./components/group/about.tsx";
 import { store } from "./app/store.ts";
 // import Layout from "./components/Layout.tsx";  
