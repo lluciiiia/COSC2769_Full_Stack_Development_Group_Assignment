@@ -1,5 +1,5 @@
 import { useState } from "react";
-import OverviewInformation from "./about/OverviewInformation";
+import OverviewInformation from "./OverviewInformation";
 
 const componentRender = (tab: string) => {
   switch (tab) {

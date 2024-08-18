@@ -1,13 +1,14 @@
 import { useSelector } from "react-redux";
-import { getUserById, UserType } from "../../../features/userSlice";
 import { useParams } from "react-router-dom";
-import { AppState } from "../../../app/store";
 
-import educationIcon from "../../../assets/icons/profileIcon/educationIcon.png";
-import homeUserIcon from "../../../assets/icons/profileIcon/homeUserIcon.png";
-import jobsIcon from "../../../assets/icons/profileIcon/jobsIcon.png";
-import phoneIcon from "../../../assets/icons/profileIcon/phoneIcon.png";
-import relationshipIcon from "../../../assets/icons/profileIcon/relationshipIcon.png";
+import educationIcon from "../../assets/icons/profileIcon/educationIcon.png";
+import homeUserIcon from "../../assets/icons/profileIcon/homeUserIcon.png";
+import jobsIcon from "../../assets/icons/profileIcon/jobsIcon.png";
+import phoneIcon from "../../assets/icons/profileIcon/phoneIcon.png";
+import relationshipIcon from "../../assets/icons/profileIcon/relationshipIcon.png";
+import { AppState } from "../../app/store";
+import { UserType } from "../../interfaces/Users";
+import { getUserById } from "../../features/userSlice";
 
 interface OverviewItemProps {
   defaultText: string;
