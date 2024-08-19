@@ -1,11 +1,11 @@
 import React from "react";
-import { LikeIcon } from "../assets/icons/LikeIcon";
-import { CommentIcon } from "../assets/icons/CommentIcon";
+import { LikeIcon } from "../../assets/icons/LikeIcon";
+import { CommentIcon } from "../../assets/icons/CommentIcon";
 import {
   PostParams,
   ProfileSectionParams,
   ReactionSectionProps,
-} from "../interfaces/Posts";
+} from "../../interfaces/Posts";
 import { useNavigate } from "react-router-dom";
 
 const ProfileSection: React.FC<ProfileSectionParams> = ({

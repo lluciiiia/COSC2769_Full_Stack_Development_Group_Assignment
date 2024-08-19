@@ -26,7 +26,10 @@ export interface PostProps {
   postImage: string;
   profileLink: string;
   isDetail: boolean;
-  isliked: boolean; // check if user liked this post
   likes: number;
 }
 
+
+export interface PostState {
+  posts: PostParams[];
+}
