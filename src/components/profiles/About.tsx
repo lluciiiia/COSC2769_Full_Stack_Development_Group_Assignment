@@ -1,18 +1,22 @@
 import { useState } from "react";
 import OverviewInformation from "./OverviewInformation";
+import WorkInformation from "./WorkInformation";
+import EducationInformation from "./EducationInformation";
+import ContactInformation from "./ContactInformation";
+import RelationshipInformation from "./RelationshipInformation";
 
 const componentRender = (tab: string) => {
   switch (tab) {
     case "Overview":
       return <OverviewInformation />;
     case "Work":
-      return <h1>Works</h1>;
+      return <WorkInformation/>;
     case "Education":
-      return <h1>Education</h1>;
-    case "Contacts":
-      return <h1>Contacts</h1>;
-    case "Relationships":
-      return <h1>Realtionships</h1>;
+      return <EducationInformation/>;
+    case "Contact":
+      return <ContactInformation/>;
+    case "Relationship":
+      return <RelationshipInformation/>;
     default:
       return null;
   }

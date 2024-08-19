@@ -17,9 +17,15 @@ const initialState: UserType[] = [
     education: "RMIT University",
     location: "HCMC, Vietnam",
     phoneNumber: "09991113233",
-    relationship: "Single",
+    relationship: "In a relationship",
     job: "Tech Innovatiors",
-  },
+    jobDescription: "I have been working at Tech Innovators for five years as a software engineer. During this time, I have developed several key projects that improved our product’s efficiency and user experience. My role involves designing, coding, and testing software, as well as collaborating with cross-functional teams to deliver high-quality solutions.",
+    degree: "Bachelor of Science in Computer Science",
+    years:"2022-2026",
+    educationDescription:" Completed coursework in software engineering, data structures, and algorithms. Participated in research on artificial intelligence. ",
+    inRelationship: "Alex"
+
+},
   {
     id: 2,
     name: "user 2",
@@ -35,6 +41,11 @@ const initialState: UserType[] = [
     phoneNumber: "02932332",
     relationship: undefined,
     job: undefined,
+    jobDescription: undefined,
+    degree:undefined,
+    years:undefined,
+    educationDescription:undefined,
+    inRelationship:undefined,
   },
 ];
 
