@@ -17,3 +17,16 @@ export interface ProfileSectionParams {
 export interface ReactionSectionProps {
   handleClick: () => void;
 }
+
+export interface PostProps {
+  id: string;
+  profileImage: string;
+  profileName: string;
+  postContent: string;
+  postImage: string;
+  profileLink: string;
+  isDetail: boolean;
+  isliked: boolean; // check if user liked this post
+  likes: number;
+}
+
