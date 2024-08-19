@@ -27,7 +27,8 @@ const Navbar = () => {
         <img
           src={logo}
           alt="BuZzNet Logo"
-          className="h-12 w-12 object-contain"
+          className="h-12 w-12 cursor-pointer object-contain"
+          onClick={handleHomeClick}
         />
         <h1 className="text-2xl font-bold">BuZzNet</h1>
       </div>
