@@ -10,6 +10,9 @@ import Login from "./pages/Login.tsx";
 import PostDetail from "./pages/PostDetail.tsx";
 import GroupPage from "./pages/GroupPage.tsx";
 import { Provider } from "react-redux";
+import Members from "./components/group/member.tsx";
+import Discussion from "./components/group/discussion.tsx";
+import About from "./components/group/about.tsx";
 import { store } from "./app/store.ts";
 // import Layout from "./components/Layout.tsx";  
 
@@ -29,7 +32,21 @@ const router = createBrowserRouter([
       },
       {
         path: "/groupPage/:groupId",
-        element: <GroupPage/>
+        element: <GroupPage/>,
+        children: [
+          {
+            path: "discussion",
+            element: <Discussion />,
+          },
+          {
+            path: "about",
+            element: <About />,
+          },
+          {
+            path: "members",
+            element: <Members />,
+          },
+        ],
       },
       {
         path: "/profile",
