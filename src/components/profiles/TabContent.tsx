@@ -1,9 +1,10 @@
 import About from "./About";
+import PostsList from "./PostsList";
 
 const TabContent = ({ activeTab }: { activeTab: string }) => {
   switch (activeTab) {
     case "Posts":
-      return <h1>Posts</h1>;
+      return <PostsList/>;
     case "About":
       return <About />;
     case "Friends":
