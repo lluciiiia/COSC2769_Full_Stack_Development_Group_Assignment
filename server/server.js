@@ -23,9 +23,9 @@ app.get('/', (req, res) => {
 
 // Database connection
 const db = mysql.createConnection({
-  host: '10.247.194.45',
+  host: '0.0.0.0',
   user: 'root',
-  password: 'fullstackdb',
+  password: 'fullstackdb123',
   database: 'HD_FULL_STACK'
 });
 
