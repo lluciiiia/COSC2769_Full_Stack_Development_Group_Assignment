@@ -10,13 +10,13 @@ const componentRender = (tab: string) => {
     case "Overview":
       return <OverviewInformation />;
     case "Work":
-      return <WorkInformation/>;
+      return <WorkInformation />;
     case "Education":
-      return <EducationInformation/>;
+      return <EducationInformation />;
     case "Contact":
-      return <ContactInformation/>;
+      return <ContactInformation />;
     case "Relationship":
-      return <RelationshipInformation/>;
+      return <RelationshipInformation />;
     default:
       return null;
   }
