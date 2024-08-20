@@ -1,4 +1,6 @@
 import About from "./About";
+import PhotoGrid from "./PhotoGrid";
+import PhotoList from "./PhotoList";
 import PostsList from "./PostsList";
 
 const TabContent = ({ activeTab }: { activeTab: string }) => {
@@ -10,7 +12,7 @@ const TabContent = ({ activeTab }: { activeTab: string }) => {
     case "Friends":
       return <h1>Friends</h1>;
     case "Photos":
-      return <h1>Photos</h1>;
+      return <PhotoList/>;
     default:
       return null;
   }
