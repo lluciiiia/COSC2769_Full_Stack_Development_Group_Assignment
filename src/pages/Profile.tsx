@@ -28,20 +28,22 @@ const Profile = () => {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center bg-white">
-      <ProfileHeader />
+    <>
+      <div className="flex min-h-screen flex-col items-center bg-white">
+        <ProfileHeader />
 
-      <div className="mt-16 w-full px-10">
-        <ProfileInformation name={name} />
+        <div className="mt-16 w-full px-10">
+          <ProfileInformation name={name} />
 
-        <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+          <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+        </div>
+        <div className="mt-1 w-full border-b-2"></div>
+
+        <div className="mt-8 w-full max-w-4xl px-3">
+          <TabContent activeTab={activeTab} />
+        </div>
       </div>
-      <div className="mt-1 w-full border-b-2"></div>
-
-      <div className="mt-8 w-full max-w-4xl px-3">
-        <TabContent activeTab={activeTab} />
-      </div>
-    </div>
+    </>
   );
 };
 export default Profile;

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import Navbar from "../Navbar.tsx";
 import Post from "../Post.tsx";
 import { PostParams } from "../../interfaces/Posts.tsx";
 import { AppState } from "../../app/store";
@@ -11,7 +10,7 @@ import { useParams } from "react-router-dom";
 const PostsList = () => {
   const { userId } = useParams();
   const user: UserType | undefined = useSelector((state: AppState) =>
-    getUserById(state, Number(userId))
+    getUserById(state, Number(userId)),
   );
   const [posts, setPosts] = useState<PostParams[]>([]);
 
@@ -33,7 +32,6 @@ const PostsList = () => {
 
   return (
     <>
-      <Navbar />
       <div className="flex h-screen">
         <div className="mt-[64px] flex-1 overflow-y-auto">
           {filteredPosts.length > 0 ? (

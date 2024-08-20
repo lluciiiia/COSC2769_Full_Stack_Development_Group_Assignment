@@ -1,20 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { AppState } from '../../app/store';
-import PhotoGrid from './PhotoGrid';
-import { UserType } from '../../interfaces/Users';
-import { PostParams } from '../../interfaces/Posts';
-import { getUserById } from '../../features/userSlice';
-
-
-
-
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { AppState } from "../../app/store";
+import PhotoGrid from "./PhotoGrid";
+import { UserType } from "../../interfaces/Users";
+import { PostParams } from "../../interfaces/Posts";
+import { getUserById } from "../../features/userSlice";
 
 const PhotoList: React.FC = () => {
   const { userId } = useParams();
   const user: UserType | undefined = useSelector((state: AppState) =>
-    getUserById(state, Number(userId))
+    getUserById(state, Number(userId)),
   );
   const [posts, setPosts] = useState<PostParams[]>([]);
 
