@@ -13,4 +13,13 @@ export type UserType = {
   phoneNumber: string | undefined;
   relationship: string | undefined;
   job: string | undefined;
+  jobDescription: string | undefined; 
+  degree:string | undefined; 
+  years: string | undefined; 
+  educationDescription: string | undefined; 
+  inRelationship:string | undefined; 
+
+ 
+
+
 };
