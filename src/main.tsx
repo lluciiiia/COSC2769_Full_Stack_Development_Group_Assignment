@@ -14,7 +14,8 @@ import Members from "./components/group/member.tsx";
 import Discussion from "./components/group/discussion.tsx";
 import About from "./components/group/about.tsx";
 import { store } from "./app/store.ts";
-// import Layout from "./components/Layout.tsx";  
+import Admin from "./pages/Admin.tsx";
+// import Layout from "./components/Layout.tsx";
 
 const router = createBrowserRouter([
   {
@@ -32,7 +33,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/groupPage/:groupId",
-        element: <GroupPage/>,
+        element: <GroupPage />,
         children: [
           {
             path: "discussion",
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/admin",
+        element: <Admin />,
       },
     ],
   },
