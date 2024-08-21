@@ -10,9 +10,9 @@ export const fetchPosts = createAsyncThunk<PostParams[]>(
       console.error("Failed to fetch posts:", response.statusText);
       throw new Error("Failed to fetch posts");
     }
-    const data: PostParams[] = await response.json(); 
+    const data: PostParams[] = await response.json();
     return data;
-  }
+  },
 );
 const initialState: PostState = {
   posts: [],
@@ -27,9 +27,7 @@ const postSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder
-   
-    .addCase(fetchPosts.fulfilled, (state, action) => {
+    builder.addCase(fetchPosts.fulfilled, (state, action) => {
       state.posts.push(...action.payload);
     });
   },

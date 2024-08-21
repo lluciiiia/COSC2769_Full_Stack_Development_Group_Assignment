@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import Post from "../Post.tsx";
+
 import { PostParams } from "../../interfaces/Posts.tsx";
 import { AppState } from "../../app/store";
 import { UserType } from "../../interfaces/Users";
 import { getUserById } from "../../features/userSlice";
 import { useParams } from "react-router-dom";
+import Post from "../Post/Post.tsx";
 
 const PostsList = () => {
   const { userId } = useParams();
