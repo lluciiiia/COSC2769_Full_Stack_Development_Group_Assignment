@@ -48,14 +48,6 @@
     "profileLink": "https://example.com/profile/Konosuba"
   },
   {
-    "id": "6",
-    "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
-    "profileName": "Tai Ngo",
-    "postContent": "Just finished a new project!",
-    "postImage": "https://www.simplilearn.com/ice9/free_resources_article_thumb/full_stack_banner.jpg",
-    "profileLink": "https://example.com/profile/TaiNgo"
-  },
-  {
     "id": "7",
     "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
     "profileName": "Tai Ngo",
@@ -79,8 +71,5 @@
     "postImage": "https://steamuserimages-a.akamaihd.net/ugc/1013818009148019610/187908C668F299A58F2E07A25874D7075CE5F17F/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false",
     "profileLink": "https://example.com/profile/Jessica"
   }
-
-
-
 
 ]

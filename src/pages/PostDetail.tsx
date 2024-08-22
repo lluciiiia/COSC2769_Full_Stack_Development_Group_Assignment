@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { PostParams } from "../interfaces/Posts";
 import Post from "../components/Post/Post";
@@ -8,11 +8,11 @@ import CommentContainer from "../components/comments/CommentContainer";
 const PostDetail: React.FC = () => {
   const [post, setPost] = useState<PostParams | null>(null);
   const location = useLocation();
+  const { postId } = useParams();
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const postId = queryParams.get("id");
-
+    // const queryParams = new URLSearchParams(location.search);
+    // const postId = queryParams.get("id");
     const fetchPost = async () => {
       try {
         // const response = await fetch(`/api/posts/${postId}`);
@@ -33,7 +33,7 @@ const PostDetail: React.FC = () => {
     };
 
     fetchPost();
-  }, [location.search]);
+  }, []);
 
   if (!post) return <p>Loading...</p>;
 
