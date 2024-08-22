@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Post from "../components/Post/Post.tsx";
 import { PostParams } from "../interfaces/Posts.tsx";
-import PostList from '../components/Post/PostList'; // Adjust the path as necessary
-
+import PostList from "../components/Post/PostList"; // Adjust the path as necessary
 
 const Home = () => {
   // const [posts, setPosts] = useState<PostParams[]>([]);
@@ -55,10 +54,9 @@ const Home = () => {
   // );
   return (
     <>
-    <Navbar />
-    <PostList />
-    <h1> loading </h1>
+      <Navbar />
+      <PostList />
     </>
-  )
+  );
 };
 export default Home;
