@@ -14,7 +14,7 @@ import Members from "./components/group/member.tsx";
 import Discussion from "./components/group/discussion.tsx";
 import About from "./components/group/about.tsx";
 import { store } from "./app/store.ts";
-// import Layout from "./components/Layout.tsx";  
+// import Layout from "./components/Layout.tsx";
 
 const router = createBrowserRouter([
   {
@@ -27,12 +27,12 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/posts",
+        path: "/post/:postId",
         element: <PostDetail />,
       },
       {
         path: "/groupPage/:groupId",
-        element: <GroupPage/>,
+        element: <GroupPage />,
         children: [
           {
             path: "discussion",
