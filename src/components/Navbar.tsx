@@ -7,12 +7,9 @@ import profileIcon from "../assets/icons/profileIcon.png";
 import homeIcon from "../assets/icons/homeIcon.png";
 import groupIcon from "../assets/icons/groupIcon.png";
 import createPostIcon from "../assets/icons/createPostIcon.png";
+import { NavItem } from "./NavItem";
 
-interface NavItemProps {
-  src: string;
-  label: string;
-  onClick?: () => void;
-}
+
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -46,13 +43,3 @@ const Navbar = () => {
   );
 };
 export default Navbar;
-
-const NavItem: React.FC<NavItemProps> = ({ src, label, onClick }) => (
-  <div
-    onClick={onClick}
-    className="flex w-full flex-1 cursor-pointer flex-col items-center hover:underline focus:outline-none"
-  >
-    <img src={src} alt={`${label} icon`} className="h-6" />
-    <p>{label}</p>
-  </div>
-);
