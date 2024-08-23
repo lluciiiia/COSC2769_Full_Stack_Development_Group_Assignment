@@ -1,6 +1,6 @@
 export interface PostParams {
   id: string;
-userId: string;
+  userId: string;
   profileImage: string;
   profileName: string;
   postContent: string;

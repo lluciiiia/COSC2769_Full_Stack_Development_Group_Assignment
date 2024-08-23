@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import Post from "../components/Post/Post.tsx";
+import Post from "../components/post/Post.tsx";
 import { PostParams } from "../interfaces/Posts.tsx";
-import PostList from "../components/Post/PostList"; // Adjust the path as necessary
+import PostList from "../components/post/PostList.tsx"; // Adjust the path as necessary
 
 const Home = () => {
   // const [posts, setPosts] = useState<PostParams[]>([]);

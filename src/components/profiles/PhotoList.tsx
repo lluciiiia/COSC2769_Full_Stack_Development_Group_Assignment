@@ -1,43 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { AppState } from "../../app/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, AppState } from "../../app/store";
 import PhotoGrid from "./PhotoGrid";
-import { UserType } from "../../interfaces/Users";
 import { PostParams } from "../../interfaces/Posts";
-import { getUserById } from "../../features/userSlice";
+import { fetchPosts, getPostListById } from "../../features/postsSlice";
 
 const PhotoList: React.FC = () => {
   const { userId } = useParams();
-  const user: UserType | undefined = useSelector((state: AppState) =>
-    getUserById(state, Number(userId)),
-  );
-  const [posts, setPosts] = useState<PostParams[]>([]);
+  const dispatch: AppDispatch = useDispatch();
+  const firstRender = useRef(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/sample-data.json");
-        const data: PostParams[] = await response.json();
-        setPosts(data);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      }
-    };
-
-    fetchData();
+    if (firstRender.current) {
+      dispatch(fetchPosts());
+      firstRender.current = false;
+    }
   }, []);
-
-  const filteredPosts = posts.filter((post) => post.profileName === user?.name);
-
-  return (
-    <PhotoGrid
-      photos={filteredPosts.map((post) => ({
-        id: post.id,
-        src: post.postImage,
-      }))}
-    />
+  const filteredPosts: PostParams[] = useSelector(
+    (state: AppState): PostParams[] => {
+      return getPostListById(state, Number(userId));
+    },
   );
+
+  return <PhotoGrid photos={filteredPosts} />;
 };
 
 export default PhotoList;

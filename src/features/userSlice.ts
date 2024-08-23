@@ -25,7 +25,7 @@ const initialState: UserType[] = [
     educationDescription:
       " Completed coursework in software engineering, data structures, and algorithms. Participated in research on artificial intelligence. ",
     inRelationship: "Alex",
-    Bio: "hi Im Tai Ngo Im a Software Engineering student at RMIT University and a software engineer at Tech Innovators"
+    Bio: "hi Im Tai Ngo Im a Software Engineering student at RMIT University and a software engineer at Tech Innovators",
   },
   {
     id: 2,
@@ -53,7 +53,7 @@ const initialState: UserType[] = [
 
 // userSlice.ts
 const userSlice = createSlice({
-  name: 'users',
+  name: "users",
   initialState,
   reducers: {
     // Existing reducers
@@ -75,9 +75,6 @@ const userSlice = createSlice({
 });
 
 export const { updateUser } = userSlice.actions;
-
-
-
 
 //set single user (return UserType or undefined when cannot find)
 export const getUserById = (
