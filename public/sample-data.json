@@ -1,7 +1,7 @@
 [
   {
     "id": "1",
-    "userId": "1",
+    "userId": "4",
     "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
     "profileName": "Aqua konosuba",
     "postContent": "Receive grades yesterday",
@@ -10,7 +10,7 @@
   },
   {
     "id": "2",
-    "userId": "1",
+    "userId": "5",
     "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
     "profileName": "Seokyung Kim",
     "postContent": "HD Let's go",
@@ -19,7 +19,7 @@
   },
   {
     "id": "3",
-    "userId": "1",
+    "userId": "4",
     "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
     "profileName": "Shirin",
     "postContent": "Full stack is fun",
@@ -28,7 +28,7 @@
   },
   {
     "id": "4",
-    "userId": "1",
+    "userId": "3",
     "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
     "profileName": "Hehe",
     "postContent": "yo...",
@@ -37,7 +37,7 @@
   },
   {
     "id": "5",
-    "userId": "1",
+    "userId": "3",
     "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
     "profileName": "hahaha",
     "postContent": "hehehe",
@@ -64,7 +64,7 @@
   },
   {
     "id": "8",
-    "userId": "2",
+    "userId": "1",
     "profileImage": "https://i.redd.it/07cowjrlyhda1.jpg",
     "profileName": "Tai Ngo",
     "postContent": "Had a great time at the conference!",

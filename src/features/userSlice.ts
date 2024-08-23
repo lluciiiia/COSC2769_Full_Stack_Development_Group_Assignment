@@ -25,6 +25,7 @@ const initialState: UserType[] = [
     educationDescription:
       " Completed coursework in software engineering, data structures, and algorithms. Participated in research on artificial intelligence. ",
     inRelationship: "Alex",
+    Bio: "hi Im Tai Ngo Im a Software Engineering student at RMIT University and a software engineer at Tech Innovators"
   },
   {
     id: 2,
@@ -46,24 +47,37 @@ const initialState: UserType[] = [
     years: undefined,
     educationDescription: undefined,
     inRelationship: undefined,
+    Bio: undefined,
   },
 ];
 
+// userSlice.ts
 const userSlice = createSlice({
-  name: "users",
+  name: 'users',
   initialState,
   reducers: {
+    // Existing reducers
     changePassword(state, action) {
       const { id, newPassword } = action.payload;
-
       const user = state.find((u) => u.id === id);
-
       if (user) {
         user.password = newPassword;
       }
     },
+    updateUser(state, action) {
+      const updatedUser = action.payload;
+      const index = state.findIndex((u) => u.id === updatedUser.id);
+      if (index !== -1) {
+        state[index] = updatedUser;
+      }
+    },
   },
 });
+
+export const { updateUser } = userSlice.actions;
+
+
+
 
 //set single user (return UserType or undefined when cannot find)
 export const getUserById = (
