@@ -1,11 +1,15 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import userReducer from "../features/userSlice";
 import groupReducer from "../features/groupSlice";
+import postsReducer from "../features/postsSlice";
+
 export const rootReducer = combineReducers({
   //write hte reducer in this function and
   //the type when using selector is AppState
   users: userReducer,
-  groups: groupReducer
+  groups: groupReducer,
+  posts: postsReducer,
+
 });
 
 export type AppState = ReturnType<typeof rootReducer>;

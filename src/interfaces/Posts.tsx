@@ -1,5 +1,6 @@
 export interface PostParams {
   id: string;
+  userId: string;
   profileImage: string;
   profileName: string;
   postContent: string;
@@ -16,4 +17,19 @@ export interface ProfileSectionParams {
 
 export interface ReactionSectionProps {
   handleClick: () => void;
+}
+
+export interface PostProps {
+  id: string;
+  profileImage: string;
+  profileName: string;
+  postContent: string;
+  postImage: string;
+  profileLink: string;
+  isDetail: boolean;
+  likes: number;
+}
+
+export interface PostState {
+  posts: PostParams[];
 }

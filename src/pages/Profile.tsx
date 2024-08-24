@@ -1,24 +1,64 @@
-import { useSelector } from "react-redux";
-import { UserType } from "../features/userSlice";
-import { AppState } from "../app/store";
+// Profile.tsx
+import { useSelector, useDispatch } from 'react-redux';
+import { getUserById, updateUser } from '../features/userSlice'; // Update user action
+import { AppState } from '../app/store';
+import { useParams } from 'react-router-dom';
+import ErrorPage from './ErrorPage';
+import { useState } from 'react';
+import { UserType } from '../interfaces/Users';
+import TabContent from '../components/profiles/TabContent';
+import ProfileHeader from '../components/profiles/ProfileHeader';
+import TabNavigation from '../components/profiles/TabNavigation';
+import ProfileInformation from '../components/profiles/ProfileInformation';
+import Modal from '../components/profiles/ProfileEditModal';
+
 
 const Profile = () => {
-  
-  const users: UserType[] = useSelector((state: AppState) => state.users);
+  const { userId } = useParams();
+  const dispatch = useDispatch();
+
+  const user: UserType | undefined = useSelector((state: AppState) => {
+    return getUserById(state, Number(userId));
+  });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("Posts"); // Initialize activeTab state
+
+  if (user === undefined) {
+    return <ErrorPage />;
+  }
+
+  const handleEditProfile = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
-    <div>
-      <h1 className="text-3xl">Profile for all users</h1>
-      <ul>
-        {users.map((user: UserType) => {
-          return (
-            <li key={user.id}>
-              id: {user.id}, name: {user.name}
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+    <>
+      <div className="flex min-h-screen flex-col items-center bg-white">
+        <ProfileHeader />
+
+        <div className="mt-16 w-full px-10">
+          <ProfileInformation name={user.name} bio={user.Bio} onEditProfile={handleEditProfile} />
+
+          <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+        </div>
+        <div className="mt-1 w-full border-b-2"></div>
+
+        <div className="mt-8 w-full max-w-4xl px-3">
+          <TabContent activeTab={activeTab} />
+        </div>
+      </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        user={user}
+      />
+    </>
   );
 };
 export default Profile;

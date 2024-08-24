@@ -10,8 +10,12 @@ import Login from "./pages/Login.tsx";
 import PostDetail from "./pages/PostDetail.tsx";
 import GroupPage from "./pages/GroupPage.tsx";
 import { Provider } from "react-redux";
+import Members from "./components/group/member.tsx";
+import Discussion from "./components/group/discussion.tsx";
+import About from "./components/group/about.tsx";
 import { store } from "./app/store.ts";
-// import Layout from "./components/Layout.tsx";  
+import Admin from "./pages/Admin.tsx";
+// import Layout from "./components/Layout.tsx";
 
 const router = createBrowserRouter([
   {
@@ -24,24 +28,42 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/posts",
+        path: "/post/:postId",
         element: <PostDetail />,
       },
       {
         path: "/groupPage/:groupId",
-        element: <GroupPage/>
+        element: <GroupPage />,
+        children: [
+          {
+            path: "discussion",
+            element: <Discussion />,
+          },
+          {
+            path: "about",
+            element: <About />,
+          },
+          {
+            path: "members",
+            element: <Members />,
+          },
+        ],
       },
       {
-        path: "/profile",
+        path: "/profile/:userId",
         element: <Profile />,
       },
       {
-        path: "/signUp",
+        path: "/sign-up",
         element: <Signup />,
       },
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/admin",
+        element: <Admin />,
       },
     ],
   },

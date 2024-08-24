@@ -1,11 +1,11 @@
 import React from "react";
-import { LikeIcon } from "../assets/icons/LikeIcon";
-import { CommentIcon } from "../assets/icons/CommentIcon";
+import { LikeIcon } from "../../assets/icons/LikeIcon";
+import { CommentIcon } from "../../assets/icons/CommentIcon";
 import {
   PostParams,
   ProfileSectionParams,
   ReactionSectionProps,
-} from "../interfaces/Posts";
+} from "../../interfaces/Posts";
 import { useNavigate } from "react-router-dom";
 
 const ProfileSection: React.FC<ProfileSectionParams> = ({
@@ -59,9 +59,9 @@ const Post: React.FC<PostParams> = ({
   isDetail,
 }) => {
   const navigate = useNavigate();
-
   const handleClick = () => {
-    navigate(`/posts?id=${id}`);
+    console.log({ id });
+    navigate(`/post/${id}`);
   };
 
   return (
