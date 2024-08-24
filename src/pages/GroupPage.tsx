@@ -1,5 +1,21 @@
+
+import { useParams } from "react-router-dom";
+import {  useSelector } from "react-redux";
+import { GroupType } from "../types/group";
+import { AppState } from "../app/store";
 import { Outlet, NavLink } from "react-router-dom";
 import ReturnNavbar from "../components/ReturnNavbar";
+import { selectGroupById } from "../features/groupSlice";
+export default function GroupPage() {
+    const { groupId } = useParams<{ groupId: string }>();
+    const group: GroupType | undefined = useSelector((state: AppState) =>
+    selectGroupById(state, groupId || "")
+  );
+  return (
+    <div>
+        {JSON.stringify(group)}
+
+
 const GroupPage = () => {
   return (
     <div>
