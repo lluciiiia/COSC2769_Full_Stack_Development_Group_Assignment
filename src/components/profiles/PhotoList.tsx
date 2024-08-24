@@ -19,6 +19,7 @@ const PhotoList: React.FC = () => {
   }, []);
   const filteredPosts: PostParams[] = useSelector(
     (state: AppState): PostParams[] => {
+      console.log('lamo');
       return getPostListById(state, Number(userId));
     },
   );
