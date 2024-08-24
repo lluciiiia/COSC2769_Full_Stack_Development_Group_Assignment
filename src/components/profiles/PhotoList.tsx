@@ -17,6 +17,7 @@ const PhotoList: React.FC = () => {
       firstRender.current = false;
     }
   }, []);
+  
   const filteredPosts: PostParams[] = useSelector(
     (state: AppState): PostParams[] => {
       console.log('lamo');
