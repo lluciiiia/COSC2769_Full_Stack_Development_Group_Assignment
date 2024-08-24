@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { PostParams } from "../interfaces/Posts";
 import { PostState } from "../interfaces/Posts";
+import { AppState } from "../app/store";
 
 export const fetchPosts = createAsyncThunk<PostParams[]>(
   "posts/fetchPosts",
@@ -32,6 +33,18 @@ const postSlice = createSlice({
     });
   },
 });
+
+export const getPostListById = (
+  state: AppState,
+  userId: number,
+): PostParams[] => {
+  const posts = state.posts.posts.filter((p: PostParams) => {
+    const uId = Number(p.userId);
+    return uId === userId;
+  });
+
+  return posts;
+};
 
 export const { likePost } = postSlice.actions;
 export default postSlice.reducer;

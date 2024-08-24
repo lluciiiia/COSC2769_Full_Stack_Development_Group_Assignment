@@ -1,58 +1,28 @@
-import mysql from 'mysql2';
-import express from 'express';
-import cors from 'cors';
+const express = require('express');
+const cors = require('cors');
+const connectDB = require('./db'); // Import the database connection function
 
 const app = express();
 
 // CORS configuration
 const corsOptions = {
-  origin: 'http://localhost:5173', // React frontend URL
-  optionsSuccessStatus: 200
+  origin: 'http://localhost:5173',
+  optionsSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions)); // Apply CORS middleware
+app.use(express.json()); // Parse JSON bodies
 
-// Parse JSON bodies
-app.use(express.json());
+// Connect to MongoDB
+connectDB(); // Call the function to connect to MongoDB
 
-const router = express.Router();
-
+// Define a simple route
 app.get('/', (req, res) => {
-  return res.json("From backend side");
+  res.json('From backend side');
 });
-
-// Database connection
-const db = mysql.createConnection({
-  host: '0.0.0.0',
-  user: 'root',
-  password: 'fullstackdb123',
-  database: 'HD_FULL_STACK'
-});
-
-db.connect((err) => {
-  if (err) {
-    console.error('Error connecting to the database:', err.stack);
-    return;
-  }
-  console.log('Connected to the database');
-});
-// Use the router
-app.use('/api', router);
-// Define your API route
-router.get('/users', (req, res) => {
-  const query = 'SELECT * FROM User';
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error('Error fetching users:', err.stack);
-      return res.status(500).json({ error: 'Failed to fetch users' });
-    }
-    return res.json(results);
-  });
-});
-
-
 
 // Start the server
-app.listen(8080, () => {
-  console.log("Running on port 8080");
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

@@ -22,7 +22,7 @@ function PostList() {
   const postList = posts.map((p: PostParams) => <Post key={p.id} {...p} />);
   console.log("postlist", posts);
   return (
-    <div id="postList" className="space-y-6">
+    <div id="postList" className="space-y-6 pt-12">
       {posts.length > 0 ? postList : <h1>Loading...</h1>}
     </div>
   );

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { PostParams } from "../interfaces/Posts";
-import Post from "../components/Post/Post";
+import Post from "../components/post/Post";
 import CommentContainer from "../components/comments/CommentContainer";
 
 const PostDetail: React.FC = () => {

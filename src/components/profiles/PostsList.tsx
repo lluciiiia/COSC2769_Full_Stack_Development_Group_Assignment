@@ -1,63 +1,37 @@
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-
+import { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { PostParams } from "../../interfaces/Posts.tsx";
-import { AppState } from "../../app/store";
-import { UserType } from "../../interfaces/Users";
-import { getUserById } from "../../features/userSlice";
+import { AppDispatch, AppState } from "../../app/store";
 import { useParams } from "react-router-dom";
-import Post from "../Post/Post.tsx";
+import Post from "../post/Post.tsx";
+import { fetchPosts, getPostListById } from "../../features/postsSlice.ts";
 
 const PostsList = () => {
   const { userId } = useParams();
-  const user: UserType | undefined = useSelector((state: AppState) =>
-    getUserById(state, Number(userId)),
-  );
-  const [posts, setPosts] = useState<PostParams[]>([]);
+  const dispatch: AppDispatch = useDispatch();
+  const firstRender = useRef(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/sample-data.json");
-        const data: PostParams[] = await response.json();
-        setPosts(data);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      }
-    };
-
-    fetchData();
+    if (firstRender.current) {
+      dispatch(fetchPosts());
+      firstRender.current = false;
+    }
   }, []);
 
-  const filteredPosts = posts.filter((post) => post.profileName === user?.name);
+  const filteredPosts: PostParams[] = useSelector(
+    (state: AppState): PostParams[] => {
+      return getPostListById(state, Number(userId));
+    },
+  );
+
+  const postList = filteredPosts.map((p: PostParams) => (
+    <Post key={p.id} {...p} />
+  ));
 
   return (
-    <>
-      <div className="flex h-screen">
-        <div className="mt-[64px] flex-1 overflow-y-auto">
-          {filteredPosts.length > 0 ? (
-            <div className="flex flex-col items-center gap-6">
-              {filteredPosts.map((post) => (
-                <Post
-                  key={post.id}
-                  id={post.id}
-                  profileImage={post.profileImage}
-                  profileName={post.profileName}
-                  postContent={post.postContent}
-                  postImage={post.postImage}
-                  profileLink={post.profileLink}
-                  isDetail={false}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="flex h-full items-center justify-center">
-              <p className="text-center">No posts available</p>
-            </div>
-          )}
-        </div>
-      </div>
-    </>
+    <div id="postList" className="space-y-6 pt-12">
+      {postList.length > 0 ? postList : <h1>Loading...</h1>}
+    </div>
   );
 };
 
