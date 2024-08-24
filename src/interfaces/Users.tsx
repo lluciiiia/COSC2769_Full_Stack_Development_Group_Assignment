@@ -18,8 +18,7 @@ export type UserType = {
   years: string | undefined; 
   educationDescription: string | undefined; 
   inRelationship:string | undefined; 
-
+  Bio:string | undefined; 
  
-
 
 };
