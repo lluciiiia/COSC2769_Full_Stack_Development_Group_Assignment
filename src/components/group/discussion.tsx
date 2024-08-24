@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { PostParams } from "../../interfaces/Posts";
-import Post from "../post/Post";
+import Post from "../Post/Post";
 export default function Discusstion() {
   const [posts, setPosts] = useState<PostParams[]>([]);
   useEffect(() => {
