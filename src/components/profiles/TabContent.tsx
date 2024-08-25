@@ -5,7 +5,7 @@ import About from "./About";
 import PhotoList from "./PhotoList";
 import PostsList from "./PostsProfileList";
 import { useEffect, useRef } from "react";
-import { fetchPosts } from "../../features/postsSlice";
+import { getPosts } from "../../controllers/posts";
 
 const TabContent = ({ activeTab }: { activeTab: string }) => {
   const dispatch: AppDispatch = useDispatch();
@@ -13,7 +13,7 @@ const TabContent = ({ activeTab }: { activeTab: string }) => {
 
   useEffect(() => {
     if (firstRender.current) {
-      dispatch(fetchPosts());
+      dispatch(getPosts());
       firstRender.current = false;
     }
   }, []);

@@ -11,20 +11,27 @@ import { useNavigate } from "react-router-dom";
 const ProfileSection: React.FC<ProfileSectionParams> = ({
   profileImage,
   profileName,
-}) => (
-  <div className="flex items-start p-6">
-    <div className="mr-4 flex-shrink-0">
-      <img
-        src={profileImage}
-        alt="Profile"
-        className="h-[50px] w-[50px] rounded-full"
-      />
+}) => {
+  // Set default values only if the properties are undefined
+  const safeProfileImage =
+    profileImage !== undefined ? profileImage : "default-image-url.jpg";
+  const safeProfileName = profileName !== undefined ? profileName : "Undefined";
+
+  return (
+    <div className="flex items-start p-6">
+      <div className="mr-4 flex-shrink-0">
+        <img
+          src={safeProfileImage}
+          alt="Profile"
+          className="h-[50px] w-[50px] rounded-full"
+        />
+      </div>
+      <div>
+        <div className="font-bold">{safeProfileName}</div>
+      </div>
     </div>
-    <div>
-      <div className="font-bold">{profileName}</div>
-    </div>
-  </div>
-);
+  );
+};
 
 const ReactionSection: React.FC<ReactionSectionProps> = ({ handleClick }) => (
   <div className="flex justify-between p-4">
@@ -55,24 +62,27 @@ const Post: React.FC<PostParams> = ({
     navigate(`/posts/${_id}`);
   };
 
+  // Destructure with default values only if undefined
+  const { profileImage = "default-image-url.jpg", profileName = "Undefined" } =
+    profileSection || {}; // Fallback to an empty object if profileSection is undefined
+
   return (
     <div
       className={`mx-auto max-w-md overflow-hidden rounded-lg bg-white ${
         isDetail ? "" : "shadow-md"
       }`}
     >
-      <ProfileSection
-        profileImage={profileSection.profileImage}
-        profileName={profileSection.profileName}
-      />
+      <ProfileSection profileImage={profileImage} profileName={profileName} />
       {/* Post Content */}
       <div className="text-center">
         <p className="mb-2 ml-5 text-left text-lg font-semibold">{content}</p>
-        <img
-          src={imageURL}
-          alt="Post Content"
-          className={`h-[300px] w-full ${isDetail ? "" : "rounded-lg"}`}
-        />
+        {imageURL && ( // Conditional rendering for the image
+          <img
+            src={imageURL}
+            alt="Post Content"
+            className={`h-[300px] w-full ${isDetail ? "" : "rounded-lg"}`}
+          />
+        )}
       </div>
 
       <ReactionSection handleClick={handleClick} />
