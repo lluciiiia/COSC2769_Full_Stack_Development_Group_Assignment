@@ -15,12 +15,12 @@ import Discussion from "./components/group/discussion.tsx";
 import About from "./components/group/about.tsx";
 import { store } from "./app/store.ts";
 import Admin from "./pages/Admin.tsx";
-// import Layout from "./components/Layout.tsx";
+import Layout from "./components/Layout.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    // element: <Layout />,  //Setting global navbar for the page
+    element: <Layout />,  //Setting global navbar for the page
     errorElement: <ErrorPage />,
     children: [
       {

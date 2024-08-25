@@ -9,8 +9,6 @@ import groupIcon from "../assets/icons/groupIcon.png";
 import createPostIcon from "../assets/icons/createPostIcon.png";
 import { NavItem } from "./NavItem";
 
-
-
 const Navbar = () => {
   const navigate = useNavigate();
 
@@ -19,7 +17,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed left-0 right-0 top-0 flex items-center justify-between bg-[#FFC123] p-2">
+    <nav className="fixed left-0 right-0 top-0 z-10 flex items-center justify-between bg-[#FFC123] p-2">
       <div className="flex items-center gap-2">
         <img
           src={logo}

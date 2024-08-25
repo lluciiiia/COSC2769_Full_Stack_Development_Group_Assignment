@@ -1,5 +1,6 @@
+// Profile.tsx
 import { useSelector } from "react-redux";
-import { getUserById } from "../features/userSlice";
+import { getUserById } from "../features/userSlice"; // Update user action
 import { AppState } from "../app/store";
 import { useParams } from "react-router-dom";
 import ErrorPage from "./ErrorPage";
@@ -9,6 +10,7 @@ import TabContent from "../components/profiles/TabContent";
 import ProfileHeader from "../components/profiles/ProfileHeader";
 import TabNavigation from "../components/profiles/TabNavigation";
 import ProfileInformation from "../components/profiles/ProfileInformation";
+import Modal from "../components/profiles/ProfileEditModal";
 
 const Profile = () => {
   const { userId } = useParams();
@@ -17,23 +19,32 @@ const Profile = () => {
     return getUserById(state, Number(userId));
   });
 
-  //get username
-  const name = user?.name;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("Posts"); // Initialize activeTab state
 
-  const [activeTab, setActiveTab] = useState("Posts");
-
-  //if the user id cannot be found
   if (user === undefined) {
     return <ErrorPage />;
   }
 
+  const handleEditProfile = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <>
-      <div className="flex min-h-screen flex-col items-center bg-white">
+      <div className="pt-16 flex min-h-screen flex-col items-center bg-white">
         <ProfileHeader />
 
         <div className="mt-16 w-full px-10">
-          <ProfileInformation name={name} />
+          <ProfileInformation
+            name={user.name}
+            bio={user.Bio}
+            onEditProfile={handleEditProfile}
+          />
 
           <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
         </div>
@@ -43,6 +54,8 @@ const Profile = () => {
           <TabContent activeTab={activeTab} />
         </div>
       </div>
+
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal} user={user} />
     </>
   );
 };

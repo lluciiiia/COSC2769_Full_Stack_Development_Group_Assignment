@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { UserType } from '../../features/userSlice';
+import { UserType } from '../../interfaces/Users';
 import { AppState } from '../../app/store';
 
 export default function Member() {
