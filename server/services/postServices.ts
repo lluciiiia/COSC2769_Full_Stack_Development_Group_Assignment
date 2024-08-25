@@ -9,7 +9,18 @@ export const getAllPosts = async (userId: string) => {
 
     const userObjectId = user._id;
 
-    const posts = await Post.find();
+    const posts = await Post.find().populate({
+      path: "comments",
+      populate: {
+        path: "reactions",
+        populate: {
+          path: "userId", // Populate user details for reactions
+          select: "name profilePictureURL", // Select the fields you want
+        },
+      },
+    });
+
+    console.log("posts: " + posts);
 
     // Filter and enhance posts based on visibility & their own posts
     const enhancedPosts = await Promise.all(
@@ -43,7 +54,16 @@ export const getAllPosts = async (userId: string) => {
 
 export const getPostById = async (postId: string) => {
   try {
-    const post = await Post.findById(postId);
+    const post = await Post.findById(postId).populate({
+      path: "comments",
+      populate: {
+        path: "reactions",
+        populate: {
+          path: "userId", // Populate user details for reactions
+          select: "name profilePictureURL", // Select the fields you want
+        },
+      },
+    });
     if (!post) throw new Error("Post not found with the provided id");
 
     const enhancedPost = await enhancePostWithUser(post);
@@ -66,6 +86,7 @@ const enhancePostWithUser = async (post: any) => {
       profileImage: user.profilePictureURL,
       profileName: user.name,
     },
+    comments: post.comments,
   };
 };
 
