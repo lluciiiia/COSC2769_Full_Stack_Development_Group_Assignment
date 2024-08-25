@@ -20,14 +20,12 @@ export const getAllPosts = async (userId: string) => {
           return await enhancePostWithUser(post);
         } else if (post.visibility === "GROUP") {
           const group = await Group.findById(post.groupId);
-          if (group && group.members.includes(userObjectId)) {
+          if (group && group.members.includes(userObjectId))
             return await enhancePostWithUser(post);
-          }
         } else if (post.visibility === "FRIEND_ONLY") {
           const creator = await User.findById(post.creatorId);
-          if (creator && creator.friends.includes(userObjectId)) {
+          if (creator && user.friends.includes(creator._id))
             return await enhancePostWithUser(post);
-          }
         }
         return null; // Return null for posts that don't meet visibility criteria
       }),
