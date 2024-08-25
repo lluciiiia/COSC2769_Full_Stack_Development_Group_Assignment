@@ -7,7 +7,7 @@ const reactionSchema = new mongoose.Schema({
     enum: ["LIKE", "LOVE", "HAHA", "ANGRY"],
     required: true,
   },
-  dateCreated: { type: Date, default: Date.now },
+  createdAt: { type: Date, default: Date.now },
 });
 
 const Reaction = mongoose.model("Reaction", reactionSchema);

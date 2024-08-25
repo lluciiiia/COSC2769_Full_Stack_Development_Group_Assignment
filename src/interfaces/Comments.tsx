@@ -11,6 +11,7 @@ export interface Comment {
 }
 
 export interface CommentContainerProps {
+  initComments: Comment[];
   postId: string;
 }
 

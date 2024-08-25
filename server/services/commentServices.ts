@@ -3,8 +3,7 @@ import Post from "../models/post";
 
 export const getAllComments = async () => {
   try {
-    const comments = await Comment.find();
-    return comments;
+    return await Comment.find();
   } catch (error) {
     console.error("Error fetching comments", error);
     throw new Error("Failed to fetch comments");

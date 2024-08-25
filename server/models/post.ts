@@ -9,7 +9,7 @@ const postSchema = new mongoose.Schema({
   groupId: { type: mongoose.Schema.Types.ObjectId, ref: "Group" }, // Assuming posts belong to groups
   content: { type: String, required: true },
   imageURL: { type: String },
-  dateCreated: { type: Date, default: Date.now },
+  createdAt: { type: Date, default: Date.now },
   visibility: {
     type: String,
     enum: ["PUBLIC", "FRIEND_ONLY", "GROUP"],
