@@ -1,42 +1,37 @@
 import express from "express";
-import Post from "../models/post";
+import {
+  getAllPosts,
+  createPost,
+  deletePostById,
+} from "../services/postServices";
+
 const router = express.Router();
 
-router.get('/',async (req, res) => {
-    try{
-        const posts= await Post.find();
-        res.json(posts);
-    }catch(error){
-        console.error("Error fetching posts", error);
-        res.status(500).json({error: 'Falied to fetch posts'});
-    }
-  });
-  
-  router.post('/',async (req, res) => {
-    try {
-        const newPost = new Post(req.body);  
-        console.log(newPost);
-        await newPost.save();  
-        res.status(201).json({ message: 'Post created', post: newPost });
-      } catch (error: any) {
-        console.error("Error creating post:", error);
+router.get("/", async (req, res) => {
+  try {
+    const posts = await getAllPosts();
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
 
-        if (error.name === 'ValidationError') {
-          return res.status(400).json({ error: error.message });
-        }
-        res.status(500).json({ error: 'Failed to create post' });
-      }
-  });
-  
-  router.delete('/:id', async (req, res) => {
-    try {
-      const postId = req.params.id;
-      await Post.findByIdAndDelete(postId);  
-      res.json({ message: 'Post deleted' });
-    } catch (error) {
-      console.error("Error deleting Post:", error);
-      res.status(500).json({ error: 'Failed to delete post' });
-    }
-  });
+router.post("/", async (req, res) => {
+  try {
+    const newPost = await createPost(req.body);
+    res.status(201).json({ message: "Post created", post: newPost });
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
+});
 
-  export default router;
+router.delete("/:id", async (req, res) => {
+  try {
+    await deletePostById(req.params.id);
+    res.json({ message: "Post deleted" });
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
+
+export default router;
