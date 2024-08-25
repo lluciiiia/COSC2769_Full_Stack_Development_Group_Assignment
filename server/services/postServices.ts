@@ -1,10 +1,36 @@
+import mongoose from "mongoose";
 import Group from "../models/group";
 import Post from "../models/post";
 import User from "../models/user";
 
-export const getAllPosts = async () => {
+export const getAllPosts = async (userId: string) => {
   try {
+    const user = await User.findById(userId);
+    if (!user) throw new Error(`User not found for userId: ${userId}`);
+
+    const userObjectId = user._id;
+
     const posts = await Post.find();
+
+    // Filter posts based on visibility
+    const filteredPosts = await Promise.all(
+      posts.map(async (post) => {
+        if (post.visibility === "PUBLIC") {
+          return post; // Return PUBLIC posts directly
+        } else if (post.visibility === "GROUP") {
+          const group = await Group.findById(post.groupId);
+          if (group && group.members.includes(userObjectId)) {
+            return post; // Return GROUP posts if user is a member
+          }
+        } else if (post.visibility === "FRIEND_ONLY") {
+          const creator = await User.findById(post.creatorId);
+          if (creator && creator.friends.includes(userObjectId)) {
+            return post; // Return FRIEND_ONLY posts if user is a friend of the creator
+          }
+        }
+        return null; // Return null for posts that don't meet visibility criteria
+      }),
+    );
 
     const enhancedPosts = await Promise.all(posts.map(enhancePostWithUser));
 
