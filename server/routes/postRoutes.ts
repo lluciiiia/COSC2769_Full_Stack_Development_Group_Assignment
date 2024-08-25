@@ -3,6 +3,7 @@ import {
   getAllPosts,
   createPost,
   deletePostById,
+  getPostById,
 } from "../services/postServices";
 
 const router = express.Router();
@@ -11,6 +12,15 @@ router.get("/", async (req, res) => {
   try {
     const posts = await getAllPosts();
     res.json(posts);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  try {
+    const post = await getPostById(req.params.id);
+    res.json(post);
   } catch (error) {
     res.status(500).json({ error: error });
   }

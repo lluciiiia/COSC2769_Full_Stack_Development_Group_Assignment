@@ -1,18 +1,22 @@
+import { ObjectId } from "mongoose";
+
 export interface PostParams {
-  id: string;
-  userId: string;
-  profileImage: string;
-  profileName: string;
-  postContent: string;
-  postImage: string;
-  profileLink: string;
-  isDetail: boolean;
+  _id: string;
+  creatorId: string;
+  groupId?: string;
+  content: string;
+  imageURL?: string;
+  dateCreated: Date;
+  visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
+  comments: string[];
+  reactions: string[];
+  isDetail?: boolean;
+  profileSection: ProfileSectionParams;
 }
 
 export interface ProfileSectionParams {
   profileImage: string;
   profileName: string;
-  profileLink: string;
 }
 
 export interface ReactionSectionProps {

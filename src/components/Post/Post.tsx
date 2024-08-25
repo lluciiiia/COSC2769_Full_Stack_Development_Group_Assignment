@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 const ProfileSection: React.FC<ProfileSectionParams> = ({
   profileImage,
   profileName,
-  profileLink,
 }) => (
   <div className="flex items-start p-6">
     <div className="mr-4 flex-shrink-0">
@@ -23,12 +22,6 @@ const ProfileSection: React.FC<ProfileSectionParams> = ({
     </div>
     <div>
       <div className="font-bold">{profileName}</div>
-      <a
-        href={profileLink}
-        className="mt-1 text-sm text-gray-500 hover:underline"
-      >
-        @{profileName}
-      </a>
     </div>
   </div>
 );
@@ -51,17 +44,14 @@ const ReactionSection: React.FC<ReactionSectionProps> = ({ handleClick }) => (
 
 const Post: React.FC<PostParams> = ({
   id,
-  userId,
-  profileImage,
-  profileName,
-  postContent,
-  postImage,
-  profileLink,
+  creatorId,
+  content,
+  imageURL,
+  profileSection,
   isDetail,
 }) => {
   const navigate = useNavigate();
   const handleClick = () => {
-    console.log({ id });
     navigate(`/posts/${id}`);
   };
 
@@ -72,17 +62,14 @@ const Post: React.FC<PostParams> = ({
       }`}
     >
       <ProfileSection
-        profileImage={profileImage}
-        profileName={profileName}
-        profileLink={profileLink}
+        profileImage={profileSection.profileImage}
+        profileName={profileSection.profileName}
       />
       {/* Post Content */}
       <div className="text-center">
-        <p className="mb-2 ml-5 text-left text-lg font-semibold">
-          {postContent}
-        </p>
+        <p className="mb-2 ml-5 text-left text-lg font-semibold">{content}</p>
         <img
-          src={postImage}
+          src={imageURL}
           alt="Post Content"
           className={`h-[300px] w-full ${isDetail ? "" : "rounded-lg"}`}
         />
