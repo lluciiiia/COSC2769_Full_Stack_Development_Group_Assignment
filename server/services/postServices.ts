@@ -80,16 +80,30 @@ const enhancePostWithUser = async (post: any) => {
   const user = await User.findById(post.creatorId);
   if (!user) throw new Error(`User not found for creatorId: ${post.creatorId}`);
 
+  // Add profile section to each comment
+  const commentsWithProfileSection = await Promise.all(
+    post.comments.map(async (comment: any) => {
+      const commentUser = await User.findById(comment.userId);
+      return {
+        ...comment.toObject(),
+        profileSection: {
+          profileImage:
+            commentUser?.profilePictureURL || "default-image-url.jpg",
+          profileName: commentUser?.name || "Undefined",
+        },
+      };
+    }),
+  );
+
   return {
     ...post.toObject(), // Convert Mongoose document to plain JS object
     profileSection: {
       profileImage: user.profilePictureURL,
       profileName: user.name,
     },
-    comments: post.comments,
+    comments: commentsWithProfileSection,
   };
 };
-
 export const createPost = async (postData: any) => {
   try {
     // Check if creator exists

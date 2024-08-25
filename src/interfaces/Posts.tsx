@@ -1,12 +1,14 @@
+import { Comment } from "./Comments";
+
 export interface PostParams {
   _id: string;
   creatorId: string;
   groupId?: string;
   content: string;
   imageURL?: string;
-  dateCreated: Date;
+  createdAt: Date;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
-  comments: string[];
+  comments: Comment[];
   reactions: string[];
   isDetail?: boolean;
   profileSection: ProfileSectionParams;

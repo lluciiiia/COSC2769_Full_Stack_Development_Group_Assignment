@@ -41,13 +41,13 @@ const PostDetail: React.FC = () => {
             profileSection={post.profileSection}
             content={post.content}
             imageURL={post.imageURL}
-            dateCreated={post.dateCreated}
+            createdAt={post.createdAt}
             visibility={post.visibility}
             comments={post.comments}
             reactions={post.reactions}
             isDetail={true}
           />
-          <CommentContainer postId={post._id} />
+          <CommentContainer initComments={post.comments} postId={post._id} />
         </div>
       </div>
     </>

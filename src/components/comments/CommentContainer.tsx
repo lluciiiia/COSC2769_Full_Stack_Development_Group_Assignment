@@ -3,19 +3,17 @@ import { Comment, CommentContainerProps } from "../../interfaces/Comments.tsx";
 import CommentItem from "./CommentItem.tsx";
 import CommentForm from "./CommentForm.tsx";
 
-const CommentContainer: React.FC<CommentContainerProps> = ({ postId }) => {
+const CommentContainer: React.FC<CommentContainerProps> = ({
+  initComments,
+  postId,
+}) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState<string>("");
 
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        // TODO: Replace with an actual API call
-        // const response = await fetch(`/api/comments?postId=${postId}`);
-        // const data: Comment[] = await response.json();
-        const response = await fetch("/sample-comments.json");
-        const data: Comment[] = await response.json();
-        setComments(data);
+        setComments(initComments);
       } catch (error) {
         console.error("Error fetching comments:", error);
       }
@@ -46,9 +44,10 @@ const CommentContainer: React.FC<CommentContainerProps> = ({ postId }) => {
       const newCommentData = {
         id: "",
         userId: "currentUserId",
-        profileImage: "https://example.com/profile3.jpg",
-        profileName: "User Three",
-        profileLink: "https://example.com/user3",
+        profileSection: {
+          profileImage: "https://example.com/profile3.jpg",
+          profileName: "User Three",
+        },
         postId: postId,
         createdAt: new Date(),
         content: newComment,
