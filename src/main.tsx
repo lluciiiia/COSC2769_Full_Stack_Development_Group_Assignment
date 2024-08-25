@@ -25,7 +25,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: <Login />,
       },
       {
         path: "/post/:postId",
@@ -58,8 +58,8 @@ const router = createBrowserRouter([
         element: <Signup />,
       },
       {
-        path: "/login",
-        element: <Login />,
+        path: "/home",
+        element: <Home />,
       },
       {
         path: "/admin",
