@@ -11,20 +11,22 @@ export const getAllPosts = async (userId: string) => {
 
     const posts = await Post.find();
 
-    // Filter and enhance posts based on visibility
+    // Filter and enhance posts based on visibility & their own posts
     const enhancedPosts = await Promise.all(
       posts.map(async (post) => {
-        if (post.visibility === "PUBLIC") {
-          return await enhancePostWithUser(post); // Enhance PUBLIC posts
+        if (post.creatorId === userObjectId) {
+          return await enhancePostWithUser(post);
+        } else if (post.visibility === "PUBLIC") {
+          return await enhancePostWithUser(post);
         } else if (post.visibility === "GROUP") {
           const group = await Group.findById(post.groupId);
           if (group && group.members.includes(userObjectId)) {
-            return await enhancePostWithUser(post); // Enhance GROUP posts if user is a member
+            return await enhancePostWithUser(post);
           }
         } else if (post.visibility === "FRIEND_ONLY") {
           const creator = await User.findById(post.creatorId);
           if (creator && creator.friends.includes(userObjectId)) {
-            return await enhancePostWithUser(post); // Enhance FRIEND_ONLY posts if user is a friend of the creator
+            return await enhancePostWithUser(post);
           }
         }
         return null; // Return null for posts that don't meet visibility criteria
