@@ -9,6 +9,7 @@ import relationshipIcon from "../../assets/icons/profileIcon/relationshipIcon.pn
 import { AppState } from "../../app/store";
 import { UserType } from "../../interfaces/Users";
 import { getUserById } from "../../features/userSlice";
+import React from "react";
 
 interface OverviewItemProps {
   defaultText: string;
@@ -34,18 +35,25 @@ const OverviewInformation = () => {
         defaultText="Lives in"
         icon={homeUserIcon}
         data={user?.location}
-      />{" "}
-      <OverviewItem defaultText="+" icon={phoneIcon} data={user?.phoneNumber} />{" "}
+      />
+      <OverviewItem
+        defaultText="+"
+        icon={phoneIcon}
+        data={user?.phoneNumber}
+      />
       <OverviewItem
         defaultText=""
         icon={relationshipIcon}
         data={user?.relationship}
       />
-      <OverviewItem defaultText="Works at" icon={jobsIcon} data={user?.job} />
+      <OverviewItem
+        defaultText="Works at"
+        icon={jobsIcon}
+        data={user?.job}
+      />
     </div>
   );
 };
-export default OverviewInformation;
 
 const OverviewItem: React.FC<OverviewItemProps> = ({
   defaultText,
@@ -56,9 +64,11 @@ const OverviewItem: React.FC<OverviewItemProps> = ({
     <div className="flex items-center">
       <img src={icon} alt="" className="h-8" />
       <div className="ml-2">
-        <span className="opacity-50">{defaultText}</span>
-        <span className="font-medium">{" " + data}</span>
+        <span className="opacity-50">{data ? defaultText : ""}</span>
+        <span className="font-medium">{" " + (data || "Unavailable")}</span>
       </div>
     </div>
   );
 };
+
+export default OverviewInformation;

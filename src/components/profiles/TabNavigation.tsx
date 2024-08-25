@@ -1,3 +1,5 @@
+import React from "react";
+
 type TabNavigationProps = {
   activeTab: string;
   setActiveTab: (tab: string) => void; // Correct the type of setActiveTab

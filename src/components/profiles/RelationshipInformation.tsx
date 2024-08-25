@@ -24,14 +24,13 @@ const RelationshipInformation = () => {
         </div>
         <div className="rounded-md border border-gray-300 bg-[#FFF2CA] p-4 shadow-inner">
           <p className="text-xl font-semibold text-gray-900">
-            {user?.relationship}
+            {user?.relationship || "Unavailable"}
           </p>
-          {user?.relationship === "In a relationship" &&
-            user?.inRelationship && (
-              <p className="mt-2 text-lg text-gray-700">
-                With: {user?.inRelationship}
-              </p>
-            )}
+          {user?.relationship === "In a relationship" && user?.inRelationship ? (
+            <p className="mt-2 text-lg text-gray-700">
+              With: {user?.inRelationship || "Unavailable"}
+            </p>
+          ) : null}
         </div>
       </div>
     </div>
