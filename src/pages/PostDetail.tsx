@@ -44,6 +44,7 @@ const PostDetail: React.FC = () => {
         <div className="mr-[300px] flex items-center justify-center gap-28">
           <Post
             id={post.id}
+            userId={post.userId}
             profileImage={post.profileImage}
             profileName={post.profileName}
             postContent={post.postContent}
