@@ -7,6 +7,8 @@ import groupRoutes from './routes/groupRoutes';
 import userRoutes from './routes/userRoutes';
 import postRoutes from './routes/postRoutes';
 import notiRoutes from './routes/notiRoutes';
+import commentRoutes from './routes/commentRoutes';
+import reactionRoutes from './routes/reactionRoutes';
 const app = express();
 
 // CORS configuration
@@ -26,7 +28,8 @@ app.use('/api/users', userRoutes);
 app.use('/api/groups', groupRoutes); 
 app.use('/api/posts',postRoutes);
 app.use('/api/notifications',notiRoutes);
-
+app.use('/api/comments', commentRoutes);
+app.use('/api/reactions', reactionRoutes);
 app.get('/', (req: Request, res: Response) => {
     res.json('From backend side');
 });
