@@ -4,7 +4,27 @@ import User from "../models/user";
 
 export const getAllPosts = async () => {
   try {
-    return await Post.find();
+    // Fetch all posts
+    const posts = await Post.find();
+
+    // Enhance each post with user information
+    const enhancedPosts = await Promise.all(
+      posts.map(async (post) => {
+        const user = await User.findById(post.creatorId);
+        if (!user)
+          throw new Error(`User not found for creatorId: ${post.creatorId}`);
+
+        return {
+          ...post.toObject(), // Convert Mongoose document to plain JS object
+          profileSection: {
+            profileImage: user.profilePictureURL,
+            profileName: user.name,
+          },
+        };
+      }),
+    );
+
+    return enhancedPosts;
   } catch (error) {
     console.error("Error fetching posts", error);
     throw new Error("Failed to fetch posts");
