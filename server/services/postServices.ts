@@ -2,15 +2,39 @@ import Group from "../models/group";
 import Post from "../models/post";
 import User from "../models/user";
 
-export const getAllPosts = async () => {
+export const getAllPosts = async (userId: string) => {
   try {
-    // Fetch all posts
+    const user = await User.findById(userId);
+    if (!user) throw new Error(`User not found for userId: ${userId}`);
+
+    const userObjectId = user._id;
+
     const posts = await Post.find();
 
-    // Enhance each post with user information
-    const enhancedPosts = await Promise.all(posts.map(enhancePostWithUser));
+    // Filter and enhance posts based on visibility & their own posts
+    const enhancedPosts = await Promise.all(
+      posts.map(async (post) => {
+        if (post.creatorId === userObjectId) {
+          return await enhancePostWithUser(post);
+        } else if (post.visibility === "PUBLIC") {
+          return await enhancePostWithUser(post);
+        } else if (post.visibility === "GROUP") {
+          const group = await Group.findById(post.groupId);
+          if (group && group.members.includes(userObjectId))
+            return await enhancePostWithUser(post);
+        } else if (post.visibility === "FRIEND_ONLY") {
+          const creator = await User.findById(post.creatorId);
+          if (creator && user.friends.includes(creator._id))
+            return await enhancePostWithUser(post);
+        }
+        return null; // Return null for posts that don't meet visibility criteria
+      }),
+    );
 
-    return enhancedPosts;
+    // Remove null entries from the enhanced posts
+    const validEnhancedPosts = enhancedPosts.filter((post) => post !== null);
+
+    return validEnhancedPosts;
   } catch (error) {
     console.error("Error fetching posts", error);
     throw new Error("Failed to fetch posts");
@@ -22,7 +46,6 @@ export const getPostById = async (postId: string) => {
     const post = await Post.findById(postId);
     if (!post) throw new Error("Post not found with the provided id");
 
-    // Enhance post response with user information
     const enhancedPost = await enhancePostWithUser(post);
 
     return enhancedPost;

@@ -4,8 +4,10 @@ import { AppDispatch, AppState } from "../../app/store";
 import { useSelector, useDispatch } from "react-redux";
 import Post from "./Post";
 import { getPosts } from "../../controllers/posts";
+import { useParams } from "react-router-dom";
 
 function PostList() {
+  const { userId } = useParams();
   const dispatch: AppDispatch = useDispatch();
   const posts = useSelector((state: AppState) => {
     return state.posts.posts;
@@ -14,7 +16,7 @@ function PostList() {
   const firstRender = useRef(true);
   useEffect(() => {
     if (firstRender.current) {
-      dispatch(getPosts());
+      dispatch(getPosts(userId));
       firstRender.current = false;
     }
   }, [dispatch]);
