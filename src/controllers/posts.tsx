@@ -1,10 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { PostParams } from "../interfaces/Posts";
 
+const BACKEND_URL = "http://localhost:8080";
+
 export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
   "posts/getPosts",
   async (userId) => {
-    const response = await fetch(`http://localhost:8080/api/posts/${userId}`, {
+    const response = await fetch(BACKEND_URL + `/api/posts/all/${userId}`, {
       method: "GET",
     });
 
@@ -21,7 +23,7 @@ export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
 export const getPostById = async (id: String | undefined) => {
   if (id == undefined) return;
 
-  const response = await fetch(`http://localhost:8080/api/posts/${id}`, {
+  const response = await fetch(BACKEND_URL + `/api/posts/${id}`, {
     method: "GET",
   });
 

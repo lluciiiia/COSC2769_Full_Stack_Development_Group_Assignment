@@ -8,7 +8,7 @@ import {
 
 const router = express.Router();
 
-router.get("/:userId", async (req, res) => {
+router.get("/all/:userId", async (req, res) => {
   try {
     const posts = await getAllPosts(req.params.userId);
     res.json(posts);
