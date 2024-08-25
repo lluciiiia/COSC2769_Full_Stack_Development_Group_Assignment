@@ -1,5 +1,3 @@
-import { ObjectId } from "mongoose";
-
 export interface PostParams {
   _id: string;
   creatorId: string;
