@@ -1,21 +1,19 @@
 // Profile.tsx
-import { useSelector, useDispatch } from 'react-redux';
-import { getUserById, updateUser } from '../features/userSlice'; // Update user action
-import { AppState } from '../app/store';
-import { useParams } from 'react-router-dom';
-import ErrorPage from './ErrorPage';
-import { useState } from 'react';
-import { UserType } from '../interfaces/Users';
-import TabContent from '../components/profiles/TabContent';
-import ProfileHeader from '../components/profiles/ProfileHeader';
-import TabNavigation from '../components/profiles/TabNavigation';
-import ProfileInformation from '../components/profiles/ProfileInformation';
-import Modal from '../components/profiles/ProfileEditModal';
-
+import { useSelector } from "react-redux";
+import { getUserById } from "../features/userSlice"; // Update user action
+import { AppState } from "../app/store";
+import { useParams } from "react-router-dom";
+import ErrorPage from "./ErrorPage";
+import { useState } from "react";
+import { UserType } from "../interfaces/Users";
+import TabContent from "../components/profiles/TabContent";
+import ProfileHeader from "../components/profiles/ProfileHeader";
+import TabNavigation from "../components/profiles/TabNavigation";
+import ProfileInformation from "../components/profiles/ProfileInformation";
+import Modal from "../components/profiles/ProfileEditModal";
 
 const Profile = () => {
   const { userId } = useParams();
-  const dispatch = useDispatch();
 
   const user: UserType | undefined = useSelector((state: AppState) => {
     return getUserById(state, Number(userId));
@@ -38,11 +36,15 @@ const Profile = () => {
 
   return (
     <>
-      <div className="flex min-h-screen flex-col items-center bg-white">
+      <div className="pt-16 flex min-h-screen flex-col items-center bg-white">
         <ProfileHeader />
 
         <div className="mt-16 w-full px-10">
-          <ProfileInformation name={user.name} bio={user.Bio} onEditProfile={handleEditProfile} />
+          <ProfileInformation
+            name={user.name}
+            bio={user.Bio}
+            onEditProfile={handleEditProfile}
+          />
 
           <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
         </div>
@@ -53,11 +55,7 @@ const Profile = () => {
         </div>
       </div>
 
-      <Modal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        user={user}
-      />
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal} user={user} />
     </>
   );
 };
