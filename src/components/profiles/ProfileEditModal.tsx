@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { UserType } from '../../interfaces/Users';
+
 import { updateUser } from '../../features/userSlice';
 interface ModalProps {
   isOpen: boolean;
