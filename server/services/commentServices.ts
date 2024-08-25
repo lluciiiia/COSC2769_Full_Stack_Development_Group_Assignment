@@ -1,5 +1,6 @@
 import Comment from "../models/comment";
 import Post from "../models/post";
+import User from "../models/user";
 
 export const getAllComments = async () => {
   try {
@@ -22,7 +23,19 @@ export const createComment = async (commentData: any) => {
     post.comments.push(newComment._id);
     await post.save();
 
-    return newComment;
+    // Fetch the user who created the comment to populate the profileSection
+    const user = await User.findById(commentData.userId);
+    if (!user)
+      throw new Error(`User not found for userId: ${commentData.userId}`);
+
+    // Return the new comment along with the profileSection
+    return {
+      ...newComment.toObject(),
+      profileSection: {
+        profileImage: user.profilePictureURL,
+        profileName: user.name,
+      },
+    };
   } catch (error: any) {
     console.error("Error creating comment:", error);
     if (error.name === "ValidationError") {

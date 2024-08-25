@@ -6,7 +6,7 @@ import {
   ProfileSectionParams,
   ReactionSectionProps,
 } from "../../interfaces/Posts";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ProfileSection: React.FC<ProfileSectionParams> = ({
   profileImage,
@@ -58,8 +58,10 @@ const Post: React.FC<PostParams> = ({
   isDetail,
 }) => {
   const navigate = useNavigate();
+  const { userId } = useParams();
+
   const handleClick = () => {
-    navigate(`/posts/${_id}`);
+    navigate(`/posts/${userId}/${_id}`);
   };
 
   // Destructure with default values only if undefined

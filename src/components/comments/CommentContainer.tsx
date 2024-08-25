@@ -2,9 +2,11 @@ import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { Comment, CommentContainerProps } from "../../interfaces/Comments.tsx";
 import CommentItem from "./CommentItem.tsx";
 import CommentForm from "./CommentForm.tsx";
+import { createComment } from "../../controllers/comments.tsx";
 
 const CommentContainer: React.FC<CommentContainerProps> = ({
   initComments,
+  userId,
   postId,
 }) => {
   const [comments, setComments] = useState<Comment[]>([]);
@@ -30,30 +32,17 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
     e.preventDefault();
 
     try {
-      // const response = await fetch(`/api/comments`, {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({ content: newComment }),
-      // });
-      // const result = await response.json();
-      // setComments([...comments, result]);
-
-      // Simulate adding a new comment
-      const newCommentData = {
-        id: "",
-        userId: "currentUserId",
-        profileSection: {
-          profileImage: "https://example.com/profile3.jpg",
-          profileName: "User Three",
-        },
+      const response = await createComment({
+        userId: userId,
         postId: postId,
-        createdAt: new Date(),
         content: newComment,
-      };
+      });
 
-      setComments([...comments, newCommentData]);
+      if (!response.ok) throw new Error("Failed to create comment");
+
+      const result = await response.json();
+
+      setComments([...comments, result.comment]);
       setNewComment("");
     } catch (error) {
       console.error("Error adding comment:", error);
@@ -66,7 +55,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
         <h2 className="mb-4 text-xl font-bold">Comments</h2>
         <div className="flex h-[300px] flex-col gap-2 overflow-y-auto">
           {comments.map((comment) => (
-            <CommentItem key={comment.id} comment={comment} />
+            <CommentItem key={comment._id} comment={comment} />
           ))}
         </div>
         <CommentForm

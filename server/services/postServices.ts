@@ -20,8 +20,6 @@ export const getAllPosts = async (userId: string) => {
       },
     });
 
-    console.log("posts: " + posts);
-
     // Filter and enhance posts based on visibility & their own posts
     const enhancedPosts = await Promise.all(
       posts.map(async (post) => {

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { PostParams } from "../interfaces/Posts";
 
-const BACKEND_URL = "http://localhost:8080";
+export const BACKEND_URL = "http://localhost:8080";
 
 export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
   "posts/getPosts",

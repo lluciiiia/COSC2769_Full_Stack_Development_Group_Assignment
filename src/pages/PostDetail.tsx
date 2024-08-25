@@ -9,7 +9,7 @@ import { getPostById } from "../controllers/posts";
 const PostDetail: React.FC = () => {
   const [post, setPost] = useState<PostParams | null>(null);
   const location = useLocation();
-  const { postId } = useParams();
+  const { userId, postId } = useParams();
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -47,7 +47,11 @@ const PostDetail: React.FC = () => {
             reactions={post.reactions}
             isDetail={true}
           />
-          <CommentContainer initComments={post.comments} postId={post._id} />
+          <CommentContainer
+            initComments={post.comments}
+            userId={userId}
+            postId={post._id}
+          />
         </div>
       </div>
     </>

@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent } from "react";
 import { ProfileSectionParams } from "./Posts";
 
 export interface Comment {
-  id: string;
+  _id: string;
   postId: string;
   userId: string;
   content: string;
@@ -12,6 +12,7 @@ export interface Comment {
 
 export interface CommentContainerProps {
   initComments: Comment[];
+  userId: string | undefined;
   postId: string;
 }
 
