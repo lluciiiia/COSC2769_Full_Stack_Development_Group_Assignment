@@ -6,7 +6,7 @@ const initialState: UserType[] = [
   {
     id: 1,
     name: "Tai Ngo",
-    dateJoined: new Date('2006-10-13'),
+    dateJoined: new Date("2006-10-13"),
     email: "testing@gmail.com",
     password: "123",
     profilePictureURL: "https://example.com/tai-ngo.jpg",
@@ -31,7 +31,7 @@ const initialState: UserType[] = [
   {
     id: 2,
     name: "Nguyen An",
-    dateJoined: new Date('2015-05-20'),
+    dateJoined: new Date("2015-05-20"),
     email: "nguyen.an@gmail.com",
     password: "password2",
     profilePictureURL: "https://example.com/nguyen-an.jpg",
@@ -51,11 +51,12 @@ const initialState: UserType[] = [
     educationDescription:
       "Engaged in coursework on cybersecurity, network administration, and database management. Participated in a project on enhancing network security in corporate environments.",
     inRelationship: undefined,
+    Bio: "hi Im Tai Ngo Im a Software Engineering student at RMIT University and a software engineer at Tech Innovators",
   },
   {
     id: 3,
     name: "Le Thi Hoa",
-    dateJoined: new Date('2018-08-15'),
+    dateJoined: new Date("2018-08-15"),
     email: "le.hoa@gmail.com",
     password: "password3",
     profilePictureURL: "https://example.com/le-thi-hoa.jpg",
@@ -75,15 +76,17 @@ const initialState: UserType[] = [
     educationDescription:
       "Completed advanced courses in machine learning, big data, and statistical analysis. Conducted research on predictive analytics for healthcare.",
     inRelationship: "Minh",
+    Bio: "hi Im Tai Ngo Im a Software Engineering student at RMIT University and a software engineer at Tech Innovators",
   },
   {
     id: 4,
     name: "Pham Van Long",
-    dateJoined: new Date('2020-01-10'),
+    dateJoined: new Date("2020-01-10"),
     email: "pham.long@gmail.com",
     password: "password4",
     profilePictureURL: "https://example.com/pham-van-long.jpg",
-    introduction: "I am a full-stack developer with a focus on front-end technologies.",
+    introduction:
+      "I am a full-stack developer with a focus on front-end technologies.",
     address: "District 10, Ho Chi Minh",
     age: 24,
     activeStatus: true,
@@ -99,11 +102,12 @@ const initialState: UserType[] = [
     educationDescription:
       "Studied full-stack development, focusing on modern frameworks like React and Node.js. Developed a capstone project on building scalable web applications.",
     inRelationship: "Lan",
+    Bio: "hi Im Tai Ngo Im a Software Engineering student at RMIT University and a software engineer at Tech Innovators",
   },
   {
     id: 5,
     name: "Tran Thi Lan",
-    dateJoined: new Date('2019-11-25'),
+    dateJoined: new Date("2019-11-25"),
     email: "tran.lan@gmail.com",
     password: "password5",
     profilePictureURL: "https://example.com/tran-thi-lan.jpg",
@@ -123,10 +127,12 @@ const initialState: UserType[] = [
     educationDescription:
       "Completed coursework in graphic design, digital illustration, and visual communication. Led a project on redesigning the UI for a mobile application.",
     inRelationship: undefined,
-  }, {
+    Bio: "hi Im Tai Ngo Im a Software Engineering student at RMIT University and a software engineer at Tech Innovators",
+  },
+  {
     id: 6,
     name: "Mai Thi Kim",
-    dateJoined: new Date('2023-06-01'),
+    dateJoined: new Date("2023-06-01"),
     email: "mai.kim@gmail.com",
     password: "password6",
     profilePictureURL: "https://example.com/mai-thi-kim.jpg",
@@ -146,11 +152,12 @@ const initialState: UserType[] = [
     educationDescription:
       "Conducted advanced research in AI techniques and their applications. Published papers on improving model accuracy and efficiency.",
     inRelationship: undefined,
+    Bio: "hi Im Tai Ngo Im a Software Engineering student at RMIT University and a software engineer at Tech Innovators",
   },
   {
     id: 7,
     name: "Hoang Minh Tuan",
-    dateJoined: new Date('2022-02-14'),
+    dateJoined: new Date("2022-02-14"),
     email: "hoang.tuan@gmail.com",
     password: "password7",
     profilePictureURL: "https://example.com/hoang-minh-tuan.jpg",
@@ -170,11 +177,12 @@ const initialState: UserType[] = [
     educationDescription:
       "Studied game design, programming, and interactive media. Developed several indie games as personal projects.",
     inRelationship: "Thu",
+    Bio: "hi Im Tai Ngo Im a Software Engineering student at RMIT University and a software engineer at Tech Innovators",
   },
   {
     id: 8,
     name: "Ngoc Thi Lan",
-    dateJoined: new Date('2023-01-22'),
+    dateJoined: new Date("2023-01-22"),
     email: "ngoc.lan@gmail.com",
     password: "password8",
     profilePictureURL: "https://example.com/ngoc-thi-lan.jpg",
@@ -194,11 +202,12 @@ const initialState: UserType[] = [
     educationDescription:
       "Completed coursework in digital marketing strategies, data analysis, and consumer behavior. Managed campaigns that increased client engagement.",
     inRelationship: "Hieu",
+    Bio: "hi Im Tai Ngo Im a Software Engineering student at RMIT University and a software engineer at Tech Innovators",
   },
   {
     id: 9,
     name: "Vu Thi Thanh",
-    dateJoined: new Date('2022-10-11'),
+    dateJoined: new Date("2022-10-11"),
     email: "vu.thanh@gmail.com",
     password: "password9",
     profilePictureURL: "https://example.com/vu-thi-thanh.jpg",
@@ -218,15 +227,17 @@ const initialState: UserType[] = [
     educationDescription:
       "Completed studies in user experience design, interaction design, and visual communication. Led a project on redesigning an e-commerce platform.",
     inRelationship: "Nhat",
+    Bio: "hi Im Tai Ngo Im a Software Engineering student at RMIT University and a software engineer at Tech Innovators",
   },
   {
     id: 10,
     name: "Do Thi Bao",
-    dateJoined: new Date('2023-03-19'),
+    dateJoined: new Date("2023-03-19"),
     email: "do.bao@gmail.com",
     password: "password10",
     profilePictureURL: "https://example.com/do-thi-bao.jpg",
-    introduction: "I am a project manager with a background in software development.",
+    introduction:
+      "I am a project manager with a background in software development.",
     address: "District 9, Ho Chi Minh",
     age: 30,
     activeStatus: true,
@@ -242,15 +253,17 @@ const initialState: UserType[] = [
     educationDescription:
       "Studied advanced project management techniques, risk management, and leadership. Managed multiple successful software projects.",
     inRelationship: undefined,
+    Bio: "hi Im Tai Ngo Im a Software Engineering student at RMIT University and a software engineer at Tech Innovators",
   },
   {
     id: 11,
     name: "Phan Thi My",
-    dateJoined: new Date('2022-07-30'),
+    dateJoined: new Date("2022-07-30"),
     email: "phan.my@gmail.com",
     password: "password11",
     profilePictureURL: "https://example.com/phan-thi-my.jpg",
-    introduction: "I am a business analyst with expertise in data-driven decision making.",
+    introduction:
+      "I am a business analyst with expertise in data-driven decision making.",
     address: "District 12, Ho Chi Minh",
     age: 28,
     activeStatus: true,
@@ -266,15 +279,17 @@ const initialState: UserType[] = [
     educationDescription:
       "Focused on data analysis, statistical methods, and business intelligence. Led several analytics projects that improved business outcomes.",
     inRelationship: "Hoang",
+    Bio: "hi Im Tai Ngo Im a Software Engineering student at RMIT University and a software engineer at Tech Innovators",
   },
   {
     id: 12,
     name: "Nguyen Thi Huong",
-    dateJoined: new Date('2024-02-10'),
+    dateJoined: new Date("2024-02-10"),
     email: "nguyen.huong@gmail.com",
     password: "password12",
     profilePictureURL: "https://example.com/nguyen-thi-huong.jpg",
-    introduction: "I am an environmental engineer passionate about sustainability.",
+    introduction:
+      "I am an environmental engineer passionate about sustainability.",
     address: "District 11, Ho Chi Minh",
     age: 32,
     activeStatus: true,
@@ -290,15 +305,17 @@ const initialState: UserType[] = [
     educationDescription:
       "Specialized in environmental impact assessments, sustainable development, and renewable energy. Managed several large-scale sustainability projects.",
     inRelationship: "Tuan",
+    Bio: "hi Im Tai Ngo Im a Software Engineering student at RMIT University and a software engineer at Tech Innovators",
   },
   {
     id: 13,
     name: "Le Thi Mai",
-    dateJoined: new Date('2024-05-05'),
+    dateJoined: new Date("2024-05-05"),
     email: "le.mai@gmail.com",
     password: "password13",
     profilePictureURL: "https://example.com/le-thi-mai.jpg",
-    introduction: "I am a mobile app developer with a focus on cross-platform solutions.",
+    introduction:
+      "I am a mobile app developer with a focus on cross-platform solutions.",
     address: "District 7, Ho Chi Minh",
     age: 29,
     activeStatus: true,

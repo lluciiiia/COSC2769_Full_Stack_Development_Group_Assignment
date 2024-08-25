@@ -1,8 +1,23 @@
+import React from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../app/store";
 import About from "./About";
 import PhotoList from "./PhotoList";
-import PostsList from "./PostsList";
+import PostsList from "./PostsProfileList";
+import { useEffect, useRef } from "react";
+import { fetchPosts } from "../../features/postsSlice";
 
 const TabContent = ({ activeTab }: { activeTab: string }) => {
+  const dispatch: AppDispatch = useDispatch();
+  const firstRender = useRef(true);
+
+  useEffect(() => {
+    if (firstRender.current) {
+      dispatch(fetchPosts());
+      firstRender.current = false;
+    }
+  }, []);
+
   switch (activeTab) {
     case "Posts":
       return <PostsList />;
