@@ -4,19 +4,6 @@ import { PostState } from "../interfaces/Posts";
 import { AppState } from "../app/store";
 import { getPosts } from "../controllers/posts";
 
-// export const fetchPosts = createAsyncThunk<PostParams[]>(
-//   "posts/fetchPosts",
-//   async () => {
-//     const response = await fetch("/sample-data.json");
-//     if (!response.ok) {
-//       console.error("Failed to fetch posts:", response.statusText);
-//       throw new Error("Failed to fetch posts");
-//     }
-//     const data: PostParams[] = await response.json();
-//     return data;
-//   },
-// );
-
 const initialState: PostState = {
   posts: [],
 };
