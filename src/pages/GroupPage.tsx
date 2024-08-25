@@ -4,6 +4,7 @@ import { GroupType } from "../types/group";
 import { AppState } from "../app/store";
 import { Outlet, NavLink } from "react-router-dom";
 import ReturnNavbar from "../components/ReturnNavbar";
+import React from "react";
 import { selectGroupById } from "../features/groupSlice";
 export default function GroupPage() {
   const { groupId } = useParams<{ groupId: string }>();

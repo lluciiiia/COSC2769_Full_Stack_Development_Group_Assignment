@@ -6,6 +6,8 @@ const groupSchema= new mongoose.Schema({
     name: {type: String, required: true},
     dataCreated: {type: Date, default:Date.now()},
     visibility: {type: String, required: true},
+    imageURL: {type:String},
+    backgroundImageURL: {type:String},
     members:[{type:mongoose.Schema.Types.ObjectId, ref:'User'}]
 })
 
