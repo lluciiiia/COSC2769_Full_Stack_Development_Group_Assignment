@@ -12,6 +12,16 @@ export const getAllPosts = async () => {
   }
 };
 
+export const getPostById = async (postId: String) => {
+  try {
+    const post = await Post.findById(postId);
+    return post;
+  } catch (error) {
+    console.error("Error fetching posts", error);
+    throw new Error("Failed to fetch posts");
+  }
+};
+
 export const createPost = async (postData: any) => {
   try {
     // Check if creator exists
