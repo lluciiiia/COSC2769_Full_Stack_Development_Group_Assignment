@@ -43,7 +43,7 @@ const ReactionSection: React.FC<ReactionSectionProps> = ({ handleClick }) => (
 );
 
 const Post: React.FC<PostParams> = ({
-  id,
+  _id,
   creatorId,
   content,
   imageURL,
@@ -52,7 +52,7 @@ const Post: React.FC<PostParams> = ({
 }) => {
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate(`/posts/${id}`);
+    navigate(`/posts/${_id}`);
   };
 
   return (
