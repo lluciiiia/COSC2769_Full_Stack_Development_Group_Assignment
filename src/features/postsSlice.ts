@@ -28,8 +28,7 @@ export const getPostListById = (
   creatorId: string,
 ): PostParams[] => {
   const posts = state.posts.posts.filter((p: PostParams) => {
-    const uId = p.creatorId;
-    return uId === creatorId;
+    return p.creatorId === creatorId;
   });
 
   return posts;
