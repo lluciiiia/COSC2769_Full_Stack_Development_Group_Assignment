@@ -8,21 +8,7 @@ export const getAllPosts = async () => {
     const posts = await Post.find();
 
     // Enhance each post with user information
-    const enhancedPosts = await Promise.all(
-      posts.map(async (post) => {
-        const user = await User.findById(post.creatorId);
-        if (!user)
-          throw new Error(`User not found for creatorId: ${post.creatorId}`);
-
-        return {
-          ...post.toObject(), // Convert Mongoose document to plain JS object
-          profileSection: {
-            profileImage: user.profilePictureURL,
-            profileName: user.name,
-          },
-        };
-      }),
-    );
+    const enhancedPosts = await Promise.all(posts.map(enhancePostWithUser));
 
     return enhancedPosts;
   } catch (error) {
@@ -31,28 +17,33 @@ export const getAllPosts = async () => {
   }
 };
 
-export const getPostById = async (postId: String) => {
+export const getPostById = async (postId: string) => {
   try {
     const post = await Post.findById(postId);
     if (!post) throw new Error("Post not found with the provided id");
 
-    const user = await User.findById(post.creatorId);
-    if (!user) throw new Error("User not found with the provided creatorId");
-
     // Enhance post response with user information
-    const enhancedPost = {
-      ...post.toObject(), // Convert Mongoose document to plain JS object
-      profileSection: {
-        profileImage: user.profilePictureURL,
-        profileName: user.name,
-      },
-    };
+    const enhancedPost = await enhancePostWithUser(post);
 
     return enhancedPost;
   } catch (error) {
-    console.error("Error fetching posts", error);
-    throw new Error("Failed to fetch posts");
+    console.error("Error fetching post by id", error);
+    throw new Error("Failed to fetch post");
   }
+};
+
+// Helper function to enhance a post with user information
+const enhancePostWithUser = async (post: any) => {
+  const user = await User.findById(post.creatorId);
+  if (!user) throw new Error(`User not found for creatorId: ${post.creatorId}`);
+
+  return {
+    ...post.toObject(), // Convert Mongoose document to plain JS object
+    profileSection: {
+      profileImage: user.profilePictureURL,
+      profileName: user.name,
+    },
+  };
 };
 
 export const createPost = async (postData: any) => {
