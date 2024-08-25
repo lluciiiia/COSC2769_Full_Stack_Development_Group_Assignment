@@ -6,5 +6,5 @@ const reactionSchema= new mongoose.Schema({
     dateCreated: { type: Date, default: Date.now }
 })
 
-
-export default reactionSchema;
+const Reaction = mongoose.model('Reaction',reactionSchema);
+export default Reaction;
