@@ -4,8 +4,7 @@ import User from "../models/user";
 
 export const getAllPosts = async () => {
   try {
-    const posts = await Post.find();
-    return posts;
+    return await Post.find();
   } catch (error) {
     console.error("Error fetching posts", error);
     throw new Error("Failed to fetch posts");
@@ -14,8 +13,7 @@ export const getAllPosts = async () => {
 
 export const getPostById = async (postId: String) => {
   try {
-    const post = await Post.findById(postId);
-    return post;
+    return await Post.findById(postId);
   } catch (error) {
     console.error("Error fetching posts", error);
     throw new Error("Failed to fetch posts");
@@ -26,13 +24,11 @@ export const createPost = async (postData: any) => {
   try {
     // Check if creator exists
     const user = await User.findById(postData.creatorId);
-    console.log("user: " + user);
     if (!user) throw new Error("User not found with the provided creatorId");
 
     // Check if group exists
     if (postData.groupId && postData.groupId != "") {
       const group = await Group.findById(postData.groupId);
-      console.log("group: " + group);
 
       if (!group) throw new Error("Group not found with the provided groupId");
 
