@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import Group from "../models/group";
 import Post from "../models/post";
 import User from "../models/user";
@@ -12,30 +11,30 @@ export const getAllPosts = async (userId: string) => {
 
     const posts = await Post.find();
 
-    // Filter posts based on visibility
-    const filteredPosts = await Promise.all(
+    // Filter and enhance posts based on visibility
+    const enhancedPosts = await Promise.all(
       posts.map(async (post) => {
         if (post.visibility === "PUBLIC") {
-          return post; // Return PUBLIC posts directly
+          return await enhancePostWithUser(post); // Enhance PUBLIC posts
         } else if (post.visibility === "GROUP") {
           const group = await Group.findById(post.groupId);
           if (group && group.members.includes(userObjectId)) {
-            return post; // Return GROUP posts if user is a member
+            return await enhancePostWithUser(post); // Enhance GROUP posts if user is a member
           }
         } else if (post.visibility === "FRIEND_ONLY") {
           const creator = await User.findById(post.creatorId);
           if (creator && creator.friends.includes(userObjectId)) {
-            return post; // Return FRIEND_ONLY posts if user is a friend of the creator
+            return await enhancePostWithUser(post); // Enhance FRIEND_ONLY posts if user is a friend of the creator
           }
         }
         return null; // Return null for posts that don't meet visibility criteria
       }),
     );
 
-    // Remove null entries from the filtered posts
-    const enhancedPosts = filteredPosts.filter((post) => post !== null);
+    // Remove null entries from the enhanced posts
+    const validEnhancedPosts = enhancedPosts.filter((post) => post !== null);
 
-    return enhancedPosts;
+    return validEnhancedPosts;
   } catch (error) {
     console.error("Error fetching posts", error);
     throw new Error("Failed to fetch posts");
