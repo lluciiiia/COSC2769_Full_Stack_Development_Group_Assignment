@@ -1,6 +1,5 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { PostParams } from "../interfaces/Posts";
-import { PostState } from "../interfaces/Posts";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { PostParams, PostState } from "../interfaces/Posts";
 import { AppState } from "../app/store";
 import { getPosts } from "../controllers/posts";
 

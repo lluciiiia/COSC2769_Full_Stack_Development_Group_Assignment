@@ -4,10 +4,8 @@ import User from "../models/user";
 
 export const getAllPosts = async () => {
   try {
-    // Fetch all posts
     const posts = await Post.find();
 
-    // Enhance each post with user information
     const enhancedPosts = await Promise.all(posts.map(enhancePostWithUser));
 
     return enhancedPosts;
@@ -22,7 +20,6 @@ export const getPostById = async (postId: string) => {
     const post = await Post.findById(postId);
     if (!post) throw new Error("Post not found with the provided id");
 
-    // Enhance post response with user information
     const enhancedPost = await enhancePostWithUser(post);
 
     return enhancedPost;
