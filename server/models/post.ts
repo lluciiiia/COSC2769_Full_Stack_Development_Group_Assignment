@@ -16,8 +16,8 @@ const postSchema = new mongoose.Schema({
     default: "PUBLIC",
     required: true,
   },
-  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comments" }],
-  reactions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Reactions" }],
+  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
+  reactions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Reaction" }],
 });
 
 const Post = mongoose.model("Post", postSchema);
