@@ -32,7 +32,8 @@ export const getAllPosts = async (userId: string) => {
       }),
     );
 
-    const enhancedPosts = await Promise.all(posts.map(enhancePostWithUser));
+    // Remove null entries from the filtered posts
+    const enhancedPosts = filteredPosts.filter((post) => post !== null);
 
     return enhancedPosts;
   } catch (error) {
