@@ -51,6 +51,7 @@ const ReactionSection: React.FC<ReactionSectionProps> = ({ handleClick }) => (
 
 const Post: React.FC<PostParams> = ({
   id,
+  userId,
   profileImage,
   profileName,
   postContent,

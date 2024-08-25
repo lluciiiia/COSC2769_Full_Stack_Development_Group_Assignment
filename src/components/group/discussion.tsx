@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PostParams } from "../../interfaces/Posts";
-import Post from "../Post/Post";
-export default function Discusstion() {
+import Post from "../post/Post";
+
+export default function Discussion() {
   const [posts, setPosts] = useState<PostParams[]>([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -28,6 +29,7 @@ export default function Discusstion() {
               {posts.map((post) => (
                 <Post
                   id={post.id}
+                  userId={post.userId}
                   profileImage={post.profileImage}
                   profileName={post.profileName}
                   postContent={post.postContent}
