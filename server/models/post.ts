@@ -2,7 +2,7 @@ import mongoose  from "mongoose";
 
 const postSchema = new mongoose.Schema({
     creatorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    groupId: { type: mongoose.Schema.Types.ObjectId, ref: 'Group', required: true },  // Assuming posts belong to groups
+    groupId: { type: mongoose.Schema.Types.ObjectId, ref: 'Group' },  // Assuming posts belong to groups
     content: { type: String, required: true },
     imageURL: { type: String },
     dateCreated: { type: Date, default: Date.now },

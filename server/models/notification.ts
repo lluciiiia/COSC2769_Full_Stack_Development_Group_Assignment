@@ -8,4 +8,5 @@ const notificationSchema= new mongoose.Schema({
     isSeen: {type: Boolean, required: true}
 })
 
-export default notificationSchema;
+const Notifications = mongoose.model('Notification', notificationSchema);
+export default Notifications;
