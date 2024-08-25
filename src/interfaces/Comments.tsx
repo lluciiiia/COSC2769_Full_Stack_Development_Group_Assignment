@@ -1,14 +1,13 @@
 import { ChangeEvent, FormEvent } from "react";
+import { ProfileSectionParams } from "./Posts";
 
 export interface Comment {
   id: string;
-  userId: string;
-  profileImage: string;
-  profileName: string;
-  profileLink: string;
   postId: string;
-  createdAt: Date;
+  userId: string;
   content: string;
+  profileSection: ProfileSectionParams;
+  createdAt: Date;
 }
 
 export interface CommentContainerProps {
