@@ -3,8 +3,10 @@ import cors from 'cors';
 import connectDB from './db';
 
 // Importing your routes
-// import groupRoutes from './routes/groupRoutes';
-
+import groupRoutes from './routes/groupRoutes';
+import userRoutes from './routes/userRoutes';
+import postRoutes from './routes/postRoutes';
+import notiRoutes from './routes/notiRoutes';
 const app = express();
 
 // CORS configuration
@@ -20,8 +22,10 @@ app.use(express.json());
 connectDB();
 
 // Use different API routes
-// app.use('/api/users', userRoutes);
-// app.use('/api/groups', groupRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/groups', groupRoutes); 
+app.use('/api/posts',postRoutes);
+app.use('/api/notifications',notiRoutes);
 
 app.get('/', (req: Request, res: Response) => {
     res.json('From backend side');
