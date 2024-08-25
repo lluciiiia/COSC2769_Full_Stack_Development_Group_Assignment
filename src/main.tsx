@@ -20,7 +20,7 @@ import Layout from "./components/Layout.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,  //Setting global navbar for the page
+    element: <Layout />, //Setting global navbar for the page
     errorElement: <ErrorPage />,
     children: [
       {
@@ -28,11 +28,11 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: "/post/:postId",
+        path: "/posts/:postId",
         element: <PostDetail />,
       },
       {
-        path: "/groupPage/:groupId",
+        path: "/groups/:groupId",
         element: <GroupPage />,
         children: [
           {

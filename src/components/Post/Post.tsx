@@ -61,7 +61,7 @@ const Post: React.FC<PostParams> = ({
   const navigate = useNavigate();
   const handleClick = () => {
     console.log({ id });
-    navigate(`/post/${id}`);
+    navigate(`/posts/${id}`);
   };
 
   return (
