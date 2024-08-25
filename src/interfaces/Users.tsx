@@ -1,6 +1,7 @@
 export type UserType = {
   id: number;
   name: string;
+  dateJoined: Date;
   email: string;
   password: string;
   profilePictureURL: string | undefined;
@@ -19,6 +20,4 @@ export type UserType = {
   educationDescription: string | undefined; 
   inRelationship:string | undefined; 
   Bio:string | undefined; 
- 
-
 };
