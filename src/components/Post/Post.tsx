@@ -82,7 +82,7 @@ const Post: React.FC<PostParams> = ({
           <img
             src={imageURL}
             alt="Post Content"
-            className={`h-[300px] w-full ${isDetail ? "" : "rounded-lg"}`}
+            className={`h-[300px] ${isDetail ? "w-[500px]" : "w-full rounded-lg"}`}
           />
         )}
       </div>
