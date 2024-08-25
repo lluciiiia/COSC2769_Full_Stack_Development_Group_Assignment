@@ -8,9 +8,9 @@ import {
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/:userId", async (req, res) => {
   try {
-    const posts = await getAllPosts();
+    const posts = await getAllPosts(req.params.userId);
     res.json(posts);
   } catch (error) {
     res.status(500).json({ error: error });

@@ -1,10 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { PostParams } from "../interfaces/Posts";
 
-export const getPosts = createAsyncThunk<PostParams[], void>(
+export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
   "posts/getPosts",
-  async () => {
-    const response = await fetch("http://localhost:8080/api/posts", {
+  async (userId) => {
+    const response = await fetch(`http://localhost:8080/api/posts/${userId}`, {
       method: "GET",
     });
 

@@ -6,14 +6,21 @@ import PhotoList from "./PhotoList";
 import PostsList from "./PostsProfileList";
 import { useEffect, useRef } from "react";
 import { getPosts } from "../../controllers/posts";
+import { useParams } from "react-router-dom";
 
-const TabContent = ({ activeTab }: { activeTab: string }) => {
+const TabContent = ({
+  activeTab,
+  userId,
+}: {
+  activeTab: string;
+  userId: string | undefined;
+}) => {
   const dispatch: AppDispatch = useDispatch();
   const firstRender = useRef(true);
 
   useEffect(() => {
     if (firstRender.current) {
-      dispatch(getPosts());
+      dispatch(getPosts(userId));
       firstRender.current = false;
     }
   }, []);
