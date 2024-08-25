@@ -1,5 +1,3 @@
-import React from "react";
-
 type GroupCreationRequestType = {
   name: string;
   imgUrl: string;
@@ -16,15 +14,15 @@ const GroupCreationRequest = ({
   requestDate,
 }: GroupCreationRequestType) => {
   return (
-    <div className="rounded-md bg-[#FFEEA8] p-2 relative">
-      <p className="absolute right-3 top-2">
+    <div className="rounded-md bg-[#FFEEA8] p-2">
+      <p className="absolute right-3 mr-2">
         <span className="opacity-60">Requested Date </span>
         {requestDate}
       </p>
       <div className="flex items-center gap-2">
-        <img src={imgUrl} className="h-10 w-10 rounded-full object-cover" alt={`${name} group`} />
+        <img src={imgUrl} className="h-10 w-10 rounded-full object-cover"></img>
         <div>
-          <p className="font-bold">{name}</p>
+          <p>{name}</p>
           <p className="ml-6">
             <span className="opacity-60">Requested by </span>
             <span className="cursor-pointer hover:underline">
@@ -33,13 +31,13 @@ const GroupCreationRequest = ({
           </p>
         </div>
       </div>
-      <div className="px-8 pt-4 text-sm">{description}</div>
+      <div className="px-8 pt-4">{description}</div>
       <div className="mr-1 flex justify-end gap-5">
         <button className="rounded-xl bg-[rgba(76,175,80,0.57)] px-3 py-1 text-sm">
           Approve
         </button>
         <button className="rounded-xl bg-[rgba(207,41,41,0.59)] px-3 py-1 text-sm">
-          Reject
+          Approve
         </button>
       </div>
     </div>
