@@ -1,10 +1,9 @@
-// Profile.tsx
 import { useSelector } from "react-redux";
-import { getUserById } from "../features/userSlice"; // Update user action
+import { getUserById } from "../features/userSlice";
 import { AppState } from "../app/store";
 import { useParams } from "react-router-dom";
 import ErrorPage from "./ErrorPage";
-import { useState } from "react";
+import React, { useState } from "react";
 import { UserType } from "../interfaces/Users";
 import TabContent from "../components/profiles/TabContent";
 import ProfileHeader from "../components/profiles/ProfileHeader";
@@ -36,7 +35,7 @@ const Profile = () => {
 
   return (
     <>
-      <div className="pt-16 flex min-h-screen flex-col items-center bg-white">
+      <div className="flex min-h-screen flex-col items-center bg-white pt-16">
         <ProfileHeader />
 
         <div className="mt-16 w-full px-10">
@@ -51,7 +50,7 @@ const Profile = () => {
         <div className="mt-1 w-full border-b-2"></div>
 
         <div className="mt-8 w-full max-w-4xl px-3">
-          <TabContent activeTab={activeTab} />
+          <TabContent activeTab={activeTab} userId={userId?.toString()} />
         </div>
       </div>
 

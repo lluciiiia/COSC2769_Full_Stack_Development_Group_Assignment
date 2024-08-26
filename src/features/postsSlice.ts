@@ -1,20 +1,8 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { PostParams } from "../interfaces/Posts";
-import { PostState } from "../interfaces/Posts";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { PostParams, PostState } from "../interfaces/Posts";
 import { AppState } from "../app/store";
+import { getPosts } from "../controllers/posts";
 
-export const fetchPosts = createAsyncThunk<PostParams[]>(
-  "posts/fetchPosts",
-  async () => {
-    const response = await fetch("/sample-data.json");
-    if (!response.ok) {
-      console.error("Failed to fetch posts:", response.statusText);
-      throw new Error("Failed to fetch posts");
-    }
-    const data: PostParams[] = await response.json();
-    return data;
-  },
-);
 const initialState: PostState = {
   posts: [],
 };
@@ -28,7 +16,7 @@ const postSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(fetchPosts.fulfilled, (state, action) => {
+    builder.addCase(getPosts.fulfilled, (state, action) => {
       state.posts.push(...action.payload);
     });
   },
@@ -36,11 +24,10 @@ const postSlice = createSlice({
 
 export const getPostListById = (
   state: AppState,
-  userId: number,
+  creatorId: string,
 ): PostParams[] => {
   const posts = state.posts.posts.filter((p: PostParams) => {
-    const uId = Number(p.userId);
-    return uId === userId;
+    return p.creatorId === creatorId;
   });
 
   return posts;

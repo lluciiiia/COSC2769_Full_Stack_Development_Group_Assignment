@@ -6,32 +6,32 @@ import {
   ProfileSectionParams,
   ReactionSectionProps,
 } from "../../interfaces/Posts";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ProfileSection: React.FC<ProfileSectionParams> = ({
   profileImage,
   profileName,
-  profileLink,
-}) => (
-  <div className="flex items-start p-6">
-    <div className="mr-4 flex-shrink-0">
-      <img
-        src={profileImage}
-        alt="Profile"
-        className="h-[50px] w-[50px] rounded-full"
-      />
+}) => {
+  // Set default values only if the properties are undefined
+  const safeProfileImage =
+    profileImage !== undefined ? profileImage : "default-image-url.jpg";
+  const safeProfileName = profileName !== undefined ? profileName : "Undefined";
+
+  return (
+    <div className="flex items-start p-6">
+      <div className="mr-4 flex-shrink-0">
+        <img
+          src={safeProfileImage}
+          alt="Profile"
+          className="h-[50px] w-[50px] rounded-full"
+        />
+      </div>
+      <div>
+        <div className="font-bold">{safeProfileName}</div>
+      </div>
     </div>
-    <div>
-      <div className="font-bold">{profileName}</div>
-      <a
-        href={profileLink}
-        className="mt-1 text-sm text-gray-500 hover:underline"
-      >
-        @{profileName}
-      </a>
-    </div>
-  </div>
-);
+  );
+};
 
 const ReactionSection: React.FC<ReactionSectionProps> = ({ handleClick }) => (
   <div className="flex justify-between p-4">
@@ -50,19 +50,23 @@ const ReactionSection: React.FC<ReactionSectionProps> = ({ handleClick }) => (
 );
 
 const Post: React.FC<PostParams> = ({
-  id,
-  profileImage,
-  profileName,
-  postContent,
-  postImage,
-  profileLink,
+  _id,
+  creatorId,
+  content,
+  imageURL,
+  profileSection,
   isDetail,
 }) => {
   const navigate = useNavigate();
+  const { userId } = useParams();
+
   const handleClick = () => {
-    console.log({ id });
-    navigate(`/post/${id}`);
+    navigate(`/posts/${userId}/${_id}`);
   };
+
+  // Destructure with default values only if undefined
+  const { profileImage = "default-image-url.jpg", profileName = "Undefined" } =
+    profileSection || {}; // Fallback to an empty object if profileSection is undefined
 
   return (
     <div
@@ -70,21 +74,17 @@ const Post: React.FC<PostParams> = ({
         isDetail ? "" : "shadow-md"
       }`}
     >
-      <ProfileSection
-        profileImage={profileImage}
-        profileName={profileName}
-        profileLink={profileLink}
-      />
+      <ProfileSection profileImage={profileImage} profileName={profileName} />
       {/* Post Content */}
       <div className="text-center">
-        <p className="mb-2 ml-5 text-left text-lg font-semibold">
-          {postContent}
-        </p>
-        <img
-          src={postImage}
-          alt="Post Content"
-          className={`h-[300px] w-full ${isDetail ? "" : "rounded-lg"}`}
-        />
+        <p className="mb-2 ml-5 text-left text-lg font-semibold">{content}</p>
+        {imageURL && ( // Conditional rendering for the image
+          <img
+            src={imageURL}
+            alt="Post Content"
+            className={`h-[300px] ${isDetail ? "w-[500px]" : "w-full rounded-lg"}`}
+          />
+        )}
       </div>
 
       <ReactionSection handleClick={handleClick} />

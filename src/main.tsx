@@ -20,7 +20,7 @@ import GroupList from "./pages/GroupList";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />, 
+    element: <Layout />, //Setting global navbar for the page
     errorElement: <ErrorPage />,
     children: [
       {
@@ -28,11 +28,11 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: "/post/:postId",
+        path: "/posts/:userId/:postId",
         element: <PostDetail />,
       },
       {
-        path: "/groupPage/:groupId",
+        path: "/groups/:groupId",
         element: <GroupPage />,
         children: [
           {
@@ -62,7 +62,7 @@ const router = createBrowserRouter([
         element: <Signup />,
       },
       {
-        path: "/home",
+        path: "/home/:userId",
         element: <Home />,
       },
       {

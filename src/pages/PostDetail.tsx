@@ -4,26 +4,19 @@ import Navbar from "../components/Navbar";
 import { PostParams } from "../interfaces/Posts";
 import Post from "../components/post/Post";
 import CommentContainer from "../components/comments/CommentContainer";
+import { getPostById } from "../controllers/posts";
 
 const PostDetail: React.FC = () => {
   const [post, setPost] = useState<PostParams | null>(null);
   const location = useLocation();
-  const { postId } = useParams();
+  const { userId, postId } = useParams();
 
   useEffect(() => {
-    // const queryParams = new URLSearchParams(location.search);
-    // const postId = queryParams.get("id");
     const fetchPost = async () => {
       try {
-        // const response = await fetch(`/api/posts/${postId}`);
-        // const data: PostParams = await response.json();
-        // TODO: replace Sample data version
-        const response = await fetch("/sample-data.json");
-        const data: PostParams[] = await response.json();
-        const foundPost = data.find((post) => post.id === postId);
-
-        if (foundPost) {
-          setPost(foundPost);
+        const post = await getPostById(postId);
+        if (post) {
+          setPost(post);
         } else {
           console.error("Post not found");
         }
@@ -43,15 +36,22 @@ const PostDetail: React.FC = () => {
       <div className="mt-[120px] flex h-full items-center justify-center overflow-y-auto">
         <div className="mr-[300px] flex items-center justify-center gap-28">
           <Post
-            id={post.id}
-            profileImage={post.profileImage}
-            profileName={post.profileName}
-            postContent={post.postContent}
-            postImage={post.postImage}
-            profileLink={post.profileLink}
+            _id={post._id}
+            creatorId={post.creatorId}
+            profileSection={post.profileSection}
+            content={post.content}
+            imageURL={post.imageURL}
+            createdAt={post.createdAt}
+            visibility={post.visibility}
+            comments={post.comments}
+            reactions={post.reactions}
             isDetail={true}
           />
-          <CommentContainer postId={post.id} />
+          <CommentContainer
+            initComments={post.comments}
+            userId={userId}
+            postId={post._id}
+          />
         </div>
       </div>
     </>

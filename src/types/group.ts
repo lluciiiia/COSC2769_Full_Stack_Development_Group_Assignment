@@ -7,3 +7,4 @@ export type GroupType={
     backgroundImageURL: string
     dateCreated: string,
 }
+
