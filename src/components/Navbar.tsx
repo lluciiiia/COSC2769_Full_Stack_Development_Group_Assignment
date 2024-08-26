@@ -15,7 +15,10 @@ const Navbar = () => {
   const handleHomeClick = () => {
     navigate(`/`);
   };
-
+ 
+  const handleGroupClick = () => {
+    navigate(`/GroupList`);
+  };
   return (
     <nav className="fixed left-0 right-0 top-0 z-10 flex items-center justify-between bg-[#FFC123] p-2">
       <div className="flex items-center gap-2">
@@ -29,7 +32,7 @@ const Navbar = () => {
       </div>
       <div className="flex max-w-xs flex-1 flex-grow justify-around gap-5">
         <NavItem src={homeIcon} label="Home" onClick={handleHomeClick} />
-        <NavItem src={groupIcon} label="Group" />
+        <NavItem src={groupIcon} onClick={handleGroupClick} label="Group" />
         <NavItem src={createPostIcon} label="Create Post" />
       </div>
 

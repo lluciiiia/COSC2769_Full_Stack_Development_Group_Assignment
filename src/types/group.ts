@@ -1,7 +1,10 @@
-export type GroupType = {
-  groupId: string;
-  groupAdmin: string;
-  name: string;
-  visibility: string;
-  createdAt: string;
-};
+export type GroupType={
+    _id: string,
+    groupAdmin: string,
+    name: string,
+    visibility: string,
+    imageURL:string,
+    backgroundImageURL: string
+    dateCreated: string,
+}
+

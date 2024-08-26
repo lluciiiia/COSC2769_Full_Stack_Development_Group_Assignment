@@ -1,17 +1,27 @@
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { GroupType } from "../types/group";
 import { AppState } from "../app/store";
 import { Outlet, NavLink } from "react-router-dom";
 import ReturnNavbar from "../components/ReturnNavbar";
-import { selectGroupById } from "../features/groupSlice";
+import { selectGroupById, fetchGroups } from "../features/groupSlice";
 export default function GroupPage() {
   const { groupId } = useParams<{ groupId: string }>();
-  const group: GroupType | undefined = useSelector((state: AppState) => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Fetch groups when the component is mounted
+    dispatch(fetchGroups());
+  }, [dispatch]);
+  const group: GroupType | void = useSelector((state: AppState) => {
+    // console.log("id is",groupId);
     selectGroupById(state, groupId || "");
+   
   });
   // selectGroupById(state, groupId || "")
-
+  console.log("group by id", group)
+  
   return (
     <div>
       <ReturnNavbar />
