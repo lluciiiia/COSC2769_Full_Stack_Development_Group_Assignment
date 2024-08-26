@@ -1,22 +1,26 @@
+import React from "react";
 import { useState } from "react";
 import OverviewInformation from "./OverviewInformation";
 import WorkInformation from "./WorkInformation";
 import EducationInformation from "./EducationInformation";
 import ContactInformation from "./ContactInformation";
 import RelationshipInformation from "./RelationshipInformation";
+import { UserType } from "../../interfaces/Users";
+import { useSelector } from "react-redux";
+import { AppState } from "../../app/store";
 
-const componentRender = (tab: string) => {
+const componentRender = (tab: string, user) => {
   switch (tab) {
     case "Overview":
-      return <OverviewInformation />;
+      return <OverviewInformation user={user} />;
     case "Work":
-      return <WorkInformation />;
+      return <WorkInformation user={user} />;
     case "Education":
-      return <EducationInformation />;
+      return <EducationInformation user={user}/>;
     case "Contact":
-      return <ContactInformation />;
+      return <ContactInformation user={user}/>;
     case "Relationship":
-      return <RelationshipInformation />;
+      return <RelationshipInformation user={user}/>;
     default:
       return null;
   }
@@ -24,6 +28,7 @@ const componentRender = (tab: string) => {
 
 const About = () => {
   const [activeTab, setActiveTab] = useState("Overview");
+  const user: UserType = useSelector((state: AppState) => state.user);
 
   return (
     <div className="flex rounded-xl bg-[#FFF8E6] p-4">
@@ -48,7 +53,7 @@ const About = () => {
         </ul>
       </div>
       <div className="flex w-4/5 flex-col justify-center px-10 py-4">
-        {componentRender(activeTab)}
+        {componentRender(activeTab, user)}
       </div>
     </div>
   );

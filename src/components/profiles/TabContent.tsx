@@ -3,10 +3,9 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import About from "./About";
 import PhotoList from "./PhotoList";
-import PostsList from "./PostsProfileList";
+import PostsProfileList from "./PostsProfileList";
 import { useEffect, useRef } from "react";
-import { getPosts } from "../../controllers/posts";
-import { useParams } from "react-router-dom";
+import { getPostsByCreatorId } from "../../controllers/posts";
 
 const TabContent = ({
   activeTab,
@@ -20,14 +19,14 @@ const TabContent = ({
 
   useEffect(() => {
     if (firstRender.current) {
-      dispatch(getPosts(userId));
+      dispatch(getPostsByCreatorId(userId));
       firstRender.current = false;
     }
   }, []);
 
   switch (activeTab) {
     case "Posts":
-      return <PostsList />;
+      return <PostsProfileList />;
     case "About":
       return <About />;
     case "Friends":

@@ -6,7 +6,7 @@ import postsReducer from "../features/postsSlice";
 export const rootReducer = combineReducers({
   //write hte reducer in this function and
   //the type when using selector is AppState
-  users: userReducer,
+  user: userReducer,
   groups: groupReducer,
   posts: postsReducer,
 

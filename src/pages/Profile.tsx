@@ -1,22 +1,31 @@
-import { useSelector } from "react-redux";
-import { getUserById } from "../features/userSlice";
-import { AppState } from "../app/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, AppState } from "../app/store";
 import { useParams } from "react-router-dom";
 import ErrorPage from "./ErrorPage";
-import React, { useState } from "react";
-import { UserType } from "../interfaces/Users";
+import React, { useEffect, useRef, useState } from "react";
 import TabContent from "../components/profiles/TabContent";
 import ProfileHeader from "../components/profiles/ProfileHeader";
 import TabNavigation from "../components/profiles/TabNavigation";
-import ProfileInformation from "../components/profiles/ProfileInformation";
 import Modal from "../components/profiles/ProfileEditModal";
+import { getUser } from "../controllers/user";
+import ProfileEditModal from "../components/profiles/ProfileEditModal";
 
 const Profile = () => {
   const { userId } = useParams();
 
-  const user: UserType | undefined = useSelector((state: AppState) => {
-    return getUserById(state, Number(userId));
+  const dispatch: AppDispatch = useDispatch();
+
+  const firstRender = useRef(true);
+  const user = useSelector((state: AppState) => state.user);
+
+  useEffect(() => {
+    if (firstRender.current) {
+      dispatch(getUser(userId));
+      firstRender.current = false;
+    }
   });
+
+  const numberOfFriend = user.friends?.length;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Posts"); // Initialize activeTab state
@@ -36,14 +45,16 @@ const Profile = () => {
   return (
     <>
       <div className="flex min-h-screen flex-col items-center bg-white pt-16">
-        <ProfileHeader />
+        <ProfileHeader
+          name={user.name}
+          bio={user.bio}
+          avatar={user.profilePictureURL}
+        />
 
-        <div className="mt-16 w-full px-10">
-          <ProfileInformation
-            name={user.name}
-            bio={user.Bio}
-            onEditProfile={handleEditProfile}
-          />
+        <div className="mt-20 w-full px-10">
+          <p>
+            {numberOfFriend} <span className="opacity-50">friends</span>
+          </p>
 
           <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
         </div>
@@ -54,7 +65,11 @@ const Profile = () => {
         </div>
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal} user={user} />
+      <ProfileEditModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        user={user}
+      />
     </>
   );
 };

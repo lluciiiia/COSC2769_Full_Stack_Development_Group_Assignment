@@ -4,6 +4,7 @@ import {
   createPost,
   deletePostById,
   getPostById,
+  getPostListByCreatorId,
 } from "../services/postServices";
 
 const router = express.Router();
@@ -11,6 +12,15 @@ const router = express.Router();
 router.get("/all/:userId", async (req, res) => {
   try {
     const posts = await getAllPosts(req.params.userId);
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
+
+router.get("/profile/:userId", async (req, res) => {
+  try {
+    const posts = await getPostListByCreatorId(req.params.userId);
     res.json(posts);
   } catch (error) {
     res.status(500).json({ error: error });
