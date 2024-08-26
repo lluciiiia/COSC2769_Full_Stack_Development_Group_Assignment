@@ -1,4 +1,3 @@
-
 import phoneIcon from "../../assets/icons/profileIcon/phoneIcon.png";
 import homeUserIcon from "../../assets/icons/profileIcon/homeUserIcon.png";
 import React from "react";

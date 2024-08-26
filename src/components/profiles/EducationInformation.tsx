@@ -1,4 +1,3 @@
-
 import educationIcon from "../../assets/icons/profileIcon/educationIcon.png";
 
 import React from "react";
