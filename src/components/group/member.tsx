@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { UserType } from '../../interfaces/Users';
 import { AppState } from '../../app/store';
-
+import React from 'react';
 export default function Member() {
   const users: UserType[] = useSelector((state: AppState) => state.users);
   const [dropdownOpen, setDropdownOpen] = useState<number | null>(null); 

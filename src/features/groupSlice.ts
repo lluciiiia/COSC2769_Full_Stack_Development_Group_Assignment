@@ -1,53 +1,53 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { GroupType } from "../types/group";
 import { AppState } from "../app/store";
 
-const initialState: GroupType[] = [
-  {
-    groupId: "grp001",
-    groupAdmin: "admin01",
-    name: "Tech Enthusiasts",
-    visibility: "Public",
-    dateCreated: "2023-01-15",
+const API_URL = "http://localhost:8080/api/groups";
+const initialState: GroupType[] = [];
+
+// Define the async thunk for fetching group data
+// export const fetchGroups = createAsyncThunk("groups/fetchGroups", async () => {
+//   const response = await fetch(API_URL);
+//   const data: GroupType[] = await response.json();
+//   console.log(data, "data fetched");
+//   return data;
+// });
+export const fetchGroups = createAsyncThunk<GroupType[]>(
+  "posts/fetchPosts",
+  async () => {
+    const response = await fetch(API_URL);
+    if (!response.ok) {
+      console.error("Failed to fetch groups:", response.statusText);
+      throw new Error("Failed to fetch groups");
+    }
+    const data: GroupType[] = await response.json();
+    return data;
   },
-  {
-    groupId: "grp002",
-    groupAdmin: "admin02",
-    name: "Book Lovers",
-    visibility: "Private",
-    dateCreated: "2022-11-30",
-  },
-  {
-    groupId: "grp003",
-    groupAdmin: "admin03",
-    name: "Fitness Freaks",
-    visibility: "Public",
-    dateCreated: "2023-05-10",
-  },
-  {
-    groupId: "grp004",
-    groupAdmin: "admin04",
-    name: "Music Mania",
-    visibility: "Public",
-    dateCreated: "2022-08-25",
-  },
-  {
-    groupId: "grp005",
-    groupAdmin: "admin05",
-    name: "Photography Pros",
-    visibility: "Private",
-    dateCreated: "2023-03-01",
-  },
-];
+);
 
 const groupSlice = createSlice({
-  name: "users",
+  name: "groups",
   initialState,
   reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchGroups.pending, (state) => {
+        // Handle loading state if needed
+        console.log("Fetching groups...");
+      })
+      .addCase(fetchGroups.fulfilled, (state, action) => {
+        console.log("Fetched groups data:", action.payload);
+        return action.payload; // Replace the state with the fetched groups
+      })
+      .addCase(fetchGroups.rejected, (state, action) => {
+        console.error("Failed to fetch groups", action.error.message);
+      });
+  },
 });
 
-export const selectGroupById = (state: AppState, groupId: string) => {
-  state.groups.find((group) => group.groupId === groupId);
-};
+
+// Selector to get group by ID
+export const selectGroupById = (state: AppState, groupId: string) =>
+  state.groups.find((group) => group.id === groupId);
 
 export default groupSlice.reducer;
