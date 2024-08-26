@@ -9,6 +9,7 @@ import postRoutes from "./routes/postRoutes";
 import notiRoutes from "./routes/notiRoutes";
 import commentRoutes from "./routes/commentRoutes";
 import reactionRoutes from "./routes/reactionRoutes";
+import authenticationRoutes from "./routes/authenticationRoutes";
 const app = express();
 
 // CORS configuration
@@ -30,6 +31,7 @@ app.use("/api/posts", postRoutes);
 app.use("/api/notifications", notiRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/reactions", reactionRoutes);
+app.use("/api/user",authenticationRoutes);
 app.get("/", (req: Request, res: Response) => {
   res.json("From backend side");
 });
