@@ -1,16 +1,6 @@
-import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { AppState } from "../../app/store";
-import { UserType } from "../../interfaces/Users";
-import { getUserById } from "../../features/userSlice";
 import relationshipIcon from "../../assets/icons/profileIcon/relationshipIcon.png";
 
-const RelationshipInformation = () => {
-  const { userId } = useParams();
-  const user: UserType | undefined = useSelector((state: AppState) =>
-    getUserById(state, Number(userId)),
-  );
-
+const RelationshipInformation = ({ user }) => {
   return (
     <div className="flex flex-col gap-8 p-4">
       <div className="p-4">
@@ -26,7 +16,8 @@ const RelationshipInformation = () => {
           <p className="text-xl font-semibold text-gray-900">
             {user?.relationship || "Unavailable"}
           </p>
-          {user?.relationship === "In a relationship" && user?.inRelationship ? (
+          {user?.relationship === "In a relationship" &&
+          user?.inRelationship ? (
             <p className="mt-2 text-lg text-gray-700">
               With: {user?.inRelationship || "Unavailable"}
             </p>

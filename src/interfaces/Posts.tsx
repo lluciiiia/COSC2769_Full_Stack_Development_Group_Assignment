@@ -36,4 +36,5 @@ export interface PostProps {
 
 export interface PostState {
   posts: PostParams[];
+  creatorPost: PostParams[];
 }
