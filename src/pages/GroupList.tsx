@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchGroups } from "../features/groupSlice";
 import { AppState, AppDispatch } from "../app/store";
 import { GroupType } from "../types/group";
+import { Link } from "react-router-dom";
 
 const GroupList = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -11,7 +12,6 @@ const GroupList = () => {
   useEffect(() => {
     dispatch(fetchGroups());
   }, [dispatch]);
-
 
   return (
     <div className="flex justify-center">
@@ -22,10 +22,9 @@ const GroupList = () => {
           </div>
         )}
 
-
         {groups && groups.length > 0 && (
           groups.map((group: GroupType) => (
-            <div key={group.id} className="flex mt-20 items-center border-black border-t-2 pb-4 justify-between relative">
+            <div key={group._id} className="flex mt-20 items-center border-black border-t-2 pb-4 justify-between relative">
               <div className="flex pt-5 items-center">
                 <img
                   src={group.imageURL}
@@ -40,15 +39,13 @@ const GroupList = () => {
                 >
                   Join
                 </button>
-                <button
-                  className="text-white bg-green-500 hover:bg-green-700 font-bold py-2 px-4 rounded focus:outline-none"
-                  onClick={() => {
-
-                    console.log('View group:', group.name);
-                  }}
-                >
-                  View
-                </button>
+                <Link to={`/GroupPage/${group._id}/discussion`}>
+                  <button
+                    className="text-white bg-green-500 hover:bg-green-700 font-bold py-2 px-4 rounded focus:outline-none"
+                  >
+                    View
+                  </button>
+                </Link>
               </div>
             </div>
           ))

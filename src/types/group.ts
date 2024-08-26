@@ -1,5 +1,5 @@
 export type GroupType={
-    id: string,
+    _id: string,
     groupAdmin: string,
     name: string,
     visibility: string,
