@@ -1,46 +1,53 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { GroupType } from "../interfaces/Group";
 import { useSelector, useDispatch } from "react-redux";
-import { GroupType } from "../types/group";
-import { AppState } from "../app/store";
+import { AppState, AppDispatch } from "../app/store";
 import { Outlet, NavLink } from "react-router-dom";
 import ReturnNavbar from "../components/ReturnNavbar";
 import { selectGroupById, fetchGroups } from "../features/groupSlice";
+
 export default function GroupPage() {
   const { groupId } = useParams<{ groupId: string }>();
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
+  const [group, setGroup] = useState<GroupType | null>(null); // Allow group to be null initially
+
+  const selectedGroup = useSelector((state: AppState) =>
+    selectGroupById(state, groupId || ""),
+  );
 
   useEffect(() => {
     // Fetch groups when the component is mounted
     dispatch(fetchGroups());
   }, [dispatch]);
-  const group: GroupType | void = useSelector((state: AppState) => {
-    // console.log("id is",groupId);
-    selectGroupById(state, groupId || "");
-   
-  });
-  // selectGroupById(state, groupId || "")
-  console.log("group by id", group)
-  
+
+  useEffect(() => {
+    setGroup(selectedGroup || null); 
+  }, [selectedGroup]);
+
+  if (!group) {
+    return <div>Group not found</div>; 
+  }
+
   return (
     <div>
       <ReturnNavbar />
       <div className="min-h-screen min-w-9 bg-gray-100">
         <header
           className="relative h-[250px] bg-cover bg-center"
-          style={{ backgroundImage: `url('/fruit_desktop.png')` }}
+          style={{ backgroundImage: `url('${group.backgroundImageURL}')` }}
         >
           <div className="absolute -bottom-12 left-12">
             <img
-              src="/cat.png"
+              src={group.imageURL}
               alt="Group"
               className="h-44 w-44 rounded-full border-4 border-white"
             />
           </div>
         </header>
         <div className="ml-64">
-          <h1 className="text-xl font-bold text-black">RMIT Vietnam Society</h1>
-          <p className="text-sm text-gray-600">6996 members</p>
+          <h1 className="text-xl font-bold text-black">{group.name}</h1>
+          <p className="text-sm text-gray-600">{group.members ? group.members.length : 0} members</p>
         </div>
         <div>
           <div className="mt-16 px-4">
@@ -93,7 +100,6 @@ export default function GroupPage() {
         </nav>
 
         <main className="p-4">
-          {/* This is where the nested route components will be rendered */}
           <Outlet />
         </main>
       </div>

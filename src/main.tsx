@@ -20,7 +20,7 @@ import GroupList from "./pages/GroupList";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />, //Setting global navbar for the page
+    element: <Layout />, 
     errorElement: <ErrorPage />,
     children: [
       {

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { GroupType } from "../types/group";
+import { GroupType } from "../interfaces/Group";
 import { AppState } from "../app/store";
 
 const API_URL = "http://localhost:8080/api/groups";
@@ -47,7 +47,12 @@ const groupSlice = createSlice({
 
 
 // Selector to get group by ID
-export const selectGroupById = (state: AppState, groupId: string) =>
-  state.groups.find((group) => group.id === groupId);
+export const selectGroupById = (state: AppState, groupId: string) => {
+  console.log(`selectGroupById called with groupId: ${groupId}`);
+  const group = state.groups.find((group) => group._id === groupId);
+  console.log(`Group found:`, group);
+  return group;
+};
+
 
 export default groupSlice.reducer;
