@@ -6,9 +6,9 @@ import { registerUser } from "../features/authSlice"; // Import the registerUser
 // import { UseDispatch } from "react-redux";
 import { AppDispatch } from "../app/store";
 interface RegisInfor {
-  name: String;
-  email: String;
-  password: String;
+  name?: string;
+  email?: string;
+  password?: string;
 }
 const Signup: React.FC = () => {
   const [formData, setFormData] = useState<RegisInfor>({
