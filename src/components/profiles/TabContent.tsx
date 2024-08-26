@@ -5,7 +5,7 @@ import About from "./About";
 import PhotoList from "./PhotoList";
 import PostsProfileList from "./PostsProfileList";
 import { useEffect, useRef } from "react";
-import { getPosts, getPostsByCreatorId } from "../../controllers/posts";
+import { getPostsByCreatorId } from "../../controllers/posts";
 
 const TabContent = ({
   activeTab,
@@ -32,9 +32,7 @@ const TabContent = ({
     case "Friends":
       return <h1>Friends</h1>;
     case "Photos":
-      return <h1>Friends</h1>;
-
-    // return <PhotoList />;
+      return <PhotoList />;
     default:
       return null;
   }
