@@ -1,14 +1,12 @@
-import React, { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 import { PostParams } from "../../interfaces/Posts.tsx";
-import { AppDispatch, AppState } from "../../app/store.ts";
-import { useParams } from "react-router-dom";
+import { AppState } from "../../app/store.ts";
 import Post from "../post/Post.tsx";
-import { getPostsByCreatorId } from "../../controllers/posts.tsx";
 
 const PostsProfileList = () => {
   const posts = useSelector((state: AppState) => state.posts.creatorPost);
-  console.log(posts);
+
   const postList = posts.map((p: PostParams) => <Post key={p._id} {...p} />);
 
   return (
