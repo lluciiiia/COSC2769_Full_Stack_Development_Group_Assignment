@@ -74,6 +74,7 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
             onEdit={handleEdit}
             onDelete={handleDelete}
             onViewHistory={handleViewHistory}
+            creatorId={post.creatorId}
           />
         )}
       </div>

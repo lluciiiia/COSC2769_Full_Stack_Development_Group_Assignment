@@ -68,6 +68,7 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
                     onEdit={handleEdit}
                     onDelete={handleDelete}
                     onViewHistory={handleViewHistory}
+                    creatorId={comment.userId}
                   />
                 )}
               </div>
