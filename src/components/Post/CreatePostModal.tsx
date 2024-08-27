@@ -1,4 +1,3 @@
-// src/components/CreatePostModal.tsx
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createpost } from "../../controllers/posts.tsx";

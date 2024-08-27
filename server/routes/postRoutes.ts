@@ -2,6 +2,7 @@ import express from "express";
 import {
   getAllPosts,
   createPost,
+  updatePost,
   deletePostById,
   getPostById,
   getPostListByCreatorId,
@@ -40,6 +41,15 @@ router.post("/", async (req, res) => {
   try {
     const newPost = await createPost(req.body);
     res.status(201).json({ message: "Post created", post: newPost });
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  try {
+    const updatedPost = await updatePost(req.params.id, req.body);
+    res.json({ message: "Post updated", post: updatedPost });
   } catch (error) {
     res.status(400).json({ error: error });
   }

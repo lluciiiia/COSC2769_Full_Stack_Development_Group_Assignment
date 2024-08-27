@@ -47,8 +47,6 @@ export const getPostById = async (id: string | undefined) => {
     method: "GET",
   });
 
-  console.log("response: " + JSON.stringify(response));
-
   if (!response.ok) {
     console.error("Failed to fetch posts:", response.statusText);
     throw new Error("Failed to fetch posts");
@@ -72,6 +70,24 @@ export const createpost = createAsyncThunk<PostParams, PostParams | undefined>(
     if (!response.ok) {
       throw new Error("Failed to create post");
     }
+
+    const data: PostParams = await response.json();
+    return data;
+  },
+);
+
+export const updatePost = createAsyncThunk<PostParams, PostParams>(
+  "posts/updatePost",
+  async (postData) => {
+    const response = await fetch(`${BACKEND_URL}/api/posts/${postData._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+    });
+
+    if (!response.ok) throw new Error("Failed to update post");
 
     const data: PostParams = await response.json();
     return data;
