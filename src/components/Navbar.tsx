@@ -46,7 +46,7 @@ const Navbar = () => {
       <div className="flex max-w-xs flex-1 flex-grow justify-around gap-5">
         <NavItem src={homeIcon} label="Home" onClick={handleHomeClick} />
         <NavItem src={groupIcon} onClick={handleGroupClick} label="Group" />
-        <NavItem src={createPostIcon} label="Create Post" />
+        <NavItem src={createPostIcon} onClick={handleCreatePostClick} label="Create Post" />
       </div>
 
         <div className="mr-6 flex justify-between gap-5">
