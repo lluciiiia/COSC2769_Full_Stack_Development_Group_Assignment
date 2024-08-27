@@ -8,10 +8,12 @@ import {
 } from "../../interfaces/Posts";
 import { useNavigate, useParams } from "react-router-dom";
 import PostDropDown from "./PostDropDown";
+import { deletePostById } from "../../controllers/posts";
 
 const ProfileSection: React.FC<ProfileSectionParams> = ({
   profileImage,
   profileName,
+  postId,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -24,10 +26,17 @@ const ProfileSection: React.FC<ProfileSectionParams> = ({
     setIsDropdownOpen(false);
   };
 
-  const handleDelete = () => {
-    console.log("Delete clicked");
+  const handleDelete = async () => {
     setIsDropdownOpen(false);
-    // Implement actual delete logic here
+    try {
+      const response = await deletePostById(postId);
+      if (!response) {
+        alert("Failed to delete the post. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      alert("An error occurred while trying to delete the post.");
+    }
   };
 
   const safeProfileImage =
@@ -102,7 +111,11 @@ const Post: React.FC<PostParams> = ({
         isDetail ? "" : "shadow-md"
       }`}
     >
-      <ProfileSection profileImage={profileImage} profileName={profileName} />
+      <ProfileSection
+        profileImage={profileImage}
+        profileName={profileName}
+        postId={_id}
+      />
       {/* Post Content */}
       <div className="text-center">
         <p className="mb-2 ml-5 text-left text-lg font-semibold">{content}</p>

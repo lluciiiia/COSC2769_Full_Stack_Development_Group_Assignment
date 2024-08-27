@@ -37,3 +37,15 @@ export const getPostById = async (id: String | undefined) => {
   const data: PostParams = await response.json();
   return data;
 };
+
+export const deletePostById = async (id: String | undefined) => {
+  if (id == undefined) return false;
+
+  const response = await fetch(BACKEND_URL + `/api/posts/${id}`, {
+    method: "DELETE",
+  });
+
+  return response.ok
+    ? true
+    : (console.error("Failed to delete the post", response.statusText), false);
+};
