@@ -9,3 +9,16 @@ export const createComment = async (comment: any) => {
     body: JSON.stringify(comment),
   });
 };
+
+export const deleteCommentById = async (id: String | undefined) => {
+  if (id == undefined) return false;
+
+  const response = await fetch(BACKEND_URL + `/api/comments/${id}`, {
+    method: "DELETE",
+  });
+
+  return response.ok
+    ? true
+    : (console.error("Failed to delete the comment", response.statusText),
+      false);
+};
