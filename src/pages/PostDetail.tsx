@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { PostParams } from "../interfaces/Posts";
-import Post from "../components/post/Post";
 import CommentContainer from "../components/comments/CommentContainer";
 import { getPostById } from "../controllers/posts";
+import Post from "../components/Post/Post";
 
 const PostDetail: React.FC = () => {
   const [post, setPost] = useState<PostParams | null>(null);
