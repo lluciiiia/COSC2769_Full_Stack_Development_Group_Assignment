@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ProfileSectionParams } from "../../interfaces/Posts";
 import { useNavigate, useParams } from "react-router-dom";
 import { deletePostById } from "../../controllers/posts";
-import PostDropDown from "./PostDropDown";
+import MenuDropDown from "../MenuDropDown";
 
 export const ProfileSection: React.FC<ProfileSectionParams> = ({
   profileImage,
@@ -62,7 +62,7 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
           className="cursor-pointer"
         />
         {isDropdownOpen && (
-          <PostDropDown onEdit={handleEdit} onDelete={handleDelete} />
+          <MenuDropDown onEdit={handleEdit} onDelete={handleDelete} />
         )}
       </div>
     </div>

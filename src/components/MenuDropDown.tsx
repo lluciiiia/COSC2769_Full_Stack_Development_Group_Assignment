@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import ConfirmationModal from "./ConfirmationModal";
+import ConfirmationModal from "./Post/ConfirmationModal";
 
-interface PostDropDownProps {
+interface MenuDropDownProps {
   onEdit: () => void;
   onDelete: () => void;
 }
 
-const PostDropDown: React.FC<PostDropDownProps> = ({ onEdit, onDelete }) => {
+const MenuDropDown: React.FC<MenuDropDownProps> = ({ onEdit, onDelete }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleDeleteClick = () => {
@@ -50,4 +50,4 @@ const PostDropDown: React.FC<PostDropDownProps> = ({ onEdit, onDelete }) => {
   );
 };
 
-export default PostDropDown;
+export default MenuDropDown;
