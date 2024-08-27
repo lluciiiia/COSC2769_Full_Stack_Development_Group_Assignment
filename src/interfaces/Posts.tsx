@@ -15,9 +15,9 @@ export interface PostParams {
 }
 
 export interface ProfileSectionParams {
+  post?: PostParams;
   profileImage?: string;
   profileName?: string;
-  postId?: string;
 }
 
 export interface ReactionSectionProps {
@@ -49,4 +49,5 @@ export interface PostFormProps {
   setImageURL: (url: string) => void;
   onSubmit: (e: React.FormEvent) => void;
   onClose: () => void;
+  isEdit: boolean;
 }

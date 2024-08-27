@@ -10,29 +10,38 @@ const PostForm: React.FC<PostFormProps> = ({
   setImageURL,
   onSubmit,
   onClose,
+  isEdit,
 }) => {
   return (
     <form onSubmit={onSubmit}>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div>
-          <div className="mb-6">
-            <label className="block text-base font-medium text-gray-700 font-bold">Content</label>
+          <div className="mb-4">
+            <label className="block text-sm font-bold font-medium text-gray-700">
+              Content
+            </label>
             <textarea
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-base resize"
+              className="mt-1 block w-full resize rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="What's buzzing?"
-              rows={6} // Increased rows for larger textarea
+              rows={4}
               required
             />
           </div>
 
-          <div className="mb-6">
-            <label className="block text-base font-medium text-gray-700 font-bold">Visibility</label>
+          <div className="mb-4">
+            <label className="block text-sm font-bold font-medium text-gray-700">
+              Visibility
+            </label>
             <select
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-base"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               value={visibility}
-              onChange={(e) => setVisibility(e.target.value as "PUBLIC" | "FRIEND_ONLY" | "GROUP")}
+              onChange={(e) =>
+                setVisibility(
+                  e.target.value as "PUBLIC" | "FRIEND_ONLY" | "GROUP",
+                )
+              }
             >
               <option value="PUBLIC">Public</option>
               <option value="FRIEND_ONLY">Friends Only</option>
@@ -41,11 +50,13 @@ const PostForm: React.FC<PostFormProps> = ({
           </div>
         </div>
         <div>
-          <div className="mb-6">
-            <label className="block text-base font-medium text-gray-700">Image</label>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">
+              Image
+            </label>
             <input
               type="text"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-base"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               value={imageURL}
               onChange={(e) => setImageURL(e.target.value)}
               placeholder="https://via.placeholder.com/150"
@@ -53,11 +64,11 @@ const PostForm: React.FC<PostFormProps> = ({
           </div>
 
           {imageURL && (
-            <div className="mb-6">
+            <div className="mb-4">
               <img
                 src={imageURL}
                 alt="Post Image"
-                className="w-full h-auto rounded-md"
+                className="h-auto w-full rounded-md"
               />
             </div>
           )}
@@ -67,16 +78,16 @@ const PostForm: React.FC<PostFormProps> = ({
       <div className="flex justify-end">
         <button
           type="button"
-          className="bg-gray-300 text-gray-700 rounded-md px-5 py-3 mr-3"
+          className="mr-2 rounded-md bg-gray-300 px-4 py-2 text-gray-700"
           onClick={onClose}
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="bg-[#FFC123] text-black rounded-md px-5 py-3"
+          className="rounded-md bg-[#FFC123] px-4 py-2 text-black"
         >
-          Post
+          {isEdit ? "Edit" : "Post"}
         </button>
       </div>
     </form>

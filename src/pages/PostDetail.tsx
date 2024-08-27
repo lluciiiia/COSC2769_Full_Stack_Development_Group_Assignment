@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import { PostParams } from "../interfaces/Posts";
 import CommentContainer from "../components/comments/CommentContainer";
 import { getPostById } from "../controllers/posts";
-import Post from "../components/Post/Post";
+import Post from "../components/post/Post";
 
 const PostDetail: React.FC = () => {
   const [post, setPost] = useState<PostParams | null>(null);

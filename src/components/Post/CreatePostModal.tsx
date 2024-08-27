@@ -75,3 +75,4 @@ const CreatePostModal = ({ isOpen, onClose, userId }) => {
 };
 
 export default CreatePostModal;
+
