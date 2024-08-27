@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { LikeIcon } from "../../assets/icons/LikeIcon";
 import { CommentIcon } from "../../assets/icons/CommentIcon";
 import {
@@ -12,13 +12,18 @@ const ProfileSection: React.FC<ProfileSectionParams> = ({
   profileImage,
   profileName,
 }) => {
-  // Set default values only if the properties are undefined
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   const safeProfileImage =
     profileImage !== undefined ? profileImage : "default-image-url.jpg";
   const safeProfileName = profileName !== undefined ? profileName : "Undefined";
 
   return (
-    <div className="flex items-start p-6">
+    <div className="relative flex items-start p-6">
       <div className="mr-4 flex-shrink-0">
         <img
           src={safeProfileImage}
@@ -29,8 +34,29 @@ const ProfileSection: React.FC<ProfileSectionParams> = ({
       <div>
         <div className="font-bold">{safeProfileName}</div>
       </div>
-      <div className="ml-auto">
-        <img src="/src/assets/svgs/ThreeDots.svg" alt="Three dots" />
+      <div className="relative ml-auto">
+        <img
+          src="/src/assets/svgs/ThreeDots.svg"
+          alt="Three dots"
+          onClick={toggleDropdown}
+          className="cursor-pointer"
+        />
+        {isDropdownOpen && (
+          <div className="absolute right-0 mt-2 w-28 rounded-md bg-white shadow-xl">
+            <button
+              onClick={() => console.log("Edit clicked")}
+              className="block w-full px-4 py-2 text-left text-sm text-gray-700 first:rounded-t-md last:rounded-b-md hover:bg-gray-100"
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => console.log("Delete clicked")}
+              className="block w-full px-4 py-2 text-left text-sm text-gray-700 first:rounded-t-md last:rounded-b-md hover:bg-gray-100"
+            >
+              Delete
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
