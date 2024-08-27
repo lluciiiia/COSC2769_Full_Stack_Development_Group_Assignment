@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from "react";
 import { PostParams } from "../../interfaces/Posts";
 import { AppDispatch, AppState } from "../../app/store";
 import { useSelector, useDispatch } from "react-redux";
-import Post from "./Post";
 import { getPosts } from "../../controllers/posts";
 import { useParams } from "react-router-dom";
+import Post from "./Post";
 
 function PostList() {
   const { userId } = useParams();
@@ -22,7 +22,13 @@ function PostList() {
   const postList = posts.map((p: PostParams) => <Post key={p._id} {...p} />);
   return (
     <div id="postList" className="space-y-6 pt-20">
-      {posts.length > 0 ? postList : <h1>Loading...</h1>}
+      {posts.length > 0 ? (
+        postList
+      ) : (
+        <div className="flex h-[600px] items-center justify-center">
+          <h1 className="text-gray-500">Loading...</h1>
+        </div>
+      )}
     </div>
   );
 }
