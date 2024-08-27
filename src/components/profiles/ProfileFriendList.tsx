@@ -6,7 +6,6 @@ const ProfileFriendList = () => {
   const user = useSelector((state: AppState) => state.user);
   const { friends } = user;
 
-  console.log("fasd", friends);
   return (
     <div className="flex w-full flex-col gap-6">
       {friends?.map((friend) => {

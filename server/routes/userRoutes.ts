@@ -1,6 +1,6 @@
 import express from "express";
 import User from "../models/user";
-import { getUserById } from "../services/userServices";
+import { getUserById, updateUser } from "../services/userServices";
 const router = express.Router();
 
 //GET /user- fetch all user
@@ -18,6 +18,17 @@ router.get("/:id", async (req, res) => {
   try {
     const userId = req.params.id;
     const user = await getUserById(userId);
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const updatedData = req.body;
+    const user = await updateUser(userId, updatedData);
     res.json(user);
   } catch (error) {
     res.status(500).json({ error: error });
