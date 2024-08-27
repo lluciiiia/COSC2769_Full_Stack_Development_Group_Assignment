@@ -16,6 +16,8 @@ export interface PostParams {
 
 export interface ProfileSectionParams {
   post?: PostParams;
+  profileImage?: string;
+  profileName?: string;
 }
 
 export interface ReactionSectionProps {
