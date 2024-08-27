@@ -57,7 +57,8 @@ export const getPostById = async (id: string | undefined) => {
   const data: PostParams = await response.json();
   return data;
 };
-export const createpost = createAsyncThunk<PostParams, PostParams |  undefined>(
+
+export const createpost = createAsyncThunk<PostParams, PostParams | undefined>(
   "posts/createPost",
   async (postData) => {
     const response = await fetch(`${BACKEND_URL}/api/posts`, {
@@ -73,6 +74,18 @@ export const createpost = createAsyncThunk<PostParams, PostParams |  undefined>(
     }
 
     const data: PostParams = await response.json();
-    return data; // Ensure this matches the PostParams type
-  }
+    return data;
+  },
 );
+
+export const deletePostById = async (id: String | undefined) => {
+  if (id == undefined) return false;
+
+  const response = await fetch(BACKEND_URL + `/api/posts/${id}`, {
+    method: "DELETE",
+  });
+
+  return response.ok
+    ? true
+    : (console.error("Failed to delete the post", response.statusText), false);
+};
