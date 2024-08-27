@@ -16,6 +16,8 @@ const ProfileSection: React.FC<ProfileSectionParams> = ({
   postId,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const navigate = useNavigate();
+  const { userId } = useParams();
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -32,6 +34,9 @@ const ProfileSection: React.FC<ProfileSectionParams> = ({
       const response = await deletePostById(postId);
       if (!response) {
         alert("Failed to delete the post. Please try again.");
+      } else {
+        navigate(`/home/${userId}`);
+        window.location.reload();
       }
     } catch (error) {
       console.error("Error deleting post:", error);
