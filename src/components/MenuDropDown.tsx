@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ConfirmationModal from "./Post/ConfirmationModal";
+import ConfirmationModal from "./post/ConfirmationModal";
 
 interface MenuDropDownProps {
   onEdit: () => void;
