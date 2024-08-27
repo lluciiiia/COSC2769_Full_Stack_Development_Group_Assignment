@@ -9,6 +9,7 @@ export type GroupType={
     backgroundImageURL: string
     dateCreated: string,
     members: UserType[]
+  
 }
 
 export interface GroupParams{

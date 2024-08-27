@@ -1,36 +1,33 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserType } from "../interfaces/Users";
-import { getUser } from "../controllers/user";
+import { getUser, fetchUsers } from "../controllers/user";
 
-//current user
-const initialState: UserType = {
-  _id: "",
-  name: "",
-  dateJoined: new Date(),
-  email: "",
-  password: "",
-  activeStatus: false,
+// Define initial state with both singleUser and usersList
+const initialState: {
+  singleUser: UserType | null;
+  usersList: UserType[];
+} = {
+  singleUser: null,
+  usersList: [],
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    // updateUser(state, action) {
-    //   const updatedUser = action.payload;
-    //   const index = state.findIndex((u) => u.id === updatedUser.id);
-    //   if (index !== -1) {
-    //     state[index] = updatedUser;
-    //   }
-    // },
+    // Add any additional reducers if needed
   },
   extraReducers(builder) {
-    builder.addCase(getUser.fulfilled, (state, action) => {
-      return action.payload;
+    // Handle fetching a single user
+    builder.addCase(getUser.fulfilled, (state, action: PayloadAction<UserType>) => {
+      state.singleUser = action.payload;
+    });
+
+    // Handle fetching the list of users
+    builder.addCase(fetchUsers.fulfilled, (state, action: PayloadAction<UserType[]>) => {
+      state.usersList = action.payload;
     });
   },
 });
-
-// export const { updateUser } = userSlice.actions;
 
 export default userSlice.reducer;

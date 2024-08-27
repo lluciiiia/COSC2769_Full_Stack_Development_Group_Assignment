@@ -18,3 +18,20 @@ export const getUser = createAsyncThunk<UserType, string | undefined>(
     return data;
   },
 );
+
+export const fetchUsers = createAsyncThunk<UserType[]>(
+  "users/fetchUsers",
+  async () => {
+    const response = await fetch(BACKEND_URL + `/api/users`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      console.error("Failed to fetch users:", response.statusText);
+      throw new Error("Failed to fetch users");
+    }
+
+    const data: UserType[] = await response.json();
+    return data;
+  }
+);

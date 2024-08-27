@@ -20,4 +20,5 @@ export type UserType = {
   inRelationship?: string;
   bio?: string;
   friends?: Array<{ _id: string; name: string; profilePictureURL?: string }>;
+  createdAt: string; 
 };

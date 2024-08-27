@@ -1,7 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import AdminNavbar from "../components/AdminNavbar";
-import { GroupManagement } from "../components/admin/GroupManagement";
+
+import GroupManagement from "../components/admin/GroupManagement";
 import UserManagement from "../components/admin/UserManagement";
 
 const Admin = () => {
@@ -19,9 +20,9 @@ export default Admin;
 const AdminTabContent = (activeTab: string) => {
   switch (activeTab) {
     case "Group":
-      return <GroupManagement />;
+      return  <GroupManagement/>;
     case "Users":
-      return <UserManagement />;
+      return < UserManagement/>;
     case "Content":
       return <h1>Content Management</h1>;
     default:

@@ -1,142 +1,118 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import GroupCreationRequest from "./GroupCreationRequest";
+//http://localhost:8080/api/groups
 
-type GroupCreationRequestType = {
-  id: number;
-  name: string;
-  imgUrl: string;
-  requestPerson: string;
-  description: string;
-  requestDate: string;
-};
-
-const groupList = [
-  {
-    id: 1,
-    name: "Tech Innovators",
-    imgUrl:
-      "https://steamuserimages-a.akamaihd.net/ugc/1013818009148019610/187908C668F299A58F2E07A25874D7075CE5F17F/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false",
-    requestPerson: "John Doe",
-    description:
-      "A group for tech enthusiasts to discuss the latest trends in technology, software development, and innovation.",
-    requestDate: "2024-07-15",
-  },
-  {
-    id: 2,
-    name: "Creative Writers Hub",
-    imgUrl:
-      "https://steamuserimages-a.akamaihd.net/ugc/1013818009148019610/187908C668F299A58F2E07A25874D7075CE5F17F/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false",
-    requestPerson: "Sarah Lee",
-    description:
-      "A community for aspiring and experienced writers to share their work, exchange feedback, and collaborate on creative projects.",
-    requestDate: "2024-08-01",
-  },
-  {
-    id: 3,
-    name: "Fitness Enthusiasts",
-    imgUrl:
-      "https://steamuserimages-a.akamaihd.net/ugc/1013818009148019610/187908C668F299A58F2E07A25874D7075CE5F17F/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false",
-    requestPerson: "Mike Johnson",
-    description:
-      "A group dedicated to fitness lovers. Share workout routines, diet plans, and tips to stay healthy and fit.",
-    requestDate: "2024-07-25",
-  },
-  {
-    id: 4,
-    name: "Photography Lovers",
-    imgUrl:
-      "https://steamuserimages-a.akamaihd.net/ugc/1013818009148019610/187908C668F299A58F2E07A25874D7075CE5F17F/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false",
-    requestPerson: "Emily Carter",
-    description:
-      "A platform for photographers of all levels to showcase their work, learn new techniques, and participate in photography challenges.",
-    requestDate: "2024-07-30",
-  },
-  {
-    id: 5,
-    name: "Sustainable Living",
-    imgUrl:
-      "https://steamuserimages-a.akamaihd.net/ugc/1013818009148019610/187908C668F299A58F2E07A25874D7075CE5F17F/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false",
-    requestPerson: "Alice Brown",
-    description:
-      "A community focused on promoting sustainable living practices, including eco-friendly products, recycling tips, and green energy solutions.",
-    requestDate: "2024-08-05",
-  },
-  {
-    id: 6,
-    name: "Book Club",
-    imgUrl:
-      "https://steamuserimages-a.akamaihd.net/ugc/1013818009148019610/187908C668F299A58F2E07A25874D7075CE5F17F/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false",
-    requestPerson: "Jane Smith",
-    description:
-      "A group for book lovers to read and discuss a wide variety of genres, from fiction to non-fiction.",
-    requestDate: "2024-08-10",
-  },
-  {
-    id: 7,
-    name: "Travel Enthusiasts",
-    imgUrl:
-      "https://steamuserimages-a.akamaihd.net/ugc/1013818009148019610/187908C668F299A58F2E07A25874D7075CE5F17F/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false",
-    requestPerson: "Robert Wilson",
-    description:
-      "A group for people who love to travel, share their experiences, and plan future trips together.",
-    requestDate: "2024-07-20",
-  },
-];
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { GroupType } from "../../types/group"; // Adjust the path as needed
 
 export const GroupManagement = () => {
-  const [groups, setGroups] = useState<GroupCreationRequestType[]>([]);
-  const [sortOption, setSortOption] = useState("newest");
+  const [groups, setGroups] = useState<GroupType[]>([]);
+  const [activeTab, setActiveTab] = useState("groups");
+  const navigate = useNavigate(); // Initialize the navigate function
 
   useEffect(() => {
-    const sortedGroups = [...groupList].sort((a, b) => {
-      if (sortOption === "newest") {
-        return (
-          new Date(b.requestDate).getTime() - new Date(a.requestDate).getTime()
-        );
-      } else {
-        return (
-          new Date(a.requestDate).getTime() - new Date(b.requestDate).getTime()
-        );
+    const fetchGroups = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/api/groups"); // Replace with your actual API endpoint
+        const data: GroupType[] = await response.json();
+        setGroups(data);
+      } catch (error) {
+        console.error("Error fetching groups:", error);
       }
-    });
-    setGroups(sortedGroups);
-  }, [sortOption]);
+    };
 
-  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSortOption(e.target.value);
+    fetchGroups();
+  }, []);
+
+  const handleViewGroup = (groupId: string) => {
+    navigate(`/groups/${groupId}/discussion`);
+  };
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
   };
 
   return (
-    <div className="mt-4 p-2">
-      <div className="mb-4 flex items-center justify-between">
-        <div></div> {/* Empty div to take up space on the left */}
-        <select
-          value={sortOption}
-          onChange={handleSortChange}
-          className="rounded-md border px-4 py-2"
+    <div className="flex h-screen flex-col">
+      {/* Tab Navigation */}
+      <div className="flex border-b border-gray-300">
+        <button
+          onClick={() => handleTabChange("groups")}
+          className={`flex-1 px-4 py-2 text-center ${
+            activeTab === "groups" ? "font-bold text-black" : "text-gray-600"
+          }`}
+          style={{
+            backgroundColor: activeTab === "groups" ? "#FFFAE8" : "white", // Custom color for active tab, white for inactive
+          }}
         >
-          <option value="newest">Sort by Newest</option>
-          <option value="oldest">Sort by Oldest</option>
-        </select>
+          Groups
+        </button>
+        <button
+          onClick={() => handleTabChange("requests")}
+          className={`flex-1 px-4 py-2 text-center ${
+            activeTab === "requests" ? "font-bold text-black" : "text-gray-600"
+          }`}
+          style={{
+            backgroundColor: activeTab === "requests" ? "#FFFAE8" : "white", // Custom color for active tab, white for inactive
+          }}
+        >
+          Group Requests
+        </button>
       </div>
 
-      <div className="flex flex-col gap-4">
-        {groups.map((gr) => {
-          const { id, name, imgUrl, requestPerson, description, requestDate } =
-            gr;
+      {/* Tab Content */}
+      <div className="flex-1 overflow-auto p-4">
+        {activeTab === "groups" && (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {groups.map((group) => (
+              <div
+                key={group._id}
+                className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm"
+              >
+                <img
+                  src={group.imageURL}
+                  alt={group.name}
+                  className="h-48 w-full object-cover"
+                />
+                <div className="p-4">
+                  <h2 className="text-xl font-bold text-gray-900">
+                    {group.name}
+                  </h2>
+                  <p className="text-sm text-gray-600">
+                    Admin: {group.groupAdmin}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Visibility: {group.visibility}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Date Created:{" "}
+                    {new Date(group.dateCreated).toLocaleDateString()}
+                  </p>
+                </div>
+                <div className="flex justify-around border-t border-gray-200 p-4">
+                  <button
+                    onClick={() => {}}
+                    className="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+                  >
+                    Delete Group
+                  </button>
+                  <button
+                    onClick={() => handleViewGroup(group._id)}
+                    className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+                  >
+                    View Group
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
-          return (
-            <GroupCreationRequest
-              key={id}
-              name={name}
-              imgUrl={imgUrl}
-              requestPerson={requestPerson}
-              description={description}
-              requestDate={requestDate}
-            />
-          );
-        })}
+        {activeTab === "requests" && (
+          <div>
+            {/* Placeholder content for Group Requests tab */}
+            <p className="text-gray-600">Group Requests content goes here.</p>
+          </div>
+        )}
       </div>
     </div>
   );
