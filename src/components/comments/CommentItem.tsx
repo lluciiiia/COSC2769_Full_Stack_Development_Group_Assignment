@@ -32,7 +32,7 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
   };
 
   return (
-    <div className="rounded-md bg-white p-2 shadow-sm">
+    <div className="w-[650px] rounded-md bg-white p-2 shadow-sm">
       <div className="flex">
         <div className="mr-2 flex-shrink-0">
           <img
@@ -65,7 +65,9 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
               </div>
             </div>
           </div>
-          <p>{comment.content}</p>
+          <p className="w-[570px] whitespace-normal break-words text-sm text-gray-800">
+            {comment.content}
+          </p>
         </div>
       </div>
     </div>
