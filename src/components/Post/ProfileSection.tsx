@@ -22,7 +22,6 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
   };
 
   const handleEdit = () => {
-    console.log("Edit clicked");
     setIsDropdownOpen(false);
     setIsEditModalOpen(true);
   };

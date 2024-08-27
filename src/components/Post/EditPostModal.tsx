@@ -30,10 +30,10 @@ const EditPostModal = ({ isOpen, onClose, userId, post }) => {
         visibility,
         imageURL,
       };
-
       const result = await dispatch(updatePost(postData)).unwrap();
       console.log("Post updated successfully:", result);
       onClose();
+      window.location.reload();
     } catch (error) {
       console.error("Error updating post:", error);
       alert("An error occurred while updating the post");

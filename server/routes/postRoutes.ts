@@ -2,6 +2,7 @@ import express from "express";
 import {
   getAllPosts,
   createPost,
+  updatePost,
   deletePostById,
   getPostById,
   getPostListByCreatorId,

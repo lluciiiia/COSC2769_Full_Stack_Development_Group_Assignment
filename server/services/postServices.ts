@@ -24,7 +24,6 @@ export const getAllPosts = async (userId: string) => {
     const enhancedPosts = await Promise.all(
       posts.map(async (post) => {
         if (post.creatorId.toString() === userObjectId.toString()) {
-          console.log("hi");
           return await enhancePostWithUser(post);
         } else if (post.visibility === "PUBLIC") {
           return await enhancePostWithUser(post);
