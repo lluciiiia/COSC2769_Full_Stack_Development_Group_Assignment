@@ -3,7 +3,7 @@ import { ProfileSectionParams } from "../../interfaces/Posts";
 import { useNavigate, useParams } from "react-router-dom";
 import { deletePostById } from "../../controllers/posts";
 import MenuDropDown from "../MenuDropDown";
-import EditPostModal from "../post/EditPostModal";
+import PostModal from "../post/PostModal";
 
 export const ProfileSection: React.FC<ProfileSectionParams> = ({
   post,
@@ -69,11 +69,11 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
           <MenuDropDown onEdit={handleEdit} onDelete={handleDelete} />
         )}
       </div>
-      <EditPostModal
+      <PostModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
-        post={post}
         userId={userId}
+        post={post}
       />
     </div>
   );

@@ -56,7 +56,7 @@ export const getPostById = async (id: string | undefined) => {
   return data;
 };
 
-export const createpost = createAsyncThunk<PostParams, PostParams | undefined>(
+export const createPost = createAsyncThunk<PostParams, PostParams | undefined>(
   "posts/createPost",
   async (postData) => {
     const response = await fetch(`${BACKEND_URL}/api/posts`, {
