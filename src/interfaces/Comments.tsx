@@ -11,9 +11,9 @@ export interface Comment {
 }
 
 export interface CommentContainerProps {
-  initComments: Comment[];
+  initComments: Comment[] | undefined;
   userId: string | undefined;
-  postId: string;
+  postId: string | undefined;
 }
 
 export interface CommentProps {
