@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import MenuDropDown from "../MenuDropDown";
 import { CommentProps } from "../../interfaces/Comments";
 import { formatRelativeTime } from "../../utils/formatRelativeTime";
