@@ -56,7 +56,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
         <div className="flex h-[300px] flex-col gap-2 overflow-y-auto">
           {comments.length === 0 ? (
             <div className="flex flex-1 items-center justify-center">
-              s <p className="text-center text-gray-500">No Comments</p>
+              <p className="text-center text-gray-500">No Comments</p>
             </div>
           ) : (
             comments.map((comment) => (

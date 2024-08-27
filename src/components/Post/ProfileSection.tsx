@@ -42,6 +42,10 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
     }
   };
 
+  const handleViewHistory = () => {
+    console.log("View Edit History clicked");
+  };
+
   const safeProfileImage =
     profileImage !== undefined ? profileImage : "default-image-url.jpg";
   const safeProfileName = profileName !== undefined ? profileName : "Undefined";
@@ -66,7 +70,11 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
           className="cursor-pointer"
         />
         {isDropdownOpen && (
-          <MenuDropDown onEdit={handleEdit} onDelete={handleDelete} />
+          <MenuDropDown
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            onViewHistory={handleViewHistory}
+          />
         )}
       </div>
       <PostModal
