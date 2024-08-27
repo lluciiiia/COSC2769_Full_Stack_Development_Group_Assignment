@@ -8,7 +8,7 @@ import homeIcon from "../assets/icons/homeIcon.png";
 import groupIcon from "../assets/icons/groupIcon.png";
 import createPostIcon from "../assets/icons/createPostIcon.png";
 import { NavItem } from "./NavItem";
-import CreatePostModal from "./post/CreatePostModal";
+import PostModal from "./post/PostModal";
 
 const Navbar = () => {
   const { userId } = useParams();
@@ -56,7 +56,8 @@ const Navbar = () => {
           <NavItem src={profileIcon} label={"Profile"} />
         </div>
       </nav>
-      <CreatePostModal
+
+      <PostModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         userId={userId}
