@@ -23,7 +23,8 @@ export const getAllPosts = async (userId: string) => {
     // Filter and enhance posts based on visibility & their own posts
     const enhancedPosts = await Promise.all(
       posts.map(async (post) => {
-        if (post.creatorId === userObjectId) {
+        if (post.creatorId.toString() === userObjectId.toString()) {
+          console.log("hi");
           return await enhancePostWithUser(post);
         } else if (post.visibility === "PUBLIC") {
           return await enhancePostWithUser(post);
@@ -129,6 +130,7 @@ const enhancePostWithUser = async (post: any) => {
     comments: commentsWithProfileSection,
   };
 };
+
 export const createPost = async (postData: any) => {
   try {
     // Check if creator exists
