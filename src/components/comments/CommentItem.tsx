@@ -31,6 +31,10 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
     }
   };
 
+  const handleViewHistory = () => {
+    console.log("View Edit History clicked");
+  };
+
   return (
     <div className="w-[650px] rounded-md bg-white p-2 shadow-sm">
       <div className="flex">
@@ -60,7 +64,11 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
                   height="20px"
                 />
                 {isDropdownOpen && (
-                  <MenuDropDown onEdit={handleEdit} onDelete={handleDelete} />
+                  <MenuDropDown
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    onViewHistory={handleViewHistory}
+                  />
                 )}
               </div>
             </div>
