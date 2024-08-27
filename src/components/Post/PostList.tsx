@@ -18,7 +18,7 @@ function PostList() {
       firstRender.current = false;
     }
   }, [dispatch, userId, posts.length]);
-
+  console.log(posts);
   const postList = posts.map((p: PostParams) => <Post key={p._id} {...p} />);
   return (
     <div id="postList" className="space-y-6 pt-20">

@@ -20,7 +20,27 @@ export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
   },
 );
 
-export const getPostById = async (id: String | undefined) => {
+export const getPostsByCreatorId = createAsyncThunk<
+  PostParams[],
+  string | undefined
+>("posts/getPostsByCreatorId", async (creatorId) => {
+  const response = await fetch(
+    BACKEND_URL + `/api/posts/profile/${creatorId}`,
+    {
+      method: "GET",
+    },
+  );
+
+  if (!response.ok) {
+    console.error("Failed to fetch posts:", response.statusText);
+    throw new Error("Failed to fetch posts");
+  }
+
+  const data: PostParams[] = await response.json();
+  return data;
+});
+
+export const getPostById = async (id: string | undefined) => {
   if (id == undefined) return;
 
   const response = await fetch(BACKEND_URL + `/api/posts/${id}`, {

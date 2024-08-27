@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { PostParams, PostState } from "../interfaces/Posts";
-import { AppState } from "../app/store";
-import { getPosts } from "../controllers/posts";
+import { PostState } from "../interfaces/Posts";
+import { getPosts, getPostsByCreatorId } from "../controllers/posts";
 
 const initialState: PostState = {
   posts: [],
+  creatorPost: [],
 };
 
 const postSlice = createSlice({
@@ -19,19 +19,11 @@ const postSlice = createSlice({
     builder.addCase(getPosts.fulfilled, (state, action) => {
       state.posts.push(...action.payload);
     });
+    builder.addCase(getPostsByCreatorId.fulfilled, (state, action) => {
+      state.creatorPost.push(...action.payload);
+    });
   },
 });
-
-export const getPostListById = (
-  state: AppState,
-  creatorId: string,
-): PostParams[] => {
-  const posts = state.posts.posts.filter((p: PostParams) => {
-    return p.creatorId === creatorId;
-  });
-
-  return posts;
-};
 
 export const { likePost } = postSlice.actions;
 export default postSlice.reducer;

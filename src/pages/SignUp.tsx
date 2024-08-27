@@ -1,8 +1,53 @@
-import React from "react";
-
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import logo from "../assets/icons/logo.png";
-
+import { registerUser } from "../features/authSlice"; // Import the registerUser thunk
+// import { UseDispatch } from "react-redux";
+import { AppDispatch } from "../app/store";
+interface RegisInfor {
+  name?: string;
+  email?: string;
+  password?: string;
+}
 const Signup: React.FC = () => {
+  const [formData, setFormData] = useState<RegisInfor>({
+    name: "",
+    email: "",
+    password: "",
+    // Add any other fields you may need
+  });
+
+  const dispatch: AppDispatch = useDispatch();
+  const navigate = useNavigate();
+  // Handle input changes
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value, // Update the corresponding field in formData
+    });
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      // Dispatch the registerUser thunk
+      const resultAction = await dispatch(registerUser(formData));
+
+      if (registerUser.fulfilled.match(resultAction)) {
+        console.log("User registered successfully:", resultAction.payload);
+        navigate("/");
+      } else {
+        console.error("Failed to register:", resultAction.payload);
+        // Handle registration error
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred:", error);
+    }
+  };
+
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-yellow-100">
       {/* Logo and BuZzNet Text */}
@@ -19,17 +64,19 @@ const Signup: React.FC = () => {
         <p className="mb-6 text-center text-gray-600">
           Join the Buzz, Share the Moment
         </p>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
-              htmlFor="first-name"
+              htmlFor="name"
               className="block text-sm font-bold text-gray-700"
             >
-              First Name
+              Name
             </label>
             <input
               type="text"
-              id="first-name"
+              id="name"
+              value={formData.name}
+              onChange={handleChange}
               placeholder="John"
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             />
@@ -44,6 +91,8 @@ const Signup: React.FC = () => {
             <input
               type="email"
               id="email"
+              value={formData.email}
+              onChange={handleChange}
               placeholder="johndoe@example.com"
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             />
@@ -58,6 +107,8 @@ const Signup: React.FC = () => {
             <input
               type="password"
               id="password"
+              value={formData.password}
+              onChange={handleChange}
               placeholder="********"
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             />
