@@ -61,6 +61,7 @@ const Navbar = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         userId={userId}
+        post={null}
       />
     </>
   );
