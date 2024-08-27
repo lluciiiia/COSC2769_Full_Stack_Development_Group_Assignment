@@ -1,68 +1,87 @@
-// Modal.tsx
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { UserType } from '../../interfaces/Users';
-import { updateUser } from '../../features/userSlice';
+import React, { useEffect, useState } from "react";
+
+import { UserType } from "../../interfaces/Users";
+import renderContent from "./ProfileModalUtils";
+import { useDispatch, useSelector } from "react-redux";
+import { AppState } from "../../app/store";
+import { updateLocalUser } from "../../features/userSlice";
+import { updateUser } from "../../controllers/user";
+
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  user: UserType;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, user }) => {
-  const [name, setName] = useState(user.name || '');
-  const [bio, setBio] = useState(user.Bio || '');
-  const [profilePictureURL, setProfilePictureURL] = useState(user.profilePictureURL || '');
+const ProfileEditModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
+
+  const [activeTab, setActiveTab] = useState("User Info");
+
+  const user = useSelector((state: AppState) => state.user);
+  const [formData, setFormData] = useState<UserType>({ ...user });
+
+  useEffect(() => {
+    setFormData(user);
+  }, [user]);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = () => {
+    //update user in reducer
+    dispatch(updateLocalUser(formData));
+
+    // update user in database
+    dispatch(updateUser({ userId: user._id, userData: formData }));
+
+    onClose();
+  };
+
+  const tabs = ["User Info", "Work", "Education", "Relationship", "Contact"];
 
   if (!isOpen) return null;
 
-  const handleSubmit = () => {
-    // Dispatch action to update user profile
-    dispatch(updateUser({ ...user, name, Bio: bio, profilePictureURL }));
-    onClose(); // Close the modal after submitting
-  };
-
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-      <div className="bg-white p-6 rounded shadow-lg w-1/3">
-        <h2 className="text-xl font-semibold mb-4">Edit Profile</h2>
-        <div className="mb-4">
-          <label className="block mb-2">Name:</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded"
-          />
+      <div className="w-2/3 rounded bg-white p-6 shadow-lg">
+        <h2 className="mb-4 text-xl font-semibold">Edit Profile</h2>
+
+        {/* Tabs */}
+        <div className="mb-4 border-b border-gray-200">
+          <nav className="flex space-x-4">
+            {tabs.map((tab: string) => {
+              return (
+                <button
+                  onClick={() => setActiveTab(tab)}
+                  className={`px-3 py-2 ${activeTab === tab ? "border-b-2 border-blue-500" : "border-none"}`}
+                >
+                  {tab}
+                </button>
+              );
+            })}
+          </nav>
         </div>
+
+        {/* Content */}
         <div className="mb-4">
-          <label className="block mb-2">Bio:</label>
-          <textarea
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded"
-          />
+          {renderContent(activeTab, formData, handleInputChange)}
         </div>
-        <div className="mb-4">
-          <label className="block mb-2">Profile Picture URL:</label>
-          <input
-            type="text"
-            value={profilePictureURL}
-            onChange={(e) => setProfilePictureURL(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded"
-          />
-        </div>
+
+        {/* Buttons */}
         <div className="flex justify-end">
           <button
             onClick={handleSubmit}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
           >
             Save
           </button>
           <button
             onClick={onClose}
-            className="ml-2 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+            className="ml-2 rounded bg-gray-200 px-4 py-2 hover:bg-gray-300"
           >
             Cancel
           </button>
@@ -72,4 +91,4 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, user }) => {
   );
 };
 
-export default Modal;
+export default ProfileEditModal;

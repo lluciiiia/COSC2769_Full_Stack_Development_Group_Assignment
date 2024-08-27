@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { PostParams } from "../../interfaces/Posts";
 import { AppDispatch, AppState } from "../../app/store";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,21 +9,19 @@ import { useParams } from "react-router-dom";
 function PostList() {
   const { userId } = useParams();
   const dispatch: AppDispatch = useDispatch();
-  const posts = useSelector((state: AppState) => {
-    return state.posts.posts;
-  });
 
   const firstRender = useRef(true);
+  const posts = useSelector((state: AppState) => state.posts.posts);
   useEffect(() => {
-    if (firstRender.current) {
+    if (firstRender.current && posts.length === 0) {
       dispatch(getPosts(userId));
       firstRender.current = false;
     }
-  }, [dispatch]);
-
+  }, [dispatch, userId, posts.length]);
+  console.log(posts);
   const postList = posts.map((p: PostParams) => <Post key={p._id} {...p} />);
   return (
-    <div id="postList" className="space-y-6 pt-12">
+    <div id="postList" className="space-y-6 pt-20">
       {posts.length > 0 ? postList : <h1>Loading...</h1>}
     </div>
   );

@@ -23,7 +23,8 @@ export const getAllPosts = async (userId: string) => {
     // Filter and enhance posts based on visibility & their own posts
     const enhancedPosts = await Promise.all(
       posts.map(async (post) => {
-        if (post.creatorId === userObjectId) {
+        if (post.creatorId.toString() === userObjectId.toString()) {
+          console.log("hi");
           return await enhancePostWithUser(post);
         } else if (post.visibility === "PUBLIC") {
           return await enhancePostWithUser(post);
@@ -44,6 +45,33 @@ export const getAllPosts = async (userId: string) => {
     const validEnhancedPosts = enhancedPosts.filter((post) => post !== null);
 
     return validEnhancedPosts;
+  } catch (error) {
+    console.error("Error fetching posts", error);
+    throw new Error("Failed to fetch posts");
+  }
+};
+
+export const getPostListByCreatorId = async (creatorId: string) => {
+  try {
+    const posts = await Post.find({ creatorId }).populate({
+      path: "comments",
+      populate: {
+        path: "reactions",
+        populate: {
+          path: "userId", // Populate user details for reactions
+          select: "name profilePictureURL", // Select the fields you want
+        },
+      },
+    });
+
+    // Enhance each post with user information
+    const enhancedPosts = await Promise.all(
+      posts.map(async (post) => {
+        return await enhancePostWithUser(post);
+      }),
+    );
+
+    return enhancedPosts;
   } catch (error) {
     console.error("Error fetching posts", error);
     throw new Error("Failed to fetch posts");
@@ -102,6 +130,7 @@ const enhancePostWithUser = async (post: any) => {
     comments: commentsWithProfileSection,
   };
 };
+
 export const createPost = async (postData: any) => {
   try {
     // Check if creator exists

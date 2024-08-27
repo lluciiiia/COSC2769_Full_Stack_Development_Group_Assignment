@@ -20,7 +20,27 @@ export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
   },
 );
 
-export const getPostById = async (id: String | undefined) => {
+export const getPostsByCreatorId = createAsyncThunk<
+  PostParams[],
+  string | undefined
+>("posts/getPostsByCreatorId", async (creatorId) => {
+  const response = await fetch(
+    BACKEND_URL + `/api/posts/profile/${creatorId}`,
+    {
+      method: "GET",
+    },
+  );
+
+  if (!response.ok) {
+    console.error("Failed to fetch posts:", response.statusText);
+    throw new Error("Failed to fetch posts");
+  }
+
+  const data: PostParams[] = await response.json();
+  return data;
+});
+
+export const getPostById = async (id: string | undefined) => {
   if (id == undefined) return;
 
   const response = await fetch(BACKEND_URL + `/api/posts/${id}`, {
@@ -37,6 +57,26 @@ export const getPostById = async (id: String | undefined) => {
   const data: PostParams = await response.json();
   return data;
 };
+
+export const createpost = createAsyncThunk<PostParams, PostParams | undefined>(
+  "posts/createPost",
+  async (postData) => {
+    const response = await fetch(`${BACKEND_URL}/api/posts`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to create post");
+    }
+
+    const data: PostParams = await response.json();
+    return data;
+  },
+);
 
 export const deletePostById = async (id: String | undefined) => {
   if (id == undefined) return false;

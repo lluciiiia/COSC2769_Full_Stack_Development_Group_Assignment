@@ -1,3 +1,5 @@
+import React from "react";
+
 type TabNavigationProps = {
   activeTab: string;
   setActiveTab: (tab: string) => void; // Correct the type of setActiveTab
@@ -8,7 +10,7 @@ const TabNavigation: React.FC<TabNavigationProps> = ({
   setActiveTab,
 }) => {
   return (
-    <div className="mt-6 flex items-center justify-between">
+    <div className="mt-3 flex items-center justify-between px-10">
       {["Posts", "About", "Friends", "Photos"].map((tab) => {
         return (
           <button
