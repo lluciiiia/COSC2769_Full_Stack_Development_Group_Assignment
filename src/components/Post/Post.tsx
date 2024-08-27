@@ -7,6 +7,7 @@ import {
   ReactionSectionProps,
 } from "../../interfaces/Posts";
 import { useNavigate, useParams } from "react-router-dom";
+import PostDropDown from "./PostDropDown";
 
 const ProfileSection: React.FC<ProfileSectionParams> = ({
   profileImage,
@@ -16,6 +17,16 @@ const ProfileSection: React.FC<ProfileSectionParams> = ({
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleEdit = () => {
+    console.log("Edit clicked");
+    setIsDropdownOpen(false);
+  };
+
+  const handleDelete = () => {
+    console.log("Delete clicked");
+    setIsDropdownOpen(false);
   };
 
   const safeProfileImage =
@@ -42,20 +53,7 @@ const ProfileSection: React.FC<ProfileSectionParams> = ({
           className="cursor-pointer"
         />
         {isDropdownOpen && (
-          <div className="absolute right-0 mt-2 w-28 rounded-md bg-white shadow-xl">
-            <button
-              onClick={() => console.log("Edit clicked")}
-              className="block w-full px-4 py-2 text-left text-sm text-gray-700 first:rounded-t-md last:rounded-b-md hover:bg-gray-100"
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => console.log("Delete clicked")}
-              className="block w-full px-4 py-2 text-left text-sm text-gray-700 first:rounded-t-md last:rounded-b-md hover:bg-gray-100"
-            >
-              Delete
-            </button>
-          </div>
+          <PostDropDown onEdit={handleEdit} onDelete={handleDelete} />
         )}
       </div>
     </div>
