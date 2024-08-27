@@ -3,11 +3,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import MenuDropDown from "../MenuDropDown";
 import { CommentProps } from "../../interfaces/Comments";
 import { formatRelativeTime } from "../../utils/formatRelativeTime";
+import { deleteCommentById } from "../../controllers/comments";
 
 const CommentItem: React.FC<CommentProps> = ({ comment }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const navigate = useNavigate();
-  const { userId } = useParams();
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -20,18 +19,17 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
 
   const handleDelete = async () => {
     setIsDropdownOpen(false);
-    // try {
-    //   const response = await deletePostById(postId);
-    //   if (!response) {
-    //     alert("Failed to delete the post. Please try again.");
-    //   } else {
-    //     navigate(`/home/${userId}`);
-    //     window.location.reload();
-    //   }
-    // } catch (error) {
-    //   console.error("Error deleting post:", error);
-    //   alert("An error occurred while trying to delete the post.");
-    // }
+    try {
+      const response = await deleteCommentById(comment._id);
+      if (!response) {
+        alert("Failed to delete the comment. Please try again.");
+      } else {
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+      alert("An error occurred while trying to delete the comment.");
+    }
   };
 
   return (
