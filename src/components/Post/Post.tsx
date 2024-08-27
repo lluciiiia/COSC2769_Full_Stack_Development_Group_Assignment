@@ -29,6 +29,9 @@ const ProfileSection: React.FC<ProfileSectionParams> = ({
       <div>
         <div className="font-bold">{safeProfileName}</div>
       </div>
+      <div className="ml-auto">
+        <img src="/src/assets/svgs/ThreeDots.svg" alt="Three dots" />
+      </div>
     </div>
   );
 };
