@@ -54,9 +54,15 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
       <div className="h-[550px] w-[700px] rounded-lg bg-gray-100 p-4 shadow-md">
         <h2 className="mb-4 text-xl font-bold">Comments</h2>
         <div className="flex h-[300px] flex-col gap-2 overflow-y-auto">
-          {comments.map((comment) => (
-            <CommentItem key={comment._id} comment={comment} />
-          ))}
+          {comments.length === 0 ? (
+            <div className="flex flex-1 items-center justify-center">
+              <p className="text-center text-gray-500">No Comments</p>
+            </div>
+          ) : (
+            comments.map((comment) => (
+              <CommentItem key={comment._id} comment={comment} />
+            ))
+          )}
         </div>
         <CommentForm
           newComment={newComment}
