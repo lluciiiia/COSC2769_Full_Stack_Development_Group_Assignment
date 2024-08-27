@@ -60,6 +60,7 @@ const EditPostModal = ({ isOpen, onClose, userId, post }) => {
           setImageURL={setImageURL}
           onSubmit={handleSubmit}
           onClose={onClose}
+          isEdit={true}
         />
       </div>
     </div>

@@ -51,6 +51,7 @@ const CreatePostModal = ({ isOpen, onClose, userId }) => {
           setImageURL={setImageURL}
           onSubmit={handleSubmit}
           onClose={onClose}
+          isEdit={false}
         />
       </div>
     </div>
