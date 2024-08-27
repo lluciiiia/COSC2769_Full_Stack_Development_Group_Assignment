@@ -1,5 +1,4 @@
-// src/components/CreatePostModal.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { createpost } from "../../controllers/posts.tsx";
 import { AppDispatch } from "../../app/store";
@@ -23,6 +22,11 @@ const CreatePostModal = ({ isOpen, onClose, userId }) => {
 
       const result = await dispatch(createpost(postData)).unwrap();
       console.log("Post created successfully:", result);
+
+      // Auto-refresh the page after the post is created
+      window.location.reload();
+
+      // Optionally close the modal
       onClose();
     } catch (error) {
       console.error("Error creating post:", error);
@@ -35,12 +39,26 @@ const CreatePostModal = ({ isOpen, onClose, userId }) => {
     handleCreatePost();
   };
 
+  // Disable body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg p-6 w-96">
-        <h2 className="text-xl font-bold mb-4">Buzz your mind!</h2>
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      {/* Increased width and padding */}
+      <div className="bg-white rounded-lg p-8 w-1/2 z-60 max-w-3xl">
+        <h2 className="text-2xl font-bold mb-6">Buzz your mind!</h2>
         <PostForm
           content={content}
           setContent={setContent}

@@ -39,11 +39,11 @@ router.post("/", async (req, res) => {
   try {
     const newUser = new User(req.body);
     console.log(newUser);
-    await newUser.save(); // Save the new user to MongoDB
+    await newUser.save();
     res.status(201).json({ message: "User created", user: newUser });
   } catch (error: any) {
     console.error("Error creating user:", error);
-    // Check if the error is a validation error and return a 400 status code with the error message
+
     if (error.name === "ValidationError") {
       return res.status(400).json({ error: error.message });
     }
