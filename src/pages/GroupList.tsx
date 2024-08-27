@@ -39,7 +39,7 @@ const GroupList = () => {
                 >
                   Join
                 </button>
-                <Link to={`/GroupPage/${group._id}/discussion`}>
+                <Link to={`/groups/${group._id}/discussion`}>
                   <button
                     className="text-white bg-green-500 hover:bg-green-700 font-bold py-2 px-4 rounded focus:outline-none"
                   >
