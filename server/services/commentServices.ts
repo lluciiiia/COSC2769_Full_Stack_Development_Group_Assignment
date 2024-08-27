@@ -45,6 +45,32 @@ export const createComment = async (commentData: any) => {
   }
 };
 
+export const updateComment = async (id: string, updatedData: any) => {
+  try {
+    const updatedComment = await Comment.findByIdAndUpdate(id, updatedData, {
+      new: true, // Return the updated document
+      runValidators: true, // Validate before saving
+    });
+
+    if (!updatedComment) throw new Error("Comment not found");
+
+    const user = await User.findById(updatedComment.userId);
+    if (!user)
+      throw new Error(`User not found for userId: ${updatedComment.userId}`);
+
+    return {
+      ...updatedComment.toObject(),
+      profileSection: {
+        profileImage: user.profilePictureURL,
+        profileName: user.name,
+      },
+    };
+  } catch (error: any) {
+    if (error.name === "ValidationError") throw new Error(error.message);
+    throw new Error("Failed to update comment");
+  }
+};
+
 export const deleteCommentById = async (commentId: string) => {
   try {
     await Comment.findByIdAndDelete(commentId);
