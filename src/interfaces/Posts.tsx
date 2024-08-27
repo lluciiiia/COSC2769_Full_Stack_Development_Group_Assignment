@@ -38,3 +38,14 @@ export interface PostState {
   posts: PostParams[];
   creatorPost: PostParams[];
 }
+
+export interface PostFormProps {
+  content: string;
+  setContent: (content: string) => void;
+  visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
+  setVisibility: (visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP") => void;
+  imageURL: string;
+  setImageURL: (url: string) => void;
+  onSubmit: (e: React.FormEvent) => void;
+  onClose: () => void;
+}
