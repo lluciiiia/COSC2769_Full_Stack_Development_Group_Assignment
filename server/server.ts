@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import connectDB from "./db";
+import multer from "multer"
 
 // Importing Routes
 import groupRoutes from "./routes/groupRoutes";
@@ -10,6 +11,7 @@ import notiRoutes from "./routes/notiRoutes";
 import commentRoutes from "./routes/commentRoutes";
 import reactionRoutes from "./routes/reactionRoutes";
 import authenticationRoutes from "./routes/authenticationRoutes";
+import photoRoutes from "./routes/photosRoutes"; 
 const app = express();
 
 // CORS configuration
@@ -32,6 +34,7 @@ app.use("/api/notifications", notiRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/reactions", reactionRoutes);
 app.use("/api/user",authenticationRoutes);
+app.use("/api/photos", photoRoutes);
 app.get("/", (req: Request, res: Response) => {
   res.json("From backend side");
 });
