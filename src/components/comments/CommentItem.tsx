@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import MenuDropDown from "../MenuDropDown";
 import { CommentProps } from "../../interfaces/Comments";
 import { formatRelativeTime } from "../../utils/formatRelativeTime";
-import { deleteCommentById } from "../../controllers/comments"; // Make sure to import your updateComment function
+import { deleteCommentById, updateComment } from "../../controllers/comments"; // Make sure to import your updateComment function
 
 const CommentItem: React.FC<CommentProps> = ({ comment }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -38,22 +38,22 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
   };
 
   const handleSave = async () => {
-    // try {
-    //   const response = await updateComment(comment._id, { content });
-    //   if (!response) {
-    //     alert("Failed to update the comment. Please try again.");
-    //   } else {
-    //     setIsEditing(false);
-    //     window.location.reload(); // Reload the page to see changes or consider using state to update
-    //   }
-    // } catch (error) {
-    //   console.error("Error updating comment:", error);
-    //   alert("An error occurred while trying to update the comment.");
-    // }
+    try {
+      const response = await updateComment(comment._id, { content });
+      if (!response) {
+        alert("Failed to update the comment. Please try again.");
+      } else {
+        setIsEditing(false);
+        window.location.reload(); // Reload the page to see changes or consider using state to update
+      }
+    } catch (error) {
+      console.error("Error updating comment:", error);
+      alert("An error occurred while trying to update the comment.");
+    }
   };
 
   const handleCancel = () => {
-    setContent(comment.content); // Reset content to the original comment content
+    setContent(comment.content);
     setIsEditing(false);
   };
 
