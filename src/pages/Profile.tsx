@@ -6,7 +6,6 @@ import React, { useEffect, useRef, useState } from "react";
 import TabContent from "../components/profiles/TabContent";
 import ProfileHeader from "../components/profiles/ProfileHeader";
 import TabNavigation from "../components/profiles/TabNavigation";
-import Modal from "../components/profiles/ProfileEditModal";
 import { getUser } from "../controllers/user";
 import ProfileEditModal from "../components/profiles/ProfileEditModal";
 
@@ -49,6 +48,7 @@ const Profile = () => {
           name={user.name}
           bio={user.bio}
           avatar={user.profilePictureURL}
+          handleEditProfile={handleEditProfile}
         />
 
         <div className="mt-20 w-full px-10">
@@ -65,11 +65,7 @@ const Profile = () => {
         </div>
       </div>
 
-      <ProfileEditModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        user={user}
-      />
+      <ProfileEditModal isOpen={isModalOpen} onClose={handleCloseModal} />
     </>
   );
 };

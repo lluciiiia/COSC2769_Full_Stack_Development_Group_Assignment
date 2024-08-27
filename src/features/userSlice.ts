@@ -6,7 +6,6 @@ import { getUser } from "../controllers/user";
 const initialState: UserType = {
   _id: "",
   name: "",
-  dateJoined: new Date(),
   email: "",
   password: "",
   activeStatus: false,
@@ -16,13 +15,10 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    // updateUser(state, action) {
-    //   const updatedUser = action.payload;
-    //   const index = state.findIndex((u) => u.id === updatedUser.id);
-    //   if (index !== -1) {
-    //     state[index] = updatedUser;
-    //   }
-    // },
+    updateLocalUser: (state, action) => {
+      console.log("reducer: ", action.payload);
+      return { ...state, ...action.payload };
+    },
   },
   extraReducers(builder) {
     builder.addCase(getUser.fulfilled, (state, action) => {
@@ -31,6 +27,6 @@ const userSlice = createSlice({
   },
 });
 
-// export const { updateUser } = userSlice.actions;
+export const { updateLocalUser } = userSlice.actions;
 
 export default userSlice.reducer;

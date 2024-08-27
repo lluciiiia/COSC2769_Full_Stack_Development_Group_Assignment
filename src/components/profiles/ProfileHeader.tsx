@@ -1,6 +1,6 @@
 import React from "react";
 
-const ProfileHeader = ({ name, bio, avatar }) => {
+const ProfileHeader = ({ name, bio, avatar, handleEditProfile }) => {
   const defaultAvatar = "https://via.placeholder.com/150";
   return (
     <div
@@ -21,7 +21,7 @@ const ProfileHeader = ({ name, bio, avatar }) => {
         <p className="text-sm">{bio}</p>
       </div>
       <button
-        // onClick={handleEditProfile}
+        onClick={handleEditProfile}
         className="absolute -bottom-14 right-5 rounded border border-black bg-white px-4 py-2 text-gray-800 shadow hover:bg-gray-100"
       >
         Edit Profile
