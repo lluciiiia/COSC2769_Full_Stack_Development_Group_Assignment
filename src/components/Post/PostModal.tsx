@@ -3,29 +3,60 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { PostParams } from "../../interfaces/Posts";
 import PostForm from "./PostForm";
-import { createPost, updatePost } from "../../controllers/posts";
+import { createPost, updatePost, getGroupsByUserId } from "../../controllers/posts";
+import { GroupType } from "../../interfaces/Group";
 
 const PostModal = ({ isOpen, onClose, userId, post }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [content, setContent] = useState("");
-  const [visibility, setVisibility] = useState<
-    "PUBLIC" | "FRIEND_ONLY" | "GROUP"
-  >("PUBLIC");
+  const [visibility, setVisibility] = useState<"PUBLIC" | "FRIEND_ONLY" | "GROUP">("PUBLIC");
   const [imageURL, setImageURL] = useState("");
+  const [groups, setGroups] = useState<GroupType[]>([]);
+  const [selectedGroupId, setSelectedGroupId] = useState<string>("");
 
-  // Effect to populate the modal fields with existing post data if editing
   useEffect(() => {
+    // Disable scrolling on the body when the modal is open
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
     if (isOpen && post) {
       setContent(post.content);
       setVisibility(post.visibility);
       setImageURL(post.imageURL);
+      setSelectedGroupId(post.groupId || "");
     } else if (isOpen) {
-      // Reset fields if creating a new post
       setContent("");
       setVisibility("PUBLIC");
       setImageURL("");
+      setSelectedGroupId("");
     }
-  }, [isOpen, post]);
+
+    const fetchGroups = async () => {
+      try {
+        const fetchedGroups: GroupType[] = await getGroupsByUserId(userId);
+        setGroups(fetchedGroups);
+        if (fetchedGroups.length > 0) {
+          setSelectedGroupId(fetchedGroups[0]._id);
+        } else {
+          setSelectedGroupId("");
+        }
+      } catch (error) {
+        console.error("Error fetching groups:", error);
+      }
+    };
+
+    if (isOpen) {
+      fetchGroups();
+    }
+
+    // Re-enable scrolling when the modal closes
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen, post, userId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,23 +66,22 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
         content,
         visibility,
         imageURL,
+        groupId: selectedGroupId,
       };
 
       let result;
       if (post) {
-        // Editing an existing post
         result = await dispatch(
           updatePost({ ...postData, _id: post._id }),
         ).unwrap();
         console.log("Post updated successfully:", result);
       } else {
-        // Creating a new post
         result = await dispatch(createPost(postData)).unwrap();
         console.log("Post created successfully:", result);
       }
 
       onClose();
-      window.location.reload(); // Refresh to see the new/updated post
+      window.location.reload();
     } catch (error) {
       console.error("Error saving post:", error);
       alert("An error occurred while saving the post");
@@ -61,11 +91,25 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="w-96 rounded-lg bg-white p-6">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
+      <div className="w-full max-w-lg rounded-lg bg-white p-6">
         <h2 className="mb-4 text-xl font-bold">
           {post ? "Edit Your Post" : "Buzz your mind!"}
         </h2>
+        <div className="mb-4">
+          <label className="block mb-2 text-base font-medium">Select Group:</label>
+          <select
+            value={selectedGroupId}
+            onChange={(e) => setSelectedGroupId(e.target.value)}
+            className="block w-full p-2 border border-gray-300 rounded text-base"
+          >
+            {groups.map((group: GroupType) => (
+              <option key={group._id} value={group._id}>
+                {group.name}
+              </option>
+            ))}
+          </select>
+        </div>
         <PostForm
           content={content}
           setContent={setContent}

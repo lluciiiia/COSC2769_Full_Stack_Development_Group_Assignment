@@ -12,9 +12,6 @@ export const getAllGroups = async () => {
   };
   export const getGroupsByUserId = async (userId: string) => {
     try {
-      console.log("charlie"); 
-      console.log("User ID to search:", userId); 
-  
       // Fetch groups where the user is a member
       const groups = await Group.find({ members: userId }).select('_id name');
       console.log("Fetched Groups:", groups); // Log the fetched groups

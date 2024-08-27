@@ -20,6 +20,23 @@ export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
   },
 );
 
+export const getPostById = async (id: String | undefined) => {
+  if (id == undefined) return;
+
+  const response = await fetch(BACKEND_URL + `/api/posts/${id}`, {
+    method: "GET",
+  });
+
+  console.log("response: " + JSON.stringify(response));
+
+  if (!response.ok) {
+    console.error("Failed to fetch posts:", response.statusText);
+    throw new Error("Failed to fetch posts");
+  }
+
+  const data: PostParams = await response.json();
+  return data;
+};
 export const getPostsByCreatorId = createAsyncThunk<
   PostParams[],
   string | undefined
@@ -40,21 +57,25 @@ export const getPostsByCreatorId = createAsyncThunk<
   return data;
 });
 
-export const getPostById = async (id: string | undefined) => {
-  if (id == undefined) return;
+export const getGroupsByUserId = async (userId: string | undefined) => {
+  if (!userId) return;
 
-  const response = await fetch(BACKEND_URL + `/api/posts/${id}`, {
+  const response = await fetch(`${BACKEND_URL}/api/groups/user/${userId}`, {
     method: "GET",
   });
 
+  console.log("response: " + JSON.stringify(response));
+
   if (!response.ok) {
-    console.error("Failed to fetch posts:", response.statusText);
-    throw new Error("Failed to fetch posts");
+    console.error("Failed to fetch groups:", response.statusText);
+    throw new Error("Failed to fetch groups");
   }
 
-  const data: PostParams = await response.json();
-  return data;
+  // Parse the JSON response if the fetch is successful
+  const groups = await response.json();
+  return groups;
 };
+
 
 export const createPost = createAsyncThunk<PostParams, PostParams | undefined>(
   "posts/createPost",
