@@ -2,17 +2,19 @@ import React, { useState } from "react";
 import MenuDropDown from "../MenuDropDown";
 import { CommentProps } from "../../interfaces/Comments";
 import { formatRelativeTime } from "../../utils/formatRelativeTime";
-import { deleteCommentById } from "../../controllers/comments";
+import { deleteCommentById } from "../../controllers/comments"; // Make sure to import your updateComment function
 
 const CommentItem: React.FC<CommentProps> = ({ comment }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [content, setContent] = useState(comment.content);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
   const handleEdit = () => {
-    console.log("Edit clicked");
+    setIsEditing(true);
     setIsDropdownOpen(false);
   };
 
@@ -33,6 +35,26 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
 
   const handleViewHistory = () => {
     console.log("View Edit History clicked");
+  };
+
+  const handleSave = async () => {
+    // try {
+    //   const response = await updateComment(comment._id, { content });
+    //   if (!response) {
+    //     alert("Failed to update the comment. Please try again.");
+    //   } else {
+    //     setIsEditing(false);
+    //     window.location.reload(); // Reload the page to see changes or consider using state to update
+    //   }
+    // } catch (error) {
+    //   console.error("Error updating comment:", error);
+    //   alert("An error occurred while trying to update the comment.");
+    // }
+  };
+
+  const handleCancel = () => {
+    setContent(comment.content); // Reset content to the original comment content
+    setIsEditing(false);
   };
 
   return (
@@ -74,9 +96,39 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
               </div>
             </div>
           </div>
-          <p className="w-[570px] whitespace-normal break-words text-sm text-gray-800">
-            {comment.content}
-          </p>
+          {isEditing ? (
+            <div>
+              <textarea
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                className="w-full rounded-md border-gray-300 p-2 text-sm text-gray-800"
+                rows={1}
+                style={{ resize: "vertical" }} // Allow vertical resizing
+                onInput={(e) => {
+                  e.currentTarget.style.height = "auto"; // Reset height
+                  e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`; // Adjust height based on content
+                }}
+              />
+              <div className="mt-2 flex justify-end gap-2">
+                <button
+                  onClick={handleCancel}
+                  className="rounded-md bg-gray-300 px-2 py-1 text-sm text-gray-700"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSave}
+                  className="rounded-md bg-[#FFC123] px-2 py-1 text-sm text-black"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          ) : (
+            <p className="w-[570px] whitespace-normal break-words text-sm text-gray-800">
+              {comment.content}
+            </p>
+          )}
         </div>
       </div>
     </div>
