@@ -49,4 +49,5 @@ export interface PostFormProps {
   setImageURL: (url: string) => void;
   onSubmit: (e: React.FormEvent) => void;
   onClose: () => void;
+  isEdit: boolean;
 }
