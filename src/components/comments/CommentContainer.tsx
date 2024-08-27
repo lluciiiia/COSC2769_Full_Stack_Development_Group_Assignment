@@ -15,7 +15,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        setComments(initComments);
+        setComments(initComments ? initComments : []);
       } catch (error) {
         console.error("Error fetching comments:", error);
       }
@@ -56,7 +56,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
         <div className="flex h-[300px] flex-col gap-2 overflow-y-auto">
           {comments.length === 0 ? (
             <div className="flex flex-1 items-center justify-center">
-              <p className="text-center text-gray-500">No Comments</p>
+              s <p className="text-center text-gray-500">No Comments</p>
             </div>
           ) : (
             comments.map((comment) => (
