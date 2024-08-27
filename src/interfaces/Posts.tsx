@@ -1,17 +1,17 @@
 import { Comment } from "./Comments";
 
 export interface PostParams {
-  _id: string;
+  _id?: string;
   creatorId: string;
   groupId?: string;
   content: string;
   imageURL?: string;
-  createdAt: Date;
+  createdAt?: Date;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
-  comments: Comment[];
-  reactions: string[];
+  comments?: Comment[];
+  reactions?: string[];
   isDetail?: boolean;
-  profileSection: ProfileSectionParams;
+  profileSection?: ProfileSectionParams;
 }
 
 export interface ProfileSectionParams {

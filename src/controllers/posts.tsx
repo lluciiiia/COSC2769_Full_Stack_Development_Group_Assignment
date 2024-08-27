@@ -57,3 +57,22 @@ export const getPostById = async (id: string | undefined) => {
   const data: PostParams = await response.json();
   return data;
 };
+export const createpost = createAsyncThunk<PostParams, PostParams |  undefined>(
+  "posts/createPost",
+  async (postData) => {
+    const response = await fetch(`${BACKEND_URL}/api/posts`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to create post");
+    }
+
+    const data: PostParams = await response.json();
+    return data; // Ensure this matches the PostParams type
+  }
+);
