@@ -27,6 +27,7 @@ const ProfileSection: React.FC<ProfileSectionParams> = ({
   const handleDelete = () => {
     console.log("Delete clicked");
     setIsDropdownOpen(false);
+    // Implement actual delete logic here
   };
 
   const safeProfileImage =
