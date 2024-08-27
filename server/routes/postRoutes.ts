@@ -45,6 +45,15 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.put("/:id", async (req, res) => {
+  try {
+    const updatedPost = await updatePost(req.params.id, req.body);
+    res.json({ message: "Post updated", post: updatedPost });
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
+});
+
 router.delete("/:id", async (req, res) => {
   try {
     await deletePostById(req.params.id);

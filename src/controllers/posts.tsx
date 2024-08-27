@@ -78,6 +78,26 @@ export const createpost = createAsyncThunk<PostParams, PostParams | undefined>(
   },
 );
 
+export const updatePost = createAsyncThunk<PostParams, PostParams>(
+  "posts/updatePost",
+  async (postData) => {
+    const response = await fetch(`${BACKEND_URL}/api/posts/${postData._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update post");
+    }
+
+    const data: PostParams = await response.json();
+    return data;
+  },
+);
+
 export const deletePostById = async (id: String | undefined) => {
   if (id == undefined) return false;
 

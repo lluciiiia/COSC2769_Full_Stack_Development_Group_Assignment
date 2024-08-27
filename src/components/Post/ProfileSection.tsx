@@ -3,13 +3,17 @@ import { ProfileSectionParams } from "../../interfaces/Posts";
 import { useNavigate, useParams } from "react-router-dom";
 import { deletePostById } from "../../controllers/posts";
 import MenuDropDown from "../MenuDropDown";
+import EditPostModal from "../post/EditPostModal";
 
 export const ProfileSection: React.FC<ProfileSectionParams> = ({
+  post,
   profileImage,
   profileName,
-  postId,
 }) => {
+  if (!post) return;
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const navigate = useNavigate();
   const { userId } = useParams();
 
@@ -20,12 +24,13 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
   const handleEdit = () => {
     console.log("Edit clicked");
     setIsDropdownOpen(false);
+    setIsEditModalOpen(true);
   };
 
   const handleDelete = async () => {
     setIsDropdownOpen(false);
     try {
-      const response = await deletePostById(postId);
+      const response = await deletePostById(post._id);
       if (!response) {
         alert("Failed to delete the post. Please try again.");
       } else {
@@ -65,6 +70,12 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
           <MenuDropDown onEdit={handleEdit} onDelete={handleDelete} />
         )}
       </div>
+      <EditPostModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        post={post}
+        userId={userId}
+      />
     </div>
   );
 };
