@@ -21,6 +21,7 @@ export type UserType = {
   bio?: string;
   dateCreated?: string;
   friends?: Array<{ _id: string; name: string; profilePictureURL?: string }>;
+  createdAt: string; 
 };
 
 export type UserSliceParam = {

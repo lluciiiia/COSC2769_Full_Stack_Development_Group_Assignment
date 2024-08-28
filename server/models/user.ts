@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema({
   inRelationship: String,
   bio:String,
   friends:[{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
+
 }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);

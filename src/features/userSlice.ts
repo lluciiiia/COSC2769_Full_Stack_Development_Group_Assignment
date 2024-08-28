@@ -11,6 +11,7 @@ const initialState: UserSliceParam = {
     email: "",
     password: "",
     activeStatus: false,
+    createdAt: "", 
   },
   viewedUser: null,
 };
