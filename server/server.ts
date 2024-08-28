@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import connectDB from "./db";
 import multer from "multer"
-
+import cookieParser from 'cookie-parser';
 // Importing Routes
 import groupRoutes from "./routes/groupRoutes";
 import userRoutes from "./routes/userRoutes";
@@ -14,10 +14,12 @@ import authenticationRoutes from "./routes/authenticationRoutes";
 
 const app = express();
 
+app.use(cookieParser());
 // CORS configuration
 const corsOptions: cors.CorsOptions = {
   origin: "http://localhost:5173",
   optionsSuccessStatus: 200,
+  credentials: true
 };
 
 app.use(cors(corsOptions));
@@ -25,6 +27,11 @@ app.use(express.json());
 
 // Connect to MongoDB
 connectDB();
+
+app.get('/set-test-cookie', (req, res) => {
+  res.cookie('testCookie', 'testValue', { httpOnly: true, secure: false });
+  res.send('Test cookie set');
+});
 
 // Use different API routes
 app.use("/api/users", userRoutes);
