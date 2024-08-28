@@ -3,7 +3,7 @@ import { useState } from "react";
 import AdminNavbar from "../components/AdminNavbar";
 import { GroupManagement } from "../components/admin/GroupManagement";
 
-import PostManagement from "../components/admin/PostManagement";
+// import PostManagement from "../components/admin/PostManagement";
 import UserManagement from "../components/admin/UserManagement";
 import { useDispatch } from "react-redux";
 import { getAllUsers } from "../controllers/user";
@@ -37,8 +37,8 @@ const AdminTabContent = (activeTab: string) => {
       return  <GroupManagement/>;
     case "Users":
       return < UserManagement/>;
-    case "Content":
-      return <PostManagement/>;
+    // case "Content":
+      // return <PostManagement/>;
     default:
       return null;
   }
