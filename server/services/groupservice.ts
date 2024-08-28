@@ -15,7 +15,6 @@ export const getAllGroups = async () => {
       // Fetch groups where the user is a member
       const groups = await Group.find({ members: userId }).select('_id name');
       console.log("Fetched Groups:", groups); // Log the fetched groups
-  
       return groups; 
     } catch (error) {
       console.error("Error fetching groups by user ID in service:", error);

@@ -66,7 +66,7 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
         content,
         visibility,
         imageURL,
-        groupId: selectedGroupId,
+        groupId: visibility === "GROUP" ? selectedGroupId : undefined,
       };
 
       let result;
@@ -96,20 +96,22 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
         <h2 className="mb-4 text-xl font-bold">
           {post ? "Edit Your Post" : "Buzz your mind!"}
         </h2>
-        <div className="mb-4">
-          <label className="block mb-2 text-base font-medium">Select Group:</label>
-          <select
-            value={selectedGroupId}
-            onChange={(e) => setSelectedGroupId(e.target.value)}
-            className="block w-full p-2 border border-gray-300 rounded text-base"
-          >
-            {groups.map((group: GroupType) => (
-              <option key={group._id} value={group._id}>
-                {group.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        {visibility === "GROUP" && (
+          <div className="mb-4">
+            <label className="block mb-2 text-base font-medium">Select Group:</label>
+            <select
+              value={selectedGroupId}
+              onChange={(e) => setSelectedGroupId(e.target.value)}
+              className="block w-full p-2 border border-gray-300 rounded text-base"
+            >
+              {groups.map((group: GroupType) => (
+                <option key={group._id} value={group._id}>
+                  {group.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
         <PostForm
           content={content}
           setContent={setContent}
