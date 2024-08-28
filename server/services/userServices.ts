@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import User from "../models/user";
 
 export const getAllUsers = async () => {
@@ -61,5 +62,29 @@ export const updateUser = async (userId: string, updateData: any) => {
   } catch (error) {
     console.error("Error fetching user by id", error);
     throw new Error("Failed to fetch user");
+  }
+};
+
+export const unfriendById = async (userId: string, friendId: string) => {
+  try {
+    const user = await User.findById(userId);
+    const friendObjectId = new mongoose.Types.ObjectId(friendId);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    if (!user.friends.includes(friendObjectId)) {
+      throw new Error("Friend not found");
+    }
+
+    user.friends = user.friends.filter(
+      (friend) => friend.toString() !== friendId,
+    );
+
+    await user.save();
+  } catch (error) {
+    console.error("Error removing friend", error);
+    throw new Error("Failed to remove friend");
   }
 };

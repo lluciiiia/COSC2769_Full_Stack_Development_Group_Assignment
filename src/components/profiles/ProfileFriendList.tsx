@@ -5,7 +5,7 @@ import { FriendListItem } from "./FriendListItem";
 
 const ProfileFriendList = () => {
   const user = useSelector((state: AppState) => state.user.currentUser);
-  const { friends } = user;
+  const friends = user.friends || [];
 
   return (
     <div className="flex w-full flex-col gap-6">
