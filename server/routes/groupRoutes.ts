@@ -1,5 +1,6 @@
 import express from 'express';
 import Group from '../models/group';
+import { getAllGroups, getGroupsByUserId } from '../services/groupservice';
 const router = express.Router();
 
 router.get('/', async (req, res) => {
@@ -10,6 +11,16 @@ router.get('/', async (req, res) => {
         console.error("Error fetching groups: ", error);
         res.status(500).json({error: 'Failed to fetch groups'});
     }
+});
+
+router.get('/all', async (req, res) => {
+  try{
+      const groups= await getAllGroups();
+      res.json(groups);
+  }catch(error){
+      console.error("Error fetching groups: ", error);
+      res.status(500).json({error: 'Failed to fetch groups'});
+  }
 });
 
 
@@ -37,6 +48,16 @@ router.post('/', async (req, res) => {
     } catch (error) {
       console.error("Error deleting Group:", error);
       res.status(500).json({ error: 'Failed to delete group' });
+    }
+  });
+  router.get('/user/:userId', async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const groups = await getGroupsByUserId(userId);
+      res.json(groups);
+    } catch (error) {
+      console.error("Error fetching groups by user ID:", error);
+      res.status(500).json({ error: 'Failed to fetch groups by user ID' });
     }
   });
 

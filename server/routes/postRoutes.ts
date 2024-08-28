@@ -7,6 +7,8 @@ import {
   getPostById,
   getPostListByCreatorId,
 } from "../services/postServices";
+import Group from "../models/group";
+import { getAllGroups } from "../services/groupservice";
 
 const router = express.Router();
 
