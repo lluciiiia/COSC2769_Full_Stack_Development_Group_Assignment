@@ -2,6 +2,23 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { UserType } from "../interfaces/Users";
 import { BACKEND_URL } from "./posts";
 
+export const getAllUsers = createAsyncThunk<UserType[]>(
+  "user/getAllUsers",
+  async () => {
+    const response = await fetch(BACKEND_URL + `/api/users/`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      console.error("Failed to fetch users:", response.statusText);
+      throw new Error("Failed to fetch users");
+    }
+
+    const data: UserType[] = await response.json();
+    return data;
+  },
+);
+
 export const getUser = createAsyncThunk<UserType, string | undefined>(
   "user/getUser",
   async (userId) => {
@@ -12,6 +29,23 @@ export const getUser = createAsyncThunk<UserType, string | undefined>(
     if (!response.ok) {
       console.error("Failed to fetch user:", response.statusText);
       throw new Error("Failed to fetch user");
+    }
+
+    const data: UserType = await response.json();
+    return data;
+  },
+);
+
+export const getViewedUser = createAsyncThunk<UserType, string | undefined>(
+  "user/getViewedUser",
+  async (userId) => {
+    const response = await fetch(BACKEND_URL + `/api/users/view/${userId}`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      console.error("Failed to fetch viewed user:", response.statusText);
+      throw new Error("Failed to fetch viewed user");
     }
 
     const data: UserType = await response.json();

@@ -10,6 +10,7 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
   profileImage,
   profileName,
 }) => {
+  
   if (!post) return;
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);

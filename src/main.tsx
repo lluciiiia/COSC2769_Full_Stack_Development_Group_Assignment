@@ -17,10 +17,11 @@ import { store } from "./app/store.ts";
 import Admin from "./pages/Admin.tsx";
 import Layout from "./components/Layout.tsx";
 import GroupList from "./pages/GroupList";
+
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />, 
+    element: <Layout />,
     errorElement: <ErrorPage />,
     children: [
       {
@@ -50,8 +51,8 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path:"/groupList",
-        element: <GroupList/>
+        path: "/groupList",
+        element: <GroupList />,
       },
       {
         path: "/profile/:userId",

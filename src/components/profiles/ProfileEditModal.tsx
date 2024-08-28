@@ -17,7 +17,7 @@ const ProfileEditModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
   const [activeTab, setActiveTab] = useState("User Info");
 
-  const user = useSelector((state: AppState) => state.user);
+  const user = useSelector((state: AppState) => state.user.currentUser);
   const [formData, setFormData] = useState<UserType>({ ...user });
 
   useEffect(() => {

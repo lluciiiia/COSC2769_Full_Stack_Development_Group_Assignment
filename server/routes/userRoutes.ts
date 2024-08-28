@@ -1,16 +1,20 @@
 import express from "express";
 import User from "../models/user";
-import { getUserById, updateUser } from "../services/userServices";
+import {
+  getAllUsers,
+  getUserById,
+  getViewUserById,
+  updateUser,
+} from "../services/userServices";
 const router = express.Router();
 
 //GET /user- fetch all user
 router.get("/", async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await getAllUsers();
     res.json(users);
   } catch (error) {
-    console.error("Error fetching users: ", error);
-    res.status(500).json({ error: "Failed to fetch users" });
+    res.status(500).json({ error: error });
   }
 });
 
@@ -18,6 +22,16 @@ router.get("/:id", async (req, res) => {
   try {
     const userId = req.params.id;
     const user = await getUserById(userId);
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
+
+router.get("/view/:id", async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await getViewUserById(userId);
     res.json(user);
   } catch (error) {
     res.status(500).json({ error: error });
@@ -61,4 +75,5 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ error: "Failed to delete user" });
   }
 });
+
 export default router;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { PostParams } from "../interfaces/Posts";
 import CommentContainer from "../components/comments/CommentContainer";
@@ -8,7 +8,6 @@ import Post from "../components/post/Post";
 
 const PostDetail: React.FC = () => {
   const [post, setPost] = useState<PostParams | null>(null);
-  const location = useLocation();
   const { userId, postId } = useParams();
 
   useEffect(() => {
