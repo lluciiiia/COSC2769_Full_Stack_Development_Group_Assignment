@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { AppState } from "../app/store";
-import { registerUser } from "../controllers/authentications";
+import { registerUser , login} from "../controllers/authentications";
 
 
   const authSlice= createSlice({
@@ -29,10 +29,8 @@ import { registerUser } from "../controllers/authentications";
             state.isAuthenticated = true;
             localStorage.setItem('token', action.payload.token);
           })
-          .addCase(registerUser.rejected, (state, action) => {
-            // state.status = 'failed';
-            // state = action.payload;
-          });
+      
+          
       },
   })
   export const selectAuthState = (state: AppState) => state.auth;

@@ -1,31 +1,62 @@
-import User from "../models/user"
+import User from "../models/user";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+export const regisNewAccount = async (data: any) => {
+  try {
+    const { email, name, password } = data;
 
-export const regisNewAccount = async (data: any)=>{
-    try{
-        const email= data.email;
-        const name= data.name;
-        const password= data.password;
-
-        let user= await User.findOne({email});
-        if(user){
-            return { status: 400, message: 'User already exists' };
-        }
-
-        const salt= await bcrypt.genSalt(10);
-        const hashPassword = await bcrypt.hash(password, salt);
-
-        user = new User({
-            name,
-            email,
-            password: hashPassword,
-          });
-
-          await user.save();
-
-          return { status: 201, message: 'User registered successfully' };
-    }catch(error){
-        console.error("Error in regisNewAccount:", error);
-        return { status: 500, message: 'Server error' };
+    let user = await User.findOne({ email });
+    if (user) {
+      return { status: 400, message: 'User already exists' };
     }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(password, salt);
+
+    user = new User({
+      name,
+      email,
+      password: hashPassword,
+    });
+
+    await user.save();
+
+    return { status: 201, message: 'User registered successfully' };
+  } catch (error) {
+    console.error("Error in regisNewAccount:", error);
+    return { status: 500, message: 'Server error' };
+  }
 }
+
+export const loginUser = async (data: any) => {
+    try {
+      const { email, password } = data;
+  
+      // Check if the user exists
+      const user = await User.findOne({ email });
+      if (!user) {
+        return { status: 400, message: 'User not found' };
+      }
+  
+      // Validate password
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return { status: 400, message: 'Invalid credentials' };
+      }
+  
+      // Generate JWT token
+      const token = jwt.sign({ userId: user._id },"jasd", {
+        expiresIn: "1h",
+      });
+  
+      return {
+        status: 200,
+        message: "Login successful",
+        token,
+        user: { id: user._id, name: user.name, email: user.email },
+      };
+    } catch (error) {
+      console.error("Error in loginUser:", error);
+      return { status: 500, message: "Server error" };
+    }
+  };

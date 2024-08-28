@@ -1,7 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../assets/icons/logo.png";
+import { useDispatch } from "react-redux";
+import { login } from "../controllers/authentications"; // Adjust the path as needed
+import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+
+  
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const result = await dispatch(login({ email, password }));
+    
+    if (login.fulfilled.match(result)) {
+      // Navigate to the home page after successful login
+      navigate(`/home/${result.payload.user.id}`);
+    } else {
+      console.error("Login failed:", result.payload || "Unknown error");
+      // Optionally, you can display an error message to the user here
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-yellow-100 relative">
       {/* Logo and BuZzNet Text */}
@@ -13,7 +37,7 @@ const Login: React.FC = () => {
       {/* Login Form */}
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-4">Log In to BuZzNet</h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-bold text-gray-700">
               Email Address
@@ -21,6 +45,8 @@ const Login: React.FC = () => {
             <input
               type="email"
               id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="johndoe@example.com"
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
@@ -32,6 +58,8 @@ const Login: React.FC = () => {
             <input
               type="password"
               id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="********"
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
