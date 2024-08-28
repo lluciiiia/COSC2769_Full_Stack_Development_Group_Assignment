@@ -9,6 +9,7 @@ export const registerUser = createAsyncThunk('auth/registerUser', async (userDat
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(userData),
+       
       });
   
       if (!response.ok) {
@@ -26,7 +27,7 @@ export const registerUser = createAsyncThunk('auth/registerUser', async (userDat
   });
 
 
-  export const login = createAsyncThunk('auth/registerUser', async (userData:{email: string, password: string}, { rejectWithValue }) => {
+  export const login = createAsyncThunk('auth/loginUser', async (userData:{email: string, password: string}, { rejectWithValue }) => {
     try {
       const response = await fetch('http://localhost:8080/api/user/login', {
         method: 'POST',
@@ -34,6 +35,7 @@ export const registerUser = createAsyncThunk('auth/registerUser', async (userDat
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(userData),
+        credentials: 'include' 
       });
   
       if (!response.ok) {
@@ -49,3 +51,4 @@ export const registerUser = createAsyncThunk('auth/registerUser', async (userDat
       return rejectWithValue({ message: 'Network error' });
     }
   });
+

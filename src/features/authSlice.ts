@@ -27,7 +27,7 @@ import { registerUser , login} from "../controllers/authentications";
             state.status = 'succeeded';
             state.user = action.payload.user;
             state.isAuthenticated = true;
-            localStorage.setItem('token', action.payload.token);
+            localStorage.setItem('token', action.payload._id);
           })
       
           

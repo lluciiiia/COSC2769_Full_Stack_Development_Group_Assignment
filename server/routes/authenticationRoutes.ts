@@ -19,7 +19,7 @@ router.post("/login", async (req, res) =>{
     const result= await loginUser(req.body);
 
     if(result.status === 200){
-      res.cookie("token", result.token, { httpOnly: true });
+      res.cookie("token", result.token);
       res.status(200).json({ message: result.message, user: result.user });
     }else{
       res.status(result.status).json({ message: result.message });
