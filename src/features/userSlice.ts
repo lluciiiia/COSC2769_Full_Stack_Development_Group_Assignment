@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { UserSliceParam } from "../interfaces/Users";
-import { getAllUsers, getUser, getViewedUser } from "../controllers/user";
+import {
+  getAllUsers,
+  getUser,
+  getViewedUser,
+  unfriendById,
+} from "../controllers/user";
 
 //current user
 const initialState: UserSliceParam = {
@@ -11,7 +16,7 @@ const initialState: UserSliceParam = {
     email: "",
     password: "",
     activeStatus: false,
-    createdAt: "", 
+    createdAt: "",
   },
   viewedUser: null,
 };
@@ -34,6 +39,7 @@ const userSlice = createSlice({
     builder.addCase(getViewedUser.fulfilled, (state, action) => {
       state.viewedUser = action.payload;
     });
+    builder.addCase(unfriendById.fulfilled, (state, action) => {});
   },
 });
 

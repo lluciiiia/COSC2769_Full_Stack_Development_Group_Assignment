@@ -26,8 +26,8 @@ const Profile = () => {
 
   const numberOfFriend = user.friends?.length;
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("Posts"); // Initialize activeTab state
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<string>("Posts"); // Initialize activeTab state
 
   if (user === undefined) {
     return <ErrorPage />;
@@ -66,7 +66,11 @@ const Profile = () => {
         <div className="mt-1 w-full border-b-2"></div>
 
         <div className="mt-8 w-full max-w-4xl px-3">
-          <TabContent activeTab={activeTab} userId={userId?.toString()} />
+          <TabContent
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            userId={userId?.toString()}
+          />
         </div>
       </div>
 

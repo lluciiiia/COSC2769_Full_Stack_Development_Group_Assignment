@@ -71,6 +71,30 @@ export const updateUser = createAsyncThunk<
   }
 
   const data: UserType = await response.json();
-  console.log(data);
+
+  return data;
+});
+
+export const unfriendById = createAsyncThunk<
+  UserType,
+  { userId: string | undefined; friendId: string }
+>("user/updateUser", async ({ userId, friendId }) => {
+  const response = await fetch(
+    BACKEND_URL + `/api/users/unfriend/${userId}/${friendId}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+
+  if (!response.ok) {
+    console.error("Failed to unfriend this user:", response.statusText);
+    throw new Error("Failed to unfriend this user");
+  }
+
+  const data: UserType = await response.json();
+
   return data;
 });

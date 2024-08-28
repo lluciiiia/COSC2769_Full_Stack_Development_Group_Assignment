@@ -4,6 +4,7 @@ import {
   getAllUsers,
   getUserById,
   getViewUserById,
+  unfriendById,
   updateUser,
 } from "../services/userServices";
 const router = express.Router();
@@ -65,14 +66,14 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/unfriend/:userId/:friendId", async (req, res) => {
   try {
-    const userId = req.params.id;
-    await User.findByIdAndDelete(userId);
-    res.json({ message: "User deleted" });
+    const { userId, friendId } = req.params;
+    await unfriendById(userId, friendId);
+
+    res.json({ message: "Friend removed successfully!" });
   } catch (error) {
-    console.error("Error deleting user:", error);
-    res.status(500).json({ error: "Failed to delete user" });
+    res.status(500).json({ error: error });
   }
 });
 

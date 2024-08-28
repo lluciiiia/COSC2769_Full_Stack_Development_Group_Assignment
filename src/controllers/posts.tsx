@@ -115,7 +115,7 @@ export const updatePost = createAsyncThunk<PostParams, PostParams>(
   },
 );
 
-export const deletePostById = async (id: String | undefined) => {
+export const deletePostById = async (id: string | undefined) => {
   if (id == undefined) return false;
 
   const response = await fetch(BACKEND_URL + `/api/posts/${id}`, {

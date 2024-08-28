@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { UserType } from "../../interfaces/Users";
 import renderContent from "./ProfileModalUtils";
 import { useDispatch, useSelector } from "react-redux";
-import { AppState } from "../../app/store";
+import { AppDispatch, AppState } from "../../app/store";
 import { updateLocalUser } from "../../features/userSlice";
 import { updateUser } from "../../controllers/user";
 
@@ -13,7 +13,7 @@ interface ModalProps {
 }
 
 const ProfileEditModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const [activeTab, setActiveTab] = useState("User Info");
 
