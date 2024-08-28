@@ -8,7 +8,9 @@ const groupSchema = new mongoose.Schema({
   visibility: { type: String, enum: ['public', 'private'], default: 'public' },
   imageURL: String,
   backgroundImageURL: String,
-  members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+  members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  Accepted: { type: String, enum: ['Accepted', 'Rejected'] }, 
+  description: { type: String, required: true },
 }, { timestamps: true }); // Automatically adds createdAt and updatedAt fields
 
 // Create the model using the schema

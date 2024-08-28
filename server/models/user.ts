@@ -20,7 +20,8 @@ const userSchema = new mongoose.Schema({
   educationDescription: String,
   inRelationship: String,
   bio:String,
-  friends:[{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
+  friends:[{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+  createdAt:{ type: Date, default: Date.now }
 
 }, { timestamps: true });
 

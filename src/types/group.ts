@@ -6,5 +6,7 @@ export type GroupType={
     imageURL:string,
     backgroundImageURL: string
     dateCreated: string,
+    Accepted: string,
+    description: string,
 }
 
