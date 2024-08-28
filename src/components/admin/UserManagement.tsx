@@ -17,7 +17,9 @@ const UserManagement = () => {
   const usersPerPage = 10;
 
   useEffect(() => {
-    dispatch(fetchUsers());
+
+    
+    dispatch(fetchUsers()); 
   }, [dispatch]);
 
   // Handle input changes for search and sort options
