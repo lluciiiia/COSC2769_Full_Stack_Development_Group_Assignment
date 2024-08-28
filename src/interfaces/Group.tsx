@@ -8,8 +8,9 @@ export type GroupType={
     imageURL:string,
     backgroundImageURL: string
     dateCreated: string,
-    members: UserType[]
-  
+    members: UserType[],
+    Accepted : string,
+    description: string,
 }
 
 export interface GroupParams{
