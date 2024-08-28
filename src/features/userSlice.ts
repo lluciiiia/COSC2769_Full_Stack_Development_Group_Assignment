@@ -1,14 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { UserType } from "../interfaces/Users";
-import { getUser } from "../controllers/user";
+import { UserSliceParam } from "../interfaces/Users";
+import { getAllUsers, getUser, getViewedUser } from "../controllers/user";
 
 //current user
-const initialState: UserType = {
-  _id: "",
-  name: "",
-  email: "",
-  password: "",
-  activeStatus: false,
+const initialState: UserSliceParam = {
+  users: [],
+  currentUser: {
+    _id: "",
+    name: "",
+    email: "",
+    password: "",
+    activeStatus: false,
+  },
+  viewedUser: null,
 };
 
 const userSlice = createSlice({
@@ -16,13 +20,18 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     updateLocalUser: (state, action) => {
-      console.log("reducer: ", action.payload);
-      return { ...state, ...action.payload };
+      state.currentUser = { ...state, ...action.payload };
     },
   },
   extraReducers(builder) {
+    builder.addCase(getAllUsers.fulfilled, (state, action) => {
+      state.users = action.payload;
+    });
     builder.addCase(getUser.fulfilled, (state, action) => {
-      return action.payload;
+      state.currentUser = action.payload;
+    });
+    builder.addCase(getViewedUser.fulfilled, (state, action) => {
+      state.viewedUser = action.payload;
     });
   },
 });

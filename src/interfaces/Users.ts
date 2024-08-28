@@ -19,5 +19,12 @@ export type UserType = {
   educationDescription?: string;
   inRelationship?: string;
   bio?: string;
+  dateCreated?: string;
   friends?: Array<{ _id: string; name: string; profilePictureURL?: string }>;
+};
+
+export type UserSliceParam = {
+  users: UserType[];
+  currentUser: UserType;
+  viewedUser: Partial<UserType> | null;
 };

@@ -4,7 +4,8 @@ import { AppState } from "../../app/store";
 import { UserType } from "../../interfaces/Users";
 
 const UserManagement = () => {
-  const users = useSelector((state: AppState) => state.users);
+  const users = useSelector((state: AppState) => state.user.users);
+  console.log(users);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState<"newest" | "oldest">("newest");
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,21 +23,22 @@ const UserManagement = () => {
     setCurrentPage(pageNumber);
   };
 
-  const filteredUsers = users
-    .filter((user) =>
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()),
-    )
-    .sort((a, b) => {
-      const dateA = new Date(a.dateJoined).getTime();
-      const dateB = new Date(b.dateJoined).getTime();
-      return sortOption === "newest" ? dateB - dateA : dateA - dateB;
-    });
+  // const filteredUsers = users
+  //   .filter((user) =>
+  //     user.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  //   )
+  //   .sort((a, b) => {
+  //     // const dateA = new Date(a.dateJoined).getTime();
+  //     // const dateB = new Date(b.dateJoined).getTime();
+  //     return sortOption === "newest" ? dateB - dateA : dateA - dateB;
+  //   });
 
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+  // const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+  const currentUsers = users;
 
-  const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+  // const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
   return (
     <div className="p-6">
@@ -92,7 +94,7 @@ const UserManagement = () => {
                   {user.name}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                  {user.dateJoined.toLocaleDateString()}
+                  {/* {user.dateJoined.toLocaleDateString()} */}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
                   {user.phoneNumber}
@@ -123,10 +125,10 @@ const UserManagement = () => {
       <div className="mt-4 flex items-center justify-between">
         <span className="text-sm text-gray-700">
           Showing {indexOfFirstUser + 1} to {indexOfLastUser} of{" "}
-          {filteredUsers.length} entries
+          {/* {filteredUsers.length} entries */}
         </span>
         <div className="xs:mt-0 mt-2 inline-flex">
-          {[...Array(totalPages)].map((_, i) => (
+          {/* {[...Array(totalPages)].map((_, i) => (
             <button
               key={i}
               onClick={() => handlePageChange(i + 1)}
@@ -136,15 +138,15 @@ const UserManagement = () => {
             >
               {i + 1}
             </button>
-          ))}
-          {currentPage < totalPages && (
+          ))} */}
+          {/* {currentPage < totalPages && (
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               className="rounded-r border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-600"
             >
               {">"}
             </button>
-          )}
+          )} */}
         </div>
       </div>
     </div>

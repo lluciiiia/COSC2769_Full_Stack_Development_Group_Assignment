@@ -15,7 +15,7 @@ const Profile = () => {
   const dispatch: AppDispatch = useDispatch();
 
   const firstRender = useRef(true);
-  const user = useSelector((state: AppState) => state.user);
+  const user = useSelector((state: AppState) => state.user.currentUser);
 
   useEffect(() => {
     if (firstRender.current) {
@@ -40,6 +40,11 @@ const Profile = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
+  //avoid other user go to the current user page
+  if (user._id !== userId) {
+    return <ErrorPage />;
+  }
 
   return (
     <>
