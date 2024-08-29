@@ -3,11 +3,13 @@ import MenuDropDown from "../MenuDropDown";
 import { CommentProps } from "../../interfaces/Comments";
 import { formatRelativeTime } from "../../utils/formatRelativeTime";
 import { deleteCommentById, updateComment } from "../../controllers/comments"; // Make sure to import your updateComment function
+import CommentHistoryModal from "./CommentHistoryModal";
 
 const CommentItem: React.FC<CommentProps> = ({ comment }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [content, setContent] = useState(comment.content);
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -34,7 +36,8 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
   };
 
   const handleViewHistory = () => {
-    console.log("View Edit History clicked");
+    setIsHistoryModalOpen(true);
+    setIsDropdownOpen(false);
   };
 
   const handleSave = async () => {
@@ -131,6 +134,13 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
           )}
         </div>
       </div>
+      {/* Modal for viewing edit history */}
+      {isHistoryModalOpen && (
+        <CommentHistoryModal
+          history={comment.history}
+          onClose={() => setIsHistoryModalOpen(false)}
+        />
+      )}
     </div>
   );
 };
