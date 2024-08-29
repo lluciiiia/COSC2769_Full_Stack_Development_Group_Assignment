@@ -17,11 +17,12 @@ import { store } from "./app/store.ts";
 import Admin from "./pages/Admin.tsx";
 import Layout from "./components/Layout.tsx";
 import GroupList from "./pages/GroupList";
+import ProtectedRoute from "./components/protectedRoutes";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: <Layout />, 
     errorElement: <ErrorPage />,
     children: [
       {
@@ -30,11 +31,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/posts/:userId/:postId",
-        element: <PostDetail />,
+        element: (
+          <ProtectedRoute>
+            <PostDetail />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/groups/:groupId",
-        element: <GroupPage />,
+        element: (
+          <ProtectedRoute>
+            <GroupPage />
+          </ProtectedRoute>
+        ),
         children: [
           {
             path: "discussion",
@@ -51,12 +60,20 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "/groupList",
-        element: <GroupList />,
+        path:"/groupList",
+        element: (
+          <ProtectedRoute>
+            <GroupList />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/profile/:userId",
-        element: <Profile />,
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/sign-up",
@@ -64,11 +81,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/home/:userId",
-        element: <Home />,
+        element: (
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/admin",
-        element: <Admin />,
+        element: (
+          <ProtectedRoute>
+            <Admin />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
