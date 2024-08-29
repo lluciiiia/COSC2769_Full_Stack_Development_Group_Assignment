@@ -14,9 +14,6 @@ function PostList() {
   const [loading, setLoading] = useState(true);
   const firstRender = useRef(true);
   const posts = useSelector((state: AppState) => state.posts.posts);
-  const postList = posts.map((p: PostParams) => (
-    <PostContainer key={p._id} {...p} />
-  ));
 
   useEffect(() => {
     if (firstRender.current) {
@@ -34,7 +31,9 @@ function PostList() {
           <LoadingSpinner />
         </div>
       ) : posts.length > 0 ? (
-        postList
+        posts.map((p: PostParams, index: number) => (
+          <PostContainer key={`${p._id}-${index}`} {...p} />
+        ))
       ) : (
         <div className="flex h-[600px] items-center justify-center">
           <h1 className="text-gray-500">No posts available</h1>
