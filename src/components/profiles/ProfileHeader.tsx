@@ -2,12 +2,11 @@ import React from "react";
 import DefaultProfile from "../../assets/icons/DefaultProfile";
 
 const ProfileHeader = ({ name, bio, avatar, handleEditProfile }) => {
-  const defaultBGImg = "url('https://via.placeholder.com/1200x300')";
   return (
     <div
       className="relative h-64 w-full bg-cover bg-center"
       style={{
-        backgroundImage: defaultBGImg,
+        backgroundColor: "#dbdbdb",
       }}
     >
       <div className="absolute -bottom-16 left-10">
