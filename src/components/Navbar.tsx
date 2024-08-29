@@ -18,6 +18,7 @@ const Navbar = () => {
 
   const handleHomeClick = () => {
     navigate(`/home/${userId}`);
+
   };
 
   const handleCreatePostClick = () => {
