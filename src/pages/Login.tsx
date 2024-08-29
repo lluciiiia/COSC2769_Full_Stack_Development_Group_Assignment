@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUserThunk } from "../features/authSlice";
 import { Link, useNavigate } from "react-router-dom";
+import { AppDispatch } from "../app/store";
 import logo from "../assets/icons/logo.png";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -18,9 +19,9 @@ const Login: React.FC = () => {
     if (loginUserThunk.fulfilled.match(result)) {
       const user = result.payload.user;
       if (user.isAdmin) {
-        navigate(`/admin`); // Redirect to admin page if user is an admin
+        navigate(`/admin`);
       } else {
-        navigate(`/home/${user.id}`); // Otherwise, redirect to home page
+        navigate(`/home/${user.id}`); 
       }
     } else {
       console.error("Login failed:", result.payload || "Unknown error");
