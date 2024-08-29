@@ -20,7 +20,6 @@ export const createComment = async (commentData: any) => {
     // Create a new comment
     const comment = new Comment({
       ...commentData,
-      history: [{ content: commentData.content, updatedAt: new Date() }], // Initialize history with the first content
     });
     const newComment = await comment.save();
 
