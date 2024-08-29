@@ -11,6 +11,7 @@ import notiRoutes from "./routes/notiRoutes";
 import commentRoutes from "./routes/commentRoutes";
 import reactionRoutes from "./routes/reactionRoutes";
 import authenticationRoutes from "./routes/authenticationRoutes";
+import sessionRoute from "./routes/sessionRoutes";
 import session from "express-session";
 const app = express();
 
@@ -46,6 +47,7 @@ app.use("/api/notifications", notiRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/reactions", reactionRoutes);
 app.use("/api/user", authenticationRoutes);
+app.use("/api/session",sessionRoute );
 app.get("/", (req: Request, res: Response) => {
   res.json("From backend side");
 });

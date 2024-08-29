@@ -63,6 +63,7 @@ export const loginUser = async (req: any) => {
     // Save user information in session
     req.session.user = {
       id: user._id,
+      isAuthenticated: true,
       name: user.name,
       email: user.email,
     };
