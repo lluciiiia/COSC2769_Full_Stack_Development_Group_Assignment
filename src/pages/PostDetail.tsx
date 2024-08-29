@@ -5,37 +5,28 @@ import { PostParams } from "../interfaces/Posts";
 import CommentContainer from "../components/comments/CommentContainer";
 import { getPostById } from "../controllers/posts";
 import Post from "../components/post/Post";
-import {  useDispatch } from "react-redux";
-import { AppDispatch } from "../app/store";
-import { fetchSess } from "../features/authSlice";
+
 const PostDetail: React.FC = () => {
   const [post, setPost] = useState<PostParams | null>(null);
   const { userId, postId } = useParams();
-  const dispatch = useDispatch<AppDispatch>();
-  // const {  isAuthenticated } = useSelector(selectAuthState);
-  useEffect(() => {
-    // Fetch the session data when the component mounts
-    const fetchSessionAndPost = async () => {
-      try {
-        await dispatch(fetchSess());
 
-        if ( postId) {
-          const post = await getPostById(postId);
-          if (post) {
-            setPost(post);
-          } else {
-            console.error("Post not found");
-          }
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const post = await getPostById(postId);
+        if (post) {
+          setPost(post);
         } else {
-          console.error("User not authenticated");
+          console.error("Post not found");
         }
       } catch (error) {
-        console.error("Error fetching session or post details:", error);
+        console.error("Error fetching post details:", error);
       }
     };
 
-    fetchSessionAndPost();
-  }, [dispatch, postId]);
+    fetchPost();
+  }, []);
+
   if (!post) return <p>Loading...</p>;
 
   return (
