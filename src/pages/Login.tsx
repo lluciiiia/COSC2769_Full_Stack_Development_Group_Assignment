@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUserThunk } from "../features/authSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/icons/logo.png";
 
 const Login: React.FC = () => {
@@ -87,6 +87,12 @@ const Login: React.FC = () => {
           >
             Log In
           </button>
+          <p className="mt-2 text-center text-sm text-gray-700">
+            Dont have account?{" "}
+            <Link to="sign-up" className="cursor-pointer font-bold">
+              Register
+            </Link>
+          </p>
         </form>
       </div>
     </div>

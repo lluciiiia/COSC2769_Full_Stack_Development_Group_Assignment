@@ -6,7 +6,7 @@ import { Outlet, useLocation } from "react-router-dom";
 const Layout: React.FC = () => {
   const location = useLocation();
 
-  const hideNavbarRoutes = ["/"];
+  const hideNavbarRoutes = ["/", "/sign-up"];
 
   const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
 
