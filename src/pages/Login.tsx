@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUserThunk } from "../features/authSlice";
 import { Link, useNavigate } from "react-router-dom";
-import { AppDispatch } from "../app/store";
 import logo from "../assets/icons/logo.png";
-
+import { AppDispatch } from "../app/store";
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,20 +12,24 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     const result = await dispatch(loginUserThunk({ email, password }));
-
+  
     if (loginUserThunk.fulfilled.match(result)) {
       const user = result.payload.user;
-      if (user.isAdmin) {
-        navigate(`/admin`);
+      
+      const isAdmin = user.isAdmin ?? false;
+  
+      if (isAdmin) {
+        navigate(`/admin`); // Redirect to admin page if user is an admin
       } else {
-        navigate(`/home/${user.id}`); 
+        navigate(`/home/${user.id}`); // Otherwise, redirect to home page
       }
     } else {
       console.error("Login failed:", result.payload || "Unknown error");
     }
   };
+  
 
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-yellow-100">
