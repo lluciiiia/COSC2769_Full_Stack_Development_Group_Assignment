@@ -11,7 +11,7 @@ import notiRoutes from "./routes/notiRoutes";
 import commentRoutes from "./routes/commentRoutes";
 import reactionRoutes from "./routes/reactionRoutes";
 import authenticationRoutes from "./routes/authenticationRoutes";
-
+import session from 'express-session';
 const app = express();
 
 app.use(cookieParser());
@@ -28,10 +28,12 @@ app.use(express.json());
 // Connect to MongoDB
 connectDB();
 
-app.get('/set-test-cookie', (req, res) => {
-  res.cookie('testCookie', 'testValue', { httpOnly: true, secure: false });
-  res.send('Test cookie set');
-});
+app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } // Set to true if using HTTPS
+}));
 
 // Use different API routes
 app.use("/api/users", userRoutes);

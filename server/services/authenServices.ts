@@ -28,9 +28,9 @@ export const regisNewAccount = async (data: any) => {
   }
 }
 
-export const loginUser = async (data: any) => {
+export const loginUser = async (req: any) => {
     try {
-      const { email, password } = data;
+      const { email, password } = req.body;
   
       // Check if the user exists
       const user = await User.findOne({ email });
@@ -44,19 +44,30 @@ export const loginUser = async (data: any) => {
         return { status: 400, message: 'Invalid credentials' };
       }
   
-      // Generate JWT token
-      const token = jwt.sign({ userId: user._id },"jasd", {
-        expiresIn: "1h",
-      });
+      // Save user information in session
+      req.session.user = {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      };
   
       return {
         status: 200,
-        message: "Login successful",
-        token,
-        user: { id: user._id, name: user.name, email: user.email },
+        message: 'Login successful',
+        user: req.session.user,
       };
     } catch (error) {
-      console.error("Error in loginUser:", error);
-      return { status: 500, message: "Server error" };
+      console.error('Error in loginUser:', error);
+      return { status: 500, message: 'Server error' };
     }
   };
+
+  export const logoutUser = (req: any, res: any) => {
+    req.session.destroy((err: any) => {
+      if (err) {
+        return res.status(500).json({ message: 'Failed to log out' });
+      }
+      res.status(200).json({ message: 'Logout successful' });
+    });
+  };
+  
