@@ -38,4 +38,23 @@ export interface PostProps {
 export interface PostState {
   posts: PostParams[];
   creatorPost: PostParams[];
+  groupPost: PostParams2[];
+}
+
+export interface PostParams2 {
+  _id?: string;
+  creatorId: {
+    _id: string;
+    name: string;
+    profilePictureURL?: string;
+  };
+  groupId?: string;
+  content: string;
+  imageURL?: string;
+  createdAt?: Date;
+  visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
+  comments?: Comment[];
+  reactions?: string[];
+  isDetail?: boolean;
+  profileSection?: ProfileSectionParams;
 }
