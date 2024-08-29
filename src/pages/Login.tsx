@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import logo from "../assets/icons/logo.png";
 import { useDispatch } from "react-redux";
-import { login, testCookie } from "../controllers/authentications"; // Adjust the path as needed
+import { login } from "../controllers/authentications"; // Adjust the path as needed
 import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
