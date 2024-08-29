@@ -112,7 +112,7 @@ export const getPostByGroupId = async (groupId: string) => {
         populate: {
           path: "reactions",
           populate: {
-            path: "userId", 
+            path: "userId",
             select: "name profilePictureURL", // Select fields you want from userId
           },
         },
@@ -120,7 +120,7 @@ export const getPostByGroupId = async (groupId: string) => {
     if (!posts) {
       throw new Error("Post not found with id");
     }
-    
+
     return posts;
   } catch (error) {
     throw new Error("Error ");
@@ -139,9 +139,8 @@ const enhancePostWithUser = async (post: any) => {
       return {
         ...comment.toObject(),
         profileSection: {
-          profileImage:
-            commentUser?.profilePictureURL || "default-image-url.jpg",
-          profileName: commentUser?.name || "Undefined",
+          profileImage: commentUser?.profilePictureURL,
+          profileName: commentUser?.name,
         },
       };
     }),
@@ -222,4 +221,3 @@ export const deletePostById = async (postId: String) => {
     throw new Error("Failed to delete post");
   }
 };
-
