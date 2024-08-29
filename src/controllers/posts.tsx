@@ -77,7 +77,33 @@ export const getGroupsByUserId = async (userId: string | undefined) => {
 };
 
 
+export const getPostsByGroup = createAsyncThunk<PostParams[], string>(
+  "posts/getPostByGroup",
+  async (groupId, { rejectWithValue }) => {
+    try {
+      if (!groupId) {
+        throw new Error("No group ID provided");
+      }
+
+      const response = await fetch(BACKEND_URL + `/api/posts/groups/${groupId}`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch posts: " + response.statusText);
+      }
+
+      const data: PostParams[] = await response.json();
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+
 export const createPost = createAsyncThunk<PostParams, PostParams | undefined>(
+
   "posts/createPost",
   async (postData) => {
     const response = await fetch(`${BACKEND_URL}/api/posts`, {

@@ -99,6 +99,33 @@ export const getPostById = async (postId: string) => {
     throw new Error("Failed to fetch post");
   }
 };
+export const getPostByGroupId = async (groupId: string) => {
+  try {
+    // const {groupId}= req.params;
+    const posts = await Post.find({ groupId: groupId })
+      .populate({
+        path: "creatorId", // Populate creatorId
+        select: "name profilePictureURL profileName _id", // Select fields you want from creatorId
+      })
+      .populate({
+        path: "comments",
+        populate: {
+          path: "reactions",
+          populate: {
+            path: "userId", 
+            select: "name profilePictureURL", // Select fields you want from userId
+          },
+        },
+      });
+    if (!posts) {
+      throw new Error("Post not found with id");
+    }
+    
+    return posts;
+  } catch (error) {
+    throw new Error("Error ");
+  }
+};
 
 // Helper function to enhance a post with user information
 const enhancePostWithUser = async (post: any) => {

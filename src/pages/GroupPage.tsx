@@ -6,7 +6,7 @@ import { AppState, AppDispatch } from "../app/store";
 import { Outlet, NavLink } from "react-router-dom";
 import ReturnNavbar from "../components/ReturnNavbar";
 import { selectGroupById, fetchGroups } from "../features/groupSlice";
-
+import { getPostsByGroup } from "../controllers/posts";
 export default function GroupPage() {
   const { groupId } = useParams<{ groupId: string }>();
   const dispatch: AppDispatch = useDispatch();
@@ -17,8 +17,9 @@ export default function GroupPage() {
   );
 
   useEffect(() => {
-    // Fetch groups when the component is mounted
     dispatch(fetchGroups());
+    dispatch(getPostsByGroup(groupId));
+    
   }, [dispatch]);
 
   useEffect(() => {

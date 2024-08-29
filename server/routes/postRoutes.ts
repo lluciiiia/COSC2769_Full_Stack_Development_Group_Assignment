@@ -6,6 +6,7 @@ import {
   deletePostById,
   getPostById,
   getPostListByCreatorId,
+  getPostByGroupId
 } from "../services/postServices";
 import Group from "../models/group";
 import { getAllGroups } from "../services/groupservice";
@@ -29,6 +30,16 @@ router.get("/profile/:userId", async (req, res) => {
     res.status(500).json({ error: error });
   }
 });
+
+router.get("/groups/:groupId", async (req, res) => {
+  try {
+    const posts = await getPostByGroupId(req.params.groupId);
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
+
 
 router.get("/:id", async (req, res) => {
   try {
