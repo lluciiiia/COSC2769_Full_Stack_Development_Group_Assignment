@@ -22,7 +22,7 @@ import ProtectedRoute from "./components/protectedRoutes";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />, 
+    element: <Layout />,
     errorElement: <ErrorPage />,
     children: [
       {
@@ -60,7 +60,7 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path:"/groupList",
+        path: "/groupList",
         element: (
           <ProtectedRoute>
             <GroupList />
