@@ -9,31 +9,26 @@ import LoadingSpinner from "../assets/icons/Loading";
 
 const PostDetail: React.FC = () => {
   const [post, setPost] = useState<PostParams | null>(null);
-  const [loading, setLoading] = useState(true);
   const { userId, postId } = useParams();
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
         const post = await getPostById(postId);
-        if (post) setPost(post);
+        if (post) {
+          setPost(post);
+        } else {
+          console.error("Post not found");
+        }
       } catch (error) {
         console.error("Error fetching post details:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchPost();
-  }, [postId]);
+  }, []);
 
-  if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <LoadingSpinner />
-      </div>
-    );
-  }
+  if (!post) return <p>Loading...</p>;
 
   return (
     <>

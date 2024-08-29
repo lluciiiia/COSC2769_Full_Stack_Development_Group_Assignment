@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import Cookies from 'js-cookie';
 import { AppState } from '../app/store';
-import { loginUser, registerUser } from '../controllers/authentications';
+import { loginUser, registerUser, fetchedSession } from '../controllers/authentications';
 
 export const registerUserThunk = createAsyncThunk(
   'auth/registerUser',
@@ -14,6 +13,19 @@ export const registerUserThunk = createAsyncThunk(
     }
   }
 );
+
+export const fetchSess = createAsyncThunk(
+  'auth/session',
+  async (_, { rejectWithValue }) => {
+    try {
+      const data = await fetchedSession();
+      return data;
+    } catch (err: any) {
+      return rejectWithValue(err.message || 'Error fetching session');
+    }
+  }
+);
+
 
 export const loginUserThunk = createAsyncThunk(
   'auth/loginUser',
@@ -28,8 +40,8 @@ export const loginUserThunk = createAsyncThunk(
 );
 
 const initialState = {
-  user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null,
-  isAuthenticated: !!Cookies.get('isAuthenticated'),
+  user:null ,
+  isAuthenticated: false,
   status: 'idle',
   error: null,
 };
@@ -41,8 +53,7 @@ const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
       state.isAuthenticated = false;
-      Cookies.remove('isAuthenticated');
-      Cookies.remove('user');
+     
     },
   },
   extraReducers: (builder) => {
@@ -54,8 +65,6 @@ const authSlice = createSlice({
         state.status = 'succeeded';
         state.user = action.payload.user;
         state.isAuthenticated = true;
-        Cookies.set('isAuthenticated', 'true', { expires: 1 });
-        Cookies.set('user', JSON.stringify(action.payload.user), { expires: 1 });
       })
       .addCase(loginUserThunk.pending, (state) => {
         state.status = 'loading';
@@ -64,8 +73,11 @@ const authSlice = createSlice({
         state.status = 'succeeded';
         state.user = action.payload.user;
         state.isAuthenticated = true;
-        Cookies.set('isAuthenticated', 'true', { expires: 1 });
-        Cookies.set('user', JSON.stringify(action.payload.user), { expires: 1 });
+      })
+      .addCase(fetchSess.fulfilled, (state, action) =>{
+        state.status= 'loged-in';
+        console.log(action.payload.isAuthenticated+ "check if authenticate");
+        state.isAuthenticated= action.payload.isAuthenticated;
       })
 
   },
