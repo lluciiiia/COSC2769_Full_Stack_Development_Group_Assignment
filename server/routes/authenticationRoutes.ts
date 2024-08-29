@@ -1,6 +1,6 @@
 import express from "express";
 import { regisNewAccount, loginUser } from "../services/authenServices";
-import session from 'express-session';
+import { sign } from "crypto";
 const router = express.Router();
 
 declare module 'express-session' {
@@ -32,9 +32,9 @@ router.post('/login', async (req, res) => {
       req.session.user = result.user;
 
       // Create cookies based on session information
-      res.cookie('isAuthenticated', true, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
-      res.cookie('userId', req.session.user.id, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
-      res.cookie('userName', req.session.user.name, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
+      res.cookie('isAuthenticated', true, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 ,signed:true});
+      res.cookie('userId', req.session.user.id, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000,signed:true });
+      res.cookie('userName', req.session.user.name, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, signed: true });
 
       res.status(200).json({ message: result.message, user: result.user });
     } else {
