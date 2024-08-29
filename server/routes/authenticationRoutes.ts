@@ -14,18 +14,19 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) =>{
-  try{
-    const result= await loginUser(req.body);
+router.post('/login', async (req, res) => {
+  try {
+    const result = await loginUser(req); // Notice no res passed
 
-    if(result.status === 200){
-      res.cookie("token", result.token);
+    if (result.status === 200) {
       res.status(200).json({ message: result.message, user: result.user });
-    }else{
+    } else {
       res.status(result.status).json({ message: result.message });
     }
-  }catch(err){
-
+  } catch (err) {
+    console.error('Error in /login route:', err);
+    res.status(500).json({ message: 'Server error' });
   }
-})
+});
+
 export default router;
