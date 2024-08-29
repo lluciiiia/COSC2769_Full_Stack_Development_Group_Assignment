@@ -6,7 +6,9 @@ const postSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  groupId: { type: mongoose.Schema.Types.ObjectId, ref: "Group" }, // Assuming posts belong to groups
+
+  groupId:String,
+
   content: { type: String, required: true },
   imageURL: { type: String },
   createdAt: { type: Date, default: Date.now },

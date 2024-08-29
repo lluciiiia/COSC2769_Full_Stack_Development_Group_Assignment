@@ -36,7 +36,7 @@ const groupSlice = createSlice({
         console.log("Fetching groups...");
       })
       .addCase(fetchGroups.fulfilled, (state, action) => {
-        console.log("Fetched groups data:", action.payload);
+        // console.log("Fetched groups data:", action.payload);
         return action.payload; // Replace the state with the fetched groups
       })
       .addCase(fetchGroups.rejected, (state, action) => {
@@ -47,12 +47,25 @@ const groupSlice = createSlice({
 
 
 // Selector to get group by ID
+// export const selectGroupById = (state: AppState, groupId: string) => {
+//   console.log(`selectGroupById called with groupId: ${groupId}`);
+//   const group = state.groups.find((group) => group._id === groupId);
+//   console.log(`Group found:`, group);
+//   return group;
+// };
 export const selectGroupById = (state: AppState, groupId: string) => {
+
+  if (!groupId) {
+    console.log("No groupId provided");
+    return undefined;
+  }
   console.log(`selectGroupById called with groupId: ${groupId}`);
+
   const group = state.groups.find((group) => group._id === groupId);
-  console.log(`Group found:`, group);
+  // console.log(`Group found:`, group);
   return group;
 };
+
 
 
 export default groupSlice.reducer;

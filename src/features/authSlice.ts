@@ -1,61 +1,78 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { AppState } from "../app/store";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import Cookies from 'js-cookie';
+import { AppState } from '../app/store';
+import { loginUser, registerUser } from '../controllers/authentications';
 
-export const registerUser = createAsyncThunk('auth/registerUser', async (userData, { rejectWithValue }) => {
+export const registerUserThunk = createAsyncThunk(
+  'auth/registerUser',
+  async (userData: { email: string; password: string; name?: string }, { rejectWithValue }) => {
     try {
-      const response = await fetch('http://localhost:8080/api/user/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
-  
-      if (!response.ok) {
-        // Extract error message from the response
-        const errorData = await response.json();
-        return rejectWithValue(errorData);
-      }
-  
-      const data = await response.json();
+      const data = await registerUser(userData);
       return data;
     } catch (err) {
-      // Handle network errors
-      return rejectWithValue({ message: 'Network error' });
+      return rejectWithValue(err);
     }
-  });
+  }
+);
 
-  const authSlice= createSlice({
-    name:'auth',
-    initialState:{
-        user: null,
-        isAuthenticated: false,
-        status: 'idle',
-        error: null,
+export const loginUserThunk = createAsyncThunk(
+  'auth/loginUser',
+  async (userData: { email: string; password: string }, { rejectWithValue }) => {
+    try {
+      const data = await loginUser(userData);
+      return data;
+    } catch (err) {
+      return rejectWithValue(err);
+    }
+  }
+);
+
+const initialState = {
+  user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null,
+  isAuthenticated: !!Cookies.get('isAuthenticated'),
+  status: 'idle',
+  error: null,
+};
+
+const authSlice = createSlice({
+  name: 'auth',
+  initialState,
+  reducers: {
+    logout: (state) => {
+      state.user = null;
+      state.isAuthenticated = false;
+      Cookies.remove('isAuthenticated');
+      Cookies.remove('user');
     },
-    reducers: {
-        logout: (state) => {
-          state.user = null;
-          state.isAuthenticated = false;
-          localStorage.removeItem('token');
-        },
-      },
-      extraReducers: (builder) => {
-        builder
-          .addCase(registerUser.pending, (state) => {
-            state.status = 'loading';
-          })
-          .addCase(registerUser.fulfilled, (state, action) => {
-            state.status = 'succeeded';
-            state.user = action.payload.user;
-            state.isAuthenticated = true;
-            localStorage.setItem('token', action.payload.token);
-          })
-          .addCase(registerUser.rejected, (state, action) => {
-            // state.status = 'failed';
-            // state = action.payload;
-          });
-      },
-  })
-  export const selectAuthState = (state: AppState) => state.auth;
-  export default authSlice.reducer;
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(registerUserThunk.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(registerUserThunk.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.user = action.payload.user;
+        state.isAuthenticated = true;
+        Cookies.set('isAuthenticated', 'true', { expires: 1 });
+        Cookies.set('user', JSON.stringify(action.payload.user), { expires: 1 });
+      })
+      .addCase(loginUserThunk.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(loginUserThunk.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.user = action.payload.user;
+        state.isAuthenticated = true;
+        Cookies.set('isAuthenticated', 'true', { expires: 1 });
+        Cookies.set('user', JSON.stringify(action.payload.user), { expires: 1 });
+      })
+
+  },
+});
+
+export const { logout } = authSlice.actions;
+
+export const selectAuthState = (state: AppState) => state.auth;
+
+export default authSlice.reducer;

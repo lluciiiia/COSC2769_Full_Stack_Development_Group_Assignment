@@ -28,7 +28,7 @@ const componentRender = (tab: string, user) => {
 
 const About = () => {
   const [activeTab, setActiveTab] = useState("Overview");
-  const user: UserType = useSelector((state: AppState) => state.user);
+  const user: UserType = useSelector((state: AppState) => state.user.currentUser);
 
   return (
     <div className="flex rounded-xl bg-[#FFF8E6] p-4">

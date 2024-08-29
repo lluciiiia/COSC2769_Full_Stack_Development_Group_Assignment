@@ -1,43 +1,40 @@
 import React, { useEffect, useState } from "react";
-import { PostParams } from "../../interfaces/Posts";
+import { PostParams2 } from "../../interfaces/Posts";
 import Post from "../post/Post";
+import { AppState } from "../../app/store";
+import { useSelector } from "react-redux";
+import { ProfileSectionParams } from "../../interfaces/Posts";
 
 export default function Discussion() {
-  const [posts, setPosts] = useState<PostParams[]>([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // const response = await fetch("/api/posts");
-        // const data = await response.json();
-        // TODO: replace Sample data version
-        const response = await fetch("/sample-data.json");
-        const data: PostParams[] = await response.json();
-        setPosts(data);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      }
-    };
+  // const [posts, setPosts] = useState<PostParams[]>([]);
+  const posts = useSelector((state: AppState) => state.posts.groupPost);
+  console.log(posts);
+  const postList = posts.map((p: PostParams2) => (
+    <Post
+      key={p._id}
+      creatorId={p.creatorId?._id || ""}
+      content={p.content}
+      imageURL={p.imageURL}
+      profileSection={{
+        profileImage: p.creatorId?.profilePictureURL, // Correct field name
+        profileName: p.creatorId?.name, // Correct field name
+        postId: p._id,
+      }}
+      isDetail={p.isDetail}
+      visibility={p.visibility}
+    />
+  ));
+  
 
-    fetchData();
-  }, []);
+  console.log(JSON.stringify(posts) + "Gadfkakljslksdnadlk");
+  // console.log(JSON.stringify(postList)+" hello post list");
   return (
     <div>
       <div className="flex h-screen">
         <div className="flex-1 overflow-y-auto">
           {posts.length > 0 ? (
             <div className="flex flex-col items-center gap-6">
-              {posts.map((post) => (
-                <Post
-                  id={post.id}
-                  userId={post.userId}
-                  profileImage={post.profileImage}
-                  profileName={post.profileName}
-                  postContent={post.postContent}
-                  postImage={post.postImage}
-                  profileLink={post.profileLink}
-                  isDetail={false}
-                />
-              ))}
+              {postList.length > 0 ? postList : <h1>Loading...</h1>}
             </div>
           ) : (
             <div className="flex h-full items-center justify-center">

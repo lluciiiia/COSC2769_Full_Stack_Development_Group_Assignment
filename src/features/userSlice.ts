@@ -1,14 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { UserType } from "../interfaces/Users";
-import { getUser } from "../controllers/user";
+import { UserSliceParam } from "../interfaces/Users";
+import {
+  getAllUsers,
+  getUser,
+  getViewedUser,
+  unfriendById,
+} from "../controllers/user";
 
 //current user
-const initialState: UserType = {
-  _id: "",
-  name: "",
-  email: "",
-  password: "",
-  activeStatus: false,
+const initialState: UserSliceParam = {
+  users: [],
+  currentUser: {
+    _id: "",
+    name: "",
+    email: "",
+    password: "",
+    activeStatus: false,
+    createdAt: "",
+  },
+  viewedUser: null,
 };
 
 const userSlice = createSlice({
@@ -16,14 +26,20 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     updateLocalUser: (state, action) => {
-      console.log("reducer: ", action.payload);
-      return { ...state, ...action.payload };
+      state.currentUser = { ...state, ...action.payload };
     },
   },
   extraReducers(builder) {
-    builder.addCase(getUser.fulfilled, (state, action) => {
-      return action.payload;
+    builder.addCase(getAllUsers.fulfilled, (state, action) => {
+      state.users = action.payload;
     });
+    builder.addCase(getUser.fulfilled, (state, action) => {
+      state.currentUser = action.payload;
+    });
+    builder.addCase(getViewedUser.fulfilled, (state, action) => {
+      state.viewedUser = action.payload;
+    });
+    builder.addCase(unfriendById.fulfilled, (state, action) => {});
   },
 });
 
