@@ -16,11 +16,9 @@ const Login: React.FC = () => {
     const result = await dispatch(loginUserThunk({ email, password }));
 
     if (loginUserThunk.fulfilled.match(result)) {
-      // Navigate to the home page after successful login
       navigate(`/home/${result.payload.user.id}`);
     } else {
       console.error("Login failed:", result.payload || "Unknown error");
-      // Optionally, you can display an error message to the user here
     }
   };
 
@@ -96,13 +94,6 @@ const Login: React.FC = () => {
             </Link>
           </p>
         </form>
-      </div>
-
-      {/* Sign Up Button */}
-      <div className="absolute right-4 top-4">
-        <button className="rounded-md border-2 border-black px-4 py-2 font-bold text-black hover:bg-gray-100">
-          Sign Up
-        </button>
       </div>
     </div>
   );
