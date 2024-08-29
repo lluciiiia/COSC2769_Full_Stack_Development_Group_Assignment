@@ -16,7 +16,11 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleHomeClick = () => {
-    navigate(`/`);
+    navigate(`/home/${userId}`);
+  };
+
+  const handleProfileClick = () => {
+    navigate(`/profile/${userId}`);
   };
 
   const handleCreatePostClick = () => {
@@ -28,7 +32,7 @@ const Navbar = () => {
   };
 
   const handleGroupClick = () => {
-    navigate(`/GroupList`);
+    navigate(`/groups`);
   };
 
   const handleSearchClick = () => {
@@ -38,12 +42,14 @@ const Navbar = () => {
   return (
     <>
       <nav className="fixed left-0 right-0 top-0 z-10 flex items-center justify-between bg-[#FFC123] p-2">
-        <div className="flex items-center gap-2">
+        <div
+          className="flex cursor-pointer items-center gap-2"
+          onClick={handleHomeClick}
+        >
           <img
             src={logo}
             alt="BuZzNet Logo"
-            className="h-12 w-12 cursor-pointer object-contain"
-            onClick={handleHomeClick}
+            className="h-12 w-12 object-contain"
           />
           <h1 className="text-2xl font-bold">BuZzNet</h1>
         </div>
@@ -61,8 +67,14 @@ const Navbar = () => {
           />
         </div>
         <div className="mr-6 flex justify-between gap-5">
-          <NavItem src={notificationIcon} label="Notification" />
-          <NavItem src={profileIcon} label="Profile" />
+          <NavItem src={notificationIcon} label={"Notification"} />
+          <NavItem
+            src={profileIcon}
+            label={"Profile"}
+            onClick={() => {
+              handleProfileClick();
+            }}
+          />
         </div>
       </nav>
 

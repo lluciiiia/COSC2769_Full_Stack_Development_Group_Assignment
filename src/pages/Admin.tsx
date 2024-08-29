@@ -34,11 +34,11 @@ export default Admin;
 const AdminTabContent = (activeTab: string) => {
   switch (activeTab) {
     case "Group":
-      return  <GroupManagement/>;
+      return <GroupManagement />;
     case "Users":
-      return < UserManagement/>;
+      return <UserManagement />;
     // case "Content":
-      // return <PostManagement/>;
+    // return <PostManagement/>;
     default:
       return null;
   }

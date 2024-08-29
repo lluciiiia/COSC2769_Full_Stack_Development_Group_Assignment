@@ -18,6 +18,8 @@ import Admin from "./pages/Admin.tsx";
 import Layout from "./components/Layout.tsx";
 import GroupList from "./pages/GroupList";
 import UserSearch from "./pages/UserSearch";
+import ProtectedRoute from "./components/protectedRoutes";
+
 
 const router = createBrowserRouter([
   {
@@ -31,11 +33,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/posts/:userId/:postId",
-        element: <PostDetail />,
+        element: (
+          <ProtectedRoute>
+            <PostDetail />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/groups/:groupId",
-        element: <GroupPage />,
+        element: (
+          <ProtectedRoute>
+            <GroupPage />
+          </ProtectedRoute>
+        ),
         children: [
           {
             path: "discussion",
@@ -52,12 +62,20 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "/groupList",
-        element: <GroupList />,
+        path: "/groups",
+        element: (
+          <ProtectedRoute>
+            <GroupList />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/profile/:userId",
-        element: <Profile />,
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/sign-up",
@@ -65,11 +83,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/home/:userId",
-        element: <Home />,
+        element: (
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/admin",
-        element: <Admin />,
+        element: (
+          <ProtectedRoute>
+            <Admin />
+          </ProtectedRoute>
+        ),
       },
       {
         path : "/UserSearch",
