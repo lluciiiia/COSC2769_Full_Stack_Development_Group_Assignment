@@ -27,7 +27,7 @@ const Navbar = () => {
     setIsModalOpen(false);
   };
   const handleGroupClick = () => {
-    navigate(`/GroupList`);
+    navigate(`/groups`);
   };
   return (
     <>
