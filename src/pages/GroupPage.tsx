@@ -59,7 +59,7 @@ export default function GroupPage() {
       <ReturnNavbar />
       <div className="min-h-screen min-w-9 bg-gray-100">
         <header
-          className="relative h-[250px] bg-cover bg-center"
+          className="relative h-[200px] bg-cover bg-center"
           style={{ backgroundImage: `url('${group.backgroundImageURL}')` }}
         >
           <div className="absolute -bottom-12 left-12">
@@ -70,14 +70,14 @@ export default function GroupPage() {
             />
           </div>
         </header>
-        <div className="ml-64">
+        <div className="ml-64 mt-4">
           <h1 className="text-xl font-bold text-black">{group.name}</h1>
           <p className="text-sm text-gray-600">
             {group.members ? group.members.length : 0} members
           </p>
         </div>
         <div>
-          <div className="mt-16 px-4">
+          <div className="mt-4 px-4">
             <div className="flex items-start">
               <div className="ml-auto flex space-x-2">
                 <button className="rounded-md bg-red-600 px-4 py-2 text-white shadow-md">
