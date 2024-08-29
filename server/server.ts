@@ -14,7 +14,8 @@ import authenticationRoutes from "./routes/authenticationRoutes";
 import session from 'express-session';
 const app = express();
 
-app.use(cookieParser());
+const secret= 'your-secret-key';
+app.use(cookieParser(secret));
 // CORS configuration
 const corsOptions: cors.CorsOptions = {
   origin: "http://localhost:5173",
@@ -32,7 +33,7 @@ app.use(session({
   secret: 'your-secret-key',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false } // Set to true if using HTTPS
+  cookie: { secure: false } 
 }));
 
 // Use different API routes
