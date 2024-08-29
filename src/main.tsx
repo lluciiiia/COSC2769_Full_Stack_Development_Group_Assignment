@@ -60,7 +60,7 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "/groupList",
+        path: "/groups",
         element: (
           <ProtectedRoute>
             <GroupList />
