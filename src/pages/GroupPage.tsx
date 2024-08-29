@@ -7,27 +7,51 @@ import { Outlet, NavLink } from "react-router-dom";
 import ReturnNavbar from "../components/ReturnNavbar";
 import { selectGroupById, fetchGroups } from "../features/groupSlice";
 import { getPostsByGroup } from "../controllers/posts";
+import LoadingSpinner from "../assets/icons/Loading";
+
 export default function GroupPage() {
-  const { groupId } = useParams<{ groupId: string }>();
+  const groupId = useParams<{ groupId: string }>().groupId || "";
   const dispatch: AppDispatch = useDispatch();
-  const [group, setGroup] = useState<GroupType | null>(null); // Allow group to be null initially
+  const [group, setGroup] = useState<GroupType | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const selectedGroup = useSelector((state: AppState) =>
     selectGroupById(state, groupId || ""),
   );
 
   useEffect(() => {
-    dispatch(fetchGroups());
-    dispatch(getPostsByGroup(groupId));
-    
-  }, [dispatch]);
+    const loadGroupData = async () => {
+      try {
+        await dispatch(fetchGroups());
+        await dispatch(getPostsByGroup(groupId));
+      } catch (error) {
+        console.error("Error fetching group data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadGroupData();
+  }, [dispatch, groupId]);
 
   useEffect(() => {
-    setGroup(selectedGroup || null); 
+    setGroup(selectedGroup || null);
   }, [selectedGroup]);
 
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
   if (!group) {
-    return <div>Group not found</div>; 
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <p className="text-gray-500">Group not found</p>
+      </div>
+    );
   }
 
   return (
@@ -48,7 +72,9 @@ export default function GroupPage() {
         </header>
         <div className="ml-64">
           <h1 className="text-xl font-bold text-black">{group.name}</h1>
-          <p className="text-sm text-gray-600">{group.members ? group.members.length : 0} members</p>
+          <p className="text-sm text-gray-600">
+            {group.members ? group.members.length : 0} members
+          </p>
         </div>
         <div>
           <div className="mt-16 px-4">
