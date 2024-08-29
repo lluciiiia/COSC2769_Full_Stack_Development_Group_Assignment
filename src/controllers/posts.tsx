@@ -20,6 +20,23 @@ export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
   },
 );
 
+export const getPostById = async (id: String | undefined) => {
+  if (id == undefined) return;
+
+  const response = await fetch(BACKEND_URL + `/api/posts/${id}`, {
+    method: "GET",
+  });
+
+  console.log("response: " + JSON.stringify(response));
+
+  if (!response.ok) {
+    console.error("Failed to fetch posts:", response.statusText);
+    throw new Error("Failed to fetch posts");
+  }
+
+  const data: PostParams = await response.json();
+  return data;
+};
 export const getPostsByCreatorId = createAsyncThunk<
   PostParams[],
   string | undefined
@@ -40,23 +57,25 @@ export const getPostsByCreatorId = createAsyncThunk<
   return data;
 });
 
-export const getPostById = async (id: string | undefined) => {
-  if (id == undefined) return;
+export const getGroupsByUserId = async (userId: string | undefined) => {
+  if (!userId) return;
 
-  const response = await fetch(BACKEND_URL + `/api/posts/${id}`, {
+  const response = await fetch(`${BACKEND_URL}/api/groups/user/${userId}`, {
     method: "GET",
   });
 
   console.log("response: " + JSON.stringify(response));
 
   if (!response.ok) {
-    console.error("Failed to fetch posts:", response.statusText);
-    throw new Error("Failed to fetch posts");
+    console.error("Failed to fetch groups:", response.statusText);
+    throw new Error("Failed to fetch groups");
   }
 
-  const data: PostParams = await response.json();
-  return data;
+  // Parse the JSON response if the fetch is successful
+  const groups = await response.json();
+  return groups;
 };
+
 
 export const getPostsByGroup = createAsyncThunk<PostParams[], string>(
   "posts/getPostByGroup",
@@ -81,7 +100,10 @@ export const getPostsByGroup = createAsyncThunk<PostParams[], string>(
     }
   }
 );
-export const createpost = createAsyncThunk<PostParams, PostParams | undefined>(
+
+
+export const createPost = createAsyncThunk<PostParams, PostParams | undefined>(
+
   "posts/createPost",
   async (postData) => {
     const response = await fetch(`${BACKEND_URL}/api/posts`, {
@@ -101,7 +123,25 @@ export const createpost = createAsyncThunk<PostParams, PostParams | undefined>(
   },
 );
 
-export const deletePostById = async (id: String | undefined) => {
+export const updatePost = createAsyncThunk<PostParams, PostParams>(
+  "posts/updatePost",
+  async (postData) => {
+    const response = await fetch(`${BACKEND_URL}/api/posts/${postData._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+    });
+
+    if (!response.ok) throw new Error("Failed to update post");
+
+    const data: PostParams = await response.json();
+    return data;
+  },
+);
+
+export const deletePostById = async (id: string | undefined) => {
   if (id == undefined) return false;
 
   const response = await fetch(BACKEND_URL + `/api/posts/${id}`, {

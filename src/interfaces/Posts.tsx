@@ -15,9 +15,9 @@ export interface PostParams {
 }
 
 export interface ProfileSectionParams {
+  post?: PostParams;
   profileImage?: string;
   profileName?: string;
-  postId?: string;
 }
 
 export interface ReactionSectionProps {
@@ -57,4 +57,16 @@ export interface PostParams2 {
   reactions?: string[];
   isDetail?: boolean;
   profileSection?: ProfileSectionParams;
+}
+
+export interface PostFormProps {
+  content: string;
+  setContent: (content: string) => void;
+  visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
+  setVisibility: (visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP") => void;
+  imageURL: string;
+  setImageURL: (url: string) => void;
+  onSubmit: (e: React.FormEvent) => void;
+  onClose: () => void;
+  isEdit: boolean;
 }

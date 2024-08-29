@@ -1,16 +1,21 @@
 import express from "express";
 import User from "../models/user";
-import { getUserById, updateUser } from "../services/userServices";
+import {
+  getAllUsers,
+  getUserById,
+  getViewUserById,
+  unfriendById,
+  updateUser,
+} from "../services/userServices";
 const router = express.Router();
 
 //GET /user- fetch all user
 router.get("/", async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await getAllUsers();
     res.json(users);
   } catch (error) {
-    console.error("Error fetching users: ", error);
-    res.status(500).json({ error: "Failed to fetch users" });
+    res.status(500).json({ error: error });
   }
 });
 
@@ -18,6 +23,16 @@ router.get("/:id", async (req, res) => {
   try {
     const userId = req.params.id;
     const user = await getUserById(userId);
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
+
+router.get("/view/:id", async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await getViewUserById(userId);
     res.json(user);
   } catch (error) {
     res.status(500).json({ error: error });
@@ -39,11 +54,11 @@ router.post("/", async (req, res) => {
   try {
     const newUser = new User(req.body);
     console.log(newUser);
-    await newUser.save(); // Save the new user to MongoDB
+    await newUser.save();
     res.status(201).json({ message: "User created", user: newUser });
   } catch (error: any) {
     console.error("Error creating user:", error);
-    // Check if the error is a validation error and return a 400 status code with the error message
+
     if (error.name === "ValidationError") {
       return res.status(400).json({ error: error.message });
     }
@@ -51,14 +66,15 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/unfriend/:userId/:friendId", async (req, res) => {
   try {
-    const userId = req.params.id;
-    await User.findByIdAndDelete(userId);
-    res.json({ message: "User deleted" });
+    const { userId, friendId } = req.params;
+    await unfriendById(userId, friendId);
+
+    res.json({ message: "Friend removed successfully!" });
   } catch (error) {
-    console.error("Error deleting user:", error);
-    res.status(500).json({ error: "Failed to delete user" });
+    res.status(500).json({ error: error });
   }
 });
+
 export default router;

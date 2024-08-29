@@ -9,6 +9,8 @@ const Post: React.FC<PostParams> = ({
   creatorId,
   content,
   imageURL,
+  createdAt,
+  visibility,
   profileSection,
   isDetail,
 }) => {
@@ -32,7 +34,16 @@ const Post: React.FC<PostParams> = ({
       <ProfileSection
         profileImage={profileImage}
         profileName={profileName}
-        postId={_id}
+        post={{
+          _id,
+          creatorId,
+          content,
+          imageURL,
+          createdAt,
+          visibility,
+          profileSection,
+          isDetail,
+        }} // Pass the entire PostParams object
       />
       {/* Post Content */}
       <div className="text-center">

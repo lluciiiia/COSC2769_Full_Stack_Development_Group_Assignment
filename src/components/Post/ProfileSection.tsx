@@ -2,14 +2,18 @@ import React, { useState } from "react";
 import { ProfileSectionParams } from "../../interfaces/Posts";
 import { useNavigate, useParams } from "react-router-dom";
 import { deletePostById } from "../../controllers/posts";
-import PostDropDown from "./PostDropDown";
+import MenuDropDown from "../MenuDropDown";
+import PostModal from "../post/PostModal";
 
 export const ProfileSection: React.FC<ProfileSectionParams> = ({
+  post,
   profileImage,
   profileName,
-  postId,
 }) => {
+  if (!post) return;
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const navigate = useNavigate();
   const { userId } = useParams();
 
@@ -18,14 +22,14 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
   };
 
   const handleEdit = () => {
-    console.log("Edit clicked");
     setIsDropdownOpen(false);
+    setIsEditModalOpen(true);
   };
 
   const handleDelete = async () => {
     setIsDropdownOpen(false);
     try {
-      const response = await deletePostById(postId);
+      const response = await deletePostById(post._id);
       if (!response) {
         alert("Failed to delete the post. Please try again.");
       } else {
@@ -36,6 +40,10 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
       console.error("Error deleting post:", error);
       alert("An error occurred while trying to delete the post.");
     }
+  };
+
+  const handleViewHistory = () => {
+    console.log("View Edit History clicked");
   };
 
   const safeProfileImage =
@@ -62,9 +70,20 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
           className="cursor-pointer"
         />
         {isDropdownOpen && (
-          <PostDropDown onEdit={handleEdit} onDelete={handleDelete} />
+          <MenuDropDown
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            onViewHistory={handleViewHistory}
+            creatorId={post.creatorId}
+          />
         )}
       </div>
+      <PostModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        userId={userId}
+        post={post}
+      />
     </div>
   );
 };

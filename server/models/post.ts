@@ -6,7 +6,9 @@ const postSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+
   groupId:String,
+
   content: { type: String, required: true },
   imageURL: { type: String },
   createdAt: { type: Date, default: Date.now },

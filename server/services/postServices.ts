@@ -24,7 +24,6 @@ export const getAllPosts = async (userId: string) => {
     const enhancedPosts = await Promise.all(
       posts.map(async (post) => {
         if (post.creatorId.toString() === userObjectId.toString()) {
-          console.log("hi");
           return await enhancePostWithUser(post);
         } else if (post.visibility === "PUBLIC") {
           return await enhancePostWithUser(post);
@@ -184,6 +183,37 @@ export const createPost = async (postData: any) => {
   }
 };
 
+export const updatePost = async (postId: string, postData: any) => {
+  try {
+    // Check if the post exists
+    const post = await Post.findById(postId);
+    if (!post) throw new Error("Post not found with the provided id");
+
+    // Check if the creator exists
+    const user = await User.findById(postData.creatorId);
+    if (!user) throw new Error("User not found with the provided creatorId");
+
+    // Check if group exists if a groupId is provided
+    if (postData.groupId && postData.groupId !== "") {
+      const group = await Group.findById(postData.groupId);
+      if (!group) throw new Error("Group not found with the provided groupId");
+
+      // Check if the user is a member of the group
+      const isMember = group.members.includes(postData.creatorId);
+      if (!isMember) throw new Error("User is not a member of the group");
+    }
+
+    // Update the post with new data
+    Object.assign(post, postData);
+    await post.save();
+
+    return post;
+  } catch (error) {
+    console.error("Error updating post:", error);
+    throw new Error("Failed to update post");
+  }
+};
+
 export const deletePostById = async (postId: String) => {
   try {
     await Post.findByIdAndDelete(postId);
@@ -192,3 +222,4 @@ export const deletePostById = async (postId: String) => {
     throw new Error("Failed to delete post");
   }
 };
+

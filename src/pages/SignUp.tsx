@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/icons/logo.png";
-import { registerUser } from "../features/authSlice"; // Import the registerUser thunk
+import { registerUser } from "../controllers/authentications";
 // import { UseDispatch } from "react-redux";
 import { AppDispatch } from "../app/store";
 interface RegisInfor {
