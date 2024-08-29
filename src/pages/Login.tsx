@@ -16,7 +16,12 @@ const Login: React.FC = () => {
     const result = await dispatch(loginUserThunk({ email, password }));
 
     if (loginUserThunk.fulfilled.match(result)) {
-      navigate(`/home/${result.payload.user.id}`);
+      const user = result.payload.user;
+      if (user.isAdmin) {
+        navigate(`/admin`); // Redirect to admin page if user is an admin
+      } else {
+        navigate(`/home/${user.id}`); // Otherwise, redirect to home page
+      }
     } else {
       console.error("Login failed:", result.payload || "Unknown error");
     }

@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema({
   jobDescription: String,
   degree: String,
   years: String,
+  isAdmin: {type: String,default: false},
   educationDescription: String,
   inRelationship: String,
   bio:String,
