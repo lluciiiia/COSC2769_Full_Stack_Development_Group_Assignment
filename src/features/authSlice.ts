@@ -43,6 +43,7 @@ const initialState = {
   user:null ,
   isAuthenticated: false,
   status: 'idle',
+  isAdmin: false,
   error: null,
 };
 

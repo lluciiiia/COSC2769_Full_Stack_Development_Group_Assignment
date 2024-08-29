@@ -65,6 +65,7 @@ export const loginUser = async (req: any) => {
       id: user._id,
       isAuthenticated: true,
       name: user.name,
+      isAdmin: user.isAdmin,
       email: user.email,
     };
 

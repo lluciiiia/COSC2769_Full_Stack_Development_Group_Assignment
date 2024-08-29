@@ -4,13 +4,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { deletePostById } from "../../controllers/posts";
 import MenuDropDown from "../MenuDropDown";
 import PostModal from "../post/PostModal";
+import DefaultProfile from "../../assets/icons/DefaultProfile.tsx";
 
 export const ProfileSection: React.FC<ProfileSectionParams> = ({
   post,
   profileImage,
   profileName,
 }) => {
-  if (!post) return;
+  if (!post) return null;
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -18,7 +19,7 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
   const { userId } = useParams();
 
   const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+    setIsDropdownOpen((prev) => !prev);
   };
 
   const handleEdit = () => {
@@ -46,18 +47,27 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
     console.log("View Edit History clicked");
   };
 
+  // Determine safe profile image and name
   const safeProfileImage =
-    profileImage !== undefined ? profileImage : "default-image-url.jpg";
-  const safeProfileName = profileName !== undefined ? profileName : "Undefined";
+    typeof profileImage === "string" && profileImage.length > 0
+      ? profileImage
+      : null;
+  const safeProfileName = profileName || "Undefined";
 
   return (
     <div className="relative flex items-start p-6">
       <div className="mr-4 flex-shrink-0">
-        <img
-          src={safeProfileImage}
-          alt="Profile"
-          className="h-[50px] w-[50px] rounded-full"
-        />
+        {safeProfileImage ? (
+          <img
+            src={safeProfileImage}
+            alt="Profile"
+            className="h-[50px] w-[50px] rounded-full"
+          />
+        ) : (
+          <div className="h-[50px] w-[50px]">
+            <DefaultProfile />
+          </div>
+        )}
       </div>
       <div>
         <div className="font-bold">{safeProfileName}</div>
