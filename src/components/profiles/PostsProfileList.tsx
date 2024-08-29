@@ -13,7 +13,7 @@ const PostsProfileList = () => {
 
   return (
     <div id="postList" className="space-y-6 pt-12">
-      {postList.length > 0 ? postList : <h1>Loading...</h1>}
+      {postList.length > 0 ? postList : <h1>No post available</h1>}
     </div>
   );
 };
