@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import MenuDropDown from "../MenuDropDown";
 import { CommentProps } from "../../interfaces/Comments";
 import { formatRelativeTime } from "../../utils/formatRelativeTime";
-import { deleteCommentById, updateComment } from "../../controllers/comments"; // Make sure to import your updateComment function
+import { deleteCommentById, updateComment } from "../../controllers/comments";
 import CommentHistoryModal from "./CommentHistoryModal";
 
 const CommentItem: React.FC<CommentProps> = ({ comment }) => {
@@ -47,7 +47,7 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
         alert("Failed to update the comment. Please try again.");
       } else {
         setIsEditing(false);
-        window.location.reload(); // Reload the page to see changes or consider using state to update
+        window.location.reload();
       }
     } catch (error) {
       console.error("Error updating comment:", error);
