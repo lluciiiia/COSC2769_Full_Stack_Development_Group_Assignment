@@ -1,3 +1,5 @@
+import React from "react";
+
 interface NavItemProps {
   src: string;
   label: string;
