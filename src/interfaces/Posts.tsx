@@ -1,5 +1,11 @@
 import { Comment } from "./Comments";
 
+export interface PostHistory {
+  content: string;
+  imageURL?: string;
+  updatedAt: Date;
+}
+
 export interface PostParams {
   _id?: string;
   creatorId: string;
@@ -12,6 +18,7 @@ export interface PostParams {
   reactions?: string[];
   isDetail?: boolean;
   profileSection?: ProfileSectionParams;
+  history: PostHistory[];
 }
 
 export interface ProfileSectionParams {

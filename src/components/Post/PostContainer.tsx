@@ -13,6 +13,7 @@ const PostContainer: React.FC<PostParams> = ({
   visibility,
   profileSection,
   isDetail,
+  history,
 }) => {
   const navigate = useNavigate();
   const { userId } = useParams();
@@ -39,6 +40,7 @@ const PostContainer: React.FC<PostParams> = ({
           visibility,
           profileSection,
           isDetail,
+          history,
         }}
       />
       {/* Post Content */}
