@@ -5,7 +5,7 @@ const DefaultProfile = () => {
     <img
       src="/src/assets/icons/default-profile.png"
       alt="Default Profile"
-      className="h-[50px] w-[50px] rounded-full"
+      className="rounded-full"
     />
   );
 };

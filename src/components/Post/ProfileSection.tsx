@@ -64,7 +64,9 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
             className="h-[50px] w-[50px] rounded-full"
           />
         ) : (
-          <DefaultProfile />
+          <div className="h-[50px] w-[50px]">
+            <DefaultProfile />
+          </div>
         )}
       </div>
       <div>

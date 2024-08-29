@@ -8,7 +8,7 @@ import ProfileHeader from "../components/profiles/ProfileHeader";
 import TabNavigation from "../components/profiles/TabNavigation";
 import { getUser } from "../controllers/user";
 import ProfileEditModal from "../components/profiles/ProfileEditModal";
-import LoadingSpinner from "../assets/icons/Loading"; // Import your loading spinner
+import LoadingSpinner from "../assets/icons/Loading";
 
 const Profile = () => {
   const { userId } = useParams();
