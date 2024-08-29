@@ -17,7 +17,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleHomeClick = () => {
-    navigate(`/`);
+    navigate(`/home/${userId}`);
   };
 
   const handleCreatePostClick = () => {
