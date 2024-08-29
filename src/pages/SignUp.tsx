@@ -43,7 +43,6 @@ const Signup: React.FC = () => {
         console.error("Failed to register:", resultAction.payload);
         // Handle registration error
       }
-
     } catch (error) {
       console.error("An unexpected error occurred:", error);
     }
@@ -127,13 +126,6 @@ const Signup: React.FC = () => {
             </Link>
           </p>
         </form>
-      </div>
-
-      {/* Login Button */}
-      <div className="absolute right-4 top-4">
-        <button className="rounded-md border-2 border-black px-4 py-2 font-bold text-black hover:bg-gray-100">
-          Log In
-        </button>
       </div>
     </div>
   );
