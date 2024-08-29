@@ -15,17 +15,23 @@ const CommentHistoryModal: React.FC<CommentHistoryModalProps> = ({
       <div className="flex w-full max-w-md flex-col justify-center rounded-lg bg-white p-4">
         <h2 className="mb-4 text-lg font-bold">Edit History</h2>
         <ul className="max-h-64 overflow-y-auto">
-          {history.map((entry, index) => (
-            <li key={index} className="border-b py-2">
-              <p className="flex flex-col gap-1 text-sm">
-                <span className="font-bold">Version {index + 1}</span>
-                {entry.content}
-              </p>
-              <p className="mt-1 text-xs text-gray-500">
-                {new Date(entry.updatedAt).toLocaleString()}
-              </p>
+          {history.length === 0 ? (
+            <li className="py-2 text-center text-sm text-gray-500">
+              No edit history available.
             </li>
-          ))}
+          ) : (
+            history.map((entry, index) => (
+              <li key={index} className="border-b py-2">
+                <p className="flex flex-col gap-1 text-sm">
+                  <span className="font-bold">Version {index + 1}</span>
+                  {entry.content}
+                </p>
+                <p className="mt-1 text-xs text-gray-500">
+                  {new Date(entry.updatedAt).toLocaleString()}
+                </p>
+              </li>
+            ))
+          )}
         </ul>
         <div className="mt-4 flex justify-center">
           <button
