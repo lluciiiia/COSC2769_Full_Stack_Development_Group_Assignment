@@ -5,6 +5,7 @@ import { deletePostById } from "../../controllers/posts";
 import MenuDropDown from "../MenuDropDown";
 import PostModal from "../post/PostModal";
 import DefaultProfile from "../../assets/icons/DefaultProfile.tsx";
+import PostHistoryModal from "./PostHistoryModal.tsx";
 
 export const ProfileSection: React.FC<ProfileSectionParams> = ({
   post,
@@ -15,6 +16,8 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+
   const navigate = useNavigate();
   const { userId } = useParams();
 
@@ -44,7 +47,8 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
   };
 
   const handleViewHistory = () => {
-    console.log("View Edit History clicked");
+    setIsHistoryModalOpen(true);
+    setIsDropdownOpen(false);
   };
 
   // Determine safe profile image and name
@@ -94,6 +98,14 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
         userId={userId}
         post={post}
       />
+
+      {/* Modal for viewing edit history */}
+      {isHistoryModalOpen && (
+        <PostHistoryModal
+          history={post.history}
+          onClose={() => setIsHistoryModalOpen(false)}
+        />
+      )}
     </div>
   );
 };
