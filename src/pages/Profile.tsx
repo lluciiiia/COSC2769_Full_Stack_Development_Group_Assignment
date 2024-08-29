@@ -68,7 +68,6 @@ const Profile = () => {
         <div className="mt-8 w-full max-w-4xl px-3">
           <TabContent
             activeTab={activeTab}
-            setActiveTab={setActiveTab}
             userId={userId?.toString()}
           />
         </div>

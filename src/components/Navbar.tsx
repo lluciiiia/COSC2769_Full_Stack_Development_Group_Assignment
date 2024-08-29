@@ -18,7 +18,10 @@ const Navbar = () => {
 
   const handleHomeClick = () => {
     navigate(`/home/${userId}`);
+  };
 
+  const handleProfileClick = () => {
+    navigate(`/profile/${userId}`);
   };
 
   const handleCreatePostClick = () => {
@@ -54,7 +57,13 @@ const Navbar = () => {
 
         <div className="mr-6 flex justify-between gap-5">
           <NavItem src={notificationIcon} label={"Notification"} />
-          <NavItem src={profileIcon} label={"Profile"} />
+          <NavItem
+            src={profileIcon}
+            label={"Profile"}
+            onClick={() => {
+              handleProfileClick();
+            }}
+          />
         </div>
       </nav>
 
