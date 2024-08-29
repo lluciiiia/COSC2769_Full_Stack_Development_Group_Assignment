@@ -3,6 +3,23 @@ import { PostParams } from "../interfaces/Posts";
 
 export const BACKEND_URL = "http://localhost:8080";
 
+export const getAllPosts = createAsyncThunk<PostParams[]>(
+  "posts/getAllPosts",
+  async () => {
+    const response = await fetch(BACKEND_URL + `/api/posts/`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      console.error("Failed to fetch posts:", response.statusText);
+      throw new Error("Failed to fetch posts");
+    }
+
+    const data: PostParams[] = await response.json();
+    return data;
+  },
+);
+
 export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
   "posts/getPosts",
   async (userId) => {
@@ -76,7 +93,6 @@ export const getGroupsByUserId = async (userId: string | undefined) => {
   return groups;
 };
 
-
 export const getPostsByGroup = createAsyncThunk<PostParams[], string>(
   "posts/getPostByGroup",
   async (groupId, { rejectWithValue }) => {
@@ -85,9 +101,12 @@ export const getPostsByGroup = createAsyncThunk<PostParams[], string>(
         throw new Error("No group ID provided");
       }
 
-      const response = await fetch(BACKEND_URL + `/api/posts/groups/${groupId}`, {
-        method: "GET",
-      });
+      const response = await fetch(
+        BACKEND_URL + `/api/posts/groups/${groupId}`,
+        {
+          method: "GET",
+        },
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch posts: " + response.statusText);
@@ -98,12 +117,10 @@ export const getPostsByGroup = createAsyncThunk<PostParams[], string>(
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
-
 export const createPost = createAsyncThunk<PostParams, PostParams | undefined>(
-
   "posts/createPost",
   async (postData) => {
     const response = await fetch(`${BACKEND_URL}/api/posts`, {

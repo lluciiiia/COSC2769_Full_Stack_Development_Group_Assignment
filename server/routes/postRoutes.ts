@@ -1,21 +1,30 @@
 import express from "express";
 import {
-  getAllPosts,
   createPost,
   updatePost,
   deletePostById,
   getPostById,
   getPostListByCreatorId,
-  getPostByGroupId
+  getPostByGroupId,
+  getPostsForUser,
+  getAllPosts,
 } from "../services/postServices";
-import Group from "../models/group";
-import { getAllGroups } from "../services/groupservice";
 
 const router = express.Router();
 
+//get all posts from admin
+router.get("/", async (req, res, next) => {
+  try {
+    const posts = await getAllPosts();
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
+
 router.get("/all/:userId", async (req, res) => {
   try {
-    const posts = await getAllPosts(req.params.userId);
+    const posts = await getPostsForUser(req.params.userId);
     res.json(posts);
   } catch (error) {
     res.status(500).json({ error: error });
@@ -39,7 +48,6 @@ router.get("/groups/:groupId", async (req, res) => {
     res.status(500).json({ error: error });
   }
 });
-
 
 router.get("/:id", async (req, res) => {
   try {

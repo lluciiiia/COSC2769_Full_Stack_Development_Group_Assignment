@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import connectDB from "./db";
-import multer from "multer"
-import cookieParser from 'cookie-parser';
+import multer from "multer";
+import cookieParser from "cookie-parser";
 // Importing Routes
 import groupRoutes from "./routes/groupRoutes";
 import userRoutes from "./routes/userRoutes";
@@ -11,7 +11,7 @@ import notiRoutes from "./routes/notiRoutes";
 import commentRoutes from "./routes/commentRoutes";
 import reactionRoutes from "./routes/reactionRoutes";
 import authenticationRoutes from "./routes/authenticationRoutes";
-import session from 'express-session';
+import session from "express-session";
 const app = express();
 
 app.use(cookieParser());
@@ -19,7 +19,7 @@ app.use(cookieParser());
 const corsOptions: cors.CorsOptions = {
   origin: "http://localhost:5173",
   optionsSuccessStatus: 200,
-  credentials: true
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
@@ -28,12 +28,14 @@ app.use(express.json());
 // Connect to MongoDB
 connectDB();
 
-app.use(session({
-  secret: 'your-secret-key',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false } // Set to true if using HTTPS
-}));
+app.use(
+  session({
+    secret: "your-secret-key",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // Set to true if using HTTPS
+  }),
+);
 
 // Use different API routes
 app.use("/api/users", userRoutes);
@@ -42,7 +44,7 @@ app.use("/api/posts", postRoutes);
 app.use("/api/notifications", notiRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/reactions", reactionRoutes);
-app.use("/api/user",authenticationRoutes);
+app.use("/api/user", authenticationRoutes);
 app.get("/", (req: Request, res: Response) => {
   res.json("From backend side");
 });

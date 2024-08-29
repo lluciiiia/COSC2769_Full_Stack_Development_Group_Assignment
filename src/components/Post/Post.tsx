@@ -48,7 +48,7 @@ const Post: React.FC<PostParams> = ({
       {/* Post Content */}
       <div className="text-center">
         <p className="mb-2 ml-5 text-left text-lg font-semibold">{content}</p>
-        {imageURL && ( // Conditional rendering for the image
+        {imageURL && ( 
           <img
             src={imageURL}
             alt="Post Content"
