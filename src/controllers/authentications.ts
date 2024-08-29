@@ -44,3 +44,19 @@ export const registerUser = async (userData: { email: string; password: string; 
     }
   };
   
+  export const fetchedSession=async () => {
+    try{
+      const response= await fetch(`http://localhost:8080/api/session`);
+
+      if(!response.ok){
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error fetched session');
+      }
+
+      const data = await response.json();
+
+      return data;
+    }catch(error: any){
+      throw new Error( 'Network error');
+    }
+  }

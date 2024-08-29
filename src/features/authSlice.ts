@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
 import { AppState } from '../app/store';
-import { loginUser, registerUser } from '../controllers/authentications';
+import { loginUser, registerUser, fetchedSession } from '../controllers/authentications';
 
 export const registerUserThunk = createAsyncThunk(
   'auth/registerUser',
@@ -11,6 +11,18 @@ export const registerUserThunk = createAsyncThunk(
       return data;
     } catch (err) {
       return rejectWithValue(err);
+    }
+  }
+);
+
+export const fetchSess = createAsyncThunk(
+  'auth/session',
+  async () => {
+    try {
+        const data= await fetchedSession();
+      return data;
+    } catch (err) {
+      throw new Error('Error fetch session');
     }
   }
 );
