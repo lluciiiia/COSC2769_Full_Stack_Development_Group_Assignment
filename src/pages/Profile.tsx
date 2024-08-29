@@ -8,30 +8,28 @@ import ProfileHeader from "../components/profiles/ProfileHeader";
 import TabNavigation from "../components/profiles/TabNavigation";
 import { getUser } from "../controllers/user";
 import ProfileEditModal from "../components/profiles/ProfileEditModal";
+import LoadingSpinner from "../assets/icons/Loading"; // Import your loading spinner
 
 const Profile = () => {
   const { userId } = useParams();
-
   const dispatch: AppDispatch = useDispatch();
 
   const firstRender = useRef(true);
   const user = useSelector((state: AppState) => state.user.currentUser);
+  const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<string>("Posts");
 
   useEffect(() => {
     if (firstRender.current) {
-      dispatch(getUser(userId));
-      firstRender.current = false;
+      dispatch(getUser(userId)).finally(() => {
+        firstRender.current = false;
+        setLoading(false);
+      });
     }
-  });
+  }, [dispatch]);
 
-  const numberOfFriend = user.friends?.length;
-
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<string>("Posts"); // Initialize activeTab state
-
-  if (user === undefined) {
-    return <ErrorPage />;
-  }
+  const numberOfFriend = user?.friends?.length;
 
   const handleEditProfile = () => {
     setIsModalOpen(true);
@@ -41,10 +39,17 @@ const Profile = () => {
     setIsModalOpen(false);
   };
 
-  //avoid other user go to the current user page
-  if (user._id !== userId) {
-    return <ErrorPage />;
+  if (loading) {
+    // Show loading spinner while fetching user data
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
   }
+
+  // Avoid other users accessing the current user page
+  if (user && user._id !== userId) return <ErrorPage />;
 
   return (
     <>
@@ -66,11 +71,7 @@ const Profile = () => {
         <div className="mt-1 w-full border-b-2"></div>
 
         <div className="mt-8 w-full max-w-4xl px-3">
-          <TabContent
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            userId={userId?.toString()}
-          />
+          <TabContent activeTab={activeTab} userId={userId?.toString()} />
         </div>
       </div>
 
@@ -78,4 +79,5 @@ const Profile = () => {
     </>
   );
 };
+
 export default Profile;
