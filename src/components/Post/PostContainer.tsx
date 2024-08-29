@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ReactionSection } from "./ReactionSection";
 import { ProfileSection } from "./ProfileSection";
 
-const Post: React.FC<PostParams> = ({
+const PostContainer: React.FC<PostParams> = ({
   _id,
   creatorId,
   content,
@@ -21,10 +21,6 @@ const Post: React.FC<PostParams> = ({
     navigate(`/posts/${userId}/${_id}`);
   };
 
-  // Destructure with default values only if undefined
-  const { profileImage = "default-image-url.jpg", profileName = "Undefined" } =
-    profileSection || {}; // Fallback to an empty object if profileSection is undefined
-
   return (
     <div
       className={`mx-auto max-w-md overflow-hidden rounded-lg bg-white ${
@@ -32,8 +28,8 @@ const Post: React.FC<PostParams> = ({
       }`}
     >
       <ProfileSection
-        profileImage={profileImage}
-        profileName={profileName}
+        profileImage={profileSection?.profileImage}
+        profileName={profileSection?.profileName}
         post={{
           _id,
           creatorId,
@@ -43,12 +39,12 @@ const Post: React.FC<PostParams> = ({
           visibility,
           profileSection,
           isDetail,
-        }} // Pass the entire PostParams object
+        }}
       />
       {/* Post Content */}
       <div className="text-center">
         <p className="mb-2 ml-5 text-left text-lg font-semibold">{content}</p>
-        {imageURL && ( // Conditional rendering for the image
+        {imageURL && (
           <img
             src={imageURL}
             alt="Post Content"
@@ -62,4 +58,4 @@ const Post: React.FC<PostParams> = ({
   );
 };
 
-export default Post;
+export default PostContainer;

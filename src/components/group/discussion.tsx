@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { PostParams2 } from "../../interfaces/Posts";
-import Post from "../post/Post";
+import PostContainer from "../post/PostContainer";
 import { AppState } from "../../app/store";
 import { useSelector } from "react-redux";
 import { ProfileSectionParams } from "../../interfaces/Posts";
@@ -10,7 +10,7 @@ export default function Discussion() {
   const posts = useSelector((state: AppState) => state.posts.groupPost);
   console.log(posts);
   const postList = posts.map((p: PostParams2) => (
-    <Post
+    <PostContainer
       key={p._id}
       creatorId={p.creatorId?._id || ""}
       content={p.content}
@@ -24,7 +24,6 @@ export default function Discussion() {
       visibility={p.visibility}
     />
   ));
-  
 
   console.log(JSON.stringify(posts) + "Gadfkakljslksdnadlk");
   // console.log(JSON.stringify(postList)+" hello post list");

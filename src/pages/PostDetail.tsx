@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import { PostParams } from "../interfaces/Posts";
 import CommentContainer from "../components/comments/CommentContainer";
 import { getPostById } from "../controllers/posts";
-import Post from "../components/post/Post";
+import PostContainer from "../components/post/PostContainer";
 import LoadingSpinner from "../assets/icons/Loading";
 
 const PostDetail: React.FC = () => {
@@ -42,7 +42,7 @@ const PostDetail: React.FC = () => {
         <div className="mr-[300px] flex items-center justify-center gap-28">
           {post && (
             <>
-              <Post
+              <PostContainer
                 _id={post._id}
                 creatorId={post.creatorId}
                 profileSection={post.profileSection}

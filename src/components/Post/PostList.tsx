@@ -4,7 +4,7 @@ import { AppDispatch, AppState } from "../../app/store";
 import { useSelector, useDispatch } from "react-redux";
 import { getPosts } from "../../controllers/posts";
 import { useParams } from "react-router-dom";
-import Post from "./Post";
+import PostContainer from "./PostContainer";
 import LoadingSpinner from "../../assets/icons/Loading";
 
 function PostList() {
@@ -14,7 +14,9 @@ function PostList() {
   const [loading, setLoading] = useState(true);
   const firstRender = useRef(true);
   const posts = useSelector((state: AppState) => state.posts.posts);
-  const postList = posts.map((p: PostParams) => <Post key={p._id} {...p} />);
+  const postList = posts.map((p: PostParams) => (
+    <PostContainer key={p._id} {...p} />
+  ));
 
   useEffect(() => {
     if (firstRender.current) {
