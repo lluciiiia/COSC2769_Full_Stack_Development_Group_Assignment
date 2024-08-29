@@ -17,6 +17,7 @@ import { store } from "./app/store.ts";
 import Admin from "./pages/Admin.tsx";
 import Layout from "./components/Layout.tsx";
 import GroupList from "./pages/GroupList";
+import UserSearch from "./pages/UserSearch";
 
 const router = createBrowserRouter([
   {
@@ -70,6 +71,10 @@ const router = createBrowserRouter([
         path: "/admin",
         element: <Admin />,
       },
+      {
+        path : "/UserSearch",
+        element: <UserSearch />,
+      }
     ],
   },
 ]);

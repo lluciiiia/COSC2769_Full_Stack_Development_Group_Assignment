@@ -11,7 +11,7 @@ const GroupList = () => {
 
   useEffect(() => {
     dispatch(fetchGroups());
-  }, [dispatch]);
+  }, [dispatch]); 
 
   return (
     <div className="flex justify-center">
