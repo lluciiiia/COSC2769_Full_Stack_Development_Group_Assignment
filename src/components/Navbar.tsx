@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useInsertionEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import logo from "../assets/icons/logo.png";
 import notificationIcon from "../assets/icons/notificationIcon.png";
@@ -11,18 +11,19 @@ import { NavItem } from "./NavItem";
 import PostModal from "./post/PostModal";
 import NotificationModal from "./notifications/NotificationModal";
 import ProfileButtonModal from "./ProfileButtonModal";
+import { useSelector } from "react-redux";
+import { AppState } from "../app/store";
 
 const Navbar = () => {
-  const { userId } = useParams();
+  const currentUser = useSelector((state: AppState) => state.auth);
 
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [isProfileModalOpen, setProfileOpen] = useState(false);
   const navigate = useNavigate();
-  
 
   const handleHomeClick = () => {
-    navigate(`/home/${userId}`);
+    navigate(`/home/`);
   };
 
   const handleCreatePostClick = () => {
@@ -83,11 +84,15 @@ const Navbar = () => {
       </nav>
 
       <NotificationModal isOpen={isNotificationModalOpen} />
-      <ProfileButtonModal isOpen={isProfileModalOpen} />
+      <ProfileButtonModal
+        isOpen={isProfileModalOpen}
+        imgUrl={currentUser.profilePictureURL}
+        name={currentUser.name}
+      />
       <PostModal
         isOpen={isPostModalOpen}
         onClose={handleCloseModal}
-        userId={userId}
+        userId={currentUser.id}
         post={null}
       />
     </>

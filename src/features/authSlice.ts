@@ -63,10 +63,12 @@ export const logoutUserThunk = createAsyncThunk(
 );
 
 const initialState = {
-  id: '',
+  id: "",
   isAuthenticated: false,
   status: "idle",
   isAdmin: false,
+  name: "",
+  profilePictureURL: "",
   error: null,
 };
 
@@ -77,7 +79,7 @@ const authSlice = createSlice({
     // Update logout reducer to handle local state
     logout: (state) => {
       state.isAuthenticated = false;
-      state.id = '';
+      state.id = "";
       state.isAdmin = false;
     },
   },
@@ -94,20 +96,17 @@ const authSlice = createSlice({
         state.status = "loading";
       })
       .addCase(loginUserThunk.fulfilled, (state, action) => {
-        console.log("Login response payload:", action.payload);
-
         state.status = "succeeded";
         state.id = action.payload.id;
         state.isAdmin = action.payload.user.isAdmin;
         state.isAuthenticated = true;
-        console.log("Updated isAdmin:", state.isAdmin);
       })
       .addCase(fetchSess.fulfilled, (state, action) => {
-        state.status = "loged-in";
-        console.log(action.payload.isAuthenticated + "check if authenticate");
-        state.isAuthenticated = action.payload.isAuthenticated;
-        state.id = action.payload.id;
-        
+        // console.log(action.payload)
+        // state.status = "loged-in";
+        // state.isAuthenticated = action.payload.isAuthenticated;
+        // state.id = action.payload.id;
+        return action.payload;
       })
       // Add case for logoutUserThunk
       .addCase(logoutUserThunk.pending, (state) => {
@@ -116,9 +115,9 @@ const authSlice = createSlice({
       .addCase(logoutUserThunk.fulfilled, (state) => {
         state.status = "succeeded";
         state.isAuthenticated = false;
-        state.id = '';
+        state.id = "";
         state.isAdmin = false;
-      })
+      });
   },
 });
 
