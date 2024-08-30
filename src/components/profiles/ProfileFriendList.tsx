@@ -1,11 +1,14 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { AppState } from "../../app/store";
 import { FriendListItem } from "./FriendListItem";
+import { selectCurrentUser, selectViewedUser } from "../../features/userSlice";
 
-const ProfileFriendList = () => {
-  const user = useSelector((state: AppState) => state.user.currentUser);
-  const friends = user.friends || [];
+const ProfileFriendList = ({ isAuthenticatedUser }) => {
+  const currentUser = useSelector(selectCurrentUser);
+  const viewedUser = useSelector(selectViewedUser);
+  const user = isAuthenticatedUser ? currentUser : viewedUser;
+
+  const friends = user?.friends || [];
 
   if (friends.length === 0) {
     return <h1>No friend available</h1>;
@@ -20,6 +23,7 @@ const ProfileFriendList = () => {
             _id={friend._id}
             avatar={friend.profilePictureURL}
             userName={friend.name}
+            isAuthenticatedUser={isAuthenticatedUser}
           />
         );
       })}

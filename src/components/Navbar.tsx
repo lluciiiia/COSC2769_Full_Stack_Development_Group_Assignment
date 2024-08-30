@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import logo from "../assets/icons/logo.png";
 import notificationIcon from "../assets/icons/notificationIcon.png";
@@ -11,15 +11,16 @@ import { NavItem } from "./NavItem";
 import PostModal from "./post/PostModal";
 import NotificationModal from "./notifications/NotificationModal";
 import ProfileButtonModal from "./ProfileButtonModal";
+import { useSelector } from "react-redux";
+import { AppState } from "../app/store";
 
 const Navbar = () => {
-  const { userId } = useParams();
+  const currentUser = useSelector((state: AppState) => state.auth);
 
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
-  const [isProfileModalOpen, setProfileOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const navigate = useNavigate();
-  
 
   const handleHomeClick = () => {
     navigate(`/home`);
@@ -35,11 +36,13 @@ const Navbar = () => {
     navigate(`/groups`);
   };
 
-  const handleProfoleClick = () => {
-    setProfileOpen(!isProfileModalOpen);
+  const handleProfileClick = () => {
+    setIsProfileModalOpen(!isProfileModalOpen);
+    setIsNotificationModalOpen(false);
   };
   const handleNotificationClick = () => {
     setIsNotificationModalOpen(!isNotificationModalOpen);
+    setIsProfileModalOpen(false);
   };
 
   return (
@@ -75,7 +78,7 @@ const Navbar = () => {
           <NavItem
             src={profileIcon}
             onClick={() => {
-              handleProfoleClick();
+              handleProfileClick();
             }}
             label={"Profile"}
           />
@@ -83,11 +86,16 @@ const Navbar = () => {
       </nav>
 
       <NotificationModal isOpen={isNotificationModalOpen} />
-      <ProfileButtonModal isOpen={isProfileModalOpen} />
+      <ProfileButtonModal
+        isOpen={isProfileModalOpen}
+        setIsOpen={setIsProfileModalOpen}
+        imgUrl={currentUser.profilePictureURL}
+        name={currentUser.name}
+      />
       <PostModal
         isOpen={isPostModalOpen}
         onClose={handleCloseModal}
-        userId={userId}
+        userId={currentUser.id}
         post={null}
       />
     </>
