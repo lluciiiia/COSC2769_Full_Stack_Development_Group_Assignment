@@ -15,7 +15,7 @@ const router = express.Router();
 
 router.get("/all", async (req, res) => {
   try {
-    const posts = await getAllPosts(req.signedCookies.userId);
+    const posts = await getAllPosts(req.session.user.id);
     res.json(posts);
   } catch (error) {
     res.status(500).json({ error: error });
