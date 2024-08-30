@@ -21,30 +21,34 @@ const HistoryModal = <T extends HistoryEntry>({
 }: HistoryModalProps<T>) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="flex w-full max-w-md flex-col justify-center rounded-lg bg-white p-4">
+      <div className="flex h-[550px] w-[650px] flex-col justify-center rounded-lg bg-white p-4">
         <h2 className="mb-4 text-lg font-bold">{title}</h2>
-        <ul className="max-h-64 overflow-y-auto">
+        <ul className="max-h-[500px] overflow-y-auto">
           {history.length === 0 ? (
             <li className="py-2 text-center text-sm text-gray-500">
               No edit history available.
             </li>
           ) : (
             history.map((entry, index) => (
-              <li key={index} className="border-b py-2">
-                <p className="flex flex-col gap-1 text-sm">
-                  <span className="font-bold">Version {index + 1}</span>
-                  {entry.content}
-                </p>
-                {showImage && entry.imageURL && (
-                  <img
-                    src={entry.imageURL}
-                    alt="History image"
-                    className="mt-2 max-w-full rounded"
-                  />
-                )}
-                <p className="mt-1 text-xs text-gray-500">
-                  {new Date(entry.updatedAt).toLocaleString()}
-                </p>
+              <li key={index} className="border-b py-4">
+                <div className="flex">
+                  <p className="flex flex-col gap-1 text-sm">
+                    <span className="font-bold">Version {index + 1}</span>
+                    {entry.content}
+                  </p>
+                  <p className="ml-auto mt-1 text-xs text-gray-500">
+                    {new Date(entry.updatedAt).toLocaleString()}
+                  </p>
+                </div>
+                <div className="mt-2 flex justify-center">
+                  {showImage && entry.imageURL && (
+                    <img
+                      src={entry.imageURL}
+                      alt="History image"
+                      className="max-w-full rounded"
+                    />
+                  )}
+                </div>
               </li>
             ))
           )}
