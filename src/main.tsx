@@ -17,9 +17,7 @@ import { store } from "./app/store.ts";
 import Admin from "./pages/Admin.tsx";
 import Layout from "./components/Layout.tsx";
 import GroupList from "./pages/GroupList";
-import UserSearch from "./pages/UserSearch";
 import ProtectedRoute from "./components/protectedRoutes";
-
 
 const router = createBrowserRouter([
   {
@@ -72,9 +70,9 @@ const router = createBrowserRouter([
       {
         path: "/profile/:userId",
         element: (
-          // <ProtectedRoute>
-          <Profile />
-          // </ProtectedRoute>
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
         ),
       },
       {
@@ -97,10 +95,6 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      {
-        path : "/UserSearch",
-        element: <UserSearch />,
-      }
     ],
   },
 ]);

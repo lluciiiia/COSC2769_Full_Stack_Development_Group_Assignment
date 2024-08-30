@@ -10,12 +10,14 @@ import createPostIcon from "../assets/icons/createPostIcon.png";
 import { NavItem } from "./NavItem";
 import PostModal from "./post/PostModal";
 import NotificationModal from "./notifications/NotificationModal";
+import ProfileButtonModal from "./ProfileButtonModal";
 
 const Navbar = () => {
   const { userId } = useParams();
 
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
+  const [isProfileModalOpen, setProfileOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleHomeClick = () => {
@@ -32,6 +34,9 @@ const Navbar = () => {
     navigate(`/GroupList`);
   };
 
+  const handleProfoleClick = () => {
+    setProfileOpen(!isProfileModalOpen);
+  };
   const handleNotificationClick = () => {
     setIsNotificationModalOpen(!isNotificationModalOpen);
   };
@@ -66,12 +71,18 @@ const Navbar = () => {
               handleNotificationClick();
             }}
           />
-          <NavItem src={profileIcon} label={"Profile"} />
+          <NavItem
+            src={profileIcon}
+            onClick={() => {
+              handleProfoleClick();
+            }}
+            label={"Profile"}
+          />
         </div>
       </nav>
 
-      <NotificationModal isOpen={isNotificationModalOpen}/>
-
+      <NotificationModal isOpen={isNotificationModalOpen} />
+      <ProfileButtonModal isOpen={isProfileModalOpen} />
       <PostModal
         isOpen={isPostModalOpen}
         onClose={handleCloseModal}
