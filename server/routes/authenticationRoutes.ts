@@ -8,6 +8,7 @@ declare module 'express-session' {
     user: {
       id: string;
       name: string;
+      profilePictureURL: string,
       email: string;
       isAdmin: boolean;
       isAuthenticated: boolean;

@@ -7,7 +7,7 @@ import ContactInformation from "./ContactInformation";
 import RelationshipInformation from "./RelationshipInformation";
 import { UserType } from "../../interfaces/Users";
 import { useSelector } from "react-redux";
-import { AppState } from "../../app/store";
+import { selectCurrentUser, selectViewedUser } from "../../features/userSlice";
 
 const componentRender = (tab: string, user) => {
   switch (tab) {
@@ -26,11 +26,12 @@ const componentRender = (tab: string, user) => {
   }
 };
 
-const About = () => {
+const About = ({ isAuthenticatedUser }) => {
   const [activeTab, setActiveTab] = useState("Overview");
-  const user: UserType = useSelector(
-    (state: AppState) => state.user.currentUser,
-  );
+  const currentUser: UserType = useSelector(selectCurrentUser);
+  const viewedUser: Partial<UserType> | null = useSelector(selectViewedUser);
+
+  const user = isAuthenticatedUser ? currentUser : viewedUser;
 
   return (
     <div className="flex rounded-xl bg-[#FFF8E6] p-4">

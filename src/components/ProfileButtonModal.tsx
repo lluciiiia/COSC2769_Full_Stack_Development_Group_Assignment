@@ -7,41 +7,59 @@ import { useSelector } from "react-redux";
 import { selectAuthState } from "../features/authSlice";
 interface ProfileButtonModalProps {
   isOpen: boolean;
+  name: string;
+  imgUrl: string;
+  setIsOpen: (a: boolean) => void;
 }
 
-const ProfileButtonModal: React.FC<ProfileButtonModalProps> = ({ isOpen }) => {
+const ProfileButtonModal: React.FC<ProfileButtonModalProps> = ({
+  isOpen,
+  name,
+  imgUrl,
+  setIsOpen,
+}) => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
-  const authState = useSelector(selectAuthState);
-  const {id } = authState;
+  const { id } = useSelector(selectAuthState);
+
   const handleLogout = async () => {
     try {
       await dispatch(logoutUserThunk());
       dispatch(fetchSess);
-      navigate("/"); 
+      navigate("/");
     } catch (error) {
       console.error("Logout failed:", error);
     }
   };
 
-  const handleClick=()=>{
+  const handleClick = () => {
     navigate(`/profile/${id}`);
-  }
+    setIsOpen(false);
+    window.location.reload();
+  };
   if (!isOpen) return null;
 
   return (
-    <div className="fixed top-14 right-6 z-50 bg-white p-4 rounded-md shadow-md">
-      <h2 className="text-xl font-bold">Profile Menu</h2>
-      <button 
-        onClick={handleLogout} 
-        className="mt-4 bg-red-500 text-white px-4 py-2 rounded">
-        Logout
-      </button>
-      <button 
+    <div className="fixed right-6 top-16 z-50 w-56 cursor-pointer rounded-md bg-gray-100 p-4 shadow-md">
+      <div
+        className="flex transform items-center gap-2 transition-transform hover:opacity-20"
         onClick={handleClick}
-        className="mt-4 bg-white-500 text-black px-4 py-2 rounded">
-        Profile
-      </button>
+      >
+        <img
+          src={imgUrl}
+          alt="Profile"
+          className="h-[50px] w-[50px] transform rounded-full transition-transform"
+        />
+        <h2 className="text-xl font-bold">{name}</h2>
+      </div>
+      <div className="flex flex-col gap-4">
+        <button
+          onClick={handleLogout}
+          className="mt-4 rounded bg-red-500 px-4 py-2 text-white"
+        >
+          Logout
+        </button>
+      </div>
     </div>
   );
 };

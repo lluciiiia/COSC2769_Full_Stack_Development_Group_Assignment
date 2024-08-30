@@ -7,7 +7,7 @@ export const getAllUsers = createAsyncThunk<UserType[]>(
   async () => {
     const response = await fetch(BACKEND_URL + `/api/users/`, {
       method: "GET",
-      credentials: 'include',
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -25,7 +25,7 @@ export const getUser = createAsyncThunk<UserType, string | undefined>(
   async (userId) => {
     const response = await fetch(BACKEND_URL + `/api/users/${userId}`, {
       method: "GET",
-      credentials: 'include',
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -34,6 +34,7 @@ export const getUser = createAsyncThunk<UserType, string | undefined>(
     }
 
     const data: UserType = await response.json();
+    console.log("from thunk", data);
     return data;
   },
 );
@@ -43,7 +44,7 @@ export const getViewedUser = createAsyncThunk<UserType, string | undefined>(
   async (userId) => {
     const response = await fetch(BACKEND_URL + `/api/users/view/${userId}`, {
       method: "GET",
-      credentials: 'include',
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -65,7 +66,7 @@ export const updateUser = createAsyncThunk<
     headers: {
       "Content-Type": "application/json",
     },
-    credentials: 'include',
+    credentials: "include",
     body: JSON.stringify(userData),
   });
 
@@ -82,7 +83,7 @@ export const updateUser = createAsyncThunk<
 export const unfriendById = createAsyncThunk<
   UserType,
   { userId: string | undefined; friendId: string }
->("user/updateUser", async ({  friendId }) => {
+>("user/updateUser", async ({ friendId }) => {
   const response = await fetch(
     BACKEND_URL + `/api/users/unfriend/${friendId}`,
     {
@@ -90,7 +91,7 @@ export const unfriendById = createAsyncThunk<
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: 'include',
+      credentials: "include",
     },
   );
 
