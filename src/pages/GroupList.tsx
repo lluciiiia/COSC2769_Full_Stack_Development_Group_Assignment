@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchGroups } from "../features/groupSlice";
 import { AppState, AppDispatch } from "../app/store";
 import { GroupType } from "../types/group";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../assets/icons/Loading";
+import { fetchGroups } from "../controllers/group";
 
 const GroupList = () => {
   const dispatch: AppDispatch = useDispatch();

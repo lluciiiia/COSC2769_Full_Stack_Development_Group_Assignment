@@ -5,9 +5,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { AppState, AppDispatch } from "../app/store";
 import { Outlet, NavLink } from "react-router-dom";
 import ReturnNavbar from "../components/ReturnNavbar";
-import { selectGroupById, fetchGroups } from "../features/groupSlice";
+import { selectGroupById } from "../features/groupSlice";
 import { getPostsByGroup } from "../controllers/posts";
 import LoadingSpinner from "../assets/icons/Loading";
+import { fetchGroups } from "../controllers/group";
 
 export default function GroupPage() {
   const groupId = useParams<{ groupId: string }>().groupId || "";
