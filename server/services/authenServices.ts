@@ -21,7 +21,7 @@ export const regisNewAccount = async (data: any) => {
       address: "",
       age: null,
       phoneNumber: "",
-      activeStatus: false,
+      activeStatus: true,
       education: "",
       location: "",
       relationship: "",
