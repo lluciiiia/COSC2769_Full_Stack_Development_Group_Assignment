@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
-import { createPost, updatePost, getGroupsByUserId } from "../../controllers/posts";
-import { GroupType } from "../../interfaces/Group";
+import { PostParams } from "../../interfaces/Posts";
 import PostForm from "./PostForm";
+import {
+  createPost,
+  updatePost,
+  getGroupsByUserId,
+} from "../../controllers/posts";
+import { GroupType } from "../../interfaces/Group";
 
 const PostModal = ({ isOpen, onClose, userId, post }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [content, setContent] = useState("");
-  const [visibility, setVisibility] = useState<"PUBLIC" | "FRIEND_ONLY" | "GROUP">("PUBLIC");
+  const [visibility, setVisibility] = useState<
+    "PUBLIC" | "FRIEND_ONLY" | "GROUP"
+  >("PUBLIC");
+  const [imageURL, setImageURL] = useState("");
   const [groups, setGroups] = useState<GroupType[]>([]);
   const [selectedGroupId, setSelectedGroupId] = useState<string>("");
   const [images, setImages] = useState<string[]>([]); // Change File[] to string[]
@@ -39,7 +47,7 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
       try {
         const fetchedGroups: GroupType[] = await getGroupsByUserId(userId);
         setGroups(fetchedGroups);
-        if (fetchedGroups.length > 0) {
+        if (fetchedGroups?.length > 0) {
           setSelectedGroupId(fetchedGroups[0]._id);
         } else {
           setSelectedGroupId("");
@@ -49,9 +57,7 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
       }
     };
 
-    if (isOpen) {
-      fetchGroups();
-    }
+    if (isOpen) fetchGroups();
 
     return () => {
       document.body.style.overflow = "auto";
@@ -66,7 +72,10 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
         visibility: visibility,
         images: images, // Use the base64 images
         groupId: visibility === "GROUP" ? selectedGroupId : undefined,
-    };
+        history: post?.history ? post.history : [],
+        comments: post?.comments ? post.comments : [],
+        createdAt: post?.createdAt ? post.createdAt : new Date(),
+      };
 
 
     try {

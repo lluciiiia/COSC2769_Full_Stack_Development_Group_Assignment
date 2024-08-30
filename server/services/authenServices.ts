@@ -21,7 +21,7 @@ export const regisNewAccount = async (data: any) => {
       address: "",
       age: null,
       phoneNumber: "",
-      activeStatus: false,
+      activeStatus: true,
       education: "",
       location: "",
       relationship: "",
@@ -65,6 +65,7 @@ export const loginUser = async (req: any) => {
       id: user._id,
       isAuthenticated: true,
       name: user.name,
+      isAdmin: user.isAdmin,
       email: user.email,
     };
 
@@ -78,12 +79,17 @@ export const loginUser = async (req: any) => {
     return { status: 500, message: "Server error" };
   }
 };
-
 export const logoutUser = (req: any, res: any) => {
   req.session.destroy((err: any) => {
     if (err) {
       return res.status(500).json({ message: "Failed to log out" });
     }
-    res.status(200).json({ message: "Logout successful" });
+
+    // Clear cookies
+    res.clearCookie('isAuthenticated');
+    res.clearCookie('userId');
+    res.clearCookie('userName');
+
+    return res.status(200).json({ message: "Logout successful" });
   });
 };

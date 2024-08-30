@@ -3,11 +3,29 @@ import { PostParams } from "../interfaces/Posts";
 
 export const BACKEND_URL = "http://localhost:8080";
 
+export const getAllPosts = createAsyncThunk<PostParams[]>(
+  "posts/getAllPosts",
+  async () => {
+    const response = await fetch(BACKEND_URL + `/api/posts/`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      console.error("Failed to fetch posts:", response.statusText);
+      throw new Error("Failed to fetch posts");
+    }
+
+    const data: PostParams[] = await response.json();
+    return data;
+  },
+);
+
 export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
   "posts/getPosts",
-  async (userId) => {
-    const response = await fetch(BACKEND_URL + `/api/posts/all/${userId}`, {
+  async () => {
+    const response = await fetch(BACKEND_URL + `/api/posts/all`, {
       method: "GET",
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -25,6 +43,7 @@ export const getPostById = async (id: String | undefined) => {
 
   const response = await fetch(BACKEND_URL + `/api/posts/${id}`, {
     method: "GET",
+    credentials: 'include',
   });
 
   console.log("response: " + JSON.stringify(response));
@@ -45,6 +64,7 @@ export const getPostsByCreatorId = createAsyncThunk<
     BACKEND_URL + `/api/posts/profile/${creatorId}`,
     {
       method: "GET",
+      credentials: 'include',
     },
   );
 
@@ -62,6 +82,7 @@ export const getGroupsByUserId = async (userId: string | undefined) => {
 
   const response = await fetch(`${BACKEND_URL}/api/groups/user/${userId}`, {
     method: "GET",
+    credentials: 'include',
   });
 
   console.log("response: " + JSON.stringify(response));
@@ -76,7 +97,6 @@ export const getGroupsByUserId = async (userId: string | undefined) => {
   return groups;
 };
 
-
 export const getPostsByGroup = createAsyncThunk<PostParams[], string>(
   "posts/getPostByGroup",
   async (groupId, { rejectWithValue }) => {
@@ -87,6 +107,7 @@ export const getPostsByGroup = createAsyncThunk<PostParams[], string>(
 
       const response = await fetch(BACKEND_URL + `/api/posts/groups/${groupId}`, {
         method: "GET",
+        credentials: 'include',
       });
 
       if (!response.ok) {
@@ -98,11 +119,11 @@ export const getPostsByGroup = createAsyncThunk<PostParams[], string>(
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 
-export const createPost = createAsyncThunk<PostParams, PostParams>(
+export const createPost = createAsyncThunk<PostParams, PostParams | undefined>(
   "posts/createPost",
   async (postParams) => {
     // Log the post parameters being sent
@@ -114,6 +135,8 @@ export const createPost = createAsyncThunk<PostParams, PostParams>(
         "Content-Type": "application/json", // Set content type to JSON
       },
       body: JSON.stringify(postParams), // Send postParams as JSON
+      credentials: 'include',
+
     });
 
     // Log the response status and response body
@@ -146,6 +169,7 @@ export const updatePost = createAsyncThunk<PostParams, PostParams>(
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: 'include',
       body: JSON.stringify(postData),
     });
 

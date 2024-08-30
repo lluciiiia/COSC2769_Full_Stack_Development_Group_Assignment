@@ -6,6 +6,7 @@ import {
   getViewUserById,
   unfriendById,
   updateUser,
+  addFriend
 } from "../services/userServices";
 const router = express.Router();
 
@@ -28,6 +29,22 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ error: error });
   }
 });
+
+router.put("/addfriend/:friendId", async (req, res) => {
+  try {
+    // Use hardcoded user ID for testing
+    const userId = req.session.user.id;
+    const { friendId } = req.params;
+
+    const result = await addFriend(userId, friendId);
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Error adding friend:", error);
+    res.status(500).json({ error: "Failed to add friend" });
+  }
+});
+
 
 router.get("/view/:id", async (req, res) => {
   try {
@@ -66,9 +83,10 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.delete("/unfriend/:userId/:friendId", async (req, res) => {
+router.delete("/unfriend/:friendId", async (req, res) => {
   try {
-    const { userId, friendId } = req.params;
+    const userId=req.session.user.id;
+    const { friendId } = req.params;
     await unfriendById(userId, friendId);
 
     res.json({ message: "Friend removed successfully!" });

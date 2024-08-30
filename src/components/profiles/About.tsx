@@ -16,11 +16,11 @@ const componentRender = (tab: string, user) => {
     case "Work":
       return <WorkInformation user={user} />;
     case "Education":
-      return <EducationInformation user={user}/>;
+      return <EducationInformation user={user} />;
     case "Contact":
-      return <ContactInformation user={user}/>;
+      return <ContactInformation user={user} />;
     case "Relationship":
-      return <RelationshipInformation user={user}/>;
+      return <RelationshipInformation user={user} />;
     default:
       return null;
   }
@@ -28,7 +28,9 @@ const componentRender = (tab: string, user) => {
 
 const About = () => {
   const [activeTab, setActiveTab] = useState("Overview");
-  const user: UserType = useSelector((state: AppState) => state.user.currentUser);
+  const user: UserType = useSelector(
+    (state: AppState) => state.user.currentUser,
+  );
 
   return (
     <div className="flex rounded-xl bg-[#FFF8E6] p-4">

@@ -3,11 +3,11 @@ import { useDispatch } from "react-redux";
 import { loginUserThunk } from "../features/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/icons/logo.png";
-
+import { AppDispatch } from "../app/store";
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -16,7 +16,15 @@ const Login: React.FC = () => {
     const result = await dispatch(loginUserThunk({ email, password }));
 
     if (loginUserThunk.fulfilled.match(result)) {
-      navigate(`/home/${result.payload.user.id}`);
+      const user = result.payload.user;
+
+      const isAdmin = user.isAdmin === "true" || user.isAdmin === true;
+
+      if (isAdmin) {
+        navigate(`/admin`);
+      } else {
+        navigate(`/home`);
+      }
     } else {
       console.error("Login failed:", result.payload || "Unknown error");
     }

@@ -7,6 +7,10 @@ const ProfileFriendList = () => {
   const user = useSelector((state: AppState) => state.user.currentUser);
   const friends = user.friends || [];
 
+  if (friends.length === 0) {
+    return <h1>No friend available</h1>;
+  }
+
   return (
     <div className="flex w-full flex-col gap-6">
       {friends?.map((friend) => {

@@ -4,21 +4,27 @@ import { useNavigate, useParams } from "react-router-dom";
 import { deletePostById } from "../../controllers/posts";
 import MenuDropDown from "../MenuDropDown";
 import PostModal from "../post/PostModal";
+import DefaultProfile from "../../assets/icons/DefaultProfile.tsx";
+import PostHistoryModal from "./PostHistoryModal.tsx";
+import { formatRelativeTime } from "../../utils/formatRelativeTime.ts";
+import ErrorPage from "../../pages/ErrorPage.tsx";
 
 export const ProfileSection: React.FC<ProfileSectionParams> = ({
   post,
   profileImage,
   profileName,
 }) => {
-  if (!post) return;
+  if (!post) return <ErrorPage />;
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+
   const navigate = useNavigate();
   const { userId } = useParams();
 
   const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+    setIsDropdownOpen((prev) => !prev);
   };
 
   const handleEdit = () => {
@@ -43,26 +49,44 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
   };
 
   const handleViewHistory = () => {
-    console.log("View Edit History clicked");
+    setIsHistoryModalOpen(true);
+    setIsDropdownOpen(false);
   };
 
+  // Determine safe profile image and name
   const safeProfileImage =
-    profileImage !== undefined ? profileImage : "default-image-url.jpg";
-  const safeProfileName = profileName !== undefined ? profileName : "Undefined";
+    typeof profileImage === "string" && profileImage.length > 0
+      ? profileImage
+      : null;
+  const safeProfileName = profileName || "Undefined";
 
   return (
     <div className="relative flex items-start p-6">
       <div className="mr-4 flex-shrink-0">
-        <img
-          src={safeProfileImage}
-          alt="Profile"
-          className="h-[50px] w-[50px] rounded-full"
-        />
+        {safeProfileImage ? (
+          <img
+            src={safeProfileImage}
+            alt="Profile"
+            className="h-[50px] w-[50px] rounded-full"
+          />
+        ) : (
+          <div className="h-[50px] w-[50px]">
+            <DefaultProfile />
+          </div>
+        )}
       </div>
       <div>
         <div className="font-bold">{safeProfileName}</div>
       </div>
-      <div className="relative ml-auto">
+      <div className="relative ml-auto flex items-center justify-center gap-1">
+        <div className="flex flex-col">
+          <p className="text-sm text-gray-500">
+            {formatRelativeTime(post.createdAt)}
+          </p>
+          {post.history?.length > 0 ? (
+            <p className="text-right text-xs text-gray-500">(Edited)</p>
+          ) : null}
+        </div>
         <img
           src="/src/assets/svgs/ThreeDots.svg"
           alt="Three dots"
@@ -84,6 +108,14 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
         userId={userId}
         post={post}
       />
+
+      {/* Modal for viewing edit history */}
+      {isHistoryModalOpen && (
+        <PostHistoryModal
+          history={post.history}
+          onClose={() => setIsHistoryModalOpen(false)}
+        />
+      )}
     </div>
   );
 };

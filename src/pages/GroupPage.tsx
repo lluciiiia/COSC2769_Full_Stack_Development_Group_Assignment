@@ -5,29 +5,54 @@ import { useSelector, useDispatch } from "react-redux";
 import { AppState, AppDispatch } from "../app/store";
 import { Outlet, NavLink } from "react-router-dom";
 import ReturnNavbar from "../components/ReturnNavbar";
-import { selectGroupById, fetchGroups } from "../features/groupSlice";
+import { selectGroupById } from "../features/groupSlice";
 import { getPostsByGroup } from "../controllers/posts";
+import LoadingSpinner from "../assets/icons/Loading";
+import { fetchGroups } from "../controllers/group";
+
 export default function GroupPage() {
-  const { groupId } = useParams<{ groupId: string }>();
+  const groupId = useParams<{ groupId: string }>().groupId || "";
   const dispatch: AppDispatch = useDispatch();
-  const [group, setGroup] = useState<GroupType | null>(null); // Allow group to be null initially
+  const [group, setGroup] = useState<GroupType | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const selectedGroup = useSelector((state: AppState) =>
     selectGroupById(state, groupId || ""),
   );
 
   useEffect(() => {
-    dispatch(fetchGroups());
-    dispatch(getPostsByGroup(groupId));
-    
-  }, [dispatch]);
+    const loadGroupData = async () => {
+      try {
+        await dispatch(fetchGroups());
+        await dispatch(getPostsByGroup(groupId));
+      } catch (error) {
+        console.error("Error fetching group data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadGroupData();
+  }, [dispatch, groupId]);
 
   useEffect(() => {
-    setGroup(selectedGroup || null); 
+    setGroup(selectedGroup || null);
   }, [selectedGroup]);
 
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
   if (!group) {
-    return <div>Group not found</div>; 
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <p className="text-gray-500">Group not found</p>
+      </div>
+    );
   }
 
   return (
@@ -35,7 +60,7 @@ export default function GroupPage() {
       <ReturnNavbar />
       <div className="min-h-screen min-w-9 bg-gray-100">
         <header
-          className="relative h-[250px] bg-cover bg-center"
+          className="relative h-[200px] bg-cover bg-center"
           style={{ backgroundImage: `url('${group.backgroundImageURL}')` }}
         >
           <div className="absolute -bottom-12 left-12">
@@ -46,12 +71,14 @@ export default function GroupPage() {
             />
           </div>
         </header>
-        <div className="ml-64">
+        <div className="ml-64 mt-4">
           <h1 className="text-xl font-bold text-black">{group.name}</h1>
-          <p className="text-sm text-gray-600">{group.members ? group.members.length : 0} members</p>
+          <p className="text-sm text-gray-600">
+            {group.members ? group.members.length : 0} members
+          </p>
         </div>
         <div>
-          <div className="mt-16 px-4">
+          <div className="mt-4 px-4">
             <div className="flex items-start">
               <div className="ml-auto flex space-x-2">
                 <button className="rounded-md bg-red-600 px-4 py-2 text-white shadow-md">

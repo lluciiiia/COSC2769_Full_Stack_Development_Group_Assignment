@@ -29,9 +29,9 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/postData", async (req, res) => {
   try {
-    const updatedComment = await updateComment(req.params.id, req.body);
+    const updatedComment = await updateComment(req.session.user.id, req.body);
     res.json({ message: "Comment updated", comment: updatedComment });
   } catch (error) {
     res.status(500).json({ error: "Failed to update comment" });

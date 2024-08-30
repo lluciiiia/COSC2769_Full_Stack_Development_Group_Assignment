@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 import groupRoutes from "./routes/groupRoutes";
 import userRoutes from "./routes/userRoutes";
 import postRoutes from "./routes/postRoutes";
-import notiRoutes from "./routes/notiRoutes";
+import Notification from "./routes/notificationRoutes";
 import commentRoutes from "./routes/commentRoutes";
 import reactionRoutes from "./routes/reactionRoutes";
 import authenticationRoutes from "./routes/authenticationRoutes";
@@ -30,20 +30,18 @@ app.use(express.json());
 // Connect to MongoDB
 connectDB();
 
-app.use(
-  session({
-    secret: "your-secret-key",
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false },
-  }),
-);
+app.use(session({
+  secret: secret,  // Replace with your own secret key
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }  // Set to true if using HTTPS
+}));
 
 // Use different API routes
 app.use("/api/users", userRoutes);
 app.use("/api/groups", groupRoutes);
 app.use("/api/posts", postRoutes);
-app.use("/api/notifications", notiRoutes);
+app.use("/api/notifications", Notification);
 app.use("/api/comments", commentRoutes);
 app.use("/api/reactions", reactionRoutes);
 app.use("/api/user", authenticationRoutes);

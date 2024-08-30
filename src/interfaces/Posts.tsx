@@ -1,5 +1,11 @@
 import { Comment } from "./Comments";
 
+export interface PostHistory {
+  content: string;
+  imageURL?: string;
+  updatedAt: Date;
+}
+
 export interface PostParams {
   _id?: string;
   creatorId: string;
@@ -9,10 +15,11 @@ export interface PostParams {
   images?: string[]; // Change from File[] to string[]
   createdAt?: Date;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
-  comments?: Comment[];
+  comments: Comment[];
   reactions?: string[];
   isDetail?: boolean;
   profileSection?: ProfileSectionParams;
+  history: PostHistory[];
 }
 
 
@@ -25,6 +32,24 @@ export interface ProfileSectionParams {
 export interface ReactionSectionProps {
   handleClick: () => void;
 }
+export interface AdminSectionProps {
+  handleClick: () => void;
+  post: {
+    _id: string;
+    creatorId: string;
+    content: string;
+    imageURL?: string;
+    createdAt: string;
+    visibility: string;
+    profileSection?: {
+      profileImage?: string;
+      profileName?: string;
+    };
+    isDetail: boolean;
+  };
+}
+
+
 
 export interface PostProps {
   id: string;

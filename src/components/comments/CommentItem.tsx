@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import MenuDropDown from "../MenuDropDown";
 import { CommentProps } from "../../interfaces/Comments";
 import { formatRelativeTime } from "../../utils/formatRelativeTime";
-import { deleteCommentById, updateComment } from "../../controllers/comments"; // Make sure to import your updateComment function
+import { deleteCommentById, updateComment } from "../../controllers/comments";
+import CommentHistoryModal from "./CommentHistoryModal";
 
 const CommentItem: React.FC<CommentProps> = ({ comment }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [content, setContent] = useState(comment.content);
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -34,7 +36,8 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
   };
 
   const handleViewHistory = () => {
-    console.log("View Edit History clicked");
+    setIsHistoryModalOpen(true);
+    setIsDropdownOpen(false);
   };
 
   const handleSave = async () => {
@@ -44,7 +47,7 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
         alert("Failed to update the comment. Please try again.");
       } else {
         setIsEditing(false);
-        window.location.reload(); // Reload the page to see changes or consider using state to update
+        window.location.reload();
       }
     } catch (error) {
       console.error("Error updating comment:", error);
@@ -73,9 +76,14 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
               {comment.profileSection.profileName}
             </div>
             <div className="ml-auto flex items-center justify-center gap-1">
-              <p className="text-xs text-gray-500">
-                {formatRelativeTime(comment.createdAt)}
-              </p>
+              <div className="flex flex-col">
+                <p className="text-xs text-gray-500">
+                  {formatRelativeTime(comment.createdAt)}
+                </p>
+                {comment.history?.length > 0 ? (
+                  <p className="text-right text-xs text-gray-500">(Edited)</p>
+                ) : null}
+              </div>
               <div>
                 <img
                   src="/src/assets/svgs/ThreeDots.svg"
@@ -131,6 +139,13 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
           )}
         </div>
       </div>
+      {/* Modal for viewing edit history */}
+      {isHistoryModalOpen && (
+        <CommentHistoryModal
+          history={comment.history}
+          onClose={() => setIsHistoryModalOpen(false)}
+        />
+      )}
     </div>
   );
 };

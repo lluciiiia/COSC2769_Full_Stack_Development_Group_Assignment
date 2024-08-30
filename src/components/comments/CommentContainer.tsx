@@ -12,7 +12,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState<string>("");
   const handleReaction = (reaction: string) => {
-    console.log(`User reacted with: ${reaction} on comment ID: ${comment._id}`);
+    console.log(`User reacted with: ${reaction} on comment ID: ${comments._id}`);
     // Here you can handle the reaction logic, e.g., send it to the server
   };
   useEffect(() => {
@@ -64,10 +64,10 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
           ) : (
             comments.map((comment) => (
               <div>
-                 <CommentItem key={comment._id} comment={comment} />
-                 <div className="">
-                 <ReactionButton onReact={handleReaction}></ReactionButton>
-                 </div>
+                <CommentItem key={comment._id} comment={comment} />
+                <div className="">
+                  <ReactionButton onReact={handleReaction}></ReactionButton>
+                </div>
               </div>
             ))
           )}

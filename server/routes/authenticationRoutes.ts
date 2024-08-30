@@ -1,5 +1,5 @@
 import express from "express";
-import { regisNewAccount, loginUser } from "../services/authenServices";
+import { regisNewAccount, loginUser, logoutUser } from "../services/authenServices";
 import { sign } from "crypto";
 const router = express.Router();
 
@@ -9,6 +9,7 @@ declare module 'express-session' {
       id: string;
       name: string;
       email: string;
+      isAdmin: boolean;
       isAuthenticated: boolean;
     };
   }
@@ -45,6 +46,10 @@ router.post('/login', async (req, res) => {
     console.error('Error in /login route:', err);
     res.status(500).json({ message: 'Server error' });
   }
+});
+
+router.post('/logout', (req, res) => {
+  logoutUser(req, res); 
 });
 
 export default router;

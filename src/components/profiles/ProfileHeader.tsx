@@ -1,20 +1,24 @@
 import React from "react";
+import DefaultProfile from "../../assets/icons/DefaultProfile";
 
 const ProfileHeader = ({ name, bio, avatar, handleEditProfile }) => {
-  const defaultAvatar = "https://via.placeholder.com/150";
   return (
-    <div
-      className="relative h-64 w-full bg-cover bg-center"
-      style={{
-        backgroundImage: "url('https://via.placeholder.com/1200x300')",
-      }}
-    >
+    <div className="relative h-64 w-full bg-gray-200 bg-cover bg-center">
       <div className="absolute -bottom-16 left-10">
-        <img
-          src={avatar ? avatar : defaultAvatar}
-          alt="Profile"
-          className="h-32 w-32 rounded-full border-4 border-white shadow-lg"
-        />
+        {avatar ? (
+          <img
+            src={avatar}
+            alt="Profile"
+            className="h-32 w-32 rounded-full border-4 border-white shadow-lg transition-opacity duration-200 hover:opacity-80"
+          />
+        ) : (
+          <div className="h-32 w-32 rounded-full border-4 border-white shadow-lg">
+            <DefaultProfile />
+          </div>
+        )}
+        <div className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-black bg-opacity-50 opacity-0 transition-opacity duration-200 hover:opacity-100">
+          <span className="text-white">Edit Image</span>
+        </div>
       </div>
       <div className="absolute -bottom-14 left-44">
         <h1 className="text-2xl font-bold">{name}</h1>

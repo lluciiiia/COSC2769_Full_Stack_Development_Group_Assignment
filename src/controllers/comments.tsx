@@ -16,12 +16,13 @@ export const updateComment = async (
 ) => {
   if (id == undefined) return false;
 
-  const response = await fetch(BACKEND_URL + `/api/comments/${id}`, {
+  const response = await fetch(BACKEND_URL + `/api/comments/postData`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(updatedContent),
+    credentials: 'include',
   });
 
   return response.ok
