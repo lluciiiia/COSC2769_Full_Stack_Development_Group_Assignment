@@ -77,9 +77,13 @@ const authSlice = createSlice({
         state.status = "loading";
       })
       .addCase(loginUserThunk.fulfilled, (state, action) => {
+        console.log("Login response payload:", action.payload);
+
         state.status = "succeeded";
         state.id = action.payload.id;
+        state.isAdmin= action.payload.user.isAdmin;
         state.isAuthenticated = true;
+        console.log("Updated isAdmin:", state.isAdmin);
       })
       .addCase(fetchSess.fulfilled, (state, action) => {
         state.status = "loged-in";

@@ -18,11 +18,10 @@ const Login: React.FC = () => {
     if (loginUserThunk.fulfilled.match(result)) {
       const user = result.payload.user;
 
-      const isAdmin = user.isAdmin ?? false;
-      console.log(isAdmin);
+      const isAdmin = user.isAdmin === "true" || user.isAdmin === true;
 
       if (isAdmin) {
-        navigate(`/admin`); // Redirect to admin page if user is an admin
+        navigate(`/admin`);
       } else {
         navigate(`/home/${user.id}`); // Otherwise, redirect to home page
       }
