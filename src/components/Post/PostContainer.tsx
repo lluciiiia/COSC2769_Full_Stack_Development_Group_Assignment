@@ -18,10 +18,9 @@ const PostContainer: React.FC<PostParams> = ({
   comments,
 }) => {
   const navigate = useNavigate();
-  const { userId } = useParams();
 
   const handleClick = () => {
-    navigate(`/posts/${userId}/${_id}`);
+    navigate(`/posts/${_id}`);
   };
 
   return (
