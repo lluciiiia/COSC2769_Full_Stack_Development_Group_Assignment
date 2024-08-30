@@ -8,7 +8,7 @@ export type GroupType = {
   imageURL: string;
   backgroundImageURL: string;
   dateCreated: string;
-  members: UserType[];
+  members: string[];
   accepted: boolean;
   description: string;
 };
