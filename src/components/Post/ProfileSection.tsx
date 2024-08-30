@@ -6,6 +6,7 @@ import MenuDropDown from "../MenuDropDown";
 import PostModal from "../post/PostModal";
 import DefaultProfile from "../../assets/icons/DefaultProfile.tsx";
 import PostHistoryModal from "./PostHistoryModal.tsx";
+import { formatRelativeTime } from "../../utils/formatRelativeTime.ts";
 
 export const ProfileSection: React.FC<ProfileSectionParams> = ({
   post,
@@ -76,7 +77,10 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
       <div>
         <div className="font-bold">{safeProfileName}</div>
       </div>
-      <div className="relative ml-auto">
+      <div className="relative ml-auto flex items-center justify-center gap-1">
+        <p className="text-xs text-gray-500">
+          {formatRelativeTime(post.createdAt)}
+        </p>
         <img
           src="/src/assets/svgs/ThreeDots.svg"
           alt="Three dots"
