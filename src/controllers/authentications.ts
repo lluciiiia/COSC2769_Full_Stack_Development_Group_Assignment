@@ -51,6 +51,26 @@ export const loginUser = async (userData: {
   }
 };
 
+export const logout = async () => {
+  try {
+    const response = await fetch("http://localhost:8080/api/user/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include", 
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Logout failed");
+    }
+
+    return { message: "Logout successful" };
+  } catch (err: any) {
+    throw new Error(err.message || "Network error");
+  }
+};
 
 export const fetchedSession = async () => {
   try {

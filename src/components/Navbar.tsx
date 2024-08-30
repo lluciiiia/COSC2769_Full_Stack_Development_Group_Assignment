@@ -82,7 +82,7 @@ const Navbar = () => {
       </nav>
 
       <NotificationModal isOpen={isNotificationModalOpen} />
-      <ProfileButtonModal isOpen={isProfileModalOpen}/>
+      <ProfileButtonModal isOpen={isProfileModalOpen} />
       <PostModal
         isOpen={isPostModalOpen}
         onClose={handleCloseModal}

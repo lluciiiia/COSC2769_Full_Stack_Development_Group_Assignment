@@ -4,6 +4,7 @@ import {
   loginUser,
   registerUser,
   fetchedSession,
+  logout as logoutUser, // Import the logout function from your controller
 } from "../controllers/authentications";
 
 export const registerUserThunk = createAsyncThunk(
@@ -48,6 +49,19 @@ export const loginUserThunk = createAsyncThunk(
   },
 );
 
+// Add the logout thunk
+export const logoutUserThunk = createAsyncThunk(
+  "auth/logoutUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const data = await logoutUser();
+      return data;
+    } catch (err: any) {
+      return rejectWithValue(err.message || "Error logging out");
+    }
+  },
+);
+
 const initialState = {
   id: '',
   isAuthenticated: false,
@@ -60,8 +74,11 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    // Update logout reducer to handle local state
     logout: (state) => {
       state.isAuthenticated = false;
+      state.id = '';
+      state.isAdmin = false;
     },
   },
   extraReducers: (builder) => {
@@ -81,7 +98,7 @@ const authSlice = createSlice({
 
         state.status = "succeeded";
         state.id = action.payload.id;
-        state.isAdmin= action.payload.user.isAdmin;
+        state.isAdmin = action.payload.user.isAdmin;
         state.isAuthenticated = true;
         console.log("Updated isAdmin:", state.isAdmin);
       })
@@ -90,7 +107,17 @@ const authSlice = createSlice({
         console.log(action.payload.isAuthenticated + "check if authenticate");
         state.isAuthenticated = action.payload.isAuthenticated;
         state.id = action.payload.id;
-      });
+      })
+      // Add case for logoutUserThunk
+      .addCase(logoutUserThunk.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(logoutUserThunk.fulfilled, (state) => {
+        state.status = "succeeded";
+        state.isAuthenticated = false;
+        state.id = '';
+        state.isAdmin = false;
+      })
   },
 });
 
