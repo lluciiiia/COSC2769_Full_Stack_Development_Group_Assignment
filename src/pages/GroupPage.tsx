@@ -9,15 +9,21 @@ import { selectGroupById } from "../features/groupSlice";
 import { getPostsByGroup } from "../controllers/posts";
 import LoadingSpinner from "../assets/icons/Loading";
 import { fetchGroups } from "../controllers/group";
+import PostModal from "../components/post/PostModal";
+import { selectAuthState } from "../features/authSlice";
 
 export default function GroupPage() {
   const groupId = useParams<{ groupId: string }>().groupId || "";
   const dispatch: AppDispatch = useDispatch();
   const [group, setGroup] = useState<GroupType | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
+  const { id } = useSelector(selectAuthState);
+  const [isMember, setIsMember] = useState(false);
 
   const selectedGroup = useSelector((state: AppState) =>
-    selectGroupById(state, groupId || ""),
+    selectGroupById(state, groupId),
   );
 
   useEffect(() => {
@@ -37,7 +43,12 @@ export default function GroupPage() {
 
   useEffect(() => {
     setGroup(selectedGroup || null);
-  }, [selectedGroup]);
+    // Check if the user is a member of the group
+    if (selectedGroup) {
+      const memberStatus = selectedGroup.members.includes(id);
+      setIsMember(memberStatus); // Update isMember based on the check
+    }
+  }, [selectedGroup, id]);
 
   if (loading) {
     return (
@@ -54,6 +65,15 @@ export default function GroupPage() {
       </div>
     );
   }
+
+  const handleCreatePost = () => {
+    setSelectedPost(null);
+    setIsPostModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsPostModalOpen(false);
+  };
 
   return (
     <div>
@@ -79,6 +99,14 @@ export default function GroupPage() {
             </p>
           </div>
           <div className="ml-auto mr-2 flex space-x-2">
+            {isMember && (
+              <button
+                onClick={handleCreatePost}
+                className="rounded-md bg-[#FFC123] px-2 text-sm text-white shadow-md"
+              >
+                Create Post
+              </button>
+            )}
             <button className="rounded-md bg-red-600 px-2 text-sm text-white shadow-md">
               Leave Group
             </button>
@@ -128,6 +156,12 @@ export default function GroupPage() {
           <Outlet />
         </main>
       </div>
+      <PostModal
+        isOpen={isPostModalOpen}
+        onClose={handleCloseModal}
+        userId={id}
+        post={selectedPost}
+      />
     </div>
   );
 }

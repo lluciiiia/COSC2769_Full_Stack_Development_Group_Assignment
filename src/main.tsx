@@ -32,17 +32,17 @@ const router = createBrowserRouter([
       {
         path: "/posts/:postId",
         element: (
-          //<ProtectedRoute>
-          <PostDetail />
-          // </ProtectedRoute>
+          <ProtectedRoute>
+            <PostDetail />
+          </ProtectedRoute>
         ),
       },
       {
         path: "/groups/:groupId",
         element: (
-          //  <ProtectedRoute>
-          <GroupPage />
-          // </ProtectedRoute>
+          <ProtectedRoute>
+            <GroupPage />
+          </ProtectedRoute>
         ),
         children: [
           {
@@ -62,17 +62,17 @@ const router = createBrowserRouter([
       {
         path: "/groups",
         element: (
-          //   <ProtectedRoute>
-          <GroupList />
-          //   </ProtectedRoute>
+          <ProtectedRoute>
+            <GroupList />
+          </ProtectedRoute>
         ),
       },
       {
         path: "/profile/:profileId",
         element: (
-          //  <ProtectedRoute>
-          <Profile />
-          //  </ProtectedRoute>
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
         ),
       },
       {
@@ -80,19 +80,19 @@ const router = createBrowserRouter([
         element: <Signup />,
       },
       {
-        path: "/home/:userId",
+        path: "/home",
         element: (
-          // <ProtectedRoute>
-          <Home />
-          // </ProtectedRoute>
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
         ),
       },
       {
         path: "/admin",
         element: (
-          // <ProtectedRoute>
-          <Admin />
-          // </ProtectedRoute>
+          <ProtectedRoute>
+            <Admin />
+          </ProtectedRoute>
         ),
       },
     ],

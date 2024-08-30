@@ -1,9 +1,9 @@
 import React from "react";
 import { getUser, unfriendById } from "../../controllers/user";
-import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "../../app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthState } from "../../features/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const ProfileFriendDropDownList = ({ friendId, isAuthenticatedUser }) => {
   const { id } = useSelector(selectAuthState);
@@ -11,7 +11,7 @@ const ProfileFriendDropDownList = ({ friendId, isAuthenticatedUser }) => {
 
   const handleUnFriend = async () => {
     await dispatch(unfriendById({ userId: id, friendId }));
-    dispatch(getUser(id));
+    dispatch(getUser(id)); // fetch the user again
   };
 
   const navigate = useNavigate();

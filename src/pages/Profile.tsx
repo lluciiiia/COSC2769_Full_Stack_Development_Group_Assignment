@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../app/store";
 import { useParams } from "react-router-dom";
-import ErrorPage from "./ErrorPage";
 import React, { useEffect, useRef, useState } from "react";
 import TabContent from "../components/profiles/TabContent";
 import ProfileHeader from "../components/profiles/ProfileHeader";
