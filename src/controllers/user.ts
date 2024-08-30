@@ -82,14 +82,15 @@ export const updateUser = createAsyncThunk<
 export const unfriendById = createAsyncThunk<
   UserType,
   { userId: string | undefined; friendId: string }
->("user/updateUser", async ({ userId, friendId }) => {
+>("user/updateUser", async ({  friendId }) => {
   const response = await fetch(
-    BACKEND_URL + `/api/users/unfriend/${userId}/${friendId}`,
+    BACKEND_URL + `/api/users/unfriend/${friendId}`,
     {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: 'include',
     },
   );
 
