@@ -44,7 +44,7 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
       try {
         const fetchedGroups: GroupType[] = await getGroupsByUserId(userId);
         setGroups(fetchedGroups);
-        if (fetchedGroups.length > 0) {
+        if (fetchedGroups?.length > 0) {
           setSelectedGroupId(fetchedGroups[0]._id);
         } else {
           setSelectedGroupId("");
@@ -54,9 +54,7 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
       }
     };
 
-    if (isOpen) {
-      fetchGroups();
-    }
+    if (isOpen) fetchGroups();
 
     // Re-enable scrolling when the modal closes
     return () => {
@@ -73,9 +71,9 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
         visibility,
         imageURL,
         groupId: visibility === "GROUP" ? selectedGroupId : undefined,
-        history: post.history,
-        comments: post.comments,
-        createdAt: post.createdAt,
+        history: post?.history ? post.history : [],
+        comments: post?.comments ? post.comments : [],
+        createdAt: post?.createdAt ? post.createdAt : new Date(),
       };
 
       let result;
