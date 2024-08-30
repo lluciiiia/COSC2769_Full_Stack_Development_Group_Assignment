@@ -12,7 +12,7 @@ export interface PostParams {
   groupId?: string;
   content: string;
   imageURL?: string;
-  createdAt?: Date;
+  createdAt: Date;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
   comments?: Comment[];
   reactions?: string[];
