@@ -3,7 +3,6 @@ import { PostParams } from "../../interfaces/Posts";
 import { AppDispatch, AppState } from "../../app/store";
 import { useSelector, useDispatch } from "react-redux";
 import { getPosts } from "../../controllers/posts";
-import { useParams } from "react-router-dom";
 import PostContainer from "./PostContainer";
 import LoadingSpinner from "../../assets/icons/Loading";
 import { selectAuthState } from "../../features/authSlice";

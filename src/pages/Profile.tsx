@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "../app/store";
-import { useParams } from "react-router-dom";
 import ErrorPage from "./ErrorPage";
 import React, { useEffect, useRef, useState } from "react";
 import TabContent from "../components/profiles/TabContent";
@@ -9,9 +8,10 @@ import TabNavigation from "../components/profiles/TabNavigation";
 import { getUser } from "../controllers/user";
 import ProfileEditModal from "../components/profiles/ProfileEditModal";
 import LoadingSpinner from "../assets/icons/Loading";
+import { selectAuthState } from "../features/authSlice";
 
 const Profile = () => {
-  const { userId } = useParams();
+  const { id } = useSelector(selectAuthState);
   const dispatch: AppDispatch = useDispatch();
 
   const firstRender = useRef(true);
@@ -22,7 +22,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (firstRender.current) {
-      dispatch(getUser(userId)).finally(() => {
+      dispatch(getUser(id)).finally(() => {
         firstRender.current = false;
         setLoading(false);
       });
@@ -49,7 +49,7 @@ const Profile = () => {
   }
 
   // Avoid other users accessing the current user page
-  if (user && user._id !== userId) return <ErrorPage />;
+  if (user && user._id !== id) return <ErrorPage />;
 
   return (
     <>
@@ -71,7 +71,7 @@ const Profile = () => {
         <div className="mt-1 w-full border-b-2"></div>
 
         <div className="mt-8 w-full max-w-4xl px-3">
-          <TabContent activeTab={activeTab} userId={userId?.toString()} />
+          <TabContent activeTab={activeTab} userId={id?.toString()} />
         </div>
       </div>
 

@@ -1,16 +1,16 @@
 import React from "react";
 import { getUser, unfriendById } from "../../controllers/user";
-import { useParams } from "react-router-dom";
 import { AppDispatch } from "../../app/store";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAuthState } from "../../features/authSlice";
 
 const ProfileFriendDropDownList = ({ friendId }) => {
-  const { userId } = useParams();
+  const { id } = useSelector(selectAuthState);
   const dispatch: AppDispatch = useDispatch();
 
   const handleUnFriend = async () => {
-    await dispatch(unfriendById({ userId, friendId }));
-    dispatch(getUser(userId)); // fetch the user again
+    await dispatch(unfriendById({ userId: id, friendId }));
+    dispatch(getUser(id)); // fetch the user again
   };
   return (
     <div className="relative">

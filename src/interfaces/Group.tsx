@@ -1,5 +1,3 @@
-import { UserType } from "./Users";
-
 export type GroupType = {
   _id: string;
   groupAdmin: string;

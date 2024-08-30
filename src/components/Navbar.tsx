@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import logo from "../assets/icons/logo.png";
 import notificationIcon from "../assets/icons/notificationIcon.png";
@@ -11,15 +11,16 @@ import { NavItem } from "./NavItem";
 import PostModal from "./post/PostModal";
 import NotificationModal from "./notifications/NotificationModal";
 import ProfileButtonModal from "./ProfileButtonModal";
+import { selectAuthState } from "../features/authSlice";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
-  const { userId } = useParams();
+  const { id } = useSelector(selectAuthState);
 
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [isProfileModalOpen, setProfileOpen] = useState(false);
   const navigate = useNavigate();
-  
 
   const handleHomeClick = () => {
     navigate(`/home`);
@@ -87,7 +88,7 @@ const Navbar = () => {
       <PostModal
         isOpen={isPostModalOpen}
         onClose={handleCloseModal}
-        userId={userId}
+        userId={id}
         post={null}
       />
     </>
