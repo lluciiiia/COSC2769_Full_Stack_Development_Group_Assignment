@@ -9,41 +9,42 @@ import groupIcon from "../assets/icons/groupIcon.png";
 import createPostIcon from "../assets/icons/createPostIcon.png";
 import { NavItem } from "./NavItem";
 import PostModal from "./post/PostModal";
+import NotificationModal from "./notifications/NotificationModal";
 
 const Navbar = () => {
   const { userId } = useParams();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+  const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleHomeClick = () => {
     navigate(`/home/${userId}`);
   };
 
-  const handleProfileClick = () => {
-    navigate(`/profile/${userId}`);
-  };
-
   const handleCreatePostClick = () => {
-    setIsModalOpen(true);
+    setIsPostModalOpen(true);
   };
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    setIsPostModalOpen(false);
   };
   const handleGroupClick = () => {
-    navigate(`/groups`);
+    navigate(`/GroupList`);
   };
+
+  const handleNotificationClick = () => {
+    setIsNotificationModalOpen(!isNotificationModalOpen);
+  };
+
   return (
     <>
       <nav className="fixed left-0 right-0 top-0 z-10 flex items-center justify-between bg-[#FFC123] p-2">
-        <div
-          className="flex cursor-pointer items-center gap-2"
-          onClick={handleHomeClick}
-        >
+        <div className="flex items-center gap-2">
           <img
             src={logo}
             alt="BuZzNet Logo"
-            className="h-12 w-12 object-contain"
+            className="h-12 w-12 cursor-pointer object-contain"
+            onClick={handleHomeClick}
           />
           <h1 className="text-2xl font-bold">BuZzNet</h1>
         </div>
@@ -58,19 +59,21 @@ const Navbar = () => {
         </div>
 
         <div className="mr-6 flex justify-between gap-5">
-          <NavItem src={notificationIcon} label={"Notification"} />
           <NavItem
-            src={profileIcon}
-            label={"Profile"}
+            src={notificationIcon}
+            label={"Notification"}
             onClick={() => {
-              handleProfileClick();
+              handleNotificationClick();
             }}
           />
+          <NavItem src={profileIcon} label={"Profile"} />
         </div>
       </nav>
 
+      <NotificationModal isOpen={isNotificationModalOpen}/>
+
       <PostModal
-        isOpen={isModalOpen}
+        isOpen={isPostModalOpen}
         onClose={handleCloseModal}
         userId={userId}
         post={null}
