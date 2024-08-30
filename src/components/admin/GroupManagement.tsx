@@ -1,16 +1,17 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../app/store";
-import { fetchGroups, updateGroup } from "../../features/groupSlice";
+import { AppDispatch, AppState } from "../../app/store";
+// import { fetchGroups, updateGroup } from "../../features/groupSlice";
 import { GroupType } from "../../types/group";
+import { fetchGroups } from "../../controllers/group";
 //import { handleAcceptGroup as acceptGroup } from "../../path/to/your/handleAcceptGroupFunction"; // Replace with the correct path
-import { handleAcceptGroup as acceptGroup } from "../../controllers/group";
+// import { handleAcceptGroup as acceptGroup } from "../../controllers/group";
 export const GroupManagement = () => {
   const [activeTab, setActiveTab] = React.useState("groups");
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const groups = useSelector((state: RootState) => state.groups);
+  const groups = useSelector((state: AppState) => state.groups);
 
   useEffect(() => {
     dispatch(fetchGroups());
