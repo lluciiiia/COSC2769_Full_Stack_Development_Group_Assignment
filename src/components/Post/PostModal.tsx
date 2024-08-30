@@ -74,6 +74,8 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
         imageURL,
         groupId: visibility === "GROUP" ? selectedGroupId : undefined,
         history: post.history,
+        comments: post.comments,
+        createdAt: post.createdAt,
       };
 
       let result;

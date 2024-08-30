@@ -3,6 +3,7 @@ import { PostParams } from "../../interfaces/Posts";
 import { useNavigate, useParams } from "react-router-dom";
 import { ReactionSection } from "./ReactionSection";
 import { ProfileSection } from "./ProfileSection";
+import CommentItem from "../comments/CommentItem";
 
 const PostContainer: React.FC<PostParams> = ({
   _id,
@@ -14,6 +15,7 @@ const PostContainer: React.FC<PostParams> = ({
   profileSection,
   isDetail,
   history,
+  comments,
 }) => {
   const navigate = useNavigate();
   const { userId } = useParams();
@@ -41,6 +43,7 @@ const PostContainer: React.FC<PostParams> = ({
           profileSection,
           isDetail,
           history,
+          comments,
         }}
       />
       {/* Post Content */}
@@ -56,6 +59,21 @@ const PostContainer: React.FC<PostParams> = ({
       </div>
 
       <ReactionSection handleClick={handleClick} />
+
+      {/* Display comments if not in detail view and there are comments */}
+      {!isDetail && comments?.length > 0 && (
+        <div className="mt-4">
+          <h3
+            className="mb-2 ml-5 cursor-pointer text-left text-sm font-semibold"
+            onClick={handleClick}
+          >
+            View more comments ..
+          </h3>
+          {comments.slice(0, 2).map((comment) => (
+            <CommentItem key={comment._id} comment={comment} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
