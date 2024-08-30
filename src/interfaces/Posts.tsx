@@ -14,7 +14,7 @@ export interface PostParams {
   imageURL?: string;
   createdAt: Date;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
-  comments?: Comment[];
+  comments: Comment[];
   reactions?: string[];
   isDetail?: boolean;
   profileSection?: ProfileSectionParams;
