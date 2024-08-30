@@ -9,6 +9,8 @@ declare module 'express-session' {
       id: string;
       name: string;
       email: string;
+      isAdmin: boolean;
+      isAuthenticated: boolean;
     };
   }
 }

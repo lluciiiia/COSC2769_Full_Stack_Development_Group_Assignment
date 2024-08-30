@@ -64,10 +64,10 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
           ) : (
             comments.map((comment) => (
               <div>
-                 <CommentItem key={comment._id} comment={comment} />
-                 <div className="">
-                 <ReactionButton onReact={handleReaction}></ReactionButton>
-                 </div>
+                <CommentItem key={comment._id} comment={comment} />
+                <div className="">
+                  <ReactionButton onReact={handleReaction}></ReactionButton>
+                </div>
               </div>
             ))
           )}

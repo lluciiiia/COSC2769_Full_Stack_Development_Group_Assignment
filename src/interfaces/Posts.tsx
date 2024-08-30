@@ -1,17 +1,24 @@
 import { Comment } from "./Comments";
 
+export interface PostHistory {
+  content: string;
+  imageURL?: string;
+  updatedAt: Date;
+}
+
 export interface PostParams {
   _id?: string;
   creatorId: string;
   groupId?: string;
   content: string;
   imageURL?: string;
-  createdAt?: Date;
+  createdAt: Date;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
-  comments?: Comment[];
+  comments: Comment[];
   reactions?: string[];
   isDetail?: boolean;
   profileSection?: ProfileSectionParams;
+  history: PostHistory[];
 }
 
 export interface ProfileSectionParams {

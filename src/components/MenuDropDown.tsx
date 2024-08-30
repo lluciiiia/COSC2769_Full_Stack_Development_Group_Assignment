@@ -34,7 +34,7 @@ const MenuDropDown: React.FC<MenuDropDownProps> = ({
 
   return (
     <div className="relative">
-      <div className="absolute right-0 mt-2 w-36 rounded-md bg-white shadow-xl">
+      <div className="absolute right-0 mt-2 w-36 rounded-md border bg-white shadow-xl">
         {isOwner && (
           <>
             <button

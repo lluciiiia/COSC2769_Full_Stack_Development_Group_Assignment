@@ -1,73 +1,96 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import Cookies from 'js-cookie';
-import { AppState } from '../app/store';
-import { loginUser, registerUser } from '../controllers/authentications';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { AppState } from "../app/store";
+import {
+  loginUser,
+  registerUser,
+  fetchedSession,
+} from "../controllers/authentications";
 
 export const registerUserThunk = createAsyncThunk(
-  'auth/registerUser',
-  async (userData: { email: string; password: string; name?: string }, { rejectWithValue }) => {
+  "auth/registerUser",
+  async (
+    userData: { email: string; password: string; name?: string },
+    { rejectWithValue },
+  ) => {
     try {
       const data = await registerUser(userData);
       return data;
     } catch (err) {
       return rejectWithValue(err);
     }
-  }
+  },
+);
+
+export const fetchSess = createAsyncThunk(
+  "auth/session",
+  async (_, { rejectWithValue }) => {
+    try {
+      const data = await fetchedSession();
+      return data;
+    } catch (err: any) {
+      return rejectWithValue(err.message || "Error fetching session");
+    }
+  },
 );
 
 export const loginUserThunk = createAsyncThunk(
-  'auth/loginUser',
-  async (userData: { email: string; password: string }, { rejectWithValue }) => {
+  "auth/loginUser",
+  async (
+    userData: { email: string; password: string },
+    { rejectWithValue },
+  ) => {
     try {
       const data = await loginUser(userData);
       return data;
     } catch (err) {
       return rejectWithValue(err);
     }
-  }
+  },
 );
 
 const initialState = {
-  user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null,
-  isAuthenticated: !!Cookies.get('isAuthenticated'),
-  status: 'idle',
+  id: '',
+  isAuthenticated: false,
+  status: "idle",
+  isAdmin: false,
   error: null,
 };
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     logout: (state) => {
-      state.user = null;
       state.isAuthenticated = false;
-      Cookies.remove('isAuthenticated');
-      Cookies.remove('user');
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(registerUserThunk.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(registerUserThunk.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.user = action.payload.user;
+        state.status = "succeeded";
         state.isAuthenticated = true;
-        Cookies.set('isAuthenticated', 'true', { expires: 1 });
-        Cookies.set('user', JSON.stringify(action.payload.user), { expires: 1 });
       })
       .addCase(loginUserThunk.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(loginUserThunk.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.user = action.payload.user;
-        state.isAuthenticated = true;
-        Cookies.set('isAuthenticated', 'true', { expires: 1 });
-        Cookies.set('user', JSON.stringify(action.payload.user), { expires: 1 });
-      })
+        console.log("Login response payload:", action.payload);
 
+        state.status = "succeeded";
+        state.id = action.payload.id;
+        state.isAdmin= action.payload.user.isAdmin;
+        state.isAuthenticated = true;
+        console.log("Updated isAdmin:", state.isAdmin);
+      })
+      .addCase(fetchSess.fulfilled, (state, action) => {
+        state.status = "loged-in";
+        console.log(action.payload.isAuthenticated + "check if authenticate");
+        state.isAuthenticated = action.payload.isAuthenticated;
+        state.id = action.payload.id;
+      });
   },
 });
 

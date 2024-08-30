@@ -1,9 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PostList from "../components/post/PostList";
-import { useParams } from "react-router-dom";
 
 const Home = () => {
-  
   return (
     <>
       <PostList />

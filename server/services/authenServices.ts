@@ -21,7 +21,7 @@ export const regisNewAccount = async (data: any) => {
       address: "",
       age: null,
       phoneNumber: "",
-      activeStatus: false,
+      activeStatus: true,
       education: "",
       location: "",
       relationship: "",
@@ -63,7 +63,9 @@ export const loginUser = async (req: any) => {
     // Save user information in session
     req.session.user = {
       id: user._id,
+      isAuthenticated: true,
       name: user.name,
+      isAdmin: user.isAdmin,
       email: user.email,
     };
 

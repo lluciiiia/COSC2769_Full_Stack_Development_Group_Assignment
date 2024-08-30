@@ -17,7 +17,9 @@ import { store } from "./app/store.ts";
 import Admin from "./pages/Admin.tsx";
 import Layout from "./components/Layout.tsx";
 import GroupList from "./pages/GroupList";
+import UserSearch from "./pages/UserSearch";
 import ProtectedRoute from "./components/protectedRoutes";
+
 
 const router = createBrowserRouter([
   {
@@ -60,7 +62,7 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "/groupList",
+        path: "/groups",
         element: (
           <ProtectedRoute>
             <GroupList />
@@ -95,6 +97,10 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+      {
+        path : "/UserSearch",
+        element: <UserSearch />,
+      }
     ],
   },
 ]);

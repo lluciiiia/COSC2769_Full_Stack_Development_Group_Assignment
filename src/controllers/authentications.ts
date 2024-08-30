@@ -50,3 +50,24 @@ export const loginUser = async (userData: {
     throw new Error(err.message || "Network error");
   }
 };
+
+
+export const fetchedSession = async () => {
+  try {
+    const response = await fetch("http://localhost:8080/api/session", {
+      method: "GET",
+      credentials: "include", 
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Error fetched session");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error: any) {
+    throw new Error("Network error");
+  }
+};

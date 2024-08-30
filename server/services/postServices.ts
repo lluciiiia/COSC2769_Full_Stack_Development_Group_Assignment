@@ -99,6 +99,7 @@ export const getPostById = async (postId: string) => {
     throw new Error("Failed to fetch post");
   }
 };
+
 export const getPostByGroupId = async (groupId: string) => {
   try {
     // const {groupId}= req.params;
@@ -112,7 +113,7 @@ export const getPostByGroupId = async (groupId: string) => {
         populate: {
           path: "reactions",
           populate: {
-            path: "userId", 
+            path: "userId",
             select: "name profilePictureURL", // Select fields you want from userId
           },
         },
@@ -120,7 +121,7 @@ export const getPostByGroupId = async (groupId: string) => {
     if (!posts) {
       throw new Error("Post not found with id");
     }
-    
+
     return posts;
   } catch (error) {
     throw new Error("Error ");
@@ -139,9 +140,8 @@ const enhancePostWithUser = async (post: any) => {
       return {
         ...comment.toObject(),
         profileSection: {
-          profileImage:
-            commentUser?.profilePictureURL || "default-image-url.jpg",
-          profileName: commentUser?.name || "Undefined",
+          profileImage: commentUser?.profilePictureURL,
+          profileName: commentUser?.name,
         },
       };
     }),
@@ -203,8 +203,19 @@ export const updatePost = async (postId: string, postData: any) => {
       if (!isMember) throw new Error("User is not a member of the group");
     }
 
+    // Push the current content and imageURL to the history before updating
+    post.history.push({
+      content: post.content,
+      imageURL: post.imageURL,
+      updatedAt: new Date(),
+    });
+
     // Update the post with new data
-    Object.assign(post, postData);
+    post.content = postData.content || post.content;
+    post.imageURL = postData.imageURL || post.imageURL;
+    post.visibility = postData.visibility || post.visibility;
+    post.updatedAt = new Date();
+
     await post.save();
 
     return post;
@@ -222,4 +233,3 @@ export const deletePostById = async (postId: String) => {
     throw new Error("Failed to delete post");
   }
 };
-
