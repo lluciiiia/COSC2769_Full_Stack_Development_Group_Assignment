@@ -25,6 +25,29 @@ export const fetchGroups = createAsyncThunk<GroupType[]>(
   },
 );
 
+
+
+
+export const updateGroup = createAsyncThunk<GroupType, GroupType>(
+  "groups/updateGroup",
+  async (group: GroupType) => {
+    const response = await fetch(`${API_URL}/${group._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(group),
+    });
+
+    if (!response.ok) {
+      console.error("Failed to update group:", response.statusText);
+      throw new Error("Failed to update group");
+    }
+    const updatedGroup: GroupType = await response.json();
+    return updatedGroup;
+  }
+);
+
 const groupSlice = createSlice({
   name: "groups",
   initialState,
@@ -41,7 +64,8 @@ const groupSlice = createSlice({
       })
       .addCase(fetchGroups.rejected, (state, action) => {
         console.error("Failed to fetch groups", action.error.message);
-      });
+      })
+      
   },
 });
 

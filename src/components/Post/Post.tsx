@@ -3,6 +3,7 @@ import { PostParams } from "../../interfaces/Posts";
 import { useNavigate, useParams } from "react-router-dom";
 import { ReactionSection } from "./ReactionSection";
 import { ProfileSection } from "./ProfileSection";
+import { AdminSection } from "./AdminSection"; // Assuming you have an AdminSection component
 
 const Post: React.FC<PostParams> = ({
   _id,
@@ -24,6 +25,9 @@ const Post: React.FC<PostParams> = ({
   // Destructure with default values only if undefined
   const { profileImage = "default-image-url.jpg", profileName = "Undefined" } =
     profileSection || {}; // Fallback to an empty object if profileSection is undefined
+
+  // Check if the current route is the admin page
+  const isAdminPage = window.location.pathname.includes("/admin");
 
   return (
     <div
@@ -48,7 +52,7 @@ const Post: React.FC<PostParams> = ({
       {/* Post Content */}
       <div className="text-center">
         <p className="mb-2 ml-5 text-left text-lg font-semibold">{content}</p>
-        {imageURL && ( 
+        {imageURL && (
           <img
             src={imageURL}
             alt="Post Content"
@@ -57,7 +61,13 @@ const Post: React.FC<PostParams> = ({
         )}
       </div>
 
-      <ReactionSection handleClick={handleClick} />
+      {/* Conditionally render AdminSection or ReactionSection */}
+      {isAdminPage ? (
+        <AdminSection handleClick={handleClick} post={{ _id, creatorId, content, imageURL, createdAt, visibility, profileSection, isDetail }} />
+     
+      ) : (
+        <ReactionSection handleClick={handleClick} />
+      )}
     </div>
   );
 };

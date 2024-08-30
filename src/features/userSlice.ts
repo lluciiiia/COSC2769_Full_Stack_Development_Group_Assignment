@@ -40,6 +40,7 @@ const userSlice = createSlice({
       state.viewedUser = action.payload;
     });
     builder.addCase(unfriendById.fulfilled, (state, action) => {});
+    
   },
 });
 

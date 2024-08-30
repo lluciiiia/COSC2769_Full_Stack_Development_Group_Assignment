@@ -23,6 +23,24 @@ export interface ProfileSectionParams {
 export interface ReactionSectionProps {
   handleClick: () => void;
 }
+export interface AdminSectionProps {
+  handleClick: () => void;
+  post: {
+    _id: string;
+    creatorId: string;
+    content: string;
+    imageURL?: string;
+    createdAt: string;
+    visibility: string;
+    profileSection?: {
+      profileImage?: string;
+      profileName?: string;
+    };
+    isDetail: boolean;
+  };
+}
+
+
 
 export interface PostProps {
   id: string;
