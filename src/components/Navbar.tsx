@@ -31,7 +31,7 @@ const Navbar = () => {
     setIsPostModalOpen(false);
   };
   const handleGroupClick = () => {
-    navigate(`/GroupList`);
+    navigate(`/groups`);
   };
 
   const handleProfoleClick = () => {
