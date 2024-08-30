@@ -48,6 +48,7 @@ const PostDetail: React.FC = () => {
                 comments={post.comments}
                 reactions={post.reactions}
                 isDetail={true}
+                history={post.history}
               />
               <CommentContainer
                 initComments={post.comments}

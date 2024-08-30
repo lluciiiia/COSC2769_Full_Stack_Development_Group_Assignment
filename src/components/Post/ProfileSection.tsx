@@ -7,13 +7,14 @@ import PostModal from "../post/PostModal";
 import DefaultProfile from "../../assets/icons/DefaultProfile.tsx";
 import PostHistoryModal from "./PostHistoryModal.tsx";
 import { formatRelativeTime } from "../../utils/formatRelativeTime.ts";
+import ErrorPage from "../../pages/ErrorPage.tsx";
 
 export const ProfileSection: React.FC<ProfileSectionParams> = ({
   post,
   profileImage,
   profileName,
 }) => {
-  if (!post) return null;
+  if (!post) return <ErrorPage />;
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -78,9 +79,14 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
         <div className="font-bold">{safeProfileName}</div>
       </div>
       <div className="relative ml-auto flex items-center justify-center gap-1">
-        <p className="text-xs text-gray-500">
-          {formatRelativeTime(post.createdAt)}
-        </p>
+        <div className="flex flex-col">
+          <p className="text-sm text-gray-500">
+            {formatRelativeTime(post.createdAt)}
+          </p>
+          {post.history?.length > 0 ? (
+            <p className="text-right text-xs text-gray-500">(Edited)</p>
+          ) : null}
+        </div>
         <img
           src="/src/assets/svgs/ThreeDots.svg"
           alt="Three dots"
