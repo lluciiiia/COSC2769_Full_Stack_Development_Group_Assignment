@@ -5,6 +5,7 @@ import logo from "../assets/icons/logo.png";
 import { registerUser } from "../controllers/authentications";
 // import { UseDispatch } from "react-redux";
 import { AppDispatch } from "../app/store";
+
 interface RegisInfor {
   name?: string;
   email?: string;
@@ -15,7 +16,6 @@ const Signup: React.FC = () => {
     name: "",
     email: "",
     password: "",
-    // Add any other fields you may need
   });
 
   const dispatch: AppDispatch = useDispatch();

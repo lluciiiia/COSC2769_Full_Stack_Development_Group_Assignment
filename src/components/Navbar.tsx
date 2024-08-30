@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { SearchIcon } from "../assets/icons/profileIcon/SearchIcon";
+
 import logo from "../assets/icons/logo.png";
 import notificationIcon from "../assets/icons/notificationIcon.png";
 import profileIcon from "../assets/icons/profileIcon.png";
@@ -9,77 +9,71 @@ import groupIcon from "../assets/icons/groupIcon.png";
 import createPostIcon from "../assets/icons/createPostIcon.png";
 import { NavItem } from "./NavItem";
 import PostModal from "./post/PostModal";
+import NotificationModal from "./notifications/NotificationModal";
 
 const Navbar = () => {
   const { userId } = useParams();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+  const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleHomeClick = () => {
     navigate(`/home/${userId}`);
   };
 
-  const handleProfileClick = () => {
-    navigate(`/profile/${userId}`);
-  };
-
   const handleCreatePostClick = () => {
-    setIsModalOpen(true);
+    setIsPostModalOpen(true);
   };
-
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    setIsPostModalOpen(false);
   };
-
   const handleGroupClick = () => {
-    navigate(`/groups`);
+    navigate(`/GroupList`);
   };
 
-  const handleSearchClick = () => {
-    navigate(`/UserSearch`);
+  const handleNotificationClick = () => {
+    setIsNotificationModalOpen(!isNotificationModalOpen);
   };
 
   return (
     <>
       <nav className="fixed left-0 right-0 top-0 z-10 flex items-center justify-between bg-[#FFC123] p-2">
-        <div
-          className="flex cursor-pointer items-center gap-2"
-          onClick={handleHomeClick}
-        >
+        <div className="flex items-center gap-2">
           <img
             src={logo}
             alt="BuZzNet Logo"
-            className="h-12 w-12 object-contain"
+            className="h-12 w-12 cursor-pointer object-contain"
+            onClick={handleHomeClick}
           />
           <h1 className="text-2xl font-bold">BuZzNet</h1>
         </div>
-        <div className="relative flex items-center gap-4">
-          
-          <SearchIcon className="h-8 w-8 cursor-pointer text-black" onClick={handleSearchClick} />
-        </div>
         <div className="flex max-w-xs flex-1 flex-grow justify-around gap-5">
           <NavItem src={homeIcon} label="Home" onClick={handleHomeClick} />
-          <NavItem src={groupIcon} label="Group" onClick={handleGroupClick} />
+          <NavItem src={groupIcon} onClick={handleGroupClick} label="Group" />
           <NavItem
             src={createPostIcon}
-            label="Create Post"
             onClick={handleCreatePostClick}
+            label="Create Post"
           />
         </div>
+
         <div className="mr-6 flex justify-between gap-5">
-          <NavItem src={notificationIcon} label={"Notification"} />
           <NavItem
-            src={profileIcon}
-            label={"Profile"}
+            src={notificationIcon}
+            label={"Notification"}
             onClick={() => {
-              handleProfileClick();
+              handleNotificationClick();
             }}
           />
+          <NavItem src={profileIcon} label={"Profile"} />
         </div>
       </nav>
 
+      <NotificationModal isOpen={isNotificationModalOpen}/>
+
       <PostModal
-        isOpen={isModalOpen}
+        isOpen={isPostModalOpen}
         onClose={handleCloseModal}
         userId={userId}
         post={null}
@@ -87,5 +81,4 @@ const Navbar = () => {
     </>
   );
 };
-
 export default Navbar;

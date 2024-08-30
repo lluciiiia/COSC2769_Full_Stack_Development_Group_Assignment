@@ -51,6 +51,7 @@ export const loginUser = async (userData: {
   }
 };
 
+
 export const fetchedSession = async () => {
   try {
     const response = await fetch("http://localhost:8080/api/session", {
