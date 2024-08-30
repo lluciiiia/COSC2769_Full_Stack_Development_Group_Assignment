@@ -230,7 +230,7 @@ export const updatePost = async (postId: string, postData: any) => {
       if (!isMember) throw new Error("User is not a member of the group");
     }
 
-    // Push the current content and imageURL to the history before updating
+
     post.history.push({
       content: post.content,
       imageURL: post.imageURL,
