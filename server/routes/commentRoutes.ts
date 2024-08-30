@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/postData", async (req, res) => {
+router.put("/", async (req, res) => {
   try {
     const updatedComment = await updateComment(req.session.user.id, req.body);
     res.json({ message: "Comment updated", comment: updatedComment });
