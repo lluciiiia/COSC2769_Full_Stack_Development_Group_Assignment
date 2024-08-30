@@ -1,37 +1,32 @@
 import React, { useState } from "react";
-import logo from "../assets/icons/logo.png";
 import { useDispatch } from "react-redux";
-import { login } from "../controllers/authentications"; // Adjust the path as needed
-import { useNavigate } from "react-router-dom";
-
+import { loginUserThunk } from "../features/authSlice";
+import { Link, useNavigate } from "react-router-dom";
+import logo from "../assets/icons/logo.png";
+import { AppDispatch } from "../app/store";
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const result = await dispatch(login({ email, password }));
+    const result = await dispatch(loginUserThunk({ email, password }));
 
-    if (login.fulfilled.match(result)) {
-      // Navigate to the home page after successful login
-      navigate(`/home/${result.payload.user.id}`);
+    if (loginUserThunk.fulfilled.match(result)) {
+      const user = result.payload.user;
+
+      const isAdmin = user.isAdmin === "true" || user.isAdmin === true;
+
+      if (isAdmin) {
+        navigate(`/admin`);
+      } else {
+        navigate(`/home`);
+      }
     } else {
       console.error("Login failed:", result.payload || "Unknown error");
-      // Optionally, you can display an error message to the user here
-    }
-  };
-
-  const handleTestCookie = async () => {
-    const result = await dispatch(testCookie());
-
-    if (result) {
-      console.log("Test cookie set successfully.");
-      // Optionally, you can add some UI feedback or alert here
-    } else {
-      console.error("Failed to set test cookie.");
     }
   };
 
@@ -100,20 +95,13 @@ const Login: React.FC = () => {
           >
             Log In
           </button>
+          <p className="mt-2 text-center text-sm text-gray-700">
+            Dont have account?{" "}
+            <Link to="sign-up" className="cursor-pointer font-bold">
+              Register
+            </Link>
+          </p>
         </form>
-        <button
-          onClick={handleTestCookie}
-          className="mt-4 w-full rounded-md bg-blue-500 py-2 text-sm font-bold text-white hover:bg-blue-700"
-        >
-          Test Cookie
-        </button>
-      </div>
-
-      {/* Sign Up Button */}
-      <div className="absolute right-4 top-4">
-        <button className="rounded-md border-2 border-black px-4 py-2 font-bold text-black hover:bg-gray-100">
-          Sign Up
-        </button>
       </div>
     </div>
   );

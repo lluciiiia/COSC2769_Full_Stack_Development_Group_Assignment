@@ -1,59 +1,93 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+// authController.ts
+export const registerUser = async (userData: {
+  email: string;
+  password: string;
+  name?: string;
+}) => {
+  try {
+    const response = await fetch("http://localhost:8080/api/user/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
 
-export const registerUser = createAsyncThunk(
-  "auth/registerUser",
-  async (userData, { rejectWithValue }) => {
-    try {
-      const response = await fetch("http://localhost:8080/api/user/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
-
-      if (!response.ok) {
-        // Extract error message from the response
-        const errorData = await response.json();
-        return rejectWithValue(errorData);
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (err) {
-      // Handle network errors
-      return rejectWithValue({ message: "Network error" });
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Registration failed");
     }
-  },
-);
 
-export const login = createAsyncThunk(
-  "auth/loginUser",
-  async (
-    userData: { email: string; password: string },
-    { rejectWithValue },
-  ) => {
-    try {
-      const response = await fetch("http://localhost:8080/api/user/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-        credentials: "include",
-      });
+    const data = await response.json();
+    return data;
+  } catch (err: any) {
+    throw new Error(err.message || "Network error");
+  }
+};
 
-      if (!response.ok) {
-        // Extract error message from the response
-        const errorData = await response.json();
-        return rejectWithValue(errorData);
-      }
+export const loginUser = async (userData: {
+  email: string;
+  password: string;
+}) => {
+  try {
+    const response = await fetch("http://localhost:8080/api/user/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+      credentials: "include", // Ensure the session cookie is included
+    });
 
-      const data = await response.json();
-      return data;
-    } catch (err) {
-      // Handle network errors
-      return rejectWithValue({ message: "Network error" });
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Login failed");
     }
-  },
-);
+
+    const data = await response.json();
+    return data;
+  } catch (err: any) {
+    throw new Error(err.message || "Network error");
+  }
+};
+
+export const logout = async () => {
+  try {
+    const response = await fetch("http://localhost:8080/api/user/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include", 
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Logout failed");
+    }
+
+    return { message: "Logout successful" };
+  } catch (err: any) {
+    throw new Error(err.message || "Network error");
+  }
+};
+
+export const fetchedSession = async () => {
+  try {
+    const response = await fetch("http://localhost:8080/api/session", {
+      method: "GET",
+      credentials: "include", 
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Error fetched session");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error: any) {
+    throw new Error("Network error");
+  }
+};

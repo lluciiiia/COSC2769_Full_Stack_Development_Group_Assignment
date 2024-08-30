@@ -22,9 +22,10 @@ export const getAllPosts = createAsyncThunk<PostParams[]>(
 
 export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
   "posts/getPosts",
-  async (userId) => {
-    const response = await fetch(BACKEND_URL + `/api/posts/all/${userId}`, {
+  async () => {
+    const response = await fetch(BACKEND_URL + `/api/posts/all`, {
       method: "GET",
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -42,6 +43,7 @@ export const getPostById = async (id: String | undefined) => {
 
   const response = await fetch(BACKEND_URL + `/api/posts/${id}`, {
     method: "GET",
+    credentials: 'include',
   });
 
   console.log("response: " + JSON.stringify(response));
@@ -62,6 +64,7 @@ export const getPostsByCreatorId = createAsyncThunk<
     BACKEND_URL + `/api/posts/profile/${creatorId}`,
     {
       method: "GET",
+      credentials: 'include',
     },
   );
 
@@ -79,6 +82,7 @@ export const getGroupsByUserId = async (userId: string | undefined) => {
 
   const response = await fetch(`${BACKEND_URL}/api/groups/user/${userId}`, {
     method: "GET",
+    credentials: 'include',
   });
 
   console.log("response: " + JSON.stringify(response));
@@ -101,12 +105,10 @@ export const getPostsByGroup = createAsyncThunk<PostParams[], string>(
         throw new Error("No group ID provided");
       }
 
-      const response = await fetch(
-        BACKEND_URL + `/api/posts/groups/${groupId}`,
-        {
-          method: "GET",
-        },
-      );
+      const response = await fetch(BACKEND_URL + `/api/posts/groups/${groupId}`, {
+        method: "GET",
+        credentials: 'include',
+      });
 
       if (!response.ok) {
         throw new Error("Failed to fetch posts: " + response.statusText);
@@ -128,6 +130,7 @@ export const createPost = createAsyncThunk<PostParams, PostParams | undefined>(
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: 'include',
       body: JSON.stringify(postData),
     });
 
@@ -148,6 +151,7 @@ export const updatePost = createAsyncThunk<PostParams, PostParams>(
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: 'include',
       body: JSON.stringify(postData),
     });
 

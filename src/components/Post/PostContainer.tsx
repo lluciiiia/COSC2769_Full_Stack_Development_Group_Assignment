@@ -3,9 +3,9 @@ import { PostParams } from "../../interfaces/Posts";
 import { useNavigate, useParams } from "react-router-dom";
 import { ReactionSection } from "./ReactionSection";
 import { ProfileSection } from "./ProfileSection";
-import { AdminSection } from "./AdminSection"; // Assuming you have an AdminSection component
+import CommentItem from "../comments/CommentItem";
 
-const Post: React.FC<PostParams> = ({
+const PostContainer: React.FC<PostParams> = ({
   _id,
   creatorId,
   content,
@@ -14,20 +14,14 @@ const Post: React.FC<PostParams> = ({
   visibility,
   profileSection,
   isDetail,
+  history,
+  comments,
 }) => {
   const navigate = useNavigate();
-  const { userId } = useParams();
 
   const handleClick = () => {
-    navigate(`/posts/${userId}/${_id}`);
+    navigate(`/posts/${_id}`);
   };
-
-  // Destructure with default values only if undefined
-  const { profileImage = "default-image-url.jpg", profileName = "Undefined" } =
-    profileSection || {}; // Fallback to an empty object if profileSection is undefined
-
-  // Check if the current route is the admin page
-  const isAdminPage = window.location.pathname.includes("/admin");
 
   return (
     <div
@@ -36,8 +30,8 @@ const Post: React.FC<PostParams> = ({
       }`}
     >
       <ProfileSection
-        profileImage={profileImage}
-        profileName={profileName}
+        profileImage={profileSection?.profileImage}
+        profileName={profileSection?.profileName}
         post={{
           _id,
           creatorId,
@@ -47,7 +41,9 @@ const Post: React.FC<PostParams> = ({
           visibility,
           profileSection,
           isDetail,
-        }} // Pass the entire PostParams object
+          history,
+          comments,
+        }}
       />
       {/* Post Content */}
       <div className="text-center">
@@ -61,15 +57,24 @@ const Post: React.FC<PostParams> = ({
         )}
       </div>
 
-      {/* Conditionally render AdminSection or ReactionSection */}
-      {isAdminPage ? (
-        <AdminSection handleClick={handleClick} post={{ _id, creatorId, content, imageURL, createdAt, visibility, profileSection, isDetail }} />
-     
-      ) : (
-        <ReactionSection handleClick={handleClick} />
+      <ReactionSection handleClick={handleClick} />
+
+      {/* Display comments if not in detail view and there are comments */}
+      {!isDetail && comments?.length > 0 && (
+        <div className="mt-4">
+          <h3
+            className="mb-2 ml-5 cursor-pointer text-left text-sm font-semibold"
+            onClick={handleClick}
+          >
+            View more comments ..
+          </h3>
+          {comments.slice(0, 2).map((comment) => (
+            <CommentItem key={comment._id} comment={comment} />
+          ))}
+        </div>
       )}
     </div>
   );
 };
 
-export default Post;
+export default PostContainer;

@@ -1,6 +1,11 @@
 import { ChangeEvent, FormEvent } from "react";
 import { ProfileSectionParams } from "./Posts";
 
+export interface CommentHistory {
+  content: string;
+  updatedAt: Date;
+}
+
 export interface Comment {
   _id: string;
   postId: string;
@@ -8,6 +13,7 @@ export interface Comment {
   content: string;
   profileSection: ProfileSectionParams;
   createdAt: Date;
+  history: CommentHistory[];
 }
 
 export interface CommentContainerProps {

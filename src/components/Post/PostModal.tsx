@@ -3,13 +3,19 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { PostParams } from "../../interfaces/Posts";
 import PostForm from "./PostForm";
-import { createPost, updatePost, getGroupsByUserId } from "../../controllers/posts";
+import {
+  createPost,
+  updatePost,
+  getGroupsByUserId,
+} from "../../controllers/posts";
 import { GroupType } from "../../interfaces/Group";
 
 const PostModal = ({ isOpen, onClose, userId, post }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [content, setContent] = useState("");
-  const [visibility, setVisibility] = useState<"PUBLIC" | "FRIEND_ONLY" | "GROUP">("PUBLIC");
+  const [visibility, setVisibility] = useState<
+    "PUBLIC" | "FRIEND_ONLY" | "GROUP"
+  >("PUBLIC");
   const [imageURL, setImageURL] = useState("");
   const [groups, setGroups] = useState<GroupType[]>([]);
   const [selectedGroupId, setSelectedGroupId] = useState<string>("");
@@ -67,6 +73,9 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
         visibility,
         imageURL,
         groupId: visibility === "GROUP" ? selectedGroupId : undefined,
+        history: post.history,
+        comments: post.comments,
+        createdAt: post.createdAt,
       };
 
       let result;
@@ -91,18 +100,20 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
       <div className="w-full max-w-lg rounded-lg bg-white p-6">
         <h2 className="mb-4 text-xl font-bold">
           {post ? "Edit Your Post" : "Buzz your mind!"}
         </h2>
         {visibility === "GROUP" && (
           <div className="mb-4">
-            <label className="block mb-2 text-base font-medium">Select Group:</label>
+            <label className="mb-2 block text-base font-medium">
+              Select Group:
+            </label>
             <select
               value={selectedGroupId}
               onChange={(e) => setSelectedGroupId(e.target.value)}
-              className="block w-full p-2 border border-gray-300 rounded text-base"
+              className="block w-full rounded border border-gray-300 p-2 text-base"
             >
               {groups.map((group: GroupType) => (
                 <option key={group._id} value={group._id}>

@@ -7,11 +7,11 @@ const postSchema = new mongoose.Schema({
     required: true,
   },
 
-  groupId:String,
+  groupId: String,
 
   content: { type: String, required: true },
   imageURL: { type: String },
-  createdAt: { type: Date, default: Date.now },
+
   visibility: {
     type: String,
     enum: ["PUBLIC", "FRIEND_ONLY", "GROUP"],
@@ -20,6 +20,16 @@ const postSchema = new mongoose.Schema({
   },
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
   reactions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Reaction" }],
+
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
+  history: [
+    {
+      content: { type: String, required: true },
+      imageURL: { type: String },
+      updatedAt: { type: Date, default: Date.now },
+    },
+  ],
 });
 
 const Post = mongoose.model("Post", postSchema);

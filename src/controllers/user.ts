@@ -7,6 +7,7 @@ export const getAllUsers = createAsyncThunk<UserType[]>(
   async () => {
     const response = await fetch(BACKEND_URL + `/api/users/`, {
       method: "GET",
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -24,6 +25,7 @@ export const getUser = createAsyncThunk<UserType, string | undefined>(
   async (userId) => {
     const response = await fetch(BACKEND_URL + `/api/users/${userId}`, {
       method: "GET",
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -41,6 +43,7 @@ export const getViewedUser = createAsyncThunk<UserType, string | undefined>(
   async (userId) => {
     const response = await fetch(BACKEND_URL + `/api/users/view/${userId}`, {
       method: "GET",
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -62,6 +65,7 @@ export const updateUser = createAsyncThunk<
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: 'include',
     body: JSON.stringify(userData),
   });
 
@@ -78,14 +82,15 @@ export const updateUser = createAsyncThunk<
 export const unfriendById = createAsyncThunk<
   UserType,
   { userId: string | undefined; friendId: string }
->("user/updateUser", async ({ userId, friendId }) => {
+>("user/updateUser", async ({  friendId }) => {
   const response = await fetch(
-    BACKEND_URL + `/api/users/unfriend/${userId}/${friendId}`,
+    BACKEND_URL + `/api/users/unfriend/${friendId}`,
     {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: 'include',
     },
   );
 

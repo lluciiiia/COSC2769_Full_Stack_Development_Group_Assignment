@@ -1,6 +1,9 @@
+import React from "react";
 import jobsIcon from "../../assets/icons/profileIcon/jobsIcon.png";
 
 const WorkInformation = ({ user }) => {
+  if (!user.job)
+    return <h1 className="text-center text-xl font-bold">Unvailable</h1>;
   return (
     <div className="flex flex-col gap-8 p-4 text-lg">
       <div className="p-4">

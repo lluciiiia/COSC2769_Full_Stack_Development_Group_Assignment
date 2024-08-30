@@ -12,19 +12,9 @@ import {
 
 const router = express.Router();
 
-//get all posts from admin
-router.get("/", async (req, res, next) => {
+router.get("/all", async (req, res) => {
   try {
-    const posts = await getAllPosts();
-    res.json(posts);
-  } catch (error) {
-    res.status(500).json({ error: error });
-  }
-});
-
-router.get("/all/:userId", async (req, res) => {
-  try {
-    const posts = await getPostsForUser(req.params.userId);
+    const posts = await getAllPosts(req.session.user.id);
     res.json(posts);
   } catch (error) {
     res.status(500).json({ error: error });

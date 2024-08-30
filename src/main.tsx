@@ -17,6 +17,7 @@ import { store } from "./app/store.ts";
 import Admin from "./pages/Admin.tsx";
 import Layout from "./components/Layout.tsx";
 import GroupList from "./pages/GroupList";
+import ProtectedRoute from "./components/protectedRoutes";
 
 const router = createBrowserRouter([
   {
@@ -29,12 +30,20 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: "/posts/:userId/:postId",
-        element: <PostDetail />,
+        path: "/posts/:postId",
+        element: (
+          <ProtectedRoute>
+            <PostDetail />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/groups/:groupId",
-        element: <GroupPage />,
+        element: (
+          <ProtectedRoute>
+            <GroupPage />
+          </ProtectedRoute>
+        ),
         children: [
           {
             path: "discussion",
@@ -51,24 +60,40 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "/groupList",
-        element: <GroupList />,
+        path: "/groups",
+        element: (
+          <ProtectedRoute>
+            <GroupList />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/profile/:userId",
-        element: <Profile />,
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/sign-up",
         element: <Signup />,
       },
       {
-        path: "/home/:userId",
-        element: <Home />,
+        path: "/home",
+        element: (
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/admin",
-        element: <Admin />,
+        element: (
+          <ProtectedRoute>
+            <Admin />
+          </ProtectedRoute>
+        ),
       },
     ],
   },

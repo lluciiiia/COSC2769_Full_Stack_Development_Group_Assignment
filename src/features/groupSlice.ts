@@ -1,52 +1,10 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+// groupSlice.ts
+import { createSlice } from "@reduxjs/toolkit";
 import { GroupType } from "../interfaces/Group";
 import { AppState } from "../app/store";
+import { fetchGroups } from "../controllers/group";
 
-const API_URL = "http://localhost:8080/api/groups";
 const initialState: GroupType[] = [];
-
-// Define the async thunk for fetching group data
-// export const fetchGroups = createAsyncThunk("groups/fetchGroups", async () => {
-//   const response = await fetch(API_URL);
-//   const data: GroupType[] = await response.json();
-//   console.log(data, "data fetched");
-//   return data;
-// });
-export const fetchGroups = createAsyncThunk<GroupType[]>(
-  "posts/fetchPosts",
-  async () => {
-    const response = await fetch(API_URL);
-    if (!response.ok) {
-      console.error("Failed to fetch groups:", response.statusText);
-      throw new Error("Failed to fetch groups");
-    }
-    const data: GroupType[] = await response.json();
-    return data;
-  },
-);
-
-
-
-
-export const updateGroup = createAsyncThunk<GroupType, GroupType>(
-  "groups/updateGroup",
-  async (group: GroupType) => {
-    const response = await fetch(`${API_URL}/${group._id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(group),
-    });
-
-    if (!response.ok) {
-      console.error("Failed to update group:", response.statusText);
-      throw new Error("Failed to update group");
-    }
-    const updatedGroup: GroupType = await response.json();
-    return updatedGroup;
-  }
-);
 
 const groupSlice = createSlice({
   name: "groups",
@@ -59,8 +17,8 @@ const groupSlice = createSlice({
         console.log("Fetching groups...");
       })
       .addCase(fetchGroups.fulfilled, (state, action) => {
-        // console.log("Fetched groups data:", action.payload);
-        return action.payload; // Replace the state with the fetched groups
+        // Replace the state with the fetched groups
+        return action.payload;
       })
       .addCase(fetchGroups.rejected, (state, action) => {
         console.error("Failed to fetch groups", action.error.message);
@@ -69,16 +27,8 @@ const groupSlice = createSlice({
   },
 });
 
-
 // Selector to get group by ID
-// export const selectGroupById = (state: AppState, groupId: string) => {
-//   console.log(`selectGroupById called with groupId: ${groupId}`);
-//   const group = state.groups.find((group) => group._id === groupId);
-//   console.log(`Group found:`, group);
-//   return group;
-// };
 export const selectGroupById = (state: AppState, groupId: string) => {
-
   if (!groupId) {
     console.log("No groupId provided");
     return undefined;
@@ -86,10 +36,7 @@ export const selectGroupById = (state: AppState, groupId: string) => {
   console.log(`selectGroupById called with groupId: ${groupId}`);
 
   const group = state.groups.find((group) => group._id === groupId);
-  // console.log(`Group found:`, group);
   return group;
 };
-
-
 
 export default groupSlice.reducer;

@@ -66,9 +66,10 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.delete("/unfriend/:userId/:friendId", async (req, res) => {
+router.delete("/unfriend/:friendId", async (req, res) => {
   try {
-    const { userId, friendId } = req.params;
+    const userId=req.session.user.id;
+    const { friendId } = req.params;
     await unfriendById(userId, friendId);
 
     res.json({ message: "Friend removed successfully!" });

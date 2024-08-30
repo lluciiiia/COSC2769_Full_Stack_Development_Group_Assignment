@@ -1,34 +1,129 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { AppState } from "../app/store";
-import { registerUser, login } from "../controllers/authentications";
+import {
+  loginUser,
+  registerUser,
+  fetchedSession,
+  logout as logoutUser, // Import the logout function from your controller
+} from "../controllers/authentications";
+
+export const registerUserThunk = createAsyncThunk(
+  "auth/registerUser",
+  async (
+    userData: { email: string; password: string; name?: string },
+    { rejectWithValue },
+  ) => {
+    try {
+      const data = await registerUser(userData);
+      return data;
+    } catch (err) {
+      return rejectWithValue(err);
+    }
+  },
+);
+
+export const fetchSess = createAsyncThunk(
+  "auth/session",
+  async (_, { rejectWithValue }) => {
+    try {
+      const data = await fetchedSession();
+      return data;
+    } catch (err: any) {
+      return rejectWithValue(err.message || "Error fetching session");
+    }
+  },
+);
+
+export const loginUserThunk = createAsyncThunk(
+  "auth/loginUser",
+  async (
+    userData: { email: string; password: string },
+    { rejectWithValue },
+  ) => {
+    try {
+      const data = await loginUser(userData);
+      return data;
+    } catch (err) {
+      return rejectWithValue(err);
+    }
+  },
+);
+
+// Add the logout thunk
+export const logoutUserThunk = createAsyncThunk(
+  "auth/logoutUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const data = await logoutUser();
+      return data;
+    } catch (err: any) {
+      return rejectWithValue(err.message || "Error logging out");
+    }
+  },
+);
+
+const initialState = {
+  id: '',
+  isAuthenticated: false,
+  status: "idle",
+  isAdmin: false,
+  error: null,
+};
 
 const authSlice = createSlice({
   name: "auth",
-  initialState: {
-    user: null,
-    isAuthenticated: false,
-    status: "idle",
-    error: null,
-  },
+  initialState,
   reducers: {
+    // Update logout reducer to handle local state
     logout: (state) => {
-      state.user = null;
       state.isAuthenticated = false;
-      localStorage.removeItem("token");
+      state.id = '';
+      state.isAdmin = false;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(registerUser.pending, (state) => {
+      .addCase(registerUserThunk.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(registerUserThunk.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.user = action.payload.user;
         state.isAuthenticated = true;
-        localStorage.setItem("token", action.payload._id);
-      });
+      })
+      .addCase(loginUserThunk.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(loginUserThunk.fulfilled, (state, action) => {
+        console.log("Login response payload:", action.payload);
+
+        state.status = "succeeded";
+        state.id = action.payload.id;
+        state.isAdmin = action.payload.user.isAdmin;
+        state.isAuthenticated = true;
+        console.log("Updated isAdmin:", state.isAdmin);
+      })
+      .addCase(fetchSess.fulfilled, (state, action) => {
+        state.status = "loged-in";
+        console.log(action.payload.isAuthenticated + "check if authenticate");
+        state.isAuthenticated = action.payload.isAuthenticated;
+        state.id = action.payload.id;
+        
+      })
+      // Add case for logoutUserThunk
+      .addCase(logoutUserThunk.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(logoutUserThunk.fulfilled, (state) => {
+        state.status = "succeeded";
+        state.isAuthenticated = false;
+        state.id = '';
+        state.isAdmin = false;
+      })
   },
 });
+
+export const { logout } = authSlice.actions;
+
 export const selectAuthState = (state: AppState) => state.auth;
+
 export default authSlice.reducer;

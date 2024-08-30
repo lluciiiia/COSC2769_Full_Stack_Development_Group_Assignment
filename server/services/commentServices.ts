@@ -17,9 +17,13 @@ export const createComment = async (commentData: any) => {
     const post = await Post.findById(postId);
     if (!post) throw new Error(`Post not found for postId: ${postId}`);
 
-    const comment = new Comment(commentData);
+    // Create a new comment
+    const comment = new Comment({
+      ...commentData,
+    });
     const newComment = await comment.save();
 
+    // Update the post with the new comment
     post.comments.push(newComment._id);
     await post.save();
 
@@ -47,13 +51,23 @@ export const createComment = async (commentData: any) => {
 
 export const updateComment = async (id: string, updatedData: any) => {
   try {
-    const updatedComment = await Comment.findByIdAndUpdate(id, updatedData, {
-      new: true, // Return the updated document
-      runValidators: true, // Validate before saving
+    const existingComment = await Comment.findById(id);
+    if (!existingComment) throw new Error("Comment not found");
+
+    // Add the current content to the history before updating
+    existingComment.history.push({
+      content: existingComment.content, // Store the previous content
+      updatedAt: new Date(), // Store the timestamp of the update
     });
 
-    if (!updatedComment) throw new Error("Comment not found");
+    // Update the comment's content and updatedAt
+    existingComment.content = updatedData.content;
+    existingComment.updatedAt = new Date();
 
+    // Save the updated comment
+    const updatedComment = await existingComment.save();
+
+    // Fetch the user who created the comment to populate the profileSection
     const user = await User.findById(updatedComment.userId);
     if (!user)
       throw new Error(`User not found for userId: ${updatedComment.userId}`);
