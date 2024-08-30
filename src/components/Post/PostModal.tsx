@@ -54,9 +54,7 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
       }
     };
 
-    if (isOpen) {
-      fetchGroups();
-    }
+    if (isOpen) fetchGroups();
 
     // Re-enable scrolling when the modal closes
     return () => {
@@ -73,7 +71,7 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
         visibility,
         imageURL,
         groupId: visibility === "GROUP" ? selectedGroupId : undefined,
-        history: post.history,
+        history: post.history ? post.history : [],
         comments: post.comments,
         createdAt: post.createdAt,
       };
