@@ -26,11 +26,11 @@ const GroupList: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center">
-      <h1 className="mb-12 text-center text-2xl font-bold">
+    <div className="mt-20 flex h-screen flex-col items-center">
+      <h1 className="mb-6 text-center text-2xl font-bold">
         Join groups to share your interests with!
       </h1>
-      <div className="flex w-full max-w-xl flex-col">
+      <div className="flex h-[550px] w-[700px] flex-col overflow-y-auto px-4">
         {loading ? (
           <div className="flex h-64 items-center justify-center">
             <LoadingSpinner />
