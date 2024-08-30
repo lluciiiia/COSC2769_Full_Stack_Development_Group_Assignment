@@ -1,17 +1,19 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { AppState } from "../../app/store";
+import { updateUser } from "../../controllers/user";
 
 const UserManagement = () => {
+  const dispatch = useDispatch();
   const users = useSelector((state: AppState) => state.user.users);
   
-  console.log(users);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState<"newest" | "oldest">("newest");
   const [currentPage, setCurrentPage] = useState(1);
+  const [updateTrigger, setUpdateTrigger] = useState(false);
+
   const usersPerPage = 10;
 
-  // Handle input changes for search and sort options
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
@@ -24,18 +26,27 @@ const UserManagement = () => {
     setCurrentPage(pageNumber);
   };
 
-  // Filter and sort users based on search query and sort option
+  const handleStatusToggle = async (userId: string, currentStatus: boolean) => {
+    try {
+      console.log(`Toggling status for user ${userId}. Current status: ${currentStatus}`);
+      const action = updateUser({ userId, userData: { activeStatus: !currentStatus } });
+      console.log('Dispatching action:', action);
+      await dispatch(action as any); 
+      console.log(`Status for user ${userId} updated successfully.`);
+      window.location.reload(); 
+    } catch (error) {
+      console.error("Failed to update user:", error);
+    }
+  };
+
   const filteredUsers = users
-    .filter((user) =>
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()),
-    )
+    .filter((user) => user.name.toLowerCase().includes(searchQuery.toLowerCase()))
     .sort((a, b) => {
-      const dateA = new Date(a.createdAt).getTime(); // Use createdAt instead of dateJoined
+      const dateA = new Date(a.createdAt).getTime();
       const dateB = new Date(b.createdAt).getTime();
       return sortOption === "newest" ? dateB - dateA : dateA - dateB;
     });
 
-  // Pagination calculations
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
@@ -46,7 +57,6 @@ const UserManagement = () => {
       <h1 className="text-2xl font-bold">All Users</h1>
       <h2 className="text-lg text-green-600">Active Members</h2>
 
-      {/* Search and sort options */}
       <div className="mb-4 mt-4 flex items-center justify-between">
         <input
           type="text"
@@ -65,7 +75,6 @@ const UserManagement = () => {
         </select>
       </div>
 
-      {/* Users table */}
       <div className="mt-4 overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -109,11 +118,14 @@ const UserManagement = () => {
                   {user.location || "N/A"}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4">
-                  <span
-                    className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${user.activeStatus ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
+                  <button
+                    onClick={() => handleStatusToggle(user._id, user.activeStatus)}
+                    className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
+                      user.activeStatus ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                    }`}
                   >
                     {user.activeStatus ? "Active" : "Inactive"}
-                  </span>
+                  </button>
                 </td>
               </tr>
             ))}
@@ -121,30 +133,30 @@ const UserManagement = () => {
         </table>
       </div>
 
-      {/* Pagination controls */}
       <div className="mt-4 flex items-center justify-between">
         <span className="text-sm text-gray-700">
-          Showing {indexOfFirstUser + 1} to {indexOfLastUser} of{" "}
-          {filteredUsers.length} entries
+          Showing {indexOfFirstUser + 1} to {indexOfLastUser} of {filteredUsers.length} entries
         </span>
         <div className="xs:mt-0 mt-2 inline-flex">
-          {/* {[...Array(totalPages)].map((_, i) => (
+          {[...Array(totalPages)].map((_, i) => (
             <button
               key={i}
               onClick={() => handlePageChange(i + 1)}
-              className={`border-b border-t border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-600 ${currentPage === i + 1 ? "bg-gray-200" : ""}`}
+              className={`border-b border-t border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-600 ${
+                currentPage === i + 1 ? "bg-gray-200" : ""
+              }`}
             >
               {i + 1}
             </button>
-          ))} */}
-          {/* {currentPage < totalPages && (
+          ))}
+          {currentPage < totalPages && (
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               className="rounded-r border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-600"
             >
               {">"}
             </button>
-          )} */}
+          )}
         </div>
       </div>
     </div>
@@ -152,3 +164,5 @@ const UserManagement = () => {
 };
 
 export default UserManagement;
+
+

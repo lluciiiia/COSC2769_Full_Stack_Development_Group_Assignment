@@ -1,3 +1,5 @@
+import { UserType } from "../interfaces/Users";
+
 export type GroupType={
     _id: string,
     groupAdmin: string,
@@ -8,5 +10,6 @@ export type GroupType={
     dateCreated: string,
     Accepted: string,
     description: string,
+    members: UserType[];
 }
 

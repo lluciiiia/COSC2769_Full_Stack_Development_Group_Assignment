@@ -18,6 +18,8 @@ const groupSchema = new mongoose.Schema(
     imageURL: String,
     backgroundImageURL: String,
     members: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    description: { type: String },  
+    accepted: { type: Boolean, default: false }, 
   },
   { timestamps: true },
 ); // Automatically adds createdAt and updatedAt fields

@@ -23,7 +23,7 @@ const Login: React.FC = () => {
       if (isAdmin) {
         navigate(`/admin`);
       } else {
-        navigate(`/home`); 
+        navigate(`/home`);
       }
     } else {
       console.error("Login failed:", result.payload || "Unknown error");

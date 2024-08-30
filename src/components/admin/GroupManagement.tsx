@@ -1,70 +1,59 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { GroupType } from "../../types/group"; // Adjust the path as needed
-
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, AppState } from "../../app/store";
+// import { fetchGroups, updateGroup } from "../../features/groupSlice";
+import { GroupType } from "../../types/group";
+import { fetchGroups } from "../../controllers/group";
+//import { handleAcceptGroup as acceptGroup } from "../../path/to/your/handleAcceptGroupFunction"; // Replace with the correct path
+// import { handleAcceptGroup as acceptGroup } from "../../controllers/group";
 export const GroupManagement = () => {
-  const [groups, setGroups] = useState<GroupType[]>([]);
-  const [activeTab, setActiveTab] = useState("groups");
+  const [activeTab, setActiveTab] = React.useState("groups");
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const groups = useSelector((state: AppState) => state.groups);
 
   useEffect(() => {
-    const fetchGroups = async () => {
-      try {
-        const response = await fetch("http://localhost:8080/api/groups");
-        if (!response.ok) {
-          throw new Error("Failed to fetch groups");
-        }
-        const data: GroupType[] = await response.json();
-        // Log the fetched data
-        console.log("Fetched Groups Data:", data);
-        setGroups(data);
-      } catch (error) {
-        console.error("Error fetching groups:", error);
-      }
-    };
-
-    fetchGroups();
-  }, []);
+    dispatch(fetchGroups());
+  }, [dispatch]);
 
   const handleViewGroup = (groupId: string) => {
     navigate(`/groups/${groupId}/discussion`);
   };
 
-  const handleAcceptGroup = async (groupId: string) => {
+  const handleAcceptGroupClick = async (groupId: string) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/groups/${groupId}/accept`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-      });
-  
+      const response = await fetch(
+        `http://localhost:8080/api/groups/accepted/${groupId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+
       if (response.ok) {
-        const updatedGroup = await response.json();
-        setGroups((prevGroups) =>
-          prevGroups.map((group) =>
-            group._id === updatedGroup._id ? updatedGroup : group
-          )
-        );
+        console.log(`Group ${groupId} accepted.`);
+        dispatch(fetchGroups()); 
       } else {
-        console.error("Failed to accept group. Status:", response.status);
+        console.error("Failed to reject group. Status:", response.status);
       }
     } catch (error) {
-      console.error("Error accepting group:", error);
+      console.error("Error rejecting group:", error);
     }
   };
-  
 
   const handleRejectGroup = async (groupId: string) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/groups/${groupId}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/groups/${groupId}`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+        },
+      );
       if (response.ok) {
-        // Log the result after rejection
         console.log(`Group ${groupId} rejected.`);
-        setGroups((prevGroups) =>
-          prevGroups.filter((group) => group._id !== groupId)
-        );
+        dispatch(fetchGroups()); // Re-fetch groups after rejection
       } else {
         console.error("Failed to reject group. Status:", response.status);
       }
@@ -110,110 +99,102 @@ export const GroupManagement = () => {
         {activeTab === "groups" && (
           <div>
             {groups
-              .filter((group) => group.Accepted === "Accepted")
-              .map((group) => {
-                // Log each group being rendered in the "Accepted" tab
-                console.log("Rendering Accepted Group:", group);
-                return (
-                  <div
-                    key={group._id}
-                    className="w-full flex flex-col bg-white border border-gray-200 rounded-lg shadow-lg mb-4"
-                  >
-                    <img
-                      src={group.imageURL}
-                      alt={group.name}
-                      className="w-full h-48 object-cover rounded-t-lg"
-                    />
-                    <div className="p-4">
-                      <h2 className="text-xl font-bold text-gray-900 mb-2">
-                        {group.name}
-                      </h2>
-                      <p className="text-sm text-gray-600 mb-1">
-                        Admin: {group.groupAdmin}
-                      </p>
-                      <p className="text-sm text-gray-600 mb-1">
-                        Visibility: {group.visibility}
-                      </p>
-                      <p className="text-sm text-gray-600 mb-2">
-                        Date Created:{" "}
-                        {new Date(group.dateCreated).toLocaleDateString()}
-                      </p>
-                      <p className="text-sm text-gray-600 mb-4">
-                        Description: {group.description}
-                      </p>
-                      <div className="flex justify-between">
+              .filter((group) => group.accepted)
+              .map((group) => (
+                <div
+                  key={group._id}
+                  className="mb-4 flex w-full flex-col rounded-lg border border-gray-200 bg-white shadow-lg"
+                >
+                  <img
+                    src={group.imageURL}
+                    alt={group.name}
+                    className="h-48 w-full rounded-t-lg object-cover"
+                  />
+                  <div className="p-4">
+                    <h2 className="mb-2 text-xl font-bold text-gray-900">
+                      {group.name}
+                    </h2>
+                    <p className="mb-1 text-sm text-gray-600">
+                      Admin: {group.groupAdmin}
+                    </p>
+                    <p className="mb-1 text-sm text-gray-600">
+                      Visibility: {group.visibility}
+                    </p>
+                    <p className="mb-2 text-sm text-gray-600">
+                      Date Created:{" "}
+                      {new Date(group.dateCreated).toLocaleDateString()}
+                    </p>
+                    <p className="mb-4 text-sm text-gray-600">
+                      Description: {group.description}
+                    </p>
+                    <div className="flex justify-between">
                       <button
-                          onClick={() => handleRejectGroup(group._id)}
-                          className="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600"
-                        >
-                          Delete
-                        </button>
-                        <button
-                          onClick={() => handleViewGroup(group._id)}
-                          className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-                        >
-                          View
-                        </button>
-                      </div>
+                        onClick={() => handleRejectGroup(group._id)}
+                        className="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+                      >
+                        Delete
+                      </button>
+                      <button
+                        onClick={() => handleViewGroup(group._id)}
+                        className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+                      >
+                        View
+                      </button>
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              ))}
           </div>
         )}
 
         {activeTab === "requests" && (
           <div>
             {groups
-              .filter((group) => group.Accepted !== "Accepted")
-              .map((group) => {
-                // Log each group being rendered in the "Requests" tab
-                console.log("Rendering Request Group:", group);
-                return (
-                  <div
-                    key={group._id}
-                    className="w-full flex flex-col bg-white border border-gray-200 rounded-lg shadow-lg mb-4"
-                  >
-                    <img
-                      src={group.imageURL}
-                      alt={group.name}
-                      className="w-full h-48 object-cover rounded-t-lg"
-                    />
-                    <div className="p-4">
-                      <h2 className="text-xl font-bold text-gray-900 mb-2">
-                        {group.name}
-                      </h2>
-                      <p className="text-sm text-gray-600 mb-1">
-                        Admin: {group.groupAdmin}
-                      </p>
-                      <p className="text-sm text-gray-600 mb-1">
-                        Visibility: {group.visibility}
-                      </p>
-                      <p className="text-sm text-gray-600 mb-2">
-                        Date Created:{" "}
-                        {new Date(group.dateCreated).toLocaleDateString()}
-                      </p>
-                      <p className="text-sm text-gray-600 mb-4">
-                        Description: {group.description}
-                      </p>
-                      <div className="flex justify-between">
-                        <button
-                          onClick={() => handleRejectGroup(group._id)}
-                          className="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600"
-                        >
-                          Reject
-                        </button>
-                        <button
-                          onClick={() => handleAcceptGroup(group._id)}
-                          className="rounded-md bg-green-500 px-4 py-2 text-white hover:bg-green-600"
-                        >
-                          Accept
-                        </button>
-                      </div>
+              .filter((group) => !group.accepted)
+              .map((group) => (
+                <div
+                  key={group._id}
+                  className="mb-4 flex w-full flex-col rounded-lg border border-gray-200 bg-white shadow-lg"
+                >
+                  <img
+                    src={group.imageURL}
+                    alt={group.name}
+                    className="h-48 w-full rounded-t-lg object-cover"
+                  />
+                  <div className="p-4">
+                    <h2 className="mb-2 text-xl font-bold text-gray-900">
+                      {group.name}
+                    </h2>
+                    <p className="mb-1 text-sm text-gray-600">
+                      Admin: {group.groupAdmin}
+                    </p>
+                    <p className="mb-1 text-sm text-gray-600">
+                      Visibility: {group.visibility}
+                    </p>
+                    <p className="mb-2 text-sm text-gray-600">
+                      Date Created:{" "}
+                      {new Date(group.dateCreated).toLocaleDateString()}
+                    </p>
+                    <p className="mb-4 text-sm text-gray-600">
+                      Description: {group.description}
+                    </p>
+                    <div className="flex justify-between">
+                      <button
+                        onClick={() => handleRejectGroup(group._id)}
+                        className="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+                      >
+                        Reject
+                      </button>
+                      <button
+                        onClick={() => handleAcceptGroupClick(group._id)}
+                        className="rounded-md bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+                      >
+                        Accept
+                      </button>
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              ))}
           </div>
         )}
       </div>

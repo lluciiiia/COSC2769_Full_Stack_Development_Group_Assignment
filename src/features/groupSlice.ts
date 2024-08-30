@@ -22,7 +22,8 @@ const groupSlice = createSlice({
       })
       .addCase(fetchGroups.rejected, (state, action) => {
         console.error("Failed to fetch groups", action.error.message);
-      });
+      })
+      
   },
 });
 
