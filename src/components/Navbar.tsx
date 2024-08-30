@@ -22,7 +22,7 @@ const Navbar = () => {
   
 
   const handleHomeClick = () => {
-    navigate(`/home/${userId}`);
+    navigate(`/home`);
   };
 
   const handleCreatePostClick = () => {
