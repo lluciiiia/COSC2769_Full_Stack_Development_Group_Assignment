@@ -31,7 +31,7 @@ app.use(express.json());
 connectDB();
 
 app.use(session({
-  secret: 'your-secret-key',  // Replace with your own secret key
+  secret: secret,  // Replace with your own secret key
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false }  // Set to true if using HTTPS

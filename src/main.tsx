@@ -80,7 +80,7 @@ const router = createBrowserRouter([
         element: <Signup />,
       },
       {
-        path: "/home/:userId",
+        path: "/home",
         element: (
           <ProtectedRoute>
             <Home />
