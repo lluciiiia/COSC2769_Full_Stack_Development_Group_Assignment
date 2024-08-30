@@ -15,24 +15,30 @@ const EducationInformation = ({ user }) => {
           <h3 className="text-3xl font-bold text-gray-800">Education</h3>
         </div>
         <div className="rounded-md border border-gray-300 bg-[#FFF2CA] p-4 shadow-inner">
-          <div className="mb-4">
-            <p className="text-xl font-semibold text-gray-900">
-              {user?.education || "Unavailable"}
-            </p>
-            <p className="text-lg text-gray-700">
-              {user?.degree || "Unavailable"}
-            </p>
-          </div>
-          <div className="mb-4">
+          {!user.education && <p>Unvailable</p>}
+          {user.education && (
+            <div>
+              <p className="text-xl font-semibold text-gray-900">
+                {user?.education || "Unavailable"}
+              </p>
+              <p className="text-lg text-gray-700">
+                {user?.degree || "Unavailable"}
+              </p>
+            </div>
+          )}
+
+          {user.education && (
             <p className="text-lg text-gray-700">
               {user?.years || "Unavailable"}
             </p>
-          </div>
-          <div>
-            <p className="text-base text-gray-600">
-              {user?.educationDescription || "Unavailable"}
-            </p>
-          </div>
+          )}
+          {user.education && (
+            <div>
+              <p className="text-base text-gray-600">
+                {user?.educationDescription || "Unavailable"}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

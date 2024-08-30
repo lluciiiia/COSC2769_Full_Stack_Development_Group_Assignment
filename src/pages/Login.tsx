@@ -12,14 +12,15 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     const result = await dispatch(loginUserThunk({ email, password }));
-  
+
     if (loginUserThunk.fulfilled.match(result)) {
       const user = result.payload.user;
-      
+
       const isAdmin = user.isAdmin ?? false;
-  
+      console.log(isAdmin);
+
       if (isAdmin) {
         navigate(`/admin`); // Redirect to admin page if user is an admin
       } else {
@@ -29,7 +30,6 @@ const Login: React.FC = () => {
       console.error("Login failed:", result.payload || "Unknown error");
     }
   };
-  
 
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-yellow-100">
