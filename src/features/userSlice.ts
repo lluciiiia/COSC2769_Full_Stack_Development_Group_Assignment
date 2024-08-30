@@ -6,6 +6,7 @@ import {
   getViewedUser,
   unfriendById,
 } from "../controllers/user";
+import { AppState } from "../app/store";
 
 //current user
 const initialState: UserSliceParam = {
@@ -44,5 +45,8 @@ const userSlice = createSlice({
 });
 
 export const { updateLocalUser } = userSlice.actions;
+
+export const selectCurrentUser = (state: AppState) => state.user.currentUser;
+export const selectViewedUser = (state: AppState) => state.user.viewedUser;
 
 export default userSlice.reducer;

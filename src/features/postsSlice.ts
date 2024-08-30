@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PostState } from "../interfaces/Posts";
-import { getPosts, getPostsByCreatorId, getPostsByGroup } from "../controllers/posts";
+import {
+  getPosts,
+  getPostsByCreatorId,
+  getPostsByGroup,
+} from "../controllers/posts";
 
 const initialState: PostState = {
   posts: [],
@@ -18,10 +22,10 @@ const postSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getPosts.fulfilled, (state, action) => {
-    state.posts.push(...action.payload);
+      state.posts = action.payload;
     });
     builder.addCase(getPostsByCreatorId.fulfilled, (state, action) => {
-      state.creatorPost.push(...action.payload);
+      state.creatorPost = action.payload;
     });
     builder.addCase(getPostsByGroup.fulfilled, (state, action) => {
       state.groupPost = action.payload;

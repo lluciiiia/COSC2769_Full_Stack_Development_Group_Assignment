@@ -102,10 +102,6 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
       })
       .addCase(fetchSess.fulfilled, (state, action) => {
-        // console.log(action.payload)
-        // state.status = "loged-in";
-        // state.isAuthenticated = action.payload.isAuthenticated;
-        // state.id = action.payload.id;
         return action.payload;
       })
       // Add case for logoutUserThunk

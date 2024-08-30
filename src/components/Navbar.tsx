@@ -1,4 +1,4 @@
-import React, { useInsertionEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import logo from "../assets/icons/logo.png";
@@ -19,7 +19,7 @@ const Navbar = () => {
 
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
-  const [isProfileModalOpen, setProfileOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleHomeClick = () => {
@@ -36,11 +36,13 @@ const Navbar = () => {
     navigate(`/groups`);
   };
 
-  const handleProfoleClick = () => {
-    setProfileOpen(!isProfileModalOpen);
+  const handleProfileClick = () => {
+    setIsProfileModalOpen(!isProfileModalOpen);
+    setIsNotificationModalOpen(false);
   };
   const handleNotificationClick = () => {
     setIsNotificationModalOpen(!isNotificationModalOpen);
+    setIsProfileModalOpen(false);
   };
 
   return (
@@ -76,7 +78,7 @@ const Navbar = () => {
           <NavItem
             src={profileIcon}
             onClick={() => {
-              handleProfoleClick();
+              handleProfileClick();
             }}
             label={"Profile"}
           />
@@ -86,6 +88,7 @@ const Navbar = () => {
       <NotificationModal isOpen={isNotificationModalOpen} />
       <ProfileButtonModal
         isOpen={isProfileModalOpen}
+        setIsOpen={setIsProfileModalOpen}
         imgUrl={currentUser.profilePictureURL}
         name={currentUser.name}
       />
