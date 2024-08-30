@@ -55,7 +55,10 @@ const GroupList: React.FC = () => {
                 />
                 <span className="ml-4 text-lg font-bold">{group.name}</span>
               </div>
-              <div className="ml-auto flex space-x-4">
+              <div className="ml-auto flex items-center space-x-4">
+                <span className="text-gray text-sm">
+                  {group.members ? group.members.length : 0} members
+                </span>
                 <button className="cursor-pointer rounded bg-[#FFC123] px-4 py-2 font-bold text-black hover:bg-[#d89e1b] focus:outline-none">
                   Join
                 </button>
