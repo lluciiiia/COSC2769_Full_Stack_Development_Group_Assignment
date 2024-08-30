@@ -1,19 +1,16 @@
+
 import mongoose from "mongoose";
 
-const PhotoSchema = new mongoose.Schema({
-  filePath: { 
-    type: String, 
-    required: true 
-  },
-  fileName: { 
-    type: String, 
-    required: true 
-  },
-  fileSize: { 
-    type: Number, 
-    required: true 
-  }
-});
+
+const PhotoSchema = new mongoose.Schema(
+{
+  image:String
+},
+{
+  collection:"Photo",
+}
+);
+ 
 
 const Photo = mongoose.model('Photo', PhotoSchema);
 export default Photo;

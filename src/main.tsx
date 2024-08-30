@@ -32,9 +32,9 @@ const router = createBrowserRouter([
       {
         path: "/posts/:userId/:postId",
         element: (
-          <ProtectedRoute>
+          // <ProtectedRoute>
             <PostDetail />
-          </ProtectedRoute>
+          // </ProtectedRoute>
         ),
       },
       {
@@ -82,9 +82,9 @@ const router = createBrowserRouter([
       {
         path: "/home/:userId",
         element: (
-          <ProtectedRoute>
+          // <ProtectedRoute>
             <Home />
-          </ProtectedRoute>
+          // </ProtectedRoute>
         ),
       },
       {

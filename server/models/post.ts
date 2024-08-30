@@ -11,6 +11,12 @@ const postSchema = new mongoose.Schema({
 
   content: { type: String, required: true },
   imageURL: { type: String },
+  
+  images: { 
+    type: [{type: String}], 
+    
+  },
+
   createdAt: { type: Date, default: Date.now },
   visibility: {
     type: String,

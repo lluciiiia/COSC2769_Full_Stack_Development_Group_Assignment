@@ -6,6 +6,7 @@ export interface PostParams {
   groupId?: string;
   content: string;
   imageURL?: string;
+  images?: string[]; // Change from File[] to string[]
   createdAt?: Date;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
   comments?: Comment[];
@@ -13,6 +14,7 @@ export interface PostParams {
   isDetail?: boolean;
   profileSection?: ProfileSectionParams;
 }
+
 
 export interface ProfileSectionParams {
   post?: PostParams;
@@ -64,9 +66,9 @@ export interface PostFormProps {
   setContent: (content: string) => void;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
   setVisibility: (visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP") => void;
-  imageURL: string;
-  setImageURL: (url: string) => void;
-  onSubmit: (e: React.FormEvent) => void;
+  images: String[];
+  setImages: (images: String[]) => void;
+  onSubmit: (formData: FormData) => void;
   onClose: () => void;
   isEdit: boolean;
 }

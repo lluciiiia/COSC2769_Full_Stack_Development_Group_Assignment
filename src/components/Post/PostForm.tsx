@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { PostFormProps } from "../../interfaces/Posts";
 
 const PostForm: React.FC<PostFormProps> = ({
@@ -6,22 +6,57 @@ const PostForm: React.FC<PostFormProps> = ({
   setContent,
   visibility,
   setVisibility,
-  imageURL,
-  setImageURL,
+  images,
+  setImages,
   onSubmit,
   onClose,
   isEdit,
 }) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const selectedFiles = Array.from(e.target.files);
+      const validImages = selectedFiles.filter((file) =>
+        ["image/png", "image/jpeg", "image/jpg"].includes(file.type)
+      );
+      // Convert files to base64 and update state
+      Promise.all(validImages.map(convertToBase64)).then((base64Images) => {
+        setImages([...images, ...base64Images]);
+      });
+    }
+  };
+
+  // Helper function to convert image file to base64
+  const convertToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Instead of FormData, create an object to send
+    const postParams = {
+      content,
+      visibility,
+      images, // This will now contain base64 strings
+    };
+
+    onSubmit(postParams); // Pass the postParams directly
+  };
+
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={handleFormSubmit}>
       <div className="grid grid-cols-1 gap-6">
+        {/* Content Field */}
         <div>
           <div className="mb-6">
-            <label className="block text-lg font-bold text-gray-700">
-              Content
-            </label>
+            <label className="block text-lg font-bold text-gray-700">Content</label>
             <textarea
-              className="mt-2 block w-full resize rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg"
+              className="mt-2 block w-full resize rounded-md border-gray-300 text-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="What's buzzing?"
@@ -30,16 +65,15 @@ const PostForm: React.FC<PostFormProps> = ({
             />
           </div>
 
+          {/* Visibility Field */}
           <div className="mb-6">
-            <label className="block text-lg font-bold text-gray-700">
-              Visibility
-            </label>
+            <label className="block text-lg font-bold text-gray-700">Visibility</label>
             <select
-              className="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg"
+              className="mt-2 block w-full rounded-md border-gray-300 text-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               value={visibility}
               onChange={(e) =>
                 setVisibility(
-                  e.target.value as "PUBLIC" | "FRIEND_ONLY" | "GROUP",
+                  e.target.value as "PUBLIC" | "FRIEND_ONLY" | "GROUP"
                 )
               }
             >
@@ -49,33 +83,42 @@ const PostForm: React.FC<PostFormProps> = ({
             </select>
           </div>
         </div>
-        <div>
-          <div className="mb-6">
-            <label className="block text-lg font-medium text-gray-700">
-              Image
-            </label>
-            <input
-              type="text"
-              className="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg"
-              value={imageURL}
-              onChange={(e) => setImageURL(e.target.value)}
-              placeholder="https://via.placeholder.com/150"
-            />
-          </div>
 
-          {imageURL && (
-            <div className="mb-6">
-              <img
-                src={imageURL}
-                alt="Post Image"
-                className="h-auto w-full rounded-md"
-              />
+        {/* Image Upload Field */}
+        <div className="mb-6 flex items-center gap-4">
+          <label className="cursor-pointer rounded-md bg-[#FFC123] px-4 py-2 text-lg text-black shadow-sm hover:bg-yellow-500">
+            Upload Images
+            <input
+              type="file"
+              multiple
+              accept=".png, .jpg, .jpeg"
+              className="hidden"
+              onChange={handleImageChange}
+            />
+          </label>
+
+          {images.length > 0 && (
+            <div className="flex gap-2">
+              {images.slice(0, 3).map((image, index) => (
+                <div key={index} className="relative w-24 h-24">
+                  <img
+                    src={image} // Displaying base64 images directly
+                    alt={`Upload Preview ${index + 1}`}
+                    className="object-cover w-full h-full rounded-md"
+                  />
+                </div>
+              ))}
+              {images.length > 3 && (
+                <div className="relative w-24 h-24 flex items-center justify-center rounded-md bg-gray-200 text-lg font-bold text-gray-600">
+                  +{images.length - 3} more
+                </div>
+              )}
             </div>
           )}
         </div>
       </div>
 
-      <div className="flex justify-end mt-6">
+      <div className="mt-6 flex justify-end">
         <button
           type="button"
           className="mr-4 rounded-md bg-gray-300 px-6 py-3 text-lg text-gray-700"
