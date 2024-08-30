@@ -19,6 +19,7 @@ const Navbar = () => {
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [isProfileModalOpen, setProfileOpen] = useState(false);
   const navigate = useNavigate();
+  
 
   const handleHomeClick = () => {
     navigate(`/home/${userId}`);

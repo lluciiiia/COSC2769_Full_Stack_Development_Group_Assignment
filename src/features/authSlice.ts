@@ -107,6 +107,7 @@ const authSlice = createSlice({
         console.log(action.payload.isAuthenticated + "check if authenticate");
         state.isAuthenticated = action.payload.isAuthenticated;
         state.id = action.payload.id;
+        
       })
       // Add case for logoutUserThunk
       .addCase(logoutUserThunk.pending, (state) => {

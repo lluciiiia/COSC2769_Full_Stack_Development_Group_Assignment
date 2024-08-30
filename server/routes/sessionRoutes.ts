@@ -11,12 +11,13 @@ router.get("/", async (req, res) => {
 
     const isAuthenticated = req.session.user.isAuthenticated;
     const isAdmin = req.session.user.isAdmin;
+    const id= req.session.user.id;
     if (!isAuthenticated) {
-      return res.status(403).json({ isAuthenticated: false, isAdmin: false });
+      return res.status(403).json({ isAuthenticated: false, isAdmin: false,id:'' });
     }
 
     // If authenticated, return the status
-    return res.status(200).json({ isAuthenticated, isAdmin });
+    return res.status(200).json({ isAuthenticated, isAdmin,id });
   } catch (error) {
     console.error(error); // Log the error for debugging
     return res
