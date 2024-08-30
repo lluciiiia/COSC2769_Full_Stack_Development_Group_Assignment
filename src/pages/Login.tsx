@@ -4,6 +4,7 @@ import { loginUserThunk } from "../features/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/icons/logo.png";
 import { AppDispatch } from "../app/store";
+
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -97,7 +98,7 @@ const Login: React.FC = () => {
             Log In
           </button>
           <p className="mt-2 text-center text-sm text-gray-700">
-            Dont have account?{" "}
+            Don't have account?
             <Link to="sign-up" className="cursor-pointer font-bold">
               Register
             </Link>

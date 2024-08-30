@@ -2,7 +2,34 @@ import Group from "../models/group";
 import Post from "../models/post";
 import User from "../models/user";
 
-export const getAllPosts = async (userId: string) => {
+export const getAllPosts = async () => {
+  try {
+    const posts = await Post.find().populate({
+      path: "comments",
+      populate: {
+        path: "reactions",
+        populate: {
+          path: "userId", // Populate user details for reactions
+          select: "name profilePictureURL", // Select the fields you want
+        },
+      },
+    });
+
+    // Filter and enhance posts based on visibility & their own posts
+    const enhancedPosts = await Promise.all(
+      posts.map(async (post) => {
+        return await enhancePostWithUser(post);
+      }),
+    );
+
+    return enhancedPosts;
+  } catch (error) {
+    console.error("Error fetching posts", error);
+    throw new Error("Failed to fetch posts");
+  }
+};
+
+export const getPostsForUser = async (userId: string) => {
   try {
     const user = await User.findById(userId);
     if (!user) throw new Error(`User not found for userId: ${userId}`);

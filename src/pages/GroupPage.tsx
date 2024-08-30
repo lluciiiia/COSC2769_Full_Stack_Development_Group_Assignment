@@ -71,26 +71,23 @@ export default function GroupPage() {
             />
           </div>
         </header>
-        <div className="ml-64 mt-4">
-          <h1 className="text-xl font-bold text-black">{group.name}</h1>
-          <p className="text-sm text-gray-600">
-            {group.members ? group.members.length : 0} members
-          </p>
-        </div>
-        <div>
-          <div className="mt-4 px-4">
-            <div className="flex items-start">
-              <div className="ml-auto flex space-x-2">
-                <button className="rounded-md bg-red-600 px-4 py-2 text-white shadow-md">
-                  Leave Group
-                </button>
-                <button className="rounded-md border border-gray-400 bg-white px-4 py-2 text-black shadow-md">
-                  Report
-                </button>
-              </div>
-            </div>
+        <div className="ml-64 mt-4 flex">
+          <div className="flex flex-col">
+            <h1 className="text-xl font-bold text-black">{group.name}</h1>
+            <p className="text-sm text-gray-600">
+              {group.members ? group.members.length : 0} members
+            </p>
+          </div>
+          <div className="ml-auto mr-2 flex space-x-2">
+            <button className="rounded-md bg-red-600 px-2 text-sm text-white shadow-md">
+              Leave Group
+            </button>
+            <button className="rounded-md border border-gray-400 bg-white px-2 text-sm text-black shadow-md">
+              Report
+            </button>
           </div>
         </div>
+        <div></div>
 
         <nav className="mt-4 border-b border-gray-300 bg-white">
           <div className="flex justify-around py-2">

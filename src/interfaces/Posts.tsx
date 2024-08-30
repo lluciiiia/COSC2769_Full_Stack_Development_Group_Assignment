@@ -30,6 +30,22 @@ export interface ProfileSectionParams {
 export interface ReactionSectionProps {
   handleClick: () => void;
 }
+export interface AdminSectionProps {
+  handleClick: () => void;
+  post: {
+    _id: string;
+    creatorId: string;
+    content: string;
+    imageURL?: string;
+    createdAt: string;
+    visibility: string;
+    profileSection?: {
+      profileImage?: string;
+      profileName?: string;
+    };
+    isDetail: boolean;
+  };
+}
 
 export interface PostProps {
   id: string;
@@ -48,7 +64,7 @@ export interface PostState {
   groupPost: PostParams2[];
 }
 
-export interface PostParams2 {
+export interface GroupPostParams {
   _id?: string;
   creatorId: {
     _id: string;
@@ -58,12 +74,13 @@ export interface PostParams2 {
   groupId?: string;
   content: string;
   imageURL?: string;
-  createdAt?: Date;
+  createdAt: Date;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
-  comments?: Comment[];
+  comments: Comment[];
   reactions?: string[];
   isDetail?: boolean;
   profileSection?: ProfileSectionParams;
+  history: PostHistory[];
 }
 
 export interface PostFormProps {

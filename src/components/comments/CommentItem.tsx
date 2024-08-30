@@ -76,9 +76,14 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
               {comment.profileSection.profileName}
             </div>
             <div className="ml-auto flex items-center justify-center gap-1">
-              <p className="text-xs text-gray-500">
-                {formatRelativeTime(comment.createdAt)}
-              </p>
+              <div className="flex flex-col">
+                <p className="text-xs text-gray-500">
+                  {formatRelativeTime(comment.createdAt)}
+                </p>
+                {comment.history?.length > 0 ? (
+                  <p className="text-right text-xs text-gray-500">(Edited)</p>
+                ) : null}
+              </div>
               <div>
                 <img
                   src="/src/assets/svgs/ThreeDots.svg"

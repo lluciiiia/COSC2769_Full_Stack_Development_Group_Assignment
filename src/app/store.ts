@@ -3,6 +3,7 @@ import userReducer from "../features/userSlice";
 import groupReducer from "../features/groupSlice";
 import postsReducer from "../features/postsSlice";
 import authReducer from "../features/authSlice";
+import adminReducer from "../features/adminSlice";
 
 // Combine reducers to create the root reducer
 export const rootReducer = combineReducers({
@@ -10,6 +11,7 @@ export const rootReducer = combineReducers({
   groups: groupReducer, // Groups state
   posts: postsReducer, // Posts state
   auth: authReducer,   // Authentication state
+  admin: adminReducer
 });
 
 // Type for the entire Redux store state

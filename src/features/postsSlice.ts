@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PostState } from "../interfaces/Posts";
 import {
+  getAllPosts,
   getPosts,
   getPostsByCreatorId,
   getPostsByGroup,
@@ -26,6 +27,9 @@ const postSlice = createSlice({
     });
     builder.addCase(getPostsByCreatorId.fulfilled, (state, action) => {
       state.creatorPost = action.payload;
+    });
+    builder.addCase(getAllPosts.fulfilled, (state, action) => {
+      state.posts = action.payload;
     });
     builder.addCase(getPostsByGroup.fulfilled, (state, action) => {
       state.groupPost = action.payload;
