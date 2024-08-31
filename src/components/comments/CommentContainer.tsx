@@ -4,6 +4,7 @@ import CommentItem from "./CommentItem.tsx";
 import CommentForm from "./CommentForm.tsx";
 import { createComment } from "../../controllers/comments.tsx";
 import ReactionButton from "../reactions/reactionButtonProps.js";
+
 const CommentContainer: React.FC<CommentContainerProps> = ({
   initComments,
   userId,
@@ -11,10 +12,14 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
 }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState<string>("");
+
   const handleReaction = (reaction: string) => {
-    console.log(`User reacted with: ${reaction} on comment ID: ${comments._id}`);
+    console.log(
+      `User reacted with: ${reaction} on comment ID: ${comments._id}`,
+    );
     // Here you can handle the reaction logic, e.g., send it to the server
   };
+
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -25,7 +30,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
     };
 
     fetchComments();
-  }, []);
+  }, [initComments]); // Added initComments to dependencies
 
   const handleCommentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setNewComment(e.target.value);
@@ -63,10 +68,12 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
             </div>
           ) : (
             comments.map((comment) => (
-              <div>
-                <CommentItem key={comment._id} comment={comment} />
+              <div key={comment._id}>
+                {" "}
+                {/* Set key on the outermost div */}
+                <CommentItem comment={comment} />
                 <div className="">
-                  <ReactionButton onReact={handleReaction}></ReactionButton>
+                  <ReactionButton onReact={handleReaction} />
                 </div>
               </div>
             ))
