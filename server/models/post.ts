@@ -10,11 +10,9 @@ const postSchema = new mongoose.Schema({
   groupId: String,
 
   content: { type: String, required: true },
-  imageURL: { type: String },
-  
-  images: { 
-    type: [{type: String}], 
-    
+
+  images: {
+    type: [{ type: String }],
   },
   visibility: {
     type: String,
@@ -30,7 +28,7 @@ const postSchema = new mongoose.Schema({
   history: [
     {
       content: { type: String, required: true },
-      imageURL: { type: String },
+      images: [{ type: String }],
       updatedAt: { type: Date, default: Date.now },
     },
   ],

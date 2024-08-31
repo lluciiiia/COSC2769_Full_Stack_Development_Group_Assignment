@@ -57,12 +57,14 @@ const Navbar = () => {
   return (
     <>
       <nav className="fixed left-0 right-0 top-0 z-10 flex items-center justify-between bg-[#FFC123] p-2">
-        <div className="flex items-center gap-2">
+        <div
+          className="flex cursor-pointer items-center gap-2"
+          onClick={handleHomeClick}
+        >
           <img
             src={logo}
             alt="BuZzNet Logo"
-            className="h-12 w-12 cursor-pointer object-contain"
-            onClick={handleHomeClick}
+            className="h-12 w-12 object-contain"
           />
           <h1 className="text-2xl font-bold">BuZzNet</h1>
         </div>
