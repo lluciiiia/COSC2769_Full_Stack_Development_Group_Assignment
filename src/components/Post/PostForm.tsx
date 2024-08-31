@@ -104,7 +104,7 @@ const PostForm: React.FC<PostFormProps> = ({
 
           {images.length > 0 && (
             <div className="flex gap-2 flex-wrap">
-              {images.map((image, index) => (
+              {images.slice(0, 4).map((image, index) => (
                 <div key={index} className="relative w-24 h-24">
                   <img
                     src={image} // Displaying base64 images directly
@@ -120,9 +120,9 @@ const PostForm: React.FC<PostFormProps> = ({
                   </button>
                 </div>
               ))}
-              {images.length > 3 && (
+              {images.length > 4 && (
                 <div className="relative w-24 h-24 flex items-center justify-center rounded-md bg-gray-200 text-lg font-bold text-gray-600">
-                  +{images.length - 3} more
+                  +{images.length - 4} more
                 </div>
               )}
             </div>
@@ -150,3 +150,4 @@ const PostForm: React.FC<PostFormProps> = ({
 };
 
 export default PostForm;
+
