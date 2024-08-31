@@ -32,7 +32,7 @@ const ReactionButton: React.FC<ReactionButtonProps> = ({ onReact, initialReactio
       case "ANGRY":
         return "😡";
       default:
-        return "LIKE";
+        return "REACT";
     }
   };
 
