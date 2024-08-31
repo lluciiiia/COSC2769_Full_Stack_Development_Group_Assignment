@@ -1,6 +1,6 @@
 import React from "react";
 import { PostParams } from "../../interfaces/Posts";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ReactionSection } from "./ReactionSection";
 import { ProfileSection } from "./ProfileSection";
 import CommentItem from "../comments/CommentItem";
@@ -9,7 +9,7 @@ const PostContainer: React.FC<PostParams> = ({
   _id,
   creatorId,
   content,
-  imageURL,
+  images,
   createdAt,
   visibility,
   profileSection,
@@ -36,7 +36,7 @@ const PostContainer: React.FC<PostParams> = ({
           _id,
           creatorId,
           content,
-          imageURL,
+          images,
           createdAt,
           visibility,
           profileSection,
@@ -45,15 +45,24 @@ const PostContainer: React.FC<PostParams> = ({
           comments,
         }}
       />
+
       {/* Post Content */}
       <div className="text-center">
         <p className="mb-2 ml-5 text-left text-lg font-semibold">{content}</p>
-        {imageURL && (
-          <img
-            src={imageURL}
-            alt="Post Content"
-            className={`h-[300px] ${isDetail ? "w-[500px]" : "w-full rounded-lg"}`}
-          />
+        {images && images.length > 0 && (
+          <div
+            className="flex space-x-4 overflow-x-auto"
+            style={{ scrollbarWidth: "thin" }} // For Firefox
+          >
+            {images.map((image, index) => (
+              <img
+                key={index}
+                src={image}
+                alt={`Post image ${index + 1}`}
+                className="h-[300px] w-[300px] flex-shrink-0 rounded-lg" // Fixed height and width
+              />
+            ))}
+          </div>
         )}
       </div>
 

@@ -70,7 +70,7 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
         creatorId: userId,
         content: content,
         visibility: visibility,
-        images: images, // Use the base64 images
+        images: images, 
         groupId: visibility === "GROUP" ? selectedGroupId : undefined,
         history: post?.history ? post.history : [],
         comments: post?.comments ? post.comments : [],
@@ -82,8 +82,8 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
         // Directly use the postParams object
         let result;
         if (post) {
-            // postParams._id = post._id; // Add the post ID for updates
-            // result = await dispatch(updatePost(postParams)).unwrap(); // Use the updated postParams
+            postParams._id = post._id; // Add the post ID for updates
+            result = await dispatch(updatePost(postParams)).unwrap(); // Use the updated postParams
 
         } else {
             result = await dispatch(createPost(postParams)).unwrap(); // Use the new postParams
