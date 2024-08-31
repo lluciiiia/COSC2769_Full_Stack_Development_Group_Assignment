@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import logo from "../assets/icons/logo.png";
@@ -14,13 +14,12 @@ import ProfileButtonModal from "./ProfileButtonModal";
 
 const Navbar = () => {
   const { userId } = useParams();
-
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [isProfileModalOpen, setProfileOpen] = useState(false);
   const navigate = useNavigate();
-  
 
+ 
   const handleHomeClick = () => {
     navigate(`/home`);
   };

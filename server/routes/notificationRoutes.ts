@@ -1,23 +1,43 @@
 import express from "express";
 import Notifications from "../models/notification";
+import mongoose from "mongoose";
+import { isAuthenticated } from "../middleware/authenticate"; // Import the middleware
+
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", isAuthenticated, async (req, res) => {
   try {
-    const noti = await Notifications.find();
-    res.json(noti);
+    const notifications = await Notifications.find();
+    res.json(notifications);
   } catch (error) {
-    console.error("Error fetching posts", error);
-    res.status(500).json({ error: "Falied to fetch posts" });
+    console.error("Error fetching notifications", error);
+    res.status(500).json({ error: "Failed to fetch notifications" });
   }
 });
 
-router.post("/", async (req, res) => {
+router.get("/userNoti", isAuthenticated, async (req, res) => {
+  try {
+    // Convert the session user ID to a MongoDB ObjectId
+    const userObjectId = new mongoose.Types.ObjectId(req.session.user.id);
+
+    // Find notifications where the user is the receiver
+    const notifications = await Notifications.find({
+      receiverId: userObjectId,
+    }).populate("senderId", "name email profilePictureURL");
+
+    res.json(notifications);
+  } catch (error) {
+    console.error("Error fetching notifications", error);
+    res.status(500).json({ error: "Failed to fetch notifications" });
+  }
+});
+
+router.post("/", isAuthenticated, async (req, res) => {
   try {
     const newNoti = new Notifications(req.body);
     console.log(newNoti);
     await newNoti.save();
-    res.status(201).json({ message: "notification created", noti: newNoti });
+    res.status(201).json({ message: "Notification created", noti: newNoti });
   } catch (error: any) {
     console.error("Error creating notification:", error);
 
@@ -28,7 +48,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", isAuthenticated, async (req, res) => {
   try {
     const notiId = req.params.id;
     await Notifications.findByIdAndDelete(notiId);
