@@ -183,24 +183,22 @@ const enhancePostWithUser = async (post: any) => {
     comments: commentsWithProfileSection,
   };
 };
-
 export const createPost = async (postData: any) => {
   try {
-    // Check if creator exists
+    
+
     const user = await User.findById(postData.creatorId);
     if (!user) throw new Error("User not found with the provided creatorId");
 
-    // Check if group exists
-    if (postData.groupId && postData.groupId != "") {
+    // Check if group exists and if the user is a member
+    if (postData.groupId) {
       const group = await Group.findById(postData.groupId);
-
       if (!group) throw new Error("Group not found with the provided groupId");
-
-      // Check if the user is a member of the group
       const isMember = group.members.includes(postData.creatorId);
       if (!isMember) throw new Error("User is not a member of the group");
     }
 
+    // Create new post
     const newPost = new Post(postData);
     await newPost.save();
     return newPost;
@@ -209,6 +207,8 @@ export const createPost = async (postData: any) => {
     throw new Error("Failed to create post");
   }
 };
+
+
 
 export const updatePost = async (postId: string, postData: any) => {
   try {

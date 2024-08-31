@@ -19,9 +19,10 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
   const [imageURL, setImageURL] = useState("");
   const [groups, setGroups] = useState<GroupType[]>([]);
   const [selectedGroupId, setSelectedGroupId] = useState<string>("");
+  const [images, setImages] = useState<string[]>([]); // Change File[] to string[]
 
   useEffect(() => {
-    // Disable scrolling on the body when the modal is open
+
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else {
@@ -29,14 +30,16 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
     }
 
     if (isOpen && post) {
+      console.log("Editing post:", post);
       setContent(post.content);
       setVisibility(post.visibility);
-      setImageURL(post.imageURL);
+      setImages(post.images || []); // Expecting post.images to be string[]
       setSelectedGroupId(post.groupId || "");
     } else if (isOpen) {
+      console.log("Creating new post");
       setContent("");
       setVisibility("PUBLIC");
-      setImageURL("");
+      setImages([]);
       setSelectedGroupId("");
     }
 
@@ -56,51 +59,51 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
 
     if (isOpen) fetchGroups();
 
-    // Re-enable scrolling when the modal closes
     return () => {
       document.body.style.overflow = "auto";
     };
   }, [isOpen, post, userId]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const postData: PostParams = {
+    // Log the data structure to be sent
+    const postParams = {
         creatorId: userId,
-        content,
-        visibility,
-        imageURL,
+        content: content,
+        visibility: visibility,
+        images: images, 
         groupId: visibility === "GROUP" ? selectedGroupId : undefined,
         history: post?.history ? post.history : [],
         comments: post?.comments ? post.comments : [],
         createdAt: post?.createdAt ? post.createdAt : new Date(),
       };
 
-      let result;
-      if (post) {
-        result = await dispatch(
-          updatePost({ ...postData, _id: post._id }),
-        ).unwrap();
-        console.log("Post updated successfully:", result);
-      } else {
-        result = await dispatch(createPost(postData)).unwrap();
-        console.log("Post created successfully:", result);
-      }
 
-      onClose();
-      window.location.reload();
+    try {
+        // Directly use the postParams object
+        let result;
+        if (post) {
+            postParams._id = post._id; // Add the post ID for updates
+            result = await dispatch(updatePost(postParams)).unwrap(); // Use the updated postParams
+
+        } else {
+            result = await dispatch(createPost(postParams)).unwrap(); // Use the new postParams
+
+        }
+
+        onClose();
+        window.location.reload(); 
     } catch (error) {
-      console.error("Error saving post:", error);
-      alert("An error occurred while saving the post");
+        console.error("Error saving post:", error); // Log any errors that occur
+        alert("An error occurred while saving the post");
     }
-  };
+};
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-      <div className="w-full max-w-lg rounded-lg bg-white p-6">
-        <h2 className="mb-4 text-xl font-bold">
+      <div className="w-full max-w-xl rounded-lg bg-white p-6">
+        <h2 className="mb-7 text-xl font-bold">
           {post ? "Edit Your Post" : "Buzz your mind!"}
         </h2>
         {visibility === "GROUP" && (
@@ -126,9 +129,9 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
           setContent={setContent}
           visibility={visibility}
           setVisibility={setVisibility}
-          imageURL={imageURL}
-          setImageURL={setImageURL}
-          onSubmit={handleSubmit}
+          images={images}
+          setImages={setImages}
+          onSubmit={handleSubmit}  
           onClose={onClose}
           isEdit={!!post}
         />
