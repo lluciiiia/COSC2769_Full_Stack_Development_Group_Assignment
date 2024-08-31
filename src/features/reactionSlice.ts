@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ReactProps } from "../interfaces/reactions";
-import { createReaction } from "../controllers/reactions";
+import { createReaction, fetchReaction } from "../controllers/reactions";
 
 const initialState: ReactProps = {
     createComplete: false,
-    reactions: []
+    reactions: [],
+    isReacted: false,
 };
 
 const reactSlice = createSlice({
@@ -15,6 +16,15 @@ const reactSlice = createSlice({
         builder.addCase(createReaction.fulfilled, (state, action) => {
             state.createComplete = true;
             state.reactions.push(action.payload);
+        });
+        builder.addCase(fetchReaction.fulfilled, (state, action) => {
+            if (action.payload && action.payload.length > 0) {
+                state.isReacted = true; 
+                state.reactions = action.payload;
+            } else {
+                state.isReacted = false;  
+                state.reactions = [];
+            }
         });
     },
 });

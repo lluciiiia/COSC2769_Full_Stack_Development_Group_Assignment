@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent } from "react";
 import { ProfileSectionParams } from "./Posts";
-
+import { Reaction } from "./reactions";
 export interface CommentHistory {
   content: string;
   updatedAt: Date;
@@ -12,6 +12,7 @@ export interface Comment {
   userId: string;
   content: string;
   profileSection: ProfileSectionParams;
+  reactions: Reaction[];
   createdAt: Date;
   history: CommentHistory[];
 }
