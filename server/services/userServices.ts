@@ -79,11 +79,17 @@ export const updateUser = async (userId: string, updateData: any) => {
 
 export const unfriendById = async (userId: string, friendId: string) => {
   try {
-    const user = await User.findById(userId);
+    const userObjectId = new mongoose.Types.ObjectId(userId);
     const friendObjectId = new mongoose.Types.ObjectId(friendId);
 
+    const user = await User.findById(userObjectId);
     if (!user) {
       throw new Error("User not found");
+    }
+
+    const friend = await User.findById(friendObjectId);
+    if (!friend) {
+      throw new Error("Friend not found");
     }
 
     if (!user.friends.includes(friendObjectId)) {
@@ -94,7 +100,12 @@ export const unfriendById = async (userId: string, friendId: string) => {
       (friend) => friend.toString() !== friendId,
     );
 
+    friend.friends = friend.friends.filter(
+      (user) => user.toString() !== userId,
+    );
+
     await user.save();
+    await friend.save();
   } catch (error) {
     console.error("Error removing friend", error);
     throw new Error("Failed to remove friend");

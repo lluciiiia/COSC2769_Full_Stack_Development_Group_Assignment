@@ -10,6 +10,7 @@ import ProfileEditModal from "../components/profiles/ProfileEditModal";
 import LoadingSpinner from "../assets/icons/Loading";
 import { selectAuthState } from "../features/authSlice";
 import { selectCurrentUser, selectViewedUser } from "../features/userSlice";
+import { fetchSentFriendRequests } from "../controllers/notification";
 
 const Profile = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -17,7 +18,7 @@ const Profile = () => {
   const { id } = useSelector(selectAuthState);
   const { profileId } = useParams();
 
-  const location = useLocation(); 
+  const location = useLocation();
 
   const [loading, setLoading] = useState(true);
 
@@ -31,6 +32,8 @@ const Profile = () => {
         setLoading(false);
       });
     }
+
+    dispatch(fetchSentFriendRequests());
   }, [profileId, id, dispatch, location.key]);
 
   const viewedUser = useSelector(selectViewedUser);

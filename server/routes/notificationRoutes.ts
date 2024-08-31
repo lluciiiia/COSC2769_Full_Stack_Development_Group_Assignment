@@ -4,20 +4,32 @@ import {
   acceptedFriendRequestNotification,
   deleteNotification,
   getNotificationByReciver,
+  getNotificationBySender,
 } from "../services/notificationsService";
 
 const router = express.Router();
 
-//get notification based on recivers
-router.get("/", isAuthenticated, async (req, res) => {
+//get notification by recivers
+router.get("/received", isAuthenticated, async (req, res) => {
   const userId = req.session.user.id;
 
   try {
     const notifications = await getNotificationByReciver(userId);
-    console.log("route", notifications);
     res.json(notifications);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch notifications" });
+  }
+});
+
+//get notification by senders
+router.get("/sent", isAuthenticated, async (req, res) => {
+  const userId = req.session.user.id;
+
+  try {
+    const notifications = await getNotificationBySender(userId);
+    res.json(notifications);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch sent notifications" });
   }
 });
 

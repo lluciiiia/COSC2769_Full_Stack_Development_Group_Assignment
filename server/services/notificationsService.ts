@@ -3,15 +3,29 @@ import Notifications from "../models/notification";
 
 export const getNotificationByReciver = async (receiverId: string) => {
   try {
-    const receiverIdObject = new mongoose.Types.ObjectId(receiverId);
+    const receiverObjectId = new mongoose.Types.ObjectId(receiverId);
 
     const notifications = await Notifications.find({
-      receiverId: receiverIdObject,
+      receiverId: receiverObjectId,
     }).populate({
       path: "senderId", // The field in Notification schema
       select: "name profilePictureURL _id", // The fields you want to retrieve from User model
     });
-    console.log(notifications);
+
+    return notifications;
+  } catch (error) {
+    console.error("Error fetching notifications", error);
+    throw new Error("Failed to fetch notifications ");
+  }
+};
+
+export const getNotificationBySender = async (senderId: string) => {
+  try {
+    const senderObjectId = new mongoose.Types.ObjectId(senderId);
+
+    const notifications = await Notifications.find({
+      senderId: senderObjectId,
+    });
 
     return notifications;
   } catch (error) {
@@ -64,7 +78,7 @@ export const acceptedFriendRequestNotification = async (
       throw new Error("Notification not found");
     }
 
-    return notification;
+    return { message: "Friend request accepted successfully." };
   } catch (error) {
     console.error("Error accepting friend request notifications", error);
     throw new Error("Failed to accept friend requestnotifications");

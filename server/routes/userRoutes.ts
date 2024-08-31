@@ -10,6 +10,7 @@ import {
   acceptFriendRequest,
 } from "../services/userServices";
 import { isAuthenticated } from "../middleware/authenticate";
+
 const router = express.Router();
 
 //GET /user- fetch all user
