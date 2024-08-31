@@ -4,7 +4,7 @@ import groupReducer from "../features/groupSlice";
 import postsReducer from "../features/postsSlice";
 import authReducer from "../features/authSlice";
 import adminReducer from "../features/adminSlice";
-import notiReducer from "../features/notificationSlice";
+import notificationReducer from "../features/notificationSlice";
 import reactionReducer from "../features/reactionSlice";
 // Combine reducers to create the root reducer
 export const rootReducer = combineReducers({
@@ -13,7 +13,7 @@ export const rootReducer = combineReducers({
   posts: postsReducer, // Posts state
   auth: authReducer,   // Authentication state
   admin: adminReducer,
-  noti: notiReducer,
+  notifications: notificationReducer,
   react: reactionReducer,
 });
 

@@ -4,6 +4,7 @@ import {
   getAllUsers,
   getUser,
   getViewedUser,
+  sendFriendRequest,
   unfriendById,
 } from "../controllers/user";
 import { AppState } from "../app/store";
@@ -40,8 +41,10 @@ const userSlice = createSlice({
     builder.addCase(getViewedUser.fulfilled, (state, action) => {
       state.viewedUser = action.payload;
     });
+    builder.addCase(sendFriendRequest.fulfilled, (state, action) => {
+      console.log("Friend request is sent:", action.payload);
+    });
     builder.addCase(unfriendById.fulfilled, (state, action) => {});
-    
   },
 });
 

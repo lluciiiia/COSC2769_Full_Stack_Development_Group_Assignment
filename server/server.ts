@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 import groupRoutes from "./routes/groupRoutes";
 import userRoutes from "./routes/userRoutes";
 import postRoutes from "./routes/postRoutes";
-import Notification from "./routes/notificationRoutes";
+import notificationRoutes from "./routes/notificationRoutes";
 import commentRoutes from "./routes/commentRoutes";
 import reactionRoutes from "./routes/reactionRoutes";
 import authenticationRoutes from "./routes/authenticationRoutes";
@@ -43,7 +43,7 @@ app.use(
 app.use("/api/users", userRoutes);
 app.use("/api/groups", groupRoutes);
 app.use("/api/posts", postRoutes);
-app.use("/api/notifications", Notification);
+app.use("/api/notifications", notificationRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/reactions", reactionRoutes);
 app.use("/api/user", authenticationRoutes);

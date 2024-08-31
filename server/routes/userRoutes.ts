@@ -7,7 +7,10 @@ import {
   unfriendById,
   updateUser,
   addFriend,
+  acceptFriendRequest,
 } from "../services/userServices";
+import { isAuthenticated } from "../middleware/authenticate";
+
 const router = express.Router();
 
 //GET /user- fetch all user
@@ -30,21 +33,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.put("/addfriend/:friendId", async (req, res) => {
-  try {
-    // Use hardcoded user ID for testing
-    const userId = req.session.user.id;
-    const { friendId } = req.params;
-
-    const result = await addFriend(userId, friendId);
-
-    res.status(200).json(result);
-  } catch (error) {
-    console.error("Error adding friend:", error);
-    res.status(500).json({ error: "Failed to add friend" });
-  }
-});
-
 router.get("/view/:id", async (req, res) => {
   try {
     const userId = req.params.id;
@@ -52,6 +40,31 @@ router.get("/view/:id", async (req, res) => {
     res.json(user);
   } catch (error) {
     res.status(500).json({ error: error });
+  }
+});
+
+router.put("/addfriend/:friendId", async (req, res) => {
+  try {
+    const userId = req.session.user.id;
+    const { friendId } = req.params;
+
+    const result = await addFriend(userId, friendId);
+
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to add friend" });
+  }
+});
+
+router.put("/friend-requests/:friendId/accept", async (req, res) => {
+  try {
+    const userId = req.session.user.id;
+    const { friendId } = req.params;
+
+    const result = await acceptFriendRequest(userId, friendId);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to accpet friend request" });
   }
 });
 

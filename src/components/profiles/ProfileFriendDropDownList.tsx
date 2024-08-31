@@ -10,8 +10,9 @@ const ProfileFriendDropDownList = ({ friendId, isAuthenticatedUser }) => {
   const dispatch: AppDispatch = useDispatch();
 
   const handleUnFriend = async () => {
-    await dispatch(unfriendById({ userId: id, friendId }));
-    dispatch(getUser(id)); // fetch the user again
+    await dispatch(unfriendById(friendId)).then(() => {
+      dispatch(getUser(id)); // fetch the user again
+    });
   };
 
   const navigate = useNavigate();
