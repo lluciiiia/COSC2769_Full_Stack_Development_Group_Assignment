@@ -8,10 +8,10 @@ const router = express.Router();
 
 router.post("/userReact", async (req, res) => {
   try {
-    const { postId, reactionType } = req.body;
+    const { postId, reactionType,sentFrom } = req.body;
     const userId = req.session.user.id;
     // console.log(postId + "HELLO ");
-    const result = await commentReaction(postId, userId, reactionType);
+    const result = await commentReaction(postId, userId, reactionType,sentFrom);
     res.status(201).json({ message: "React created", post: result });
   } catch (error: any) {
     console.error("Error creating react:", error);

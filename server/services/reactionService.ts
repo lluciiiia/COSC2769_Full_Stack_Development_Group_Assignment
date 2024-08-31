@@ -1,15 +1,27 @@
 import Comment from "../models/comment";
 import Reaction from "../models/reactions";
+import Post from "../models/post";
 
 export const commentReaction = async (
   postId: string,
   userId: string,
   reactionType: string,
+  targetType: string, // Renamed for clarity
 ) => {
   try {
-    const post = await Comment.findById(postId);
+    let post;
+    if (targetType === "post") {
+      post = await Post.findById(postId);
+    } else if (targetType === "comment") {
+      post = await Comment.findById(postId);
+    } else {
+      throw new Error("Invalid target type");
+    }
+
     if (!post) {
-      throw new Error("Comment not found");
+      throw new Error(
+        `${targetType.charAt(0).toUpperCase() + targetType.slice(1)} not found`,
+      );
     }
 
     let existingReaction = await Reaction.findOne({ postId, userId });
@@ -42,11 +54,11 @@ export const fetchingUserReact = async (postId: string, userId: string) => {
     const existingReaction = await Reaction.findOne({ postId, userId });
 
     if (!existingReaction) {
-      throw new Error("raction can not found with the provided id");
+      throw new Error("Reaction not found with the provided id");
     }
     return existingReaction;
   } catch (error) {
-    console.error("Error adding/updating reaction", error);
-    throw new Error("Failed to add/update reaction");
+    console.error("Error fetching reaction", error);
+    throw new Error("Failed to fetch reaction");
   }
 };

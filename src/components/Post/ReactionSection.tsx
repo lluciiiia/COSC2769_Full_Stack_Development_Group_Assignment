@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ReactionSectionProps } from "../../interfaces/Posts";
 import { LikeIcon } from "../../assets/icons/LikeIcon";
 import { CommentIcon } from "../../assets/icons/CommentIcon";
@@ -8,8 +8,9 @@ export const ReactionSection: React.FC<ReactionSectionProps> = ({
   onReact,
   initialReaction,
   isReacted,
+  reactions
 }) => {
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(isReacted);
   const [showReactions, setShowReactions] = useState(false);
   const [reactionType, setReactionType] = useState(initialReaction);
 
