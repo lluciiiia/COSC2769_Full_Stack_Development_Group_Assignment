@@ -2,7 +2,7 @@ import React from "react";
 
 interface HistoryEntry {
   content: string;
-  imageURL?: string;
+  images?: string[];
   updatedAt: Date;
 }
 
@@ -10,14 +10,12 @@ interface HistoryModalProps<T extends HistoryEntry> {
   history: T[];
   onClose: () => void;
   title: string;
-  showImage?: boolean;
 }
 
 const HistoryModal = <T extends HistoryEntry>({
   history,
   onClose,
   title,
-  showImage = false,
 }: HistoryModalProps<T>) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -41,12 +39,19 @@ const HistoryModal = <T extends HistoryEntry>({
                   </p>
                 </div>
                 <div className="mt-2 flex justify-center">
-                  {showImage && entry.imageURL && (
-                    <img
-                      src={entry.imageURL}
-                      alt="History image"
-                      className="max-w-full rounded"
-                    />
+                  {entry.images && entry.images.length > 0 && (
+                    <div
+                      className="flex space-x-4 overflow-x-auto"
+                      style={{ scrollbarWidth: "thin" }} // For Firefox
+                    >
+                      {entry.images.map((image, index) => (
+                        <img
+                          key={index}
+                          src={image}
+                          className="h-[100px] w-[100px] flex-shrink-0 rounded-lg" // Fixed height and width
+                        />
+                      ))}
+                    </div>
                   )}
                 </div>
               </li>

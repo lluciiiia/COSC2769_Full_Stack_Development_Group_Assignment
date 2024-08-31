@@ -12,12 +12,7 @@ const PostHistoryModal: React.FC<PostHistoryModalProps> = ({
   onClose,
 }) => {
   return (
-    <HistoryModal
-      history={history}
-      onClose={onClose}
-      title="Edit History"
-      showImage={true}
-    />
+    <HistoryModal history={history} onClose={onClose} title="Edit History" />
   );
 };
 

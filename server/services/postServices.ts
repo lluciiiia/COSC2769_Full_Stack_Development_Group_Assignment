@@ -183,10 +183,9 @@ const enhancePostWithUser = async (post: any) => {
     comments: commentsWithProfileSection,
   };
 };
+
 export const createPost = async (postData: any) => {
   try {
-    
-
     const user = await User.findById(postData.creatorId);
     if (!user) throw new Error("User not found with the provided creatorId");
 
@@ -207,8 +206,6 @@ export const createPost = async (postData: any) => {
     throw new Error("Failed to create post");
   }
 };
-
-
 
 export const updatePost = async (postId: string, postData: any) => {
   try {
@@ -233,13 +230,13 @@ export const updatePost = async (postId: string, postData: any) => {
     // Push the current content and images to the history before updating
     post.history.push({
       content: post.content,
-      images: post.images,  // Assuming `images` field stores array of image URLs or base64 strings
+      images: post.images, // Assuming `images` field stores array of image URLs or base64 strings
       updatedAt: new Date(),
     });
 
     // Update the post with new data
     post.content = postData.content || post.content;
-    post.images = postData.images || post.images;  // Update images with the new array
+    post.images = postData.images || post.images; // Update images with the new array
     post.visibility = postData.visibility || post.visibility;
     post.updatedAt = new Date();
 
@@ -251,7 +248,6 @@ export const updatePost = async (postId: string, postData: any) => {
     throw new Error("Failed to update post");
   }
 };
-
 
 export const deletePostById = async (postId: String) => {
   try {

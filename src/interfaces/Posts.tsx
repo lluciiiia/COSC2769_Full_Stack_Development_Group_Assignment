@@ -2,7 +2,7 @@ import { Comment } from "./Comments";
 
 export interface PostHistory {
   content: string;
-  imageURL?: string;
+  images?: string[];
   updatedAt: Date;
 }
 
@@ -13,7 +13,7 @@ export interface PostParams {
   content: string;
   imageURL?: string;
   images?: string[]; // Change from File[] to string[]
-  createdAt?: Date;
+  createdAt: Date;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
   comments: Comment[];
   reactions?: string[];
