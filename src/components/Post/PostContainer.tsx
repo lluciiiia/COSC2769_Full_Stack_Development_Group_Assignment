@@ -1,7 +1,8 @@
 import React from "react";
 import { PostParams } from "../../interfaces/Posts";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ReactionSection } from "./ReactionSection";
+import { AdminSection } from "./AdminSection";
 import { ProfileSection } from "./ProfileSection";
 import CommentItem from "../comments/CommentItem";
 
@@ -18,10 +19,13 @@ const PostContainer: React.FC<PostParams> = ({
   comments,
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleClick = () => {
     navigate(`/posts/${_id}`);
   };
+
+  const isAdminPage = location.pathname === "/admin";
 
   return (
     <div
@@ -57,7 +61,25 @@ const PostContainer: React.FC<PostParams> = ({
         )}
       </div>
 
-      <ReactionSection handleClick={handleClick} />
+      {isAdminPage ? (
+        <AdminSection
+          handleClick={handleClick}
+          post={{
+            _id,
+            creatorId,
+            content,
+            imageURL,
+            createdAt,
+            visibility,
+            profileSection,
+            isDetail,
+            history,
+            comments,
+          }}
+        />
+      ) : (
+        <ReactionSection handleClick={handleClick} />
+      )}
 
       {/* Display comments if not in detail view and there are comments */}
       {!isDetail && comments?.length > 0 && (
