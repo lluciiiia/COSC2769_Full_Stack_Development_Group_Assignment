@@ -15,8 +15,7 @@ const PostHistoryModal: React.FC<PostHistoryModalProps> = ({
     <HistoryModal
       history={history}
       onClose={onClose}
-      title="Edit History"
-      showImage={true}
+      title="View Post History"
     />
   );
 };

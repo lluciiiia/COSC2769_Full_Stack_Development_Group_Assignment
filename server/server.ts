@@ -30,15 +30,14 @@ app.use(express.json());
 // Connect to MongoDB
 connectDB();
 
-app.use(session({
-  secret: secret,  // Replace with your own secret key
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false }  // Set to true if using HTTPS
-}));
-
-
-
+app.use(
+  session({
+    secret: secret, // Replace with your own secret key
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // Set to true if using HTTPS
+  }),
+);
 
 // Use different API routes
 app.use("/api/users", userRoutes);
@@ -48,7 +47,7 @@ app.use("/api/notifications", Notification);
 app.use("/api/comments", commentRoutes);
 app.use("/api/reactions", reactionRoutes);
 app.use("/api/user", authenticationRoutes);
-app.use("/api/session",sessionRoute );
+app.use("/api/session", sessionRoute);
 app.get("/", (req: Request, res: Response) => {
   res.json("From backend side");
 });

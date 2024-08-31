@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { PostParams } from "../../interfaces/Posts";
 import { useNavigate } from "react-router-dom";
 import { ReactionSection } from "./ReactionSection";
@@ -8,8 +8,9 @@ import CommentItem from "../comments/CommentItem";
 const PostContainer: React.FC<PostParams> = ({
   _id,
   creatorId,
+  groupId,
   content,
-  imageURL,
+  images,
   createdAt,
   visibility,
   profileSection,
@@ -18,10 +19,25 @@ const PostContainer: React.FC<PostParams> = ({
   comments,
 }) => {
   const navigate = useNavigate();
+  const [showFullContent, setShowFullContent] = useState(false);
 
   const handleClick = () => {
     navigate(`/posts/${_id}`);
   };
+
+  const handleToggleContent = () => {
+    setShowFullContent(!showFullContent);
+  };
+
+  // Define the maximum length for the excerpt
+  const maxLength = 100;
+
+  // Check if the content is too long
+  const isContentLong = content.length > maxLength;
+  const displayedContent =
+    isContentLong && !showFullContent
+      ? `${content.slice(0, maxLength)}...`
+      : content;
 
   return (
     <div
@@ -35,8 +51,9 @@ const PostContainer: React.FC<PostParams> = ({
         post={{
           _id,
           creatorId,
+          groupId,
           content,
-          imageURL,
+          images,
           createdAt,
           visibility,
           profileSection,
@@ -45,15 +62,42 @@ const PostContainer: React.FC<PostParams> = ({
           comments,
         }}
       />
+
       {/* Post Content */}
       <div className="text-center">
-        <p className="mb-2 ml-5 text-left text-lg font-semibold">{content}</p>
-        {imageURL && (
-          <img
-            src={imageURL}
-            alt="Post Content"
-            className={`h-[300px] ${isDetail ? "w-[500px]" : "w-full rounded-lg"}`}
-          />
+        <p className="mb-2 ml-5 text-left text-lg font-semibold">
+          {displayedContent}
+          {isContentLong && !showFullContent && (
+            <span
+              onClick={handleToggleContent}
+              className="ml-1 cursor-pointer text-[#FFC123]"
+            >
+              Read more
+            </span>
+          )}
+          {showFullContent && isContentLong && (
+            <span
+              onClick={handleToggleContent}
+              className="ml-1 cursor-pointer text-[#FFC123]"
+            >
+              Show less
+            </span>
+          )}
+        </p>
+        {images && images.length > 0 && (
+          <div
+            className="flex space-x-4 overflow-x-auto"
+            style={{ scrollbarWidth: "thin" }} // For Firefox
+          >
+            {images.map((image, index) => (
+              <img
+                key={index}
+                src={image}
+                alt={`Post image ${index + 1}`}
+                className="h-[300px] w-[300px] flex-shrink-0 rounded-lg" // Fixed height and width
+              />
+            ))}
+          </div>
         )}
       </div>
 

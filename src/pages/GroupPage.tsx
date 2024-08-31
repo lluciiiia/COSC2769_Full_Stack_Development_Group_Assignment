@@ -99,17 +99,24 @@ export default function GroupPage() {
             </p>
           </div>
           <div className="ml-auto mr-2 flex space-x-2">
-            {isMember && (
-              <button
-                onClick={handleCreatePost}
-                className="rounded-md bg-[#FFC123] px-2 text-sm text-white shadow-md"
-              >
-                Create Post
+            {isMember ? (
+              <>
+                <button
+                  onClick={handleCreatePost}
+                  className="rounded-md bg-[#FFC123] px-2 text-sm text-white shadow-md"
+                >
+                  Create Post
+                </button>
+                <button className="rounded-md bg-red-600 px-2 text-sm text-white shadow-md">
+                  Leave Group
+                </button>
+              </>
+            ) : (
+              <button className="rounded-md bg-[#FFC123] px-4 text-sm text-white shadow-md">
+                Join
               </button>
             )}
-            <button className="rounded-md bg-red-600 px-2 text-sm text-white shadow-md">
-              Leave Group
-            </button>
+
             <button className="rounded-md border border-gray-400 bg-white px-2 text-sm text-black shadow-md">
               Report
             </button>
@@ -161,6 +168,7 @@ export default function GroupPage() {
         onClose={handleCloseModal}
         userId={id}
         post={selectedPost}
+        groupId={groupId}
       />
     </div>
   );

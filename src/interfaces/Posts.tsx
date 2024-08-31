@@ -2,7 +2,7 @@ import { Comment } from "./Comments";
 
 export interface PostHistory {
   content: string;
-  imageURL?: string;
+  images?: string[];
   updatedAt: Date;
 }
 
@@ -11,7 +11,7 @@ export interface PostParams {
   creatorId: string;
   groupId?: string;
   content: string;
-  imageURL?: string;
+  images?: string[];
   createdAt: Date;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
   comments: Comment[];
@@ -36,7 +36,6 @@ export interface AdminSectionProps {
     _id: string;
     creatorId: string;
     content: string;
-    imageURL?: string;
     createdAt: string;
     visibility: string;
     profileSection?: {
@@ -73,7 +72,7 @@ export interface GroupPostParams {
   };
   groupId?: string;
   content: string;
-  imageURL?: string;
+  images?: string[];
   createdAt: Date;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
   comments: Comment[];
@@ -87,10 +86,9 @@ export interface PostFormProps {
   content: string;
   setContent: (content: string) => void;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
-  setVisibility: (visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP") => void;
-  imageURL: string;
-  setImageURL: (url: string) => void;
-  onSubmit: (e: React.FormEvent) => void;
+  images: string[];
+  setImages: (images: string[]) => void;
+  onSubmit: (formData: FormData) => void;
   onClose: () => void;
   isEdit: boolean;
 }

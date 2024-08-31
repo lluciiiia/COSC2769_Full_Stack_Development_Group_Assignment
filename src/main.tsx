@@ -18,6 +18,7 @@ import Admin from "./pages/Admin.tsx";
 import Layout from "./components/Layout.tsx";
 import GroupList from "./pages/GroupList";
 import ProtectedRoute from "./components/protectedRoutes";
+import UserSearch from "./pages/UserSearch"
 
 const router = createBrowserRouter([
   {
@@ -94,6 +95,10 @@ const router = createBrowserRouter([
             <Admin />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "/UserSearch",
+        element: <UserSearch />,
       },
     ],
   },

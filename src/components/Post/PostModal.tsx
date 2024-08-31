@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
-import { PostParams } from "../../interfaces/Posts";
 import PostForm from "./PostForm";
 import {
   createPost,
@@ -10,18 +9,17 @@ import {
 } from "../../controllers/posts";
 import { GroupType } from "../../interfaces/Group";
 
-const PostModal = ({ isOpen, onClose, userId, post }) => {
+const PostModal = ({ isOpen, onClose, userId, post, groupId }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [content, setContent] = useState("");
   const [visibility, setVisibility] = useState<
     "PUBLIC" | "FRIEND_ONLY" | "GROUP"
   >("PUBLIC");
-  const [imageURL, setImageURL] = useState("");
   const [groups, setGroups] = useState<GroupType[]>([]);
   const [selectedGroupId, setSelectedGroupId] = useState<string>("");
+  const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
-    // Disable scrolling on the body when the modal is open
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else {
@@ -29,25 +27,33 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
     }
 
     if (isOpen && post) {
+      console.log("Editing post:", post);
       setContent(post.content);
       setVisibility(post.visibility);
-      setImageURL(post.imageURL);
+      setImages(post.images || []); // Expecting post.images to be string[]
       setSelectedGroupId(post.groupId || "");
     } else if (isOpen) {
+      console.log("Creating new post");
       setContent("");
-      setVisibility("PUBLIC");
-      setImageURL("");
+      setImages([]);
       setSelectedGroupId("");
+
+      // Check if groupId is not empty and set visibility and selectedGroupId
+      if (groupId !== "") {
+        setVisibility("GROUP");
+        setSelectedGroupId(groupId);
+      } else {
+        setVisibility("PUBLIC"); // Default to PUBLIC if groupId is empty
+      }
     }
 
     const fetchGroups = async () => {
       try {
         const fetchedGroups: GroupType[] = await getGroupsByUserId(userId);
         setGroups(fetchedGroups);
-        if (fetchedGroups?.length > 0) {
+        // Only set selectedGroupId if groups are fetched
+        if (fetchedGroups?.length > 0 && selectedGroupId === "") {
           setSelectedGroupId(fetchedGroups[0]._id);
-        } else {
-          setSelectedGroupId("");
         }
       } catch (error) {
         console.error("Error fetching groups:", error);
@@ -56,35 +62,30 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
 
     if (isOpen) fetchGroups();
 
-    // Re-enable scrolling when the modal closes
     return () => {
       document.body.style.overflow = "auto";
     };
-  }, [isOpen, post, userId]);
+  }, [isOpen, post, userId, groupId]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const postData: PostParams = {
-        creatorId: userId,
-        content,
-        visibility,
-        imageURL,
-        groupId: visibility === "GROUP" ? selectedGroupId : undefined,
-        history: post?.history ? post.history : [],
-        comments: post?.comments ? post.comments : [],
-        createdAt: post?.createdAt ? post.createdAt : new Date(),
-      };
+    const postParams: any = {
+      creatorId: userId,
+      content: content,
+      visibility: visibility,
+      images: images,
+      groupId: visibility === "GROUP" ? selectedGroupId : undefined,
+      history: post?.history ? post.history : [],
+      comments: post?.comments ? post.comments : [],
+      createdAt: post?.createdAt ? post.createdAt : new Date(),
+    };
 
+    try {
       let result;
       if (post) {
-        result = await dispatch(
-          updatePost({ ...postData, _id: post._id }),
-        ).unwrap();
-        console.log("Post updated successfully:", result);
+        postParams._id = post._id; // Add the post ID for updates
+        result = await dispatch(updatePost(postParams)).unwrap();
       } else {
-        result = await dispatch(createPost(postData)).unwrap();
-        console.log("Post created successfully:", result);
+        result = await dispatch(createPost(postParams)).unwrap();
       }
 
       onClose();
@@ -99,35 +100,69 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-      <div className="w-full max-w-lg rounded-lg bg-white p-6">
-        <h2 className="mb-4 text-xl font-bold">
+      <div className="w-full max-w-xl rounded-lg bg-white p-6">
+        <h2 className="mb-7 text-xl font-bold">
           {post ? "Edit Your Post" : "Buzz your mind!"}
         </h2>
+
+        {/* Visibility Field */}
+        <div className="mb-6">
+          <label className="block text-lg font-bold text-gray-700">
+            Visibility
+          </label>
+          {groupId ? (
+            <p className="mt-2 block w-full rounded-md border border-gray-300 bg-gray-100 p-2 text-lg shadow-sm">
+              Group
+            </p>
+          ) : (
+            <select
+              className="mt-2 block w-full rounded-md border-gray-300 text-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              value={visibility}
+              onChange={(e) =>
+                setVisibility(
+                  e.target.value as "PUBLIC" | "FRIEND_ONLY" | "GROUP",
+                )
+              }
+            >
+              <option value="PUBLIC">Public</option>
+              <option value="FRIEND_ONLY">Friends Only</option>
+              <option value="GROUP">Group</option>
+            </select>
+          )}
+        </div>
+
+        {/* Group Selection Field */}
         {visibility === "GROUP" && (
           <div className="mb-4">
             <label className="mb-2 block text-base font-medium">
-              Select Group:
+              {groupId ? "Selected Group:" : "Select Group:"}
             </label>
-            <select
-              value={selectedGroupId}
-              onChange={(e) => setSelectedGroupId(e.target.value)}
-              className="block w-full rounded border border-gray-300 p-2 text-base"
-            >
-              {groups.map((group: GroupType) => (
-                <option key={group._id} value={group._id}>
-                  {group.name}
-                </option>
-              ))}
-            </select>
+            {groupId ? (
+              <p className="rounded border border-gray-300 bg-gray-100 p-2">
+                {groups[0]?.name || "None"}
+              </p>
+            ) : (
+              <select
+                value={selectedGroupId}
+                onChange={(e) => setSelectedGroupId(e.target.value)}
+                className="block w-full rounded border border-gray-300 p-2 text-base"
+              >
+                {groups.map((group: GroupType) => (
+                  <option key={group._id} value={group._id}>
+                    {group.name}
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
         )}
+
         <PostForm
           content={content}
           setContent={setContent}
           visibility={visibility}
-          setVisibility={setVisibility}
-          imageURL={imageURL}
-          setImageURL={setImageURL}
+          images={images}
+          setImages={setImages}
           onSubmit={handleSubmit}
           onClose={onClose}
           isEdit={!!post}
