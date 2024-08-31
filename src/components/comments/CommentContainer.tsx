@@ -4,6 +4,7 @@ import CommentItem from "./CommentItem.tsx";
 import CommentForm from "./CommentForm.tsx";
 import { createComment } from "../../controllers/comments.tsx";
 import ReactionButton from "../reactions/reactionButtonProps.js";
+
 const CommentContainer: React.FC<CommentContainerProps> = ({
   initComments,
   userId,
@@ -11,10 +12,21 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
 }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState<string>("");
-  const handleReaction = (reaction: string) => {
-    console.log(`User reacted with: ${reaction} on comment ID: ${comments._id}`);
+
+  // Handle the reaction on a specific comment
+  const handleReaction = async (reaction: string, commentId: string) => {
+    console.log(`User reacted with: ${reaction} on comment ID: ${commentId}`);
     // Here you can handle the reaction logic, e.g., send it to the server
+    try {
+      // Replace this with your actual API call to store the reaction
+      // Example:
+      // await createReaction({ reaction, commentId });
+      console.log(`Reaction "${reaction}" sent to server for comment ${commentId}`);
+    } catch (error) {
+      console.error("Error reacting to comment:", error);
+    }
   };
+
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -63,10 +75,12 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
             </div>
           ) : (
             comments.map((comment) => (
-              <div>
-                <CommentItem key={comment._id} comment={comment} />
+              <div key={comment._id}>
+                <CommentItem comment={comment} />
                 <div className="">
-                  <ReactionButton onReact={handleReaction}></ReactionButton>
+                  <ReactionButton
+                    onReact={(reaction) => handleReaction(reaction, comment._id)} // Pass the comment ID
+                  />
                 </div>
               </div>
             ))

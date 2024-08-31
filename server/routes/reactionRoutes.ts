@@ -1,5 +1,6 @@
 import express from "express";
 import Reaction from "../models/reactions";
+import { commentReaction } from "../services/reactionService";
 const router = express.Router();
 
 router.get('/', async (req, res) =>{
@@ -12,12 +13,12 @@ router.get('/', async (req, res) =>{
     }
 })
 
-router.post('/',async (req, res) => {
+router.post('/userReact',async (req, res) => {
     try {
-        const newReact = new Reaction(req.body);  
-        console.log(newReact);
-        await newReact.save();  
-        res.status(201).json({ message: 'React created', post: newReact });
+          const{postId,reactionType}= req.body;
+          const userId= req.session.user.id;
+          const result = await commentReaction(postId, userId,reactionType)
+        res.status(201).json({ message: 'React created', post: result });
       } catch (error: any) {
         console.error("Error creating react:", error);
 
