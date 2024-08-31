@@ -42,7 +42,7 @@ const ReactionButton: React.FC<ReactionButtonProps> = ({ onReact, initialReactio
       onMouseEnter={() => setShowReactions(true)}
       onMouseLeave={() => setShowReactions(false)}
     >
-      <button className="p-2 text-gray-500 hover:text-gray-700">
+      <button className="p-2 text-gray-500  hover:text-gray-700">
         {renderReactionIcon()}
       </button>
       {showReactions && (

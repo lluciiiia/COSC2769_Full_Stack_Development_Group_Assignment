@@ -1,5 +1,5 @@
 import { Comment } from "./Comments";
-
+import { Reaction } from "./reactions";
 export interface PostHistory {
   content: string;
   images?: string[];
@@ -29,6 +29,10 @@ export interface ProfileSectionParams {
 
 export interface ReactionSectionProps {
   handleClick: () => void;
+  onReact: (reaction: string)=> void;
+  initialReaction?: string;
+  isReacted: boolean;
+  reactions: Reaction;
 }
 export interface AdminSectionProps {
   handleClick: () => void;

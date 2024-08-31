@@ -1,12 +1,12 @@
-import { UserType } from "./Users";
-export interface Reaction{
-    userId: UserType,
-    reactionType: string,
-    createdAt: string
+interface Reaction {
+    userId: string;
+    reactionType: string;
+    postId: string;
+    createdAt: string;
 }
 
-export interface ReactProps{
+export interface ReactProps {
     createComplete: boolean;
     reactions: Reaction[];
-    isReacted: boolean
+    isReacted: boolean;
 }

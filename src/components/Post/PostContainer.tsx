@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PostParams } from "../../interfaces/Posts";
 import { useNavigate } from "react-router-dom";
 import { ReactionSection } from "./ReactionSection";
 import { ProfileSection } from "./ProfileSection";
+import { AppDispatch, AppState } from "../../app/store";
+import { createReaction, fetchReaction } from "../../controllers/reactions";
 import CommentItem from "../comments/CommentItem";
+import { useDispatch, useSelector } from "react-redux";
 
 const PostContainer: React.FC<PostParams> = ({
   _id,
@@ -18,11 +21,48 @@ const PostContainer: React.FC<PostParams> = ({
   history,
   comments,
 }) => {
+  const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   const [showFullContent, setShowFullContent] = useState(false);
+  const [initialReaction, setInitialReaction] = useState<string | undefined>(undefined);
+
+  const isReacted = useSelector((state: AppState) => state.react.isReacted);
+  const reactions = useSelector((state: AppState) => state.react.reactions);
+
+  // Convert _id to a string
+  const postId = _id!.toString();
+
+  useEffect(() => {
+    const fetchUserReaction = async () => {
+      try {
+        const reaction = await dispatch(fetchReaction({ postId }));
+        if (reaction.payload) {
+          setInitialReaction(reaction.payload.reactionType);
+        }
+      } catch (error) {
+        console.error("Error fetching user reaction:", error);
+      }
+    };
+
+    fetchUserReaction();
+  }, [dispatch, postId]);
 
   const handleClick = () => {
-    navigate(`/posts/${_id}`);
+    navigate(`/posts/${postId}`);
+  };
+
+  const handleReaction = async (reaction: string) => {
+    console.log(`User reacted with: ${reaction} on post ID: ${postId}`);
+    try {
+      await dispatch(
+        createReaction({ postId: postId, reactionType: reaction, sentFrom: 'post' })
+      );
+      console.log(
+        `Reaction "${reaction}" sent to server for post ${postId}`,
+      );
+    } catch (error) {
+      console.error("Error reacting to post:", error);
+    }
   };
 
   const handleToggleContent = () => {
@@ -49,7 +89,7 @@ const PostContainer: React.FC<PostParams> = ({
         profileImage={profileSection?.profileImage}
         profileName={profileSection?.profileName}
         post={{
-          _id,
+          _id: postId, // Pass the string version of _id
           creatorId,
           groupId,
           content,
@@ -101,7 +141,13 @@ const PostContainer: React.FC<PostParams> = ({
         )}
       </div>
 
-      <ReactionSection handleClick={handleClick} />
+      <ReactionSection 
+        reactions={reactions} 
+        isReacted={isReacted} 
+        handleClick={handleClick} 
+        onReact={handleReaction} 
+        initialReaction={initialReaction} // Pass the initial reaction here
+      />
 
       {/* Display comments if not in detail view and there are comments */}
       {!isDetail && comments?.length > 0 && (
