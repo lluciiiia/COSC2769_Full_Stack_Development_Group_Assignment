@@ -1,11 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface ReactionButtonProps {
   onReact: (reaction: string) => void;
+  initialReaction?: string;
+  isReacted: boolean;
 }
 
-const ReactionButton: React.FC<ReactionButtonProps> = ({ onReact }) => {
+const ReactionButton: React.FC<ReactionButtonProps> = ({ onReact, initialReaction, isReacted }) => {
   const [showReactions, setShowReactions] = useState(false);
+  const [selectedReaction, setSelectedReaction] = useState(initialReaction);
+
+  useEffect(() => {
+    if (isReacted && initialReaction) {
+      setSelectedReaction(initialReaction);
+    }
+  }, [isReacted, initialReaction]);
+
+  const handleReactionClick = (reaction: string) => {
+    setSelectedReaction(reaction);
+    onReact(reaction);
+  };
 
   return (
     <div
@@ -13,21 +27,32 @@ const ReactionButton: React.FC<ReactionButtonProps> = ({ onReact }) => {
       onMouseEnter={() => setShowReactions(true)}
       onMouseLeave={() => setShowReactions(false)}
     >
-      <button className="p-2 text-gray-500 hover:text-gray-700">👍</button>
+      <button className="p-2 text-gray-500 hover:text-gray-700">
+        {selectedReaction || "👍"}
+      </button>
       {showReactions && (
         <div className="absolute left-0 flex gap-2 rounded-lg bg-white p-2 shadow-md">
-          <button onClick={() => onReact("LIKE")} className="hover:bg-gray-200">
+          <button
+            onClick={() => handleReactionClick("LIKE")}
+            className={`hover:bg-gray-200 ${selectedReaction === "LIKE" ? "bg-gray-300" : ""}`}
+          >
             👍
           </button> 
-          <button onClick={() => onReact("LOVE")} className="hover:bg-gray-200">
+          <button
+            onClick={() => handleReactionClick("LOVE")}
+            className={`hover:bg-gray-200 ${selectedReaction === "LOVE" ? "bg-gray-300" : ""}`}
+          >
             ❤️
           </button>
-          <button onClick={() => onReact("HAHA")} className="hover:bg-gray-200">
+          <button
+            onClick={() => handleReactionClick("HAHA")}
+            className={`hover:bg-gray-200 ${selectedReaction === "HAHA" ? "bg-gray-300" : ""}`}
+          >
             😊
           </button>
           <button
-            onClick={() => onReact("ANGRY")}
-            className="hover:bg-gray-200"
+            onClick={() => handleReactionClick("ANGRY")}
+            className={`hover:bg-gray-200 ${selectedReaction === "ANGRY" ? "bg-gray-300" : ""}`}
           >
             😡
           </button>

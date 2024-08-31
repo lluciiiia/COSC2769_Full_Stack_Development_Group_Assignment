@@ -36,6 +36,7 @@ router.get("/", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch reaction" });
   }
 });
+
 router.delete("/:id", async (req, res) => {
   try {
     const reactId = req.params.id;

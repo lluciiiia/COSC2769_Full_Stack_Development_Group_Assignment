@@ -1,12 +1,12 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Comment, CommentContainerProps } from "../../interfaces/Comments.tsx";
 import CommentItem from "./CommentItem.tsx";
 import CommentForm from "./CommentForm.tsx";
 import { createComment } from "../../controllers/comments";
 import ReactionButton from "../reactions/reactionButtonProps.js";
-import { createReaction } from "../../controllers/reactions.js";
-import { AppDispatch } from "../../app/store.js";
+import { createReaction, fetchReaction } from "../../controllers/reactions.js";
+import { AppDispatch, AppState } from "../../app/store.js";
 
 const CommentContainer: React.FC<CommentContainerProps> = ({
   initComments,
@@ -16,6 +16,8 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   const dispatch: AppDispatch = useDispatch();
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState<string>("");
+
+  const isReacted = useSelector((state: AppState) => state.react.isReacted);
 
   const handleReaction = async (reaction: string, commentId: string) => {
     console.log(`User reacted with: ${reaction} on comment ID: ${commentId}`);
@@ -38,8 +40,19 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
       }
     };
 
+    const fetchReactions = async () => {
+      try {
+        for (let comment of initComments) {
+          await dispatch(fetchReaction(comment._id));
+        }
+      } catch (error) {
+        console.error("Error fetching reactions:", error);
+      }
+    };
+
     fetchComments();
-  }, []);
+    fetchReactions();
+  }, [dispatch, initComments]);
 
   const handleCommentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setNewComment(e.target.value);
@@ -82,6 +95,8 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
                 <div className="">
                   <ReactionButton
                     onReact={(reaction) => handleReaction(reaction, comment._id)}
+                    initialReaction={comment.reactions?.find(r => r.userId === userId)?.reactionType}
+                    isReacted={isReacted}
                   />
                 </div>
               </div>
