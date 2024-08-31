@@ -4,7 +4,7 @@ import Reaction from "../models/reactions";
 export const commentReaction = async (
   postId: string,
   userId: string,
-  reactionType: string
+  reactionType: string,
 ) => {
   try {
     // Find the comment by ID
@@ -13,23 +13,41 @@ export const commentReaction = async (
       throw new Error("Comment not found");
     }
 
-    // Create a new reaction
-    const newReaction = new Reaction({
-      userId: userId,
-      postId:postId,
-      reactionType: reactionType,
-      createdAt: new Date(),
-    });
+    let existingReaction = await Reaction.findOne({ postId, userId });
 
-    await newReaction.save();
+    if (existingReaction) {
+      existingReaction.reactionType = reactionType;
+      await existingReaction.save();
+    } else {
+      existingReaction = new Reaction({
+        userId: userId,
+        postId: postId,
+        reactionType: reactionType,
+        createdAt: new Date(),
+      });
+      await existingReaction.save();
 
-    post.reactions.push(newReaction._id);
+      post.reactions.push(existingReaction._id);
+      await post.save();
+    }
 
-    await post.save();
-
-    return { message: "Reaction added successfully" };
+    return { message: "Reaction added/updated successfully" };
   } catch (error) {
-    console.error("Error adding reaction", error);
-    throw new Error("Failed to add reaction");
+    console.error("Error adding/updating reaction", error);
+    throw new Error("Failed to add/update reaction");
+  }
+};
+
+export const fetchingUserReact = async (postId: string, userId: string) => {
+  try {
+    const existingReaction = await Reaction.findOne({ postId, userId });
+
+    if (!existingReaction) {
+      throw new Error("raction can not found with the provided id");
+    }
+    return existingReaction;
+  } catch (error) {
+    console.error("Error adding/updating reaction", error);
+    throw new Error("Failed to add/update reaction");
   }
 };
