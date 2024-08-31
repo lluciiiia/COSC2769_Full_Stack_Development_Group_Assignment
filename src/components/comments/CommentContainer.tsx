@@ -21,9 +21,11 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
     console.log(`User reacted with: ${reaction} on comment ID: ${commentId}`);
     try {
       await dispatch(
-        createReaction({ postId: commentId, reactionType: reaction })
+        createReaction({ postId: commentId, reactionType: reaction }),
       );
-      console.log(`Reaction "${reaction}" sent to server for comment ${commentId}`);
+      console.log(
+        `Reaction "${reaction}" sent to server for comment ${commentId}`,
+      );
     } catch (error) {
       console.error("Error reacting to comment:", error);
     }
@@ -39,7 +41,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
     };
 
     fetchComments();
-  }, []);
+  }, [initComments]); // Added initComments to dependencies
 
   const handleCommentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setNewComment(e.target.value);
@@ -81,7 +83,9 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
                 <CommentItem comment={comment} />
                 <div className="">
                   <ReactionButton
-                    onReact={(reaction) => handleReaction(reaction, comment._id)}
+                    onReact={(reaction) =>
+                      handleReaction(reaction, comment._id)
+                    }
                   />
                 </div>
               </div>

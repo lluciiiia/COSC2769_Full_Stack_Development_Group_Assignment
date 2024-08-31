@@ -109,6 +109,7 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
         onClose={() => setIsEditModalOpen(false)}
         userId={id}
         post={post}
+        groupId={isEditModalOpen ? post.groupId : null}
       />
 
       {/* Modal for viewing edit history */}

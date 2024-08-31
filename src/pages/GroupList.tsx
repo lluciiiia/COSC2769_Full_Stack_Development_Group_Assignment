@@ -5,11 +5,13 @@ import { Link } from "react-router-dom";
 import LoadingSpinner from "../assets/icons/Loading";
 import { fetchGroups } from "../controllers/group";
 import { GroupType } from "../interfaces/Group";
+import { selectAuthState } from "../features/authSlice";
 
 const GroupList: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const groups = useSelector((state: AppState) => state.groups);
+  const { id } = useSelector(selectAuthState);
 
   useEffect(() => {
     const loadGroups = async () => {
@@ -59,9 +61,12 @@ const GroupList: React.FC = () => {
                 <span className="text-gray text-sm">
                   {group.members ? group.members.length : 0} members
                 </span>
-                <button className="cursor-pointer rounded bg-[#FFC123] px-4 py-2 font-bold text-black hover:bg-[#d89e1b] focus:outline-none">
-                  Join
-                </button>
+                {!group.members.includes(id) && (
+                  <button className="cursor-pointer rounded bg-[#FFC123] px-4 py-2 font-bold text-black hover:bg-[#d89e1b] focus:outline-none">
+                    Join
+                  </button>
+                )}
+
                 <Link to={`/groups/${group._id}/discussion`}>
                   <button className="cursor-pointer rounded bg-gray-300 px-4 py-2 font-bold text-gray-700 hover:bg-gray-500 focus:outline-none">
                     View
