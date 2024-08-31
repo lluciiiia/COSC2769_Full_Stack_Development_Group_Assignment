@@ -6,7 +6,7 @@ import {
   getViewUserById,
   unfriendById,
   updateUser,
-  addFriend
+  addFriend,
 } from "../services/userServices";
 const router = express.Router();
 
@@ -45,7 +45,6 @@ router.put("/addfriend/:friendId", async (req, res) => {
   }
 });
 
-
 router.get("/view/:id", async (req, res) => {
   try {
     const userId = req.params.id;
@@ -61,6 +60,34 @@ router.put("/:id", async (req, res) => {
     const userId = req.params.id;
     const updatedData = req.body;
     const user = await updateUser(userId, updatedData);
+
+    if (req.session.user && req.session.user.id === userId) {
+      req.session.user = {
+        id: user._id.toString(),
+        isAuthenticated: true,
+        name: user.name,
+        profilePictureURL: user.profilePictureURL ?? "",
+        isAdmin: user.isAdmin,
+        email: user.email,
+      };
+    }
+
+    res.cookie("isAuthenticated", true, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+      signed: true,
+    });
+    res.cookie("userId", req.session.user.id, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+      signed: true,
+    });
+    res.cookie("userName", req.session.user.name, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+      signed: true,
+    });
+
     res.json(user);
   } catch (error) {
     res.status(500).json({ error: error });
@@ -85,7 +112,7 @@ router.post("/", async (req, res) => {
 
 router.delete("/unfriend/:friendId", async (req, res) => {
   try {
-    const userId=req.session.user.id;
+    const userId = req.session.user.id;
     const { friendId } = req.params;
     await unfriendById(userId, friendId);
 
