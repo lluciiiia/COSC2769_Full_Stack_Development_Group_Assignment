@@ -10,7 +10,6 @@ const postSchema = new mongoose.Schema({
   groupId: String,
 
   content: { type: String, required: true },
-  imageURL: { type: String },
 
   images: {
     type: [{ type: String }],

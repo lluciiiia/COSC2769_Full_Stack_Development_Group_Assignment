@@ -78,7 +78,7 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
         )}
       </div>
       <div>
-        <div className="font-bold">{safeProfileName}</div>
+        <div className="mr-12 font-bold">{safeProfileName}</div>
       </div>
       <div className="relative ml-auto flex items-center justify-center gap-1">
         <div className="flex flex-col">

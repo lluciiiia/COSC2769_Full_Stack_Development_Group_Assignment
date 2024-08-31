@@ -11,8 +11,7 @@ export interface PostParams {
   creatorId: string;
   groupId?: string;
   content: string;
-  imageURL?: string;
-  images?: string[]; // Change from File[] to string[]
+  images?: string[];
   createdAt: Date;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
   comments: Comment[];
@@ -37,7 +36,6 @@ export interface AdminSectionProps {
     _id: string;
     creatorId: string;
     content: string;
-    imageURL?: string;
     createdAt: string;
     visibility: string;
     profileSection?: {
@@ -74,7 +72,7 @@ export interface GroupPostParams {
   };
   groupId?: string;
   content: string;
-  imageURL?: string;
+  images?: string[];
   createdAt: Date;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
   comments: Comment[];
