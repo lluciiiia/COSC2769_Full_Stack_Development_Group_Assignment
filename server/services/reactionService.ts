@@ -7,7 +7,6 @@ export const commentReaction = async (
   reactionType: string,
 ) => {
   try {
-    // Find the comment by ID
     const post = await Comment.findById(postId);
     if (!post) {
       throw new Error("Comment not found");

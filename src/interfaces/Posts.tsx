@@ -29,6 +29,9 @@ export interface ProfileSectionParams {
 
 export interface ReactionSectionProps {
   handleClick: () => void;
+  onReact: (reaction: string)=> void;
+  initialReaction?: string;
+  isReacted: boolean;
 }
 export interface AdminSectionProps {
   handleClick: () => void;
