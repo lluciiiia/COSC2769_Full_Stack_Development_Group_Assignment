@@ -12,6 +12,7 @@ export const createReaction = createAsyncThunk(
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: 'include',
           body: JSON.stringify(reactionData),
         }
       );

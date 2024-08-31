@@ -1,4 +1,3 @@
-// authController.ts
 export const registerUser = async (userData: {
   email: string;
   password: string;

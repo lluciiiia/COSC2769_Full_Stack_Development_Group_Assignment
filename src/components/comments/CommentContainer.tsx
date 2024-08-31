@@ -1,26 +1,29 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { useDispatch } from "react-redux";
 import { Comment, CommentContainerProps } from "../../interfaces/Comments.tsx";
 import CommentItem from "./CommentItem.tsx";
 import CommentForm from "./CommentForm.tsx";
-import { createComment } from "../../controllers/comments.tsx";
+import { createComment } from "../../controllers/comments";
 import ReactionButton from "../reactions/reactionButtonProps.js";
+import { createReaction } from "../../controllers/reactions.js";
+import { AppDispatch } from "../../app/store.js";
 
 const CommentContainer: React.FC<CommentContainerProps> = ({
   initComments,
   userId,
   postId,
 }) => {
+  const dispatch: AppDispatch = useDispatch();
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState<string>("");
 
   // Handle the reaction on a specific comment
   const handleReaction = async (reaction: string, commentId: string) => {
     console.log(`User reacted with: ${reaction} on comment ID: ${commentId}`);
-    // Here you can handle the reaction logic, e.g., send it to the server
     try {
-      // Replace this with your actual API call to store the reaction
-      // Example:
-      // await createReaction({ reaction, commentId });
+      await dispatch(
+        createReaction({ postId: commentId, reactionType: reaction })
+      );
       console.log(`Reaction "${reaction}" sent to server for comment ${commentId}`);
     } catch (error) {
       console.error("Error reacting to comment:", error);
@@ -79,7 +82,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
                 <CommentItem comment={comment} />
                 <div className="">
                   <ReactionButton
-                    onReact={(reaction) => handleReaction(reaction, comment._id)} // Pass the comment ID
+                    onReact={(reaction) => handleReaction(reaction, comment._id)}
                   />
                 </div>
               </div>

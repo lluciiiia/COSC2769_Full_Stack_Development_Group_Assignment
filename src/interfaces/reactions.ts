@@ -6,5 +6,6 @@ export interface Reaction{
 }
 
 export interface ReactProps{
+    createComplete: boolean;
     reactions: Reaction[];
 }
