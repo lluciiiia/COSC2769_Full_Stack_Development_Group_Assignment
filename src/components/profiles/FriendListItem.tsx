@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import ProfileFriendDropDownList from "./ProfileFriendDropDownList";
 
-export const FriendListItem = ({ _id, avatar, userName }) => {
+export const FriendListItem = ({
+  _id,
+  avatar,
+  userName,
+  isAuthenticatedUser,
+}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
@@ -29,7 +34,12 @@ export const FriendListItem = ({ _id, avatar, userName }) => {
           <path d="M0 0h24v24H0z" fill="none" />
           <path d="M12 8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM6 8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
         </svg>
-        {isDropdownOpen && <ProfileFriendDropDownList friendId={_id} />}
+        {isDropdownOpen && (
+          <ProfileFriendDropDownList
+            friendId={_id}
+            isAuthenticatedUser={isAuthenticatedUser}
+          />
+        )}
       </div>
     </div>
   );

@@ -37,6 +37,9 @@ app.use(session({
   cookie: { secure: false }  // Set to true if using HTTPS
 }));
 
+
+
+
 // Use different API routes
 app.use("/api/users", userRoutes);
 app.use("/api/groups", groupRoutes);

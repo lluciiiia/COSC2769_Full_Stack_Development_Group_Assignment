@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ConfirmationModal from "./post/ConfirmationModal";
-import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectAuthState } from "../features/authSlice";
 
 interface MenuDropDownProps {
   onEdit: () => void;
@@ -16,8 +17,8 @@ const MenuDropDown: React.FC<MenuDropDownProps> = ({
   creatorId,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { userId } = useParams();
-  const isOwner = userId === creatorId;
+  const { id } = useSelector(selectAuthState);
+  const isOwner = id === creatorId;
 
   const handleDeleteClick = () => {
     setIsModalOpen(true);

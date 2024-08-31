@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "../../app/store";
 import { updateLocalUser } from "../../features/userSlice";
 import { updateUser } from "../../controllers/user";
+import { fetchSess } from "../../features/authSlice";
 
 interface ModalProps {
   isOpen: boolean;
@@ -32,12 +33,10 @@ const ProfileEditModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   };
 
   const handleSubmit = () => {
-    //update user in reducer
     dispatch(updateLocalUser(formData));
-
-    // update user in database
     dispatch(updateUser({ userId: user._id, userData: formData }));
-
+    dispatch(fetchSess);
+    
     onClose();
   };
 

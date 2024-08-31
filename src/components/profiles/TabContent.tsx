@@ -11,9 +11,12 @@ import ProfileFriendList from "./ProfileFriendList";
 const TabContent = ({
   activeTab,
   userId,
+  isAuthenticatedUser,
 }: {
   activeTab: string;
   userId: string | undefined;
+
+  isAuthenticatedUser;
 }) => {
   const dispatch: AppDispatch = useDispatch();
   const firstRender = useRef(true);
@@ -29,9 +32,9 @@ const TabContent = ({
     case "Posts":
       return <PostsProfileList />;
     case "About":
-      return <About />;
+      return <About isAuthenticatedUser={isAuthenticatedUser} />;
     case "Friends":
-      return <ProfileFriendList />;
+      return <ProfileFriendList isAuthenticatedUser={isAuthenticatedUser} />;
     case "Photos":
       return <PhotoList />;
     default:

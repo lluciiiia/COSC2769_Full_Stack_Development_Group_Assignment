@@ -49,8 +49,6 @@ export interface AdminSectionProps {
   };
 }
 
-
-
 export interface PostProps {
   id: string;
   profileImage: string;
@@ -65,10 +63,10 @@ export interface PostProps {
 export interface PostState {
   posts: PostParams[];
   creatorPost: PostParams[];
-  groupPost: PostParams2[];
+  groupPost: GroupPostParams[];
 }
 
-export interface PostParams2 {
+export interface GroupPostParams {
   _id?: string;
   creatorId: {
     _id: string;
@@ -78,12 +76,13 @@ export interface PostParams2 {
   groupId?: string;
   content: string;
   imageURL?: string;
-  createdAt?: Date;
+  createdAt: Date;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
-  comments?: Comment[];
+  comments: Comment[];
   reactions?: string[];
   isDetail?: boolean;
   profileSection?: ProfileSectionParams;
+  history: PostHistory[];
 }
 
 export interface PostFormProps {

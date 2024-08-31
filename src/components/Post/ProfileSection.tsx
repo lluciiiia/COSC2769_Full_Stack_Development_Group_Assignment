@@ -8,6 +8,8 @@ import DefaultProfile from "../../assets/icons/DefaultProfile.tsx";
 import PostHistoryModal from "./PostHistoryModal.tsx";
 import { formatRelativeTime } from "../../utils/formatRelativeTime.ts";
 import ErrorPage from "../../pages/ErrorPage.tsx";
+import { useSelector } from "react-redux";
+import { selectAuthState } from "../../features/authSlice.ts";
 
 export const ProfileSection: React.FC<ProfileSectionParams> = ({
   post,
@@ -21,7 +23,7 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
 
   const navigate = useNavigate();
-  const { userId } = useParams();
+  const { id } = useSelector(selectAuthState);
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -39,7 +41,7 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
       if (!response) {
         alert("Failed to delete the post. Please try again.");
       } else {
-        navigate(`/home/${userId}`);
+        navigate(`/home`);
         window.location.reload();
       }
     } catch (error) {
@@ -105,7 +107,7 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
       <PostModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
-        userId={userId}
+        userId={id}
         post={post}
       />
 
