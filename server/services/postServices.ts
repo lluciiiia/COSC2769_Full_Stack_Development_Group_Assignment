@@ -230,16 +230,16 @@ export const updatePost = async (postId: string, postData: any) => {
       if (!isMember) throw new Error("User is not a member of the group");
     }
 
-    // Push the current content and imageURL to the history before updating
+    // Push the current content and images to the history before updating
     post.history.push({
       content: post.content,
-      imageURL: post.imageURL,
+      images: post.images,  // Assuming `images` field stores array of image URLs or base64 strings
       updatedAt: new Date(),
     });
 
     // Update the post with new data
     post.content = postData.content || post.content;
-    post.imageURL = postData.imageURL || post.imageURL;
+    post.images = postData.images || post.images;  // Update images with the new array
     post.visibility = postData.visibility || post.visibility;
     post.updatedAt = new Date();
 
@@ -251,6 +251,7 @@ export const updatePost = async (postId: string, postData: any) => {
     throw new Error("Failed to update post");
   }
 };
+
 
 export const deletePostById = async (postId: String) => {
   try {
