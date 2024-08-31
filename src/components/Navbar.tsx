@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { SearchIcon } from "../assets/icons/profileIcon/SearchIcon";
@@ -13,12 +13,14 @@ import { NavItem } from "./NavItem";
 import PostModal from "./post/PostModal";
 import NotificationModal from "./notifications/NotificationModal";
 import ProfileButtonModal from "./ProfileButtonModal";
+import { useSelector } from "react-redux";
+import { selectAuthState } from "../features/authSlice";
 
 const Navbar = () => {
-  const { userId } = useParams();
+  const currentUser = useSelector(selectAuthState);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
-  const [isProfileModalOpen, setProfileOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -39,11 +41,13 @@ const Navbar = () => {
   };
 
   const handleProfileClick = () => {
-    setProfileOpen(!isProfileModalOpen);
+    setIsProfileModalOpen(!isProfileModalOpen);
+    setIsNotificationModalOpen(false);
   };
 
   const handleNotificationClick = () => {
     setIsNotificationModalOpen(!isNotificationModalOpen);
+    setIsProfileModalOpen(false)
   };
 
   const handleSearchClick = () => {
@@ -92,11 +96,16 @@ const Navbar = () => {
       </nav>
 
       <NotificationModal isOpen={isNotificationModalOpen} />
-      <ProfileButtonModal isOpen={isProfileModalOpen} />
+      <ProfileButtonModal
+        isOpen={isProfileModalOpen}
+        setIsOpen={setIsProfileModalOpen}
+        imgUrl={currentUser.profilePictureURL}
+        name={currentUser.name}
+      />
       <PostModal
         isOpen={isPostModalOpen}
         onClose={handleCloseModal}
-        userId={userId}
+        userId={currentUser.id}
         post={null}
       />
     </>

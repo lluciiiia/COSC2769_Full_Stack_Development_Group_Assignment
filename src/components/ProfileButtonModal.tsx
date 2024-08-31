@@ -14,9 +14,9 @@ interface ProfileButtonModalProps {
 
 const ProfileButtonModal: React.FC<ProfileButtonModalProps> = ({
   isOpen,
-  name,
-  imgUrl,
   setIsOpen,
+  imgUrl,
+  name,
 }) => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
