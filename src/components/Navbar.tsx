@@ -47,7 +47,7 @@ const Navbar = () => {
 
   const handleNotificationClick = () => {
     setIsNotificationModalOpen(!isNotificationModalOpen);
-    setIsProfileModalOpen(false)
+    setIsProfileModalOpen(false);
   };
 
   const handleSearchClick = () => {
@@ -107,6 +107,7 @@ const Navbar = () => {
         onClose={handleCloseModal}
         userId={currentUser.id}
         post={null}
+        groupId={""}
       />
     </>
   );

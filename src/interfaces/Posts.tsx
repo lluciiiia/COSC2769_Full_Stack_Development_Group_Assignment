@@ -88,7 +88,6 @@ export interface PostFormProps {
   content: string;
   setContent: (content: string) => void;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
-  setVisibility: (visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP") => void;
   images: string[];
   setImages: (images: string[]) => void;
   onSubmit: (formData: FormData) => void;

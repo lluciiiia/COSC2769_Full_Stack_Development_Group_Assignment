@@ -168,6 +168,7 @@ export default function GroupPage() {
         onClose={handleCloseModal}
         userId={id}
         post={selectedPost}
+        groupId={groupId}
       />
     </div>
   );
