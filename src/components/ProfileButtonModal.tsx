@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "../app/store";
 import { useSelector } from "react-redux";
 import { selectAuthState } from "../features/authSlice";
+import DefaultProfile from "../assets/icons/DefaultProfile";
 interface ProfileButtonModalProps {
   isOpen: boolean;
   name: string;
@@ -45,11 +46,18 @@ const ProfileButtonModal: React.FC<ProfileButtonModalProps> = ({
         className="flex transform items-center gap-2 transition-transform hover:opacity-20"
         onClick={handleClick}
       >
-        <img
-          src={imgUrl}
-          alt="Profile"
-          className="h-[50px] w-[50px] transform rounded-full transition-transform"
-        />
+        {imgUrl ? (
+          <img
+            src={imgUrl}
+            alt="Profile"
+            className="h-[50px] w-[50px] transform rounded-full transition-transform"
+          />
+        ) : (
+          <div className="h-[50px] w-[50px]">
+            <DefaultProfile />
+          </div>
+        )}
+
         <h2 className="text-xl font-bold">{name}</h2>
       </div>
       <div className="flex flex-col gap-4">
