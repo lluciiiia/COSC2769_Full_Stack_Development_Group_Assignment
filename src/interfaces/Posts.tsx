@@ -12,7 +12,7 @@ export interface PostParams {
   groupId?: string;
   content: string;
   imageURL?: string;
-  images?: string[]; // Change from File[] to string[]
+  images?: string[]; 
   createdAt?: Date;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
   comments: Comment[];
@@ -74,7 +74,7 @@ export interface GroupPostParams {
   };
   groupId?: string;
   content: string;
-  imageURL?: string;
+  images?: string[]; 
   createdAt: Date;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
   comments: Comment[];

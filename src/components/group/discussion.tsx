@@ -3,17 +3,19 @@ import { GroupPostParams } from "../../interfaces/Posts";
 import PostContainer from "../post/PostContainer";
 import { AppState } from "../../app/store";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 export default function Discussion() {
   const posts = useSelector((state: AppState) => state.posts.groupPost);
-
+  const groupid= useParams();
+ console.log(groupid);
   const postList = posts.map((p: GroupPostParams) => (
     <PostContainer
       _id={p._id}
       creatorId={p.creatorId?._id || ""}
       groupId={p.groupId || ""}
       content={p.content}
-      imageURL={p.imageURL}
+      images={p.images || []} 
       profileSection={{
         profileImage: p.creatorId?.profilePictureURL,
         profileName: p.creatorId?.name,
