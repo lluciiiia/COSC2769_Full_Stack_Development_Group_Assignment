@@ -5,6 +5,7 @@ import postsReducer from "../features/postsSlice";
 import authReducer from "../features/authSlice";
 import adminReducer from "../features/adminSlice";
 import notiReducer from "../features/notificationSlice";
+import reactionReducer from "../features/reactionSlice";
 // Combine reducers to create the root reducer
 export const rootReducer = combineReducers({
   user: userReducer,   // User state
@@ -13,6 +14,7 @@ export const rootReducer = combineReducers({
   auth: authReducer,   // Authentication state
   admin: adminReducer,
   noti: notiReducer,
+  react: reactionReducer,
 });
 
 // Type for the entire Redux store state
