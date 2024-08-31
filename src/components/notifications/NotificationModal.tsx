@@ -1,35 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppState, AppDispatch } from "../../app/store";
+import { fetchNotification } from "../../controllers/notification";
 
-const NotificationModal = ({ isOpen }) => {
-  const [userList, setUserList] = useState([
-    {
-      name: "John Doe",
-      profilePictureURL: "https://randomuser.me/api/portraits/men/1.jpg",
-    },
-    {
-      name: "Lionel Messi",
-      profilePictureURL: "https://randomuser.me/api/portraits/men/2.jpg",
-    },
-    {
-      name: "Cristiano Ronaldo",
-      profilePictureURL: "https://randomuser.me/api/portraits/men/3.jpg",
-    },
-  ]);
+const NotificationModal = ({ isOpen }: { isOpen: boolean }) => {
+  const dispatch: AppDispatch = useDispatch();
+  const notifications = useSelector((state: AppState) => state.noti.notifications);
+
+  useEffect(() => {
+    dispatch(fetchNotification());
+  }, [dispatch]);
+
+  console.log(notifications);
+
   return (
     isOpen && (
       <div className="fixed right-16 top-[66px] z-10 flex w-72 flex-col gap-3 shadow-lg">
-        {userList.map((user) => {
-          return (
-            <RequestFriendNotification
-              name={user.name}
-              imgUrl={user.profilePictureURL}
-            />
-          );
-        })}
+        {notifications.map((noti) => (
+          <RequestFriendNotification
+            key={noti.senderId._id}
+            name={noti.senderId.name}
+            imgUrl={noti.senderId.profilePictureURL}
+          />
+        ))}
       </div>
     )
   );
 };
+
 export default NotificationModal;
 
 export const RequestFriendNotification = ({
