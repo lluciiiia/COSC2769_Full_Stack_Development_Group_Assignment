@@ -8,6 +8,7 @@ import CommentItem from "../comments/CommentItem";
 const PostContainer: React.FC<PostParams> = ({
   _id,
   creatorId,
+  groupId,
   content,
   images,
   createdAt,
@@ -33,7 +34,10 @@ const PostContainer: React.FC<PostParams> = ({
 
   // Check if the content is too long
   const isContentLong = content.length > maxLength;
-  const displayedContent = isContentLong && !showFullContent ? `${content.slice(0, maxLength)}...` : content;
+  const displayedContent =
+    isContentLong && !showFullContent
+      ? `${content.slice(0, maxLength)}...`
+      : content;
 
   return (
     <div
@@ -47,6 +51,7 @@ const PostContainer: React.FC<PostParams> = ({
         post={{
           _id,
           creatorId,
+          groupId,
           content,
           images,
           createdAt,

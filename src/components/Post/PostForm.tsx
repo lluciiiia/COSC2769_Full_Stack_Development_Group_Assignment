@@ -5,7 +5,6 @@ const PostForm: React.FC<PostFormProps> = ({
   content,
   setContent,
   visibility,
-  setVisibility,
   images,
   setImages,
   onSubmit,
@@ -16,7 +15,7 @@ const PostForm: React.FC<PostFormProps> = ({
     if (e.target.files) {
       const selectedFiles = Array.from(e.target.files);
       const validImages = selectedFiles.filter((file) =>
-        ["image/png", "image/jpeg", "image/jpg"].includes(file.type)
+        ["image/png", "image/jpeg", "image/jpg"].includes(file.type),
       );
       // Convert files to base64 and update state
       Promise.all(validImages.map(convertToBase64)).then((base64Images) => {
@@ -60,7 +59,9 @@ const PostForm: React.FC<PostFormProps> = ({
         {/* Content Field */}
         <div>
           <div className="mb-6">
-            <label className="block text-lg font-bold text-gray-700">Content</label>
+            <label className="block text-lg font-bold text-gray-700">
+              Content
+            </label>
             <textarea
               className="mt-2 block w-full resize rounded-md border-gray-300 text-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               value={content}
@@ -69,24 +70,6 @@ const PostForm: React.FC<PostFormProps> = ({
               rows={6}
               required
             />
-          </div>
-
-          {/* Visibility Field */}
-          <div className="mb-6">
-            <label className="block text-lg font-bold text-gray-700">Visibility</label>
-            <select
-              className="mt-2 block w-full rounded-md border-gray-300 text-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-              value={visibility}
-              onChange={(e) =>
-                setVisibility(
-                  e.target.value as "PUBLIC" | "FRIEND_ONLY" | "GROUP"
-                )
-              }
-            >
-              <option value="PUBLIC">Public</option>
-              <option value="FRIEND_ONLY">Friends Only</option>
-              <option value="GROUP">Group</option>
-            </select>
           </div>
         </div>
 
@@ -103,25 +86,25 @@ const PostForm: React.FC<PostFormProps> = ({
           </label>
 
           {images.length > 0 && (
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex flex-wrap gap-2">
               {images.map((image, index) => (
-                <div key={index} className="relative w-24 h-24">
+                <div key={index} className="relative h-24 w-24">
                   <img
                     src={image} // Displaying base64 images directly
                     alt={`Upload Preview ${index + 1}`}
-                    className="object-cover w-full h-full rounded-md"
+                    className="h-full w-full rounded-md object-cover"
                   />
                   <button
                     type="button"
                     onClick={() => handleRemoveImage(index)}
-                    className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
+                    className="absolute right-0 top-0 rounded-full bg-red-500 p-1 text-white"
                   >
                     &times;
                   </button>
                 </div>
               ))}
               {images.length > 3 && (
-                <div className="relative w-24 h-24 flex items-center justify-center rounded-md bg-gray-200 text-lg font-bold text-gray-600">
+                <div className="relative flex h-24 w-24 items-center justify-center rounded-md bg-gray-200 text-lg font-bold text-gray-600">
                   +{images.length - 3} more
                 </div>
               )}

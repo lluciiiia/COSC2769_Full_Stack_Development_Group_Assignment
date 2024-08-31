@@ -11,6 +11,7 @@ export default function Discussion() {
     <PostContainer
       _id={p._id}
       creatorId={p.creatorId?._id || ""}
+      groupId={p.groupId || ""}
       content={p.content}
       imageURL={p.imageURL}
       profileSection={{
