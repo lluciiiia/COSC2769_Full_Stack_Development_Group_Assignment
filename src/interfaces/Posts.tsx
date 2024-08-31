@@ -22,7 +22,6 @@ export interface PostParams {
   history: PostHistory[];
 }
 
-
 export interface ProfileSectionParams {
   post?: PostParams;
   profileImage?: string;
@@ -90,8 +89,8 @@ export interface PostFormProps {
   setContent: (content: string) => void;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
   setVisibility: (visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP") => void;
-  images: String[];
-  setImages: (images: String[]) => void;
+  images: string[];
+  setImages: (images: string[]) => void;
   onSubmit: (formData: FormData) => void;
   onClose: () => void;
   isEdit: boolean;

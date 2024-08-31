@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
-import { PostParams } from "../../interfaces/Posts";
 import PostForm from "./PostForm";
 import {
   createPost,
@@ -16,13 +15,11 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
   const [visibility, setVisibility] = useState<
     "PUBLIC" | "FRIEND_ONLY" | "GROUP"
   >("PUBLIC");
-  const [imageURL, setImageURL] = useState("");
   const [groups, setGroups] = useState<GroupType[]>([]);
   const [selectedGroupId, setSelectedGroupId] = useState<string>("");
-  const [images, setImages] = useState<string[]>([]); // Change File[] to string[]
+  const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
-
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else {
@@ -65,38 +62,34 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
   }, [isOpen, post, userId]);
 
   const handleSubmit = async (e) => {
-    // Log the data structure to be sent
-    const postParams = {
-        creatorId: userId,
-        content: content,
-        visibility: visibility,
-        images: images, 
-        groupId: visibility === "GROUP" ? selectedGroupId : undefined,
-        history: post?.history ? post.history : [],
-        comments: post?.comments ? post.comments : [],
-        createdAt: post?.createdAt ? post.createdAt : new Date(),
-      };
-
+    const postParams: any = {
+      creatorId: userId,
+      content: content,
+      visibility: visibility,
+      images: images,
+      groupId: visibility === "GROUP" ? selectedGroupId : undefined,
+      history: post?.history ? post.history : [],
+      comments: post?.comments ? post.comments : [],
+      createdAt: post?.createdAt ? post.createdAt : new Date(),
+    };
 
     try {
-        // Directly use the postParams object
-        let result;
-        if (post) {
-            postParams._id = post._id; // Add the post ID for updates
-            result = await dispatch(updatePost(postParams)).unwrap(); // Use the updated postParams
+      // Directly use the postParams object
+      let result;
+      if (post) {
+        postParams._id = post._id; // Add the post ID for updates
+        result = await dispatch(updatePost(postParams)).unwrap(); // Use the updated postParams
+      } else {
+        result = await dispatch(createPost(postParams)).unwrap(); // Use the new postParams
+      }
 
-        } else {
-            result = await dispatch(createPost(postParams)).unwrap(); // Use the new postParams
-
-        }
-
-        onClose();
-        window.location.reload(); 
+      onClose();
+      window.location.reload();
     } catch (error) {
-        console.error("Error saving post:", error); // Log any errors that occur
-        alert("An error occurred while saving the post");
+      console.error("Error saving post:", error); // Log any errors that occur
+      alert("An error occurred while saving the post");
     }
-};
+  };
 
   if (!isOpen) return null;
 
@@ -131,7 +124,7 @@ const PostModal = ({ isOpen, onClose, userId, post }) => {
           setVisibility={setVisibility}
           images={images}
           setImages={setImages}
-          onSubmit={handleSubmit}  
+          onSubmit={handleSubmit}
           onClose={onClose}
           isEdit={!!post}
         />
