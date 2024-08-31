@@ -1,20 +1,34 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { useDispatch } from "react-redux";
 import { Comment, CommentContainerProps } from "../../interfaces/Comments.tsx";
 import CommentItem from "./CommentItem.tsx";
 import CommentForm from "./CommentForm.tsx";
-import { createComment } from "../../controllers/comments.tsx";
+import { createComment } from "../../controllers/comments";
 import ReactionButton from "../reactions/reactionButtonProps.js";
+import { createReaction } from "../../controllers/reactions.js";
+import { AppDispatch } from "../../app/store.js";
+
 const CommentContainer: React.FC<CommentContainerProps> = ({
   initComments,
   userId,
   postId,
 }) => {
+  const dispatch: AppDispatch = useDispatch();
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState<string>("");
-  const handleReaction = (reaction: string) => {
-    console.log(`User reacted with: ${reaction} on comment ID: ${comments._id}`);
-    // Here you can handle the reaction logic, e.g., send it to the server
+
+  const handleReaction = async (reaction: string, commentId: string) => {
+    console.log(`User reacted with: ${reaction} on comment ID: ${commentId}`);
+    try {
+      await dispatch(
+        createReaction({ postId: commentId, reactionType: reaction })
+      );
+      console.log(`Reaction "${reaction}" sent to server for comment ${commentId}`);
+    } catch (error) {
+      console.error("Error reacting to comment:", error);
+    }
   };
+
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -63,10 +77,12 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
             </div>
           ) : (
             comments.map((comment) => (
-              <div>
-                <CommentItem key={comment._id} comment={comment} />
+              <div key={comment._id}>
+                <CommentItem comment={comment} />
                 <div className="">
-                  <ReactionButton onReact={handleReaction}></ReactionButton>
+                  <ReactionButton
+                    onReact={(reaction) => handleReaction(reaction, comment._id)}
+                  />
                 </div>
               </div>
             ))

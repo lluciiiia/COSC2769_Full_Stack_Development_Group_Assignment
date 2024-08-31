@@ -7,6 +7,7 @@ const reactionSchema = new mongoose.Schema({
     enum: ["LIKE", "LOVE", "HAHA", "ANGRY"],
     required: true,
   },
+  postId:{type:String, required: true},
   createdAt: { type: Date, default: Date.now },
 });
 
