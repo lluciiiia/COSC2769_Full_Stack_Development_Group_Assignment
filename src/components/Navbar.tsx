@@ -11,9 +11,11 @@ import { NavItem } from "./NavItem";
 import PostModal from "./post/PostModal";
 import NotificationModal from "./notifications/NotificationModal";
 import ProfileButtonModal from "./ProfileButtonModal";
+import { useSelector } from "react-redux";
+import { selectAuthState } from "../features/authSlice";
 
 const Navbar = () => {
-  const{userId} =  useParams();
+  const{id} = useSelector(selectAuthState);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [isProfileModalOpen, setProfileOpen] = useState(false);
@@ -86,7 +88,7 @@ const Navbar = () => {
       <PostModal
         isOpen={isPostModalOpen}
         onClose={handleCloseModal}
-        userId={userId}
+        userId={id}
         post={null}
       />
     </>
