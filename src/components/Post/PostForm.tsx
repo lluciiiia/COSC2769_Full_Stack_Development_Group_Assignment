@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { PostFormProps } from "../../interfaces/Posts";
 
 const PostForm: React.FC<PostFormProps> = ({
@@ -48,6 +48,12 @@ const PostForm: React.FC<PostFormProps> = ({
     onSubmit(postParams); // Pass the postParams directly
   };
 
+  const handleRemoveImage = (index: number) => {
+    // Create a new array without the removed image
+    const updatedImages = images.filter((_, i) => i !== index);
+    setImages(updatedImages);
+  };
+
   return (
     <form onSubmit={handleFormSubmit}>
       <div className="grid grid-cols-1 gap-6">
@@ -84,7 +90,6 @@ const PostForm: React.FC<PostFormProps> = ({
           </div>
         </div>
 
-        {/* Image Upload Field */}
         <div className="mb-6 flex items-center gap-4">
           <label className="cursor-pointer rounded-md bg-[#FFC123] px-4 py-2 text-lg text-black shadow-sm hover:bg-yellow-500">
             Upload Images
@@ -98,14 +103,21 @@ const PostForm: React.FC<PostFormProps> = ({
           </label>
 
           {images.length > 0 && (
-            <div className="flex gap-2">
-              {images.slice(0, 3).map((image, index) => (
+            <div className="flex gap-2 flex-wrap">
+              {images.map((image, index) => (
                 <div key={index} className="relative w-24 h-24">
                   <img
                     src={image} // Displaying base64 images directly
                     alt={`Upload Preview ${index + 1}`}
                     className="object-cover w-full h-full rounded-md"
                   />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(index)}
+                    className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
+                  >
+                    &times;
+                  </button>
                 </div>
               ))}
               {images.length > 3 && (
