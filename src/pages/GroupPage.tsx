@@ -9,15 +9,21 @@ import { selectGroupById } from "../features/groupSlice";
 import { getPostsByGroup } from "../controllers/posts";
 import LoadingSpinner from "../assets/icons/Loading";
 import { fetchGroups } from "../controllers/group";
+import PostModal from "../components/post/PostModal";
+import { selectAuthState } from "../features/authSlice";
 
 export default function GroupPage() {
   const groupId = useParams<{ groupId: string }>().groupId || "";
   const dispatch: AppDispatch = useDispatch();
   const [group, setGroup] = useState<GroupType | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
+  const { id } = useSelector(selectAuthState);
+  const [isMember, setIsMember] = useState(false);
 
   const selectedGroup = useSelector((state: AppState) =>
-    selectGroupById(state, groupId || ""),
+    selectGroupById(state, groupId),
   );
 
   useEffect(() => {
@@ -37,7 +43,12 @@ export default function GroupPage() {
 
   useEffect(() => {
     setGroup(selectedGroup || null);
-  }, [selectedGroup]);
+    // Check if the user is a member of the group
+    if (selectedGroup) {
+      const memberStatus = selectedGroup.members.includes(id);
+      setIsMember(memberStatus); // Update isMember based on the check
+    }
+  }, [selectedGroup, id]);
 
   if (loading) {
     return (
@@ -55,6 +66,15 @@ export default function GroupPage() {
     );
   }
 
+  const handleCreatePost = () => {
+    setSelectedPost(null);
+    setIsPostModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsPostModalOpen(false);
+  };
+
   return (
     <div>
       <ReturnNavbar />
@@ -71,26 +91,31 @@ export default function GroupPage() {
             />
           </div>
         </header>
-        <div className="ml-64 mt-4">
-          <h1 className="text-xl font-bold text-black">{group.name}</h1>
-          <p className="text-sm text-gray-600">
-            {group.members ? group.members.length : 0} members
-          </p>
-        </div>
-        <div>
-          <div className="mt-4 px-4">
-            <div className="flex items-start">
-              <div className="ml-auto flex space-x-2">
-                <button className="rounded-md bg-red-600 px-4 py-2 text-white shadow-md">
-                  Leave Group
-                </button>
-                <button className="rounded-md border border-gray-400 bg-white px-4 py-2 text-black shadow-md">
-                  Report
-                </button>
-              </div>
-            </div>
+        <div className="ml-64 mt-4 flex">
+          <div className="flex flex-col">
+            <h1 className="text-xl font-bold text-black">{group.name}</h1>
+            <p className="text-sm text-gray-600">
+              {group.members ? group.members.length : 0} members
+            </p>
+          </div>
+          <div className="ml-auto mr-2 flex space-x-2">
+            {isMember && (
+              <button
+                onClick={handleCreatePost}
+                className="rounded-md bg-[#FFC123] px-2 text-sm text-white shadow-md"
+              >
+                Create Post
+              </button>
+            )}
+            <button className="rounded-md bg-red-600 px-2 text-sm text-white shadow-md">
+              Leave Group
+            </button>
+            <button className="rounded-md border border-gray-400 bg-white px-2 text-sm text-black shadow-md">
+              Report
+            </button>
           </div>
         </div>
+        <div></div>
 
         <nav className="mt-4 border-b border-gray-300 bg-white">
           <div className="flex justify-around py-2">
@@ -131,6 +156,12 @@ export default function GroupPage() {
           <Outlet />
         </main>
       </div>
+      <PostModal
+        isOpen={isPostModalOpen}
+        onClose={handleCloseModal}
+        userId={id}
+        post={selectedPost}
+      />
     </div>
   );
 }

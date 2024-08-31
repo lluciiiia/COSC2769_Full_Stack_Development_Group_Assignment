@@ -65,6 +65,7 @@ export const loginUser = async (req: any) => {
       id: user._id,
       isAuthenticated: true,
       name: user.name,
+      profilePictureURL: user.profilePictureURL,
       isAdmin: user.isAdmin,
       email: user.email,
     };
@@ -86,9 +87,9 @@ export const logoutUser = (req: any, res: any) => {
     }
 
     // Clear cookies
-    res.clearCookie('isAuthenticated');
-    res.clearCookie('userId');
-    res.clearCookie('userName');
+    res.clearCookie("isAuthenticated");
+    res.clearCookie("userId");
+    res.clearCookie("userName");
 
     return res.status(200).json({ message: "Logout successful" });
   });

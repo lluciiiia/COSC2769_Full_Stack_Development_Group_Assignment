@@ -4,6 +4,7 @@ import { CommentProps } from "../../interfaces/Comments";
 import { formatRelativeTime } from "../../utils/formatRelativeTime";
 import { deleteCommentById, updateComment } from "../../controllers/comments";
 import CommentHistoryModal from "./CommentHistoryModal";
+import DefaultProfile from "../../assets/icons/DefaultProfile";
 
 const CommentItem: React.FC<CommentProps> = ({ comment }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -60,15 +61,27 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
     setIsEditing(false);
   };
 
+  const safeProfileImage =
+    typeof comment.profileSection.profileImage === "string" &&
+    comment.profileSection.profileImage.length > 0
+      ? comment.profileSection.profileImage
+      : null;
+
   return (
     <div className="w-[650px] rounded-md bg-white p-2 shadow-sm">
       <div className="flex">
         <div className="mr-2 flex-shrink-0">
-          <img
-            src={comment.profileSection.profileImage}
-            alt="Profile"
-            className="h-[30px] w-[30px] rounded-full"
-          />
+          {safeProfileImage ? (
+            <img
+              src={comment.profileSection.profileImage}
+              alt="Profile"
+              className="h-[30px] w-[30px] rounded-full"
+            />
+          ) : (
+            <div className="h-[30px] w-[30px]">
+              <DefaultProfile />
+            </div>
+          )}
         </div>
         <div className="flex-1">
           <div className="flex items-center">
@@ -76,9 +89,14 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
               {comment.profileSection.profileName}
             </div>
             <div className="ml-auto flex items-center justify-center gap-1">
-              <p className="text-xs text-gray-500">
-                {formatRelativeTime(comment.createdAt)}
-              </p>
+              <div className="flex flex-col">
+                <p className="text-xs text-gray-500">
+                  {formatRelativeTime(comment.createdAt)}
+                </p>
+                {comment.history?.length > 0 ? (
+                  <p className="text-right text-xs text-gray-500">(Edited)</p>
+                ) : null}
+              </div>
               <div>
                 <img
                   src="/src/assets/svgs/ThreeDots.svg"

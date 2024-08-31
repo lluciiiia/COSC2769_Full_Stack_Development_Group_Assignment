@@ -1,6 +1,6 @@
 import React from "react";
 import { PostParams } from "../../interfaces/Posts";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ReactionSection } from "./ReactionSection";
 import { ProfileSection } from "./ProfileSection";
 import CommentItem from "../comments/CommentItem";

@@ -6,10 +6,13 @@ import CommentContainer from "../components/comments/CommentContainer";
 import { getPostById } from "../controllers/posts";
 import PostContainer from "../components/post/PostContainer";
 import LoadingSpinner from "../assets/icons/Loading";
+import { useSelector } from "react-redux";
+import { selectAuthState } from "../features/authSlice";
 
 const PostDetail: React.FC = () => {
   const [post, setPost] = useState<PostParams | null>(null);
-  const { userId, postId } = useParams();
+  const { postId } = useParams();
+  const { id } = useSelector(selectAuthState);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -48,10 +51,11 @@ const PostDetail: React.FC = () => {
                 comments={post.comments}
                 reactions={post.reactions}
                 isDetail={true}
+                history={post.history}
               />
               <CommentContainer
                 initComments={post.comments}
-                userId={userId}
+                userId={id}
                 postId={post._id}
               />
             </>
