@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../app/store";
-import { useParams } from "react-router-dom";
-import React, { useEffect, useRef, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import TabContent from "../components/profiles/TabContent";
 import ProfileHeader from "../components/profiles/ProfileHeader";
 import TabNavigation from "../components/profiles/TabNavigation";
@@ -17,6 +17,8 @@ const Profile = () => {
   const { id } = useSelector(selectAuthState);
   const { profileId } = useParams();
 
+  const location = useLocation(); 
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -29,7 +31,7 @@ const Profile = () => {
         setLoading(false);
       });
     }
-  }, [profileId, id, dispatch]);
+  }, [profileId, id, dispatch, location.key]);
 
   const viewedUser = useSelector(selectViewedUser);
   const currentUser = useSelector(selectCurrentUser);

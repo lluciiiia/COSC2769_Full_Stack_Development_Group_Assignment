@@ -15,18 +15,15 @@ const TabContent = ({
 }: {
   activeTab: string;
   userId: string | undefined;
-
   isAuthenticatedUser;
 }) => {
   const dispatch: AppDispatch = useDispatch();
   const firstRender = useRef(true);
 
   useEffect(() => {
-    if (firstRender.current) {
-      dispatch(getPostsByCreatorId(userId));
-      firstRender.current = false;
-    }
-  }, []);
+    dispatch(getPostsByCreatorId(userId));
+    firstRender.current = false;
+  }, [dispatch, userId]);
 
   switch (activeTab) {
     case "Posts":

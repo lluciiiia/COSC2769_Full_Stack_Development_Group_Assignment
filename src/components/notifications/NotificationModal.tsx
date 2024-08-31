@@ -11,7 +11,6 @@ const NotificationModal = ({ isOpen }: { isOpen: boolean }) => {
     dispatch(fetchNotification());
   }, [dispatch]);
 
-  console.log(notifications);
 
   return (
     isOpen && (

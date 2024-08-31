@@ -12,7 +12,7 @@ const ProfileHeader = ({
 }) => {
   const { id } = useSelector(selectAuthState);
 
-  const isFriend = friends.some((f) => f._id == id);
+  const isFriend = friends?.some((f) => f._id == id);
 
   return (
     <div className="relative h-64 w-full bg-gray-200 bg-cover bg-center">
