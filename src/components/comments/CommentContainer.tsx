@@ -17,7 +17,6 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState<string>("");
 
-  // Handle the reaction on a specific comment
   const handleReaction = async (reaction: string, commentId: string) => {
     console.log(`User reacted with: ${reaction} on comment ID: ${commentId}`);
     try {

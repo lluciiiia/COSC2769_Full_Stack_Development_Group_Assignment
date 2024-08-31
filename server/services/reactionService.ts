@@ -16,6 +16,7 @@ export const commentReaction = async (
     // Create a new reaction
     const newReaction = new Reaction({
       userId: userId,
+      postId:postId,
       reactionType: reactionType,
       createdAt: new Date(),
     });
