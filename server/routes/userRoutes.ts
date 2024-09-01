@@ -8,6 +8,7 @@ import {
   updateUser,
   addFriend,
   acceptFriendRequest,
+  groupJoinRequest
 } from "../services/userServices";
 import { isAuthenticated } from "../middleware/authenticate";
 
@@ -132,6 +133,21 @@ router.delete("/unfriend/:friendId", async (req, res) => {
     res.json({ message: "Friend removed successfully!" });
   } catch (error) {
     res.status(500).json({ error: error });
+  }
+});
+
+router.post("/sentGroup/:groupId", async (req, res) => {
+  try {
+    const userId = req.session.user.id;
+    const { groupId } = req.params;
+
+    // Call the createNotification function
+    const result = await groupJoinRequest(userId, groupId);
+
+    // Respond with success
+    res.status(200).json({ message: "Notification sent successfully", notification: result });
+  } catch (error) {
+    res.status(500).json({ error: error});
   }
 });
 

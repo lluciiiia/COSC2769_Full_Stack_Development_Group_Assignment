@@ -43,6 +43,30 @@ export const fetchSentFriendRequests = createAsyncThunk<Notifications[]>(
   },
 );
 
+export const groupSentRequest = createAsyncThunk<Notifications[]>(
+  "notifications/groupSentRequest",
+
+  async () => {
+    const response = await fetch(BACKEND_URL + `/api/notifications/groupRequest`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      console.error(
+        "Failed to fetch sent friend requests:",
+        response.statusText,
+      );
+      throw new Error("Failed to fetch sent friend requests");
+    }
+
+    const data: Notifications[] = await response.json();
+
+    return data;
+  },
+);
+
+
 export const acceptFriendRequestNotification = createAsyncThunk<
   { message: string },
   string

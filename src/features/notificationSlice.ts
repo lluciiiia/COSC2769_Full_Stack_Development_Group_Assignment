@@ -1,15 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
-  acceptFriendRequestNotification,
   fetchNotification,
   fetchSentFriendRequests,
+  groupSentRequest
 } from "../controllers/notification";
-import { NotiProps } from "../interfaces/notification";
+import { NotiProps, GroupRequest } from "../interfaces/notification";
 import { AppState } from "../app/store";
 
 const initialState: NotiProps = {
   notifications: [],
   sentFriendRequests: [],
+  sentGroupRequests: [],
 };
 
 const notificationSlice = createSlice({
@@ -23,18 +24,10 @@ const notificationSlice = createSlice({
     builder.addCase(fetchSentFriendRequests.fulfilled, (state, action) => {
       state.sentFriendRequests = action.payload;
     });
-    // builder.addCase(
-    //   acceptFriendRequestNotification.fulfilled,
-    //   (state, action) => {
-    //     const updatedNotificationId = action.payload;
-
-    //     state.notifications = state.notifications.map((noti) =>
-    //       noti._id === updatedNotificationId
-    //         ? { ...noti, isSeen: true, isAccepted: true }
-    //         : noti,
-    //     );
-    //   },
-    // );
+    builder.addCase(groupSentRequest.fulfilled, (state, action) => {
+      console.log(action.payload, "response");
+      state.sentGroupRequests = action.payload as unknown as GroupRequest[]; // Ensure this matches the GroupRequest type
+    });
   },
 });
 
@@ -43,5 +36,10 @@ export const selectSentFriendRequests = (state: AppState) =>
 
 export const selectNotifications = (state: AppState) =>
   state.notifications.notifications;
+
+export const selectGroupRequest = (state: AppState, groupId: string) =>
+  state.notifications.sentGroupRequests.find(
+    (request) => request.groupId === groupId
+  );
 
 export default notificationSlice.reducer;

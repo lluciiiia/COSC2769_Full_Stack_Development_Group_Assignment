@@ -11,6 +11,9 @@ import LoadingSpinner from "../assets/icons/Loading";
 import { fetchGroups } from "../controllers/group";
 import PostModal from "../components/post/PostModal";
 import { selectAuthState } from "../features/authSlice";
+import { sendGroupRequest } from "../controllers/user"; 
+import {  selectGroupRequest } from "../features/notificationSlice";
+import { groupSentRequest } from "../controllers/notification";
 
 export default function GroupPage() {
   const groupId = useParams<{ groupId: string }>().groupId || "";
@@ -23,8 +26,14 @@ export default function GroupPage() {
   const [isMember, setIsMember] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false); // New state for admin check
 
+  // Use the selector to get the selected group
   const selectedGroup = useSelector((state: AppState) =>
     selectGroupById(state, groupId)
+  );
+
+  // Use the selector to check if a group request has already been sent
+  const existingGroupRequest = useSelector((state: AppState) =>
+    selectGroupRequest(state, groupId)
   );
 
   useEffect(() => {
@@ -55,6 +64,24 @@ export default function GroupPage() {
       }
     }
   }, [selectedGroup, userId]);
+
+  useEffect(() => {
+    dispatch(groupSentRequest());
+  }, [dispatch]);
+
+  const handleJoinGroup = async () => {
+    if (existingGroupRequest) {
+      console.log("Group request already sent");
+      return;
+    }
+
+    try {
+      const response = await dispatch(sendGroupRequest(groupId));
+      console.log("Group request response:", response);
+    } catch (error) {
+      console.error("Failed to join group:", error);
+    }
+  };
 
   if (loading) {
     return (
@@ -119,8 +146,14 @@ export default function GroupPage() {
               </>
             ) : (
               !isAdmin && ( // Only show "Join" button if user is not an admin
-                <button className="rounded-md bg-[#FFC123] px-4 text-sm text-white shadow-md">
-                  Join
+                <button
+                  onClick={handleJoinGroup}
+                  className={`rounded-md px-4 text-sm text-white shadow-md ${
+                    existingGroupRequest ? "cursor-not-allowed bg-gray-400" : "bg-[#FFC123]"
+                  }`}
+                  disabled={!!existingGroupRequest}
+                >
+                  {existingGroupRequest ? "Request Sent" : "Join"}
                 </button>
               )
             )}
@@ -132,7 +165,6 @@ export default function GroupPage() {
             )}
           </div>
         </div>
-        <div></div>
 
         <nav className="mt-4 border-b border-gray-300 bg-white">
           <div className="flex justify-around py-2">
