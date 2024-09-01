@@ -38,7 +38,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     return <Navigate to="/" replace />;
   }
 
-  if (auth.isAdmin) {
+  if (!auth.isAdmin) {
     return <Navigate to="/home" replace />;
   }
   return children;
