@@ -52,7 +52,7 @@ const GroupList: React.FC = () => {
         <CreateGroupModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          //onCreate={handleCreateGroup}
+          userId={id}
         />
       )}
 
@@ -68,7 +68,8 @@ const GroupList: React.FC = () => {
               No groups found
             </div>
           ) : (
-            groups.map((group: GroupType, index: number) => (
+            // Filter groups to only include accepted ones
+            groups.filter((group: GroupType) => group.accepted).map((group: GroupType, index: number) => (
               <div
                 key={group._id}
                 className={`relative flex items-center justify-center py-4 ${

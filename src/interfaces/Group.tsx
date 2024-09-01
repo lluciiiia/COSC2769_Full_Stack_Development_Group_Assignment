@@ -6,10 +6,11 @@ export type GroupType = {
   visibility: string;
   imageURL: string;
   backgroundImageURL: string;
-  dateCreated: string;
+  dateCreated?: string;
+  members?: string[];
   members: UserType[];
   accepted: boolean;
-  description: string;
+  description?: string;
 };
 
 export interface GroupParams {
