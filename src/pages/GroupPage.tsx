@@ -11,6 +11,7 @@ import LoadingSpinner from "../assets/icons/Loading";
 import { fetchGroups } from "../controllers/group";
 import PostModal from "../components/post/PostModal";
 import { selectAuthState } from "../features/authSlice";
+import { sendGroupRequest } from "../controllers/user"; // Import the sendGroupRequest action
 
 export default function GroupPage() {
   const groupId = useParams<{ groupId: string }>().groupId || "";
@@ -21,7 +22,7 @@ export default function GroupPage() {
   const [selectedPost, setSelectedPost] = useState(null);
   const { id } = useSelector(selectAuthState);
   const [isMember, setIsMember] = useState(false);
-
+  const [click, isClick] = useState(false);
   const selectedGroup = useSelector((state: AppState) =>
     selectGroupById(state, groupId),
   );
@@ -46,9 +47,27 @@ export default function GroupPage() {
     // Check if the user is a member of the group
     if (selectedGroup) {
       const memberStatus = selectedGroup.members.includes(id);
-      setIsMember(memberStatus); // Update isMember based on the check
+
+      setIsMember(memberStatus);
     }
   }, [selectedGroup, id]);
+
+  const handleJoinGroup = async () => {
+    try {
+      const response = await dispatch(sendGroupRequest(groupId));
+      console.log("Group request response:", response);
+
+      const payload = response.payload as {
+        message: string;
+        notification: { type: string };
+      };
+      const isSendingRequest = payload.notification.type === "GROUP_REQUEST";
+
+      isClick(isSendingRequest);
+    } catch (error) {
+      console.error("Failed to join group:", error);
+    }
+  };
 
   if (loading) {
     return (
@@ -112,7 +131,13 @@ export default function GroupPage() {
                 </button>
               </>
             ) : (
-              <button className="rounded-md bg-[#FFC123] px-4 text-sm text-white shadow-md">
+              <button
+                onClick={handleJoinGroup} // Attach the handler to the Join button
+                className={`rounded-md px-4 text-sm text-white shadow-md ${
+                  click ? "cursor-not-allowed bg-gray-400" : "bg-[#FFC123]"
+                }`}
+                disabled={click}
+              >
                 Join
               </button>
             )}

@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import User from "../models/user";
+import Notifications from "../models/notification";
 import { createFriendRequestNotification } from "./notificationsService";
+import Group from "../models/group";
 
 export const getAllUsers = async () => {
   try {
@@ -77,6 +79,28 @@ export const updateUser = async (userId: string, updateData: any) => {
   }
 };
 
+export const groupJoinRequest = async (userId: string, groupId: string) => {
+  try {
+    const group = await Group.findById(groupId);
+    if (!group) {
+      throw new Error("Group not found");
+    }
+    const newNoti = {
+      senderId: userId,
+      receiverId: group?.groupAdmin,
+      type: "GROUP_REQUEST",
+    };
+
+    const result = new Notifications(newNoti);
+    await result.save();
+    console.log("Notification created successfully");
+    return result;
+    
+  } catch (error) {
+    console.error("Error removing friend", error);
+    throw new Error("Failed to remove friend");
+  }
+};
 export const unfriendById = async (userId: string, friendId: string) => {
   try {
     const userObjectId = new mongoose.Types.ObjectId(userId);

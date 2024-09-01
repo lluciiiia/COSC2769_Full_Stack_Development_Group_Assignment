@@ -150,3 +150,28 @@ export const unfriendById = createAsyncThunk<{ message: string }, string>(
     return data;
   },
 );
+
+
+export const sendGroupRequest = createAsyncThunk<
+  { message: string; notification: { type: string; receiverId: string; senderId: string } },
+  string
+>("user/sendGroupRequest", async (groupId) => {
+  const response = await fetch(
+    BACKEND_URL + `/api/users/sentGroup/${groupId}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    console.error("Failed to send group request:", response.statusText);
+    throw new Error("Failed to send group request");
+  }
+
+  const data = await response.json();
+  return data;
+});
