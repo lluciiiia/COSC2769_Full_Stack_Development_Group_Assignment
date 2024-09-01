@@ -64,10 +64,10 @@ export const acceptFriendRequestNotification = createAsyncThunk<
   return data;
 });
 
-export const denyFriendRequestNotification = createAsyncThunk<
+export const removeFriendRequestNotification = createAsyncThunk<
   { message: string },
   string
->("notifications/denyFriendRequestNotification", async (notificationId) => {
+>("notifications/removeFriendRequestNotification", async (notificationId) => {
   const response = await fetch(
     BACKEND_URL + `/api/notifications/${notificationId}`,
     {

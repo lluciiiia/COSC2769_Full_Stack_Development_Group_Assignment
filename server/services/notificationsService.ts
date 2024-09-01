@@ -65,17 +65,27 @@ export const acceptedFriendRequestNotification = async (
   try {
     const notificationObjectId = new mongoose.Types.ObjectId(notificationId);
 
-    const notification = await Notifications.findByIdAndUpdate(
-      notificationObjectId,
-      {
-        isAccepted: true,
-        isSeen: true,
-      },
-      { new: true }, // Return the updated document
-    );
+    const notification = await Notifications.findById(notificationObjectId);
 
     if (!notification) {
       throw new Error("Notification not found");
+    }
+
+    const { senderId, receiverId } = notification;
+
+    const updatedNotification = await Notifications.findByIdAndUpdate(
+      notificationObjectId,
+      {
+        senderId: receiverId,
+        receiverId: senderId,
+        type: "FRIEND_REQUEST_ACCEPTED",
+        isAccepted: true,
+      },
+      { new: true },
+    );
+
+    if (!updatedNotification) {
+      throw new Error("Failed to update notification");
     }
 
     return { message: "Friend request accepted successfully." };

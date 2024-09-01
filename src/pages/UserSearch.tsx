@@ -30,7 +30,10 @@ const UserSearch = () => {
     ? users.filter((user: UserType) =>
         user.name.toLowerCase().includes(searchQuery.toLowerCase())
       )
-    : [];
+    : users;
+
+  // Show only the first 10 users
+  const displayedUsers = filteredUsers.slice(0, 10);
 
   return (
     <div className="p-6">
@@ -48,35 +51,33 @@ const UserSearch = () => {
       </div>
 
       {/* User cards */}
-      {searchQuery && (
-        <div className="space-y-4">
-          {filteredUsers.length > 0 ? (
-            filteredUsers.map((user: UserType) => (
-              <div
-                key={user._id}
-                onClick={() => handleUserClick(user._id)}
-                className="flex items-center border rounded-lg p-4 shadow-md w-full cursor-pointer"
-              >
-                {/* User Profile Picture */}
-                <img
-                  src={user.profilePictureURL || "/default-profile.png"} // Fallback image if no profile picture
-                  alt={`${user.name}'s profile`}
-                  className="w-24 h-24 rounded-full object-cover mr-4"
-                />
-                {/* User Info */}
-                <div className="flex-1">
-                  <h2 className="text-xl font-semibold">{user.name}</h2>
-                  {user.location && (
-                    <p className="text-sm text-gray-600">Location: {user.location}</p>
-                  )}
-                </div>
+      <div className="space-y-4">
+        {displayedUsers.length > 0 ? (
+          displayedUsers.map((user: UserType) => (
+            <div
+              key={user._id}
+              onClick={() => handleUserClick(user._id)}
+              className="flex items-center border rounded-lg p-4 shadow-md w-full cursor-pointer"
+            >
+              {/* User Profile Picture */}
+              <img
+                src={user.profilePictureURL || "/default-profile.png"} // Fallback image if no profile picture
+                alt={`${user.name}'s profile`}
+                className="w-24 h-24 rounded-full object-cover mr-4"
+              />
+              {/* User Info */}
+              <div className="flex-1">
+                <h2 className="text-xl font-semibold">{user.name}</h2>
+                {user.location && (
+                  <p className="text-sm text-gray-600">Location: {user.location}</p>
+                )}
               </div>
-            ))
-          ) : (
-            <p className="text-gray-600">No users found.</p>
-          )}
-        </div>
-      )}
+            </div>
+          ))
+        ) : (
+          <p className="text-gray-600">No users found.</p>
+        )}
+      </div>
     </div>
   );
 };

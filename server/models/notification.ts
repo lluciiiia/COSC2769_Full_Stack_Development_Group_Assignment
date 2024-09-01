@@ -13,7 +13,12 @@ const notificationSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ["FRIEND_REQUEST", "GROUP_REQUEST"],
+    enum: [
+      "FRIEND_REQUEST",
+      "FRIEND_REQUEST_ACCEPTED",
+      "GROUP_REQUEST",
+      "GROUP_REQUEST_ACCEPTED",
+    ],
     required: true,
   },
   isAccepted: { type: Boolean, require: true, default: false },

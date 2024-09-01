@@ -16,9 +16,9 @@ import {
 } from "../../features/notificationSlice";
 import {
   acceptFriendRequestNotification,
-  denyFriendRequestNotification,
   fetchNotification,
   fetchSentFriendRequests,
+  removeFriendRequestNotification,
 } from "../../controllers/notification";
 const ProfileHeader = ({
   name,
@@ -76,7 +76,7 @@ const ProfileHeader = ({
   };
 
   const handleDenyFriendRequest = (notificationId) => {
-    dispatch(denyFriendRequestNotification(notificationId)).then(() => {
+    dispatch(removeFriendRequestNotification(notificationId)).then(() => {
       dispatch(fetchNotification());
     });
   };
