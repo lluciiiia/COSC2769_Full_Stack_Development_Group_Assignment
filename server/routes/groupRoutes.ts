@@ -1,6 +1,6 @@
 import express from "express";
 import Group from "../models/group";
-import { acceptGroup, getAllGroups, getGroupsByUserId, rejectGroup } from "../services/groupservice";
+import { acceptGroup, getAllGroups, getGroupsByUserId, createGroup } from "../services/groupservice";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -34,21 +34,35 @@ router.get("/user/:userId", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/createGroup", async (req, res) => {
   try {
-    const newGroup = new Group(req.body);
-    console.log(newGroup);
-    await newGroup.save();
-    res.status(201).json({ message: "Group created", user: newGroup });
+    const newGroupData = {
+      groupAdmin: req.body.groupAdmin,
+      name: req.body.name,
+      imageURL: req.body.imageURL,
+      backgroundImageURL: req.body.backgroundImageURL,
+      description: req.body.description,
+    };
+
+    const group = await createGroup(newGroupData);
+
+    if (!group) {
+      return res.status(500).json({ message: "Failed to create group" });
+    }
+
+    res.status(201).json({ message: "Group created", group });
   } catch (error: any) {
     console.error("Error creating group", error);
 
     if (error.name === "ValidationError") {
       return res.status(400).json({ error: error.message });
     }
+
     res.status(500).json({ error: "Failed to create group" });
   }
 });
+
+
 
 router.put("/accepted/:id", async (req, res) => {
   try {
