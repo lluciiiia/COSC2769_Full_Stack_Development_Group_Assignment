@@ -38,3 +38,7 @@ export const handleAcceptGroup = async (groupId: string): Promise<GroupType> => 
       throw error; // Re-throw the error to be handled by the caller
     }
   };
+
+
+
+

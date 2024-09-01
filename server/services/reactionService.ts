@@ -7,7 +7,7 @@ export const createReaction = async ({
   postId,
   userId,
   reactionType,
-  targetType, // "post" or "comment"
+  targetType, 
 }: {
   postId: string;
   userId: string;
@@ -59,7 +59,7 @@ export const createReaction = async ({
   }
 };
 
-export const fetchingUserReact = async (postId: string, userId: string) => {
+export const fetchReaction = async (postId: string, userId: string) => {
     try {
       console.log("Attempting to find reaction for postId:", postId, "and userId:", userId);
       const existingReaction = await Reaction.findOne({ postId, userId });
