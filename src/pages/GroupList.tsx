@@ -84,7 +84,6 @@ const GroupList: React.FC = () => {
         <CreateGroupModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-
         />
       )}
 
@@ -96,30 +95,6 @@ const GroupList: React.FC = () => {
               <button
                 className={`px-4 py-2 font-bold ${
                   activeSubtab === "all" ? "border-b-2 border-[#FFC123] text-[#FFC123]" : "text-gray-700"
-
-          userId={id}
-        />
-      )}
-
-      {/* Group List */}
-      {!isModalOpen && (
-        <div className="flex h-[550px] w-[700px] flex-col overflow-y-auto px-4 mt-6">
-          {loading ? (
-            <div className="flex h-64 items-center justify-center">
-              <LoadingSpinner />
-            </div>
-          ) : groups && groups.length === 0 ? (
-            <div className="text-center text-lg font-semibold text-gray-600">
-              No groups found
-            </div>
-          ) : (
-            // Filter groups to only include accepted ones
-            groups.filter((group: GroupType) => group.accepted).map((group: GroupType, index: number) => (
-              <div
-                key={group._id}
-                className={`relative flex items-center justify-center py-4 ${
-                  index < groups.length - 1 ? "border-b-2" : ""
-
                 }`}
                 onClick={() => setActiveSubtab("all")}
               >
