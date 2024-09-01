@@ -31,11 +31,16 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     return <p>Loading...</p>; // Display a loading message while the session is being fetched
   }
 
+  
+
   // Check Redux state for authentication
   if (!auth.isAuthenticated) {
     return <Navigate to="/" replace />;
   }
 
+  if (auth.isAdmin) {
+    return <Navigate to="/home" replace />;
+  }
   return children;
 };
 
