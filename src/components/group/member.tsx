@@ -28,42 +28,45 @@ export default function Member() {
   return (
     <div className="flex justify-center">
       <div className="space-y-4 p-4 max-w-xl w-full">
-        {users.map((user: UserType) => (
-          <div key={user._id} className="flex items-center justify-between relative">
-            <div className="flex items-center">
-              <img
-                src='/cat.png'
-                alt={user.name}
-                className="w-12 h-12 rounded-full border-2 border-black"
-              />
-              <span className="ml-4 text-lg font-bold">{user.name}</span>
-            </div>
-            <button
-              className="text-black text-2xl focus:outline-none ml-8"
-              onClick={() => toggleDropdown(user._id)} 
-            >
-              ...
-            </button>
-            {dropdownOpen === user._id && ( 
-              <div
-                ref={dropdownRef} 
-                className="absolute right-0 mt-2 w-32 bg-white border border-gray-300 rounded-md shadow-lg z-10"
-              >
-                <button
-                  className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-                  onClick={() => {
-                    console.log('Delete user:', user.name);
-                    setDropdownOpen(null);
-                  }}
-                >
-                  Delete
-                </button>
+        {users.length === 0 ? (
+          <p className="text-center text-gray-500">There are no members.</p>
+        ) : (
+          users.map((user: UserType) => (
+            <div key={user._id} className="flex items-center justify-between relative">
+              <div className="flex items-center">
+                <img
+                  src='/cat.png'
+                  alt={user.name}
+                  className="w-12 h-12 rounded-full border-2 border-black"
+                />
+                <span className="ml-4 text-lg font-bold">{user.name}</span>
               </div>
-            )}
-          </div>
-        ))}
+              <button
+                className="text-black text-2xl focus:outline-none ml-8"
+                onClick={() => toggleDropdown(user._id)} 
+              >
+                ...
+              </button>
+              {dropdownOpen === user._id && ( 
+                <div
+                  ref={dropdownRef} 
+                  className="absolute right-0 mt-2 w-32 bg-white border border-gray-300 rounded-md shadow-lg z-10"
+                >
+                  <button
+                    className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                    onClick={() => {
+                      console.log('Delete user:', user.name);
+                      setDropdownOpen(null);
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
 }
-
