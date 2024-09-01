@@ -20,6 +20,9 @@ const NotificationModal = ({
 }) => {
   const dispatch: AppDispatch = useDispatch();
 
+  const handleAcceptGroupRequest= (senderId, notificationId)=>{
+    
+  }
   const handleAcceptFriendRequest = (friendId, notificationId) => {
     dispatch(acceptFriendRequest(friendId));
     dispatch(acceptFriendRequestNotification(notificationId)).then(() => {
@@ -52,9 +55,7 @@ const NotificationModal = ({
             />
           ))
         ) : (
-          <div className="p-4 text-center text-gray-500">
-            No notifications
-          </div>
+          <div className="p-4 text-center text-gray-500">No notifications</div>
         )}
       </div>
     )
@@ -159,7 +160,24 @@ export const RequestItems = ({
       )}
 
       {requestType === "GROUP_REQUEST" && !isAccepted && (
-        <button>GROUP BUTTON</button>
+        <div className="mt-4 flex justify-end space-x-2">
+          <button
+            className="rounded-lg bg-[#FFC123] px-3 py-1 text-sm font-bold text-white hover:opacity-40"
+            onClick={() => {
+              handleAcceptFriendRequest(friendId, notificationId);
+            }}
+          >
+            Accept
+          </button>
+          <button
+            className="rounded-lg bg-white px-3 py-1 text-sm font-bold text-black hover:opacity-20"
+            onClick={() => {
+              handleRemoveNotification(notificationId);
+            }}
+          >
+            Deny
+          </button>
+        </div>
       )}
     </div>
   );

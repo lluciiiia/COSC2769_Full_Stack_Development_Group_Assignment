@@ -3,6 +3,7 @@ import User from "../models/user";
 import Notifications from "../models/notification";
 import { createFriendRequestNotification } from "./notificationsService";
 import Group from "../models/group";
+import { group } from "console";
 
 export const getAllUsers = async () => {
   try {
@@ -88,6 +89,7 @@ export const groupJoinRequest = async (userId: string, groupId: string) => {
     const newNoti = {
       senderId: userId,
       receiverId: group?.groupAdmin,
+      groupId: groupId,
       type: "GROUP_REQUEST",
     };
 
@@ -95,10 +97,64 @@ export const groupJoinRequest = async (userId: string, groupId: string) => {
     await result.save();
     console.log("Notification created successfully");
     return result;
-    
   } catch (error) {
     console.error("Error removing friend", error);
     throw new Error("Failed to remove friend");
+  }
+};
+
+export const acceptGroupRequest = async (
+  userId: string,
+  notiID: string,
+  senderId: string,
+) => {
+  try {
+    // Convert IDs to ObjectId if they are not already
+    const notificationId = new mongoose.Types.ObjectId(notiID);
+    const senderObjectId = new mongoose.Types.ObjectId(senderId);
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+
+    // Find the notification by ID and delete it
+    const oldNoti = await Notifications.findById(notificationId);
+    if (!oldNoti) {
+      throw new Error("Notification not found");
+    }
+
+    await Notifications.findByIdAndDelete(notificationId);
+
+    // Find the group associated with the notification
+    const group = await Group.findById(oldNoti.gruopId);
+    if (!group) {
+      throw new Error("Group not found");
+    }
+
+    // Add the sender to the group’s members
+    if (!group.members.includes(senderObjectId)) {
+      group.members.push(senderObjectId);
+    }
+    await group.save();
+
+    // Create a new notification for the friend request acceptance
+    const newNoti = {
+      senderId: userObjectId,
+      receiverId: senderObjectId,
+      type: "FRIEND_REQUEST_ACCEPTED",
+    };
+
+    const notification = new Notifications(newNoti);
+    await notification.save(); // Save the new notification to the database
+
+    console.log(`Group request accepted: Notification ID ${notiID}`);
+
+    // Return the new notification or a success message
+    return {
+      success: true,
+      message: "Group request accepted and new notification created",
+      notification,
+    };
+  } catch (error) {
+    console.error("Error accepting group request:", error);
+    throw new Error("Failed to accept group request");
   }
 };
 export const unfriendById = async (userId: string, friendId: string) => {

@@ -8,7 +8,8 @@ import {
   updateUser,
   addFriend,
   acceptFriendRequest,
-  groupJoinRequest
+  groupJoinRequest,
+  acceptGroupRequest
 } from "../services/userServices";
 import { isAuthenticated } from "../middleware/authenticate";
 
@@ -108,6 +109,18 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+router.put("/groupRequest",async (req,res) =>{
+  try{
+    const userId= req.session.user.id;
+    const {notiId, senderId} = req.body;
+
+    const notification= await acceptGroupRequest(userId, notiId, senderId);
+
+    res.json(notification)
+  }catch(error){
+    res.status(500).json({ error: error });
+  }
+})
 router.post("/", async (req, res) => {
   try {
     const newUser = new User(req.body);
