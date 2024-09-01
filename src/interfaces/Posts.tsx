@@ -33,6 +33,7 @@ export interface ReactionSectionProps {
   initialReaction?: string;
   isReacted: boolean;
   reactions: Reaction;
+  commentCount?: number;
 }
 export interface AdminSectionProps {
   handleClick: () => void;

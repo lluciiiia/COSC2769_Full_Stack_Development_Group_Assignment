@@ -8,7 +8,8 @@ export const ReactionSection: React.FC<ReactionSectionProps> = ({
   onReact,
   initialReaction,
   isReacted,
-  reactions
+  reactions,
+  commentCount // New prop for comment count
 }) => {
   const [liked, setLiked] = useState(isReacted);
   const [showReactions, setShowReactions] = useState(false);
@@ -106,21 +107,31 @@ export const ReactionSection: React.FC<ReactionSectionProps> = ({
 
   return (
     <div className="relative">
-      <div
-        className="flex justify-between p-4"
-        onMouseEnter={keepReactionsVisible}
-        onMouseLeave={hideReactions}
-      >
-        {renderReactionIcon()}
-        <button
-          onClick={handleClick}
-          className="flex items-center space-x-2 rounded px-3 py-1 text-gray-500 hover:bg-gray-100"
-        >
-          <CommentIcon />
-          <span>Comment</span>
-        </button>
-      </div>
+  <div
+    className="flex justify-between p-4"
+    onMouseEnter={keepReactionsVisible}
+    onMouseLeave={hideReactions}
+  >
+    {renderReactionIcon()}
 
+    <div className="flex flex-col items-center">
+      {/* Display comment count above the comment button */}
+      {commentCount > 0 && (
+        <div className="mb-1 text-sm text-gray-600 ml-6">
+          {commentCount} {commentCount === 1 ? 'comment' : 'comments'}
+        </div>
+      )}
+      <button
+        onClick={handleClick}
+        className="flex items-center space-x-2 rounded px-3 py-1 text-gray-500 hover:bg-gray-100"
+      >
+        <CommentIcon />
+        <span>Comment</span>
+      </button>
+    </div>
+  </div>
+
+     
       {showReactions && (
         <div
           className="absolute left-0 flex space-x-2 rounded-lg bg-white p-2 shadow-lg"
