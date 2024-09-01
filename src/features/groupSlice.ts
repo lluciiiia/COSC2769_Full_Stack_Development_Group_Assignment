@@ -33,7 +33,6 @@ export const selectGroupById = (state: AppState, groupId: string) => {
     console.log("No groupId provided");
     return undefined;
   }
-  console.log(`selectGroupById called with groupId: ${groupId}`);
 
   const group = state.groups.find((group) => group._id === groupId);
   return group;
