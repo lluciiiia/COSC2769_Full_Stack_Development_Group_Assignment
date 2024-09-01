@@ -14,13 +14,13 @@ const renderContent = (
         <>
           {renderInput("Name", user.name, handleInputChange, "name", "text")}
           {renderInput("Email", user.email, handleInputChange, "email", "text")}
-          {renderInput(
+          {/* {renderInput(
             "Password",
             user.password,
             handleInputChange,
             "password",
             "text",
-          )}
+          )} */}
           {renderInput(
             "Bio",
             user.bio || "",
