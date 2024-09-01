@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 export const createReaction = createAsyncThunk(
   "reactions/createReaction",
   async (
-    reactionData: { postId: string; reactionType: string, sentFrom: string },
+    reactionData: { postId: string; reactionType: string; sentFrom: string },
     { rejectWithValue },
   ) => {
     try {
