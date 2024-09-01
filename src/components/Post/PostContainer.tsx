@@ -50,7 +50,6 @@ const PostContainer: React.FC<PostParams> = ({
   
     fetchUserReaction();
   }, [dispatch, postId]);
-  
 
 
   const handleClick = () => {
@@ -175,21 +174,24 @@ const PostContainer: React.FC<PostParams> = ({
         handleClick={handleClick} 
         onReact={handleReaction} 
         initialReaction={initialReaction}
+        commentCount={comments?.length || 0} // Pass the number of comments
       />
       )}
 
-
-      {!isDetail && comments?.length > 0 && (
+      {!isDetail && (
         <div className="mt-4">
-          <h3
-            className="mb-2 ml-5 cursor-pointer text-left text-sm font-semibold"
-            onClick={handleClick}
-          >
-            View more comments ..
-          </h3>
-          {comments.slice(0, 2).map((comment) => (
+
+          {comments?.slice(0, 2).map((comment) => (
             <CommentItem key={comment._id} comment={comment} />
           ))}
+          {comments?.length > 2 && (
+            <h3
+              className="mb-2 ml-5 cursor-pointer text-left text-sm font-semibold"
+              onClick={handleClick}
+            >
+              View more comments ({comments.length - 2}) {/* Display the number of additional comments */}
+            </h3>
+          )}
         </div>
       )}
     </div>
