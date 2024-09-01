@@ -34,6 +34,19 @@ export const getNotificationBySender = async (senderId: string) => {
   }
 };
 
+export const getGroupRequest= async (userId: string) =>{
+  try{
+    const senderId= userId;
+
+    const notification = await Notifications.find({
+      senderId: senderId
+    })
+    return notification;
+  }catch(error){
+    console.error("Error fetching notifications", error);
+    throw new Error("Failed to fetch notifications ");
+  }
+}
 export const createFriendRequestNotification = async (
   senderId: string,
   receiverId: string,
