@@ -36,7 +36,6 @@ router.get("/user/:userId", async (req, res) => {
 
 router.post("/createGroup", async (req, res) => {
   try {
-    console.log("Request body:", req.body); 
     const newGroupData = {
       groupAdmin: req.body.groupAdmin,
       name: req.body.name,

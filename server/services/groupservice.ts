@@ -39,7 +39,6 @@ export const acceptGroup = async (groupId: string) => {
 
 export const createGroup = async (data: any) => {
   try {
-    console.log("Group data:", data); // Check if groupAdmin is properly passed
     const newGroup = new Group(data);
 
     const result = await newGroup.save();
