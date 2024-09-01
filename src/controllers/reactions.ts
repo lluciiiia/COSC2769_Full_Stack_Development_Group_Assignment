@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { stringify } from "postcss";
 
 export const createReaction = createAsyncThunk(
   "reactions/createReaction",
@@ -34,28 +35,30 @@ export const createReaction = createAsyncThunk(
 );
 
 export const fetchReaction = createAsyncThunk(
-    "reaction/fetchReaction",
-    async (postId: string, { rejectWithValue }) => {
-      try {
-        const response = await fetch(`http://localhost:8080/api/reactions?postId=${postId}`, {
-          method: "GET",
+  "reaction/fetchReaction",
+  async (postId: string, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/reactions/${postId}`,
+        {
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           credentials: "include",
-        });
-  
-        if (!response.ok) {
-          console.error("Failed to fetch reactions:", response.statusText);
-          return rejectWithValue(response.statusText);
-        }
-  
-        const data = await response.json();
-        return data;
-      } catch (error: any) {
-        console.error("Network error:", error.message);
-        return rejectWithValue(error.message || "Network error");
+        },
+      );
+
+      if (!response.ok) {
+        console.error("Failed to fetch reactions:", response.statusText);
+        return rejectWithValue(response.statusText);
       }
-    },
-  );
-  
+
+      const data = await response.json();
+      return data;
+    } catch (error: any) {
+      console.error("Network error:", error.message);
+      return rejectWithValue(error.message || "Network error");
+    }
+  },
+);
