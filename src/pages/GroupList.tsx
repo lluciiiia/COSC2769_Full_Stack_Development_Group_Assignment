@@ -11,6 +11,7 @@ const GroupList: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const groups = useSelector((state: AppState) => state.groups);
+  console.log(groups);
   const { id } = useSelector(selectAuthState);
 
   useEffect(() => {
