@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import Notifications from "../models/notification";
-
+import Group from "../models/group";
 export const getNotificationByReciver = async (receiverId: string) => {
   try {
     const receiverObjectId = new mongoose.Types.ObjectId(receiverId);
@@ -34,19 +34,36 @@ export const getNotificationBySender = async (senderId: string) => {
   }
 };
 
-export const getGroupRequest= async (userId: string) =>{
-  try{
-    const senderId= userId;
+export const getGroupRequest = async (userId: string) => {
+  try {
+    // Find notifications sent by the user
+    const notifications = await Notifications.find({
+      senderId: userId,
+    }).populate({
+      path: "senderId", 
+      select: "name profilePictureURL _id",
+    });
 
-    const notification = await Notifications.find({
-      senderId: senderId
-    })
-    return notification;
-  }catch(error){
+    // For each notification, find the corresponding group where the receiver is the groupAdmin
+    const groupRequests = await Promise.all(
+      notifications.map(async (notification) => {
+        const group = await Group.findOne({
+          groupAdmin: notification.receiverId,
+        });
+
+        return {
+          notification,
+          groupId: group?._id.toString(),
+        };
+      })
+    );
+
+    return groupRequests;
+  } catch (error) {
     console.error("Error fetching notifications", error);
-    throw new Error("Failed to fetch notifications ");
+    throw new Error("Failed to fetch notifications");
   }
-}
+};
 export const createFriendRequestNotification = async (
   senderId: string,
   receiverId: string,

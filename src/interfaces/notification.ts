@@ -1,10 +1,14 @@
+
 export interface Sender {
   _id: string;
   name: string;
   email: string;
   profilePictureURL: string;
 }
-
+export interface GroupRequest {
+  groupId?: string;
+  notification: Notifications; 
+}
 export interface Notifications {
   _id: string
   senderId: Sender;
@@ -18,4 +22,5 @@ export interface Notifications {
 export interface NotiProps {
   notifications: Notifications[];
   sentFriendRequests: Notifications[];
+  sentGroupRequests: GroupRequest[];
 }

@@ -11,8 +11,9 @@ import LoadingSpinner from "../assets/icons/Loading";
 import { fetchGroups } from "../controllers/group";
 import PostModal from "../components/post/PostModal";
 import { selectAuthState } from "../features/authSlice";
-import { sendGroupRequest } from "../controllers/user"; // Import the sendGroupRequest action
-
+import { sendGroupRequest } from "../controllers/user"; 
+import {  selectGroupRequest } from "../features/notificationSlice";
+import { groupSentRequest } from "../controllers/notification";
 export default function GroupPage() {
   const groupId = useParams<{ groupId: string }>().groupId || "";
   const dispatch: AppDispatch = useDispatch();
@@ -22,9 +23,15 @@ export default function GroupPage() {
   const [selectedPost, setSelectedPost] = useState(null);
   const { id } = useSelector(selectAuthState);
   const [isMember, setIsMember] = useState(false);
-  const [click, isClick] = useState(false);
+
+  // Use the selector to get the selected group
   const selectedGroup = useSelector((state: AppState) =>
-    selectGroupById(state, groupId),
+    selectGroupById(state, groupId)
+  );
+
+  // Use the selector to check if a group request has already been sent
+  const existingGroupRequest = useSelector((state: AppState) =>
+    selectGroupRequest(state, groupId)
   );
 
   useEffect(() => {
@@ -47,23 +54,23 @@ export default function GroupPage() {
     // Check if the user is a member of the group
     if (selectedGroup) {
       const memberStatus = selectedGroup.members.includes(id);
-
       setIsMember(memberStatus);
     }
   }, [selectedGroup, id]);
 
+  useEffect(() => {
+    dispatch(groupSentRequest());
+  }, [dispatch]);
+
   const handleJoinGroup = async () => {
+    if (existingGroupRequest) {
+      console.log("Group request already sent");
+      return;
+    }
+
     try {
       const response = await dispatch(sendGroupRequest(groupId));
       console.log("Group request response:", response);
-
-      const payload = response.payload as {
-        message: string;
-        notification: { type: string };
-      };
-      const isSendingRequest = payload.notification.type === "GROUP_REQUEST";
-
-      isClick(isSendingRequest);
     } catch (error) {
       console.error("Failed to join group:", error);
     }
@@ -132,13 +139,13 @@ export default function GroupPage() {
               </>
             ) : (
               <button
-                onClick={handleJoinGroup} // Attach the handler to the Join button
+                onClick={handleJoinGroup}
                 className={`rounded-md px-4 text-sm text-white shadow-md ${
-                  click ? "cursor-not-allowed bg-gray-400" : "bg-[#FFC123]"
+                  existingGroupRequest ? "cursor-not-allowed bg-gray-400" : "bg-[#FFC123]"
                 }`}
-                disabled={click}
+                disabled={!!existingGroupRequest}
               >
-                Join
+                {existingGroupRequest ? "Request Sent" : "Join"}
               </button>
             )}
 
@@ -147,7 +154,6 @@ export default function GroupPage() {
             </button>
           </div>
         </div>
-        <div></div>
 
         <nav className="mt-4 border-b border-gray-300 bg-white">
           <div className="flex justify-around py-2">
