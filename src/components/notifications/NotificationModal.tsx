@@ -36,20 +36,26 @@ const NotificationModal = ({
   return (
     isOpen && (
       <div className="fixed right-0 top-[66px] z-10 flex w-full max-w-sm flex-col gap-3 shadow-lg">
-        {notifications.map((noti) => (
-          <RequestItems
-            key={noti._id}
-            notificationId={noti._id}
-            friendId={noti.senderId._id}
-            name={noti.senderId.name}
-            imgUrl={noti.senderId.profilePictureURL}
-            requestType={noti.type}
-            isAccepted={noti.isAccepted}
-            isSeen={noti.isSeen}
-            handleAcceptFriendRequest={handleAcceptFriendRequest}
-            handleRemoveNotification={handleRemoveNotification}
-          />
-        ))}
+        {notifications.length > 0 ? (
+          notifications.map((noti) => (
+            <RequestItems
+              key={noti._id}
+              notificationId={noti._id}
+              friendId={noti.senderId._id}
+              name={noti.senderId.name}
+              imgUrl={noti.senderId.profilePictureURL}
+              requestType={noti.type}
+              isAccepted={noti.isAccepted}
+              isSeen={noti.isSeen}
+              handleAcceptFriendRequest={handleAcceptFriendRequest}
+              handleRemoveNotification={handleRemoveNotification}
+            />
+          ))
+        ) : (
+          <div className="p-4 text-center text-gray-500">
+            No notifications
+          </div>
+        )}
       </div>
     )
   );
@@ -123,7 +129,7 @@ export const RequestItems = ({
         ) : requestType === "GROUP_REQUEST" ? (
           <p className="text-sm text-gray-700">
             <span>
-              <span className="font-bold">{name}</span> want to join your group
+              <span className="font-bold">{name}</span> wants to join your group
             </span>
           </p>
         ) : (
