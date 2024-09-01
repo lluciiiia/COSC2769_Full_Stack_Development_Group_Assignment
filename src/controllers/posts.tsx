@@ -122,26 +122,44 @@ export const getPostsByGroup = createAsyncThunk<PostParams[], string>(
   },
 );
 
+
 export const createPost = createAsyncThunk<PostParams, PostParams | undefined>(
   "posts/createPost",
-  async (postData) => {
+  async (postParams) => {
+    // Log the post parameters being sent
+    console.log("Creating post with parameters:", JSON.stringify(postParams, null, 2));
+
     const response = await fetch(`${BACKEND_URL}/api/posts`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", // Set content type to JSON
       },
+      body: JSON.stringify(postParams), // Send postParams as JSON
       credentials: 'include',
-      body: JSON.stringify(postData),
+
     });
 
+    // Log the response status and response body
+    console.log("Response status:", response.status);
+
+    // Log the raw response before checking if it's okay
+    const rawResponseText = await response.text();
+    console.log("Raw response received:", rawResponseText); // Log raw response for debugging
+
     if (!response.ok) {
+      // Log the error response if the creation fails
+      console.error("Failed to create post:", rawResponseText);
       throw new Error("Failed to create post");
     }
 
-    const data: PostParams = await response.json();
+    const data: PostParams = JSON.parse(rawResponseText); // Parse the raw response text to JSON
+    // Log the created post data
+    console.log("Post created successfully:", JSON.stringify(data, null, 2));
+
     return data;
   },
 );
+
 
 export const updatePost = createAsyncThunk<PostParams, PostParams>(
   "posts/updatePost",

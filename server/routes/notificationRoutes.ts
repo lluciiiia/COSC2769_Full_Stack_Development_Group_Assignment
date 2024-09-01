@@ -1,58 +1,58 @@
 import express from "express";
-import Notifications from "../models/notification";
-import mongoose from "mongoose";
 import { isAuthenticated } from "../middleware/authenticate"; // Import the middleware
+import {
+  acceptedFriendRequestNotification,
+  deleteNotification,
+  getNotificationByReciver,
+  getNotificationBySender,
+} from "../services/notificationsService";
 
 const router = express.Router();
 
-router.get("/", isAuthenticated, async (req, res) => {
+//get notification by recivers
+router.get("/received", isAuthenticated, async (req, res) => {
+  const userId = req.session.user.id;
+
   try {
-    const notifications = await Notifications.find();
+    const notifications = await getNotificationByReciver(userId);
     res.json(notifications);
   } catch (error) {
-    console.error("Error fetching notifications", error);
     res.status(500).json({ error: "Failed to fetch notifications" });
   }
 });
 
-router.get("/userNoti", isAuthenticated, async (req, res) => {
+//get notification by senders
+router.get("/sent", isAuthenticated, async (req, res) => {
+  const userId = req.session.user.id;
+
   try {
-    // Convert the session user ID to a MongoDB ObjectId
-    const userObjectId = new mongoose.Types.ObjectId(req.session.user.id);
-
-    // Find notifications where the user is the receiver
-    const notifications = await Notifications.find({
-      receiverId: userObjectId,
-    }).populate("senderId", "name email profilePictureURL");
-
+    const notifications = await getNotificationBySender(userId);
     res.json(notifications);
   } catch (error) {
-    console.error("Error fetching notifications", error);
-    res.status(500).json({ error: "Failed to fetch notifications" });
+    res.status(500).json({ error: "Failed to fetch sent notifications" });
   }
 });
 
-router.post("/", isAuthenticated, async (req, res) => {
+router.put("/accepted/:notificationId", async (req, res) => {
   try {
-    const newNoti = new Notifications(req.body);
-    console.log(newNoti);
-    await newNoti.save();
-    res.status(201).json({ message: "Notification created", noti: newNoti });
-  } catch (error: any) {
-    console.error("Error creating notification:", error);
+    const { notificationId } = req.params;
 
-    if (error.name === "ValidationError") {
-      return res.status(400).json({ error: error.message });
-    }
-    res.status(500).json({ error: "Failed to create notification" });
+    const result = await acceptedFriendRequestNotification(notificationId);
+
+    res.json(result);
+  } catch (error) {
+    console.error("Error accepting notification:", error);
+    res.status(500).json({ error: "Failed to delete notification" });
   }
 });
 
-router.delete("/:id", isAuthenticated, async (req, res) => {
+router.delete("/:notificationId", isAuthenticated, async (req, res) => {
   try {
-    const notiId = req.params.id;
-    await Notifications.findByIdAndDelete(notiId);
-    res.json({ message: "Notification deleted" });
+    const { notificationId } = req.params;
+
+    const result = await deleteNotification(notificationId);
+
+    res.json(result);
   } catch (error) {
     console.error("Error deleting notification:", error);
     res.status(500).json({ error: "Failed to delete notification" });

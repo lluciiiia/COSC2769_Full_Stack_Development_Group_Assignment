@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { SearchIcon } from "../assets/icons/profileIcon/SearchIcon";
 import logo from "../assets/icons/logo.png";
@@ -13,14 +13,27 @@ import { NavItem } from "./NavItem";
 import PostModal from "./post/PostModal";
 import NotificationModal from "./notifications/NotificationModal";
 import ProfileButtonModal from "./ProfileButtonModal";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAuthState } from "../features/authSlice";
+import { AppDispatch } from "../app/store";
+import { fetchNotification } from "../controllers/notification";
+import { Notifications } from "../interfaces/notification";
+import { selectNotifications } from "../features/notificationSlice";
 
 const Navbar = () => {
-  const { userId } = useParams();
+  const currentUser = useSelector(selectAuthState);
+  const navigate = useNavigate();
+
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
-  const [isProfileModalOpen, setProfileOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
-  const navigate = useNavigate();
+  const dispatch: AppDispatch = useDispatch();
+
+  const notifications: Notifications[] = useSelector(selectNotifications);
+  useEffect(() => {
+    dispatch(fetchNotification());
+  }, [dispatch]);
 
   const handleHomeClick = () => {
     navigate(`/home`);
@@ -39,11 +52,13 @@ const Navbar = () => {
   };
 
   const handleProfileClick = () => {
-    setProfileOpen(!isProfileModalOpen);
+    setIsProfileModalOpen(!isProfileModalOpen);
+    setIsNotificationModalOpen(false);
   };
 
   const handleNotificationClick = () => {
     setIsNotificationModalOpen(!isNotificationModalOpen);
+    setIsProfileModalOpen(false);
   };
 
   const handleSearchClick = () => {
@@ -53,12 +68,14 @@ const Navbar = () => {
   return (
     <>
       <nav className="fixed left-0 right-0 top-0 z-10 flex items-center justify-between bg-[#FFC123] p-2">
-        <div className="flex items-center gap-2">
+        <div
+          className="flex cursor-pointer items-center gap-2"
+          onClick={handleHomeClick}
+        >
           <img
             src={logo}
             alt="BuZzNet Logo"
-            className="h-12 w-12 cursor-pointer object-contain"
-            onClick={handleHomeClick}
+            className="h-12 w-12 object-contain"
           />
           <h1 className="text-2xl font-bold">BuZzNet</h1>
         </div>
@@ -83,6 +100,9 @@ const Navbar = () => {
             label="Notification"
             onClick={handleNotificationClick}
           />
+          {notifications.length > 0 && (
+            <div className="absolute right-32 top-1 z-10 h-2 w-2 rounded-full bg-red-600"></div>
+          )}
           <NavItem
             src={profileIcon}
             label="Profile"
@@ -90,14 +110,23 @@ const Navbar = () => {
           />
         </div>
       </nav>
+      <NotificationModal
+        isOpen={isNotificationModalOpen}
+        notifications={notifications}
+      />
 
-      <NotificationModal isOpen={isNotificationModalOpen} />
-      <ProfileButtonModal isOpen={isProfileModalOpen} />
+      <ProfileButtonModal
+        isOpen={isProfileModalOpen}
+        setIsOpen={setIsProfileModalOpen}
+        imgUrl={currentUser.profilePictureURL}
+        name={currentUser.name}
+      />
       <PostModal
         isOpen={isPostModalOpen}
         onClose={handleCloseModal}
-        userId={userId}
+        userId={currentUser.id}
         post={null}
+        groupId={""}
       />
     </>
   );

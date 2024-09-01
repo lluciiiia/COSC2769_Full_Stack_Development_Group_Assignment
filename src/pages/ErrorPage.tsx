@@ -19,7 +19,7 @@ const ErrorPage: React.FC = () => {
 
       {/* Back to Home Button */}
       <Link
-        to="/"
+        to="/home"
         className="rounded-md bg-black px-4 py-2 font-bold text-white hover:bg-gray-800"
       >
         Back to Home

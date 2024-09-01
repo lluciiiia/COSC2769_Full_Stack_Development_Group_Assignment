@@ -186,21 +186,18 @@ const enhancePostWithUser = async (post: any) => {
 
 export const createPost = async (postData: any) => {
   try {
-    // Check if creator exists
     const user = await User.findById(postData.creatorId);
     if (!user) throw new Error("User not found with the provided creatorId");
 
-    // Check if group exists
-    if (postData.groupId && postData.groupId != "") {
+    // Check if group exists and if the user is a member
+    if (postData.groupId) {
       const group = await Group.findById(postData.groupId);
-
       if (!group) throw new Error("Group not found with the provided groupId");
-
-      // Check if the user is a member of the group
       const isMember = group.members.includes(postData.creatorId);
       if (!isMember) throw new Error("User is not a member of the group");
     }
 
+    // Create new post
     const newPost = new Post(postData);
     await newPost.save();
     return newPost;
@@ -230,16 +227,16 @@ export const updatePost = async (postId: string, postData: any) => {
       if (!isMember) throw new Error("User is not a member of the group");
     }
 
-    // Push the current content and imageURL to the history before updating
+    // Push the current content and images to the history before updating
     post.history.push({
       content: post.content,
-      imageURL: post.imageURL,
+      images: post.images, // Assuming `images` field stores array of image URLs or base64 strings
       updatedAt: new Date(),
     });
 
     // Update the post with new data
     post.content = postData.content || post.content;
-    post.imageURL = postData.imageURL || post.imageURL;
+    post.images = postData.images || post.images; // Update images with the new array
     post.visibility = postData.visibility || post.visibility;
     post.updatedAt = new Date();
 

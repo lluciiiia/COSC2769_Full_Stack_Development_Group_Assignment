@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import User from "../models/user";
-import Notifications from "../models/notification";
+import { createFriendRequestNotification } from "./notificationsService";
+
 export const getAllUsers = async () => {
   try {
     const users = await User.find().populate({
@@ -35,37 +36,12 @@ export const getUserById = async (userId: string) => {
 
 export const addFriend = async (userId: string, friendId: string) => {
   try {
-    // accept frients section
-    // const user = await User.findById(userId);
-    // const friendObjectId = new mongoose.Types.ObjectId(friendId);
+    await createFriendRequestNotification(userId, friendId);
 
-    // // if (!user) {
-    // //   throw new Error("User not found");
-    // // }
-
-
-    // // if (user.friends.includes(friendObjectId)) {
-    // //   throw new Error("Friend already added");
-    // // }
-
-
-    // // user.friends.push(friendObjectId);
-    // // await user.save();
-
-
-    const newNotification = new Notifications({
-      senderId: userId,
-      receiverId: friendId,
-      type: "FRIEND_REQUEST",
-      isSeen: false,
-    });
-
-    await newNotification.save();
-
-    return { message: "Friend added successfully and notification sent." };
+    return { message: "Notification sent successfully." };
   } catch (error) {
-    console.error("Error adding friend", error);
-    throw new Error("Failed to add friend");
+    console.error("Error sending friend request", error);
+    throw new Error("Failed to send friend request");
   }
 };
 
@@ -103,11 +79,17 @@ export const updateUser = async (userId: string, updateData: any) => {
 
 export const unfriendById = async (userId: string, friendId: string) => {
   try {
-    const user = await User.findById(userId);
+    const userObjectId = new mongoose.Types.ObjectId(userId);
     const friendObjectId = new mongoose.Types.ObjectId(friendId);
 
+    const user = await User.findById(userObjectId);
     if (!user) {
       throw new Error("User not found");
+    }
+
+    const friend = await User.findById(friendObjectId);
+    if (!friend) {
+      throw new Error("Friend not found");
     }
 
     if (!user.friends.includes(friendObjectId)) {
@@ -118,9 +100,51 @@ export const unfriendById = async (userId: string, friendId: string) => {
       (friend) => friend.toString() !== friendId,
     );
 
+    friend.friends = friend.friends.filter(
+      (user) => user.toString() !== userId,
+    );
+
     await user.save();
+    await friend.save();
   } catch (error) {
     console.error("Error removing friend", error);
     throw new Error("Failed to remove friend");
+  }
+};
+
+export const acceptFriendRequest = async (userId: string, friendId: string) => {
+  try {
+    const friendObjectId = new mongoose.Types.ObjectId(friendId);
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+
+    const user = await User.findById(userObjectId);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const friend = await User.findById(friendObjectId);
+
+    if (!friend) {
+      throw new Error("Friend not found");
+    }
+
+    if (
+      user.friends.includes(friendObjectId) ||
+      friend.friends.includes(userObjectId)
+    ) {
+      throw new Error("Already Friends");
+    }
+
+    user.friends.push(friendObjectId);
+    friend.friends.push(userObjectId);
+
+    await user.save();
+    await friend.save();
+
+    return { message: "Friend request accepted successfully" };
+  } catch (error) {
+    console.error("Error accepting friend request: ", error);
+    throw new Error("Failed to accept friend request ");
   }
 };

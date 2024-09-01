@@ -15,8 +15,7 @@ const CommentHistoryModal: React.FC<CommentHistoryModalProps> = ({
     <HistoryModal
       history={history}
       onClose={onClose}
-      title="Edit History"
-      showImage={false}
+      title="View Comment History"
     />
   );
 };

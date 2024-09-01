@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { GroupParams, GroupType } from "../interfaces/Group";
-
+import {  GroupType } from "../interfaces/Group";
 const API_URL = "http://localhost:8080/api/groups";
 
 
@@ -38,3 +37,20 @@ export const handleAcceptGroup = async (groupId: string): Promise<GroupType> => 
       throw error; // Re-throw the error to be handled by the caller
     }
   };
+
+  export const fetchGroupWithMembers = createAsyncThunk<GroupType, string>(
+    "groups/fetchGroupWithMembers",
+    async (groupId: string) => {
+      const response = await fetch(`${API_URL}/${groupId}`);
+      if (!response.ok) {
+        console.error("Failed to fetch group with members:", response.statusText);
+        throw new Error("Failed to fetch group with members");
+      }
+      const data: GroupType = await response.json();
+      return data;
+    }
+  );
+  
+
+
+

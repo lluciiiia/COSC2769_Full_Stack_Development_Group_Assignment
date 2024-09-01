@@ -1,3 +1,4 @@
+import { UserType } from "./Users";
 export type GroupType = {
   _id: string;
   groupAdmin: string;
@@ -6,7 +7,7 @@ export type GroupType = {
   imageURL: string;
   backgroundImageURL: string;
   dateCreated: string;
-  members: string[];
+  members: UserType[];
   accepted: boolean;
   description: string;
 };

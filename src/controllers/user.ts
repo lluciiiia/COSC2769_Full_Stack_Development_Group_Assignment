@@ -34,7 +34,6 @@ export const getUser = createAsyncThunk<UserType, string | undefined>(
     }
 
     const data: UserType = await response.json();
-    console.log("from thunk", data);
     return data;
   },
 );
@@ -80,27 +79,74 @@ export const updateUser = createAsyncThunk<
   return data;
 });
 
-export const unfriendById = createAsyncThunk<
-  UserType,
-  { userId: string | undefined; friendId: string }
->("user/updateUser", async ({ friendId }) => {
+export const sendFriendRequest = createAsyncThunk<
+  { message: string },
+  string | undefined
+>("user/sendFriendRequest", async (friendId) => {
   const response = await fetch(
-    BACKEND_URL + `/api/users/unfriend/${friendId}`,
+    BACKEND_URL + `/api/users/addfriend/${friendId}`,
     {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      method: "PUT",
       credentials: "include",
     },
   );
 
   if (!response.ok) {
-    console.error("Failed to unfriend this user:", response.statusText);
-    throw new Error("Failed to unfriend this user");
+    console.error(
+      "Failed to send friend request to this user:",
+      response.statusText,
+    );
+    throw new Error("Failed to send friend request to this user");
   }
 
-  const data: UserType = await response.json();
+  const data: { message: string } = await response.json();
 
   return data;
 });
+
+export const acceptFriendRequest = createAsyncThunk<
+  { message: string },
+  string | undefined
+>("user/acceptFriendRequest", async (friendId) => {
+  const response = await fetch(
+    BACKEND_URL + `/api/users/friend-requests/${friendId}/accept`,
+    {
+      method: "PUT",
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    console.error("Failed to accept friend request:", response.statusText);
+    throw new Error("Failed to accept friend request");
+  }
+
+  const data: { message: string } = await response.json();
+
+  return data;
+});
+
+export const unfriendById = createAsyncThunk<{ message: string }, string>(
+  "user/updateUser",
+  async (friendId) => {
+    const response = await fetch(
+      BACKEND_URL + `/api/users/unfriend/${friendId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      },
+    );
+
+    if (!response.ok) {
+      console.error("Failed to unfriend this user:", response.statusText);
+      throw new Error("Failed to unfriend this user");
+    }
+
+    const data = await response.json();
+
+    return data;
+  },
+);

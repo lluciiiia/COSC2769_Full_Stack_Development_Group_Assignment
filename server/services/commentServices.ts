@@ -27,12 +27,10 @@ export const createComment = async (commentData: any) => {
     post.comments.push(newComment._id);
     await post.save();
 
-    // Fetch the user who created the comment to populate the profileSection
     const user = await User.findById(commentData.userId);
     if (!user)
       throw new Error(`User not found for userId: ${commentData.userId}`);
 
-    // Return the new comment along with the profileSection
     return {
       ...newComment.toObject(),
       profileSection: {

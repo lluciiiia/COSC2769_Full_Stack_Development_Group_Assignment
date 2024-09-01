@@ -64,21 +64,23 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
 
   return (
     <div className="relative flex items-start p-6">
-      <div className="mr-4 flex-shrink-0">
-        {safeProfileImage ? (
-          <img
-            src={safeProfileImage}
-            alt="Profile"
-            className="h-[50px] w-[50px] rounded-full"
-          />
-        ) : (
-          <div className="h-[50px] w-[50px]">
-            <DefaultProfile />
-          </div>
-        )}
-      </div>
-      <div>
-        <div className="font-bold">{safeProfileName}</div>
+      <div className="items-center flex">
+        <div className="mr-4 flex-shrink-0">
+          {safeProfileImage ? (
+            <img
+              src={safeProfileImage}
+              alt="Profile"
+              className="h-[50px] w-[50px] rounded-full"
+            />
+          ) : (
+            <div className="h-[50px] w-[50px]">
+              <DefaultProfile />
+            </div>
+          )}
+        </div>
+        <div>
+          <div className="mr-12 font-bold">{safeProfileName}</div>
+        </div>
       </div>
       <div className="relative ml-auto flex items-center justify-center gap-1">
         <div className="flex flex-col">
@@ -109,6 +111,7 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
         onClose={() => setIsEditModalOpen(false)}
         userId={id}
         post={post}
+        groupId={isEditModalOpen ? post.groupId : null}
       />
 
       {/* Modal for viewing edit history */}

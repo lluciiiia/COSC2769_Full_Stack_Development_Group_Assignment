@@ -1,16 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { PostParams } from "../../interfaces/Posts";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ReactionSection } from "./ReactionSection";
 import { AdminSection } from "./AdminSection";
 import { ProfileSection } from "./ProfileSection";
+import { AppDispatch, AppState } from "../../app/store";
+import { createReaction, fetchReaction } from "../../controllers/reactions";
 import CommentItem from "../comments/CommentItem";
+import { useDispatch, useSelector } from "react-redux";
 
 const PostContainer: React.FC<PostParams> = ({
   _id,
   creatorId,
+  groupId,
   content,
-  imageURL,
+  images,
   createdAt,
   visibility,
   profileSection,
@@ -18,14 +22,72 @@ const PostContainer: React.FC<PostParams> = ({
   history,
   comments,
 }) => {
+  const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
+
   const location = useLocation();
 
+  const [showFullContent, setShowFullContent] = useState(false);
+  const [initialReaction, setInitialReaction] = useState<string | undefined>(undefined);
+
+  const isReacted = useSelector((state: AppState) => state.react.isReacted);
+  const reactions = useSelector((state: AppState) => state.react.reactions);
+
+  // Convert _id to a string
+  const postId = _id!.toString();
+
+  useEffect(() => {
+    const fetchUserReaction = async () => {
+      try {
+        const reaction = await dispatch(fetchReaction(postId));
+        if (reaction.payload) {
+          setInitialReaction(reaction.payload.reactionType);
+        }
+      } catch (error) {
+        console.error("Error fetching user reaction:", error);
+      }
+    };
+  
+    fetchUserReaction();
+  }, [dispatch, postId]);
+  
+
+
   const handleClick = () => {
-    navigate(`/posts/${_id}`);
+    navigate(`/posts/${postId}`);
   };
 
+  const handleReaction = async (reaction: string) => {
+    console.log(`User reacted with: ${reaction} on post ID: ${postId}`);
+    try {
+      await dispatch(
+        createReaction({ postId: postId, reactionType: reaction, sentFrom: 'post' })
+      );
+      console.log(
+        `Reaction "${reaction}" sent to server for post ${postId}`,
+      );
+    } catch (error) {
+      console.error("Error reacting to post:", error);
+    }
+  };
+
+  const handleToggleContent = () => {
+    setShowFullContent(!showFullContent);
+  };
+
+
   const isAdminPage = location.pathname === "/admin";
+
+  // Define the maximum length for the excerpt
+  const maxLength = 100;
+
+  // Check if the content is too long
+  const isContentLong = content.length > maxLength;
+  const displayedContent =
+    isContentLong && !showFullContent
+      ? `${content.slice(0, maxLength)}...`
+      : content;
+
 
   return (
     <div
@@ -37,10 +99,11 @@ const PostContainer: React.FC<PostParams> = ({
         profileImage={profileSection?.profileImage}
         profileName={profileSection?.profileName}
         post={{
-          _id,
+          _id: postId, // Pass the string version of _id
           creatorId,
+          groupId,
           content,
-          imageURL,
+          images,
           createdAt,
           visibility,
           profileSection,
@@ -49,17 +112,45 @@ const PostContainer: React.FC<PostParams> = ({
           comments,
         }}
       />
+
       {/* Post Content */}
       <div className="text-center">
-        <p className="mb-2 ml-5 text-left text-lg font-semibold">{content}</p>
-        {imageURL && (
-          <img
-            src={imageURL}
-            alt="Post Content"
-            className={`h-[300px] ${isDetail ? "w-[500px]" : "w-full rounded-lg"}`}
-          />
+        <p className="mb-2 ml-5 text-left text-lg font-semibold">
+          {displayedContent}
+          {isContentLong && !showFullContent && (
+            <span
+              onClick={handleToggleContent}
+              className="ml-1 cursor-pointer text-[#FFC123]"
+            >
+              Read more
+            </span>
+          )}
+          {showFullContent && isContentLong && (
+            <span
+              onClick={handleToggleContent}
+              className="ml-1 cursor-pointer text-[#FFC123]"
+            >
+              Show less
+            </span>
+          )}
+        </p>
+        {images && images.length > 0 && (
+          <div
+            className="flex space-x-4 overflow-x-auto"
+            style={{ scrollbarWidth: "thin" }} // For Firefox
+          >
+            {images.map((image, index) => (
+              <img
+                key={index}
+                src={image}
+                alt={`Post image ${index + 1}`}
+                className="h-[300px] w-[300px] flex-shrink-0 rounded-lg" // Fixed height and width
+              />
+            ))}
+          </div>
         )}
       </div>
+
 
       {isAdminPage ? (
         <AdminSection
@@ -78,10 +169,16 @@ const PostContainer: React.FC<PostParams> = ({
           }}
         />
       ) : (
-        <ReactionSection handleClick={handleClick} />
+       <ReactionSection 
+        reactions={reactions} 
+        isReacted={isReacted} 
+        handleClick={handleClick} 
+        onReact={handleReaction} 
+        initialReaction={initialReaction}
+      />
       )}
 
-      {/* Display comments if not in detail view and there are comments */}
+
       {!isDetail && comments?.length > 0 && (
         <div className="mt-4">
           <h3

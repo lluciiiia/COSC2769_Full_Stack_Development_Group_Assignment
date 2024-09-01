@@ -36,7 +36,8 @@ const ProfileEditModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
     dispatch(updateLocalUser(formData));
     dispatch(updateUser({ userId: user._id, userData: formData }));
     dispatch(fetchSess);
-    
+    window.location.reload();
+
     onClose();
   };
 

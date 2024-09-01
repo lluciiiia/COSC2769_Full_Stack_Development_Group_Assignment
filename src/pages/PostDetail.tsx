@@ -43,9 +43,10 @@ const PostDetail: React.FC = () => {
               <PostContainer
                 _id={post._id}
                 creatorId={post.creatorId}
+                groupId={post.groupId || ""}
                 profileSection={post.profileSection}
                 content={post.content}
-                imageURL={post.imageURL}
+                images={post.images}
                 createdAt={post.createdAt}
                 visibility={post.visibility}
                 comments={post.comments}
