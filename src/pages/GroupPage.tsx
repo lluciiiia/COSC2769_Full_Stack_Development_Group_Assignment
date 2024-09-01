@@ -19,11 +19,12 @@ export default function GroupPage() {
   const [loading, setLoading] = useState(true);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
-  const { id } = useSelector(selectAuthState);
+  const { id: userId } = useSelector(selectAuthState); // Renamed for clarity
   const [isMember, setIsMember] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false); // New state for admin check
 
   const selectedGroup = useSelector((state: AppState) =>
-    selectGroupById(state, groupId),
+    selectGroupById(state, groupId)
   );
 
   useEffect(() => {
@@ -43,12 +44,17 @@ export default function GroupPage() {
 
   useEffect(() => {
     setGroup(selectedGroup || null);
-    // Check if the user is a member of the group
     if (selectedGroup) {
-      const memberStatus = selectedGroup.members.includes(id);
-      setIsMember(memberStatus); // Update isMember based on the check
+      // Check if the user is a member of the group
+      const memberStatus = selectedGroup.members.includes(userId);
+      setIsMember(memberStatus);
+
+      // Check if the user is the admin of the group
+      if (userId === selectedGroup.groupAdmin) {
+        setIsAdmin(true);
+      }
     }
-  }, [selectedGroup, id]);
+  }, [selectedGroup, userId]);
 
   if (loading) {
     return (
@@ -112,14 +118,18 @@ export default function GroupPage() {
                 </button>
               </>
             ) : (
-              <button className="rounded-md bg-[#FFC123] px-4 text-sm text-white shadow-md">
-                Join
-              </button>
+              !isAdmin && ( // Only show "Join" button if user is not an admin
+                <button className="rounded-md bg-[#FFC123] px-4 text-sm text-white shadow-md">
+                  Join
+                </button>
+              )
             )}
 
-            <button className="rounded-md border border-gray-400 bg-white px-2 text-sm text-black shadow-md">
-              Report
-            </button>
+            {!isAdmin && ( // Only show "Report" button if user is not an admin
+              <button className="rounded-md border border-gray-400 bg-white px-2 text-sm text-black shadow-md">
+                Report
+              </button>
+            )}
           </div>
         </div>
         <div></div>
@@ -166,7 +176,7 @@ export default function GroupPage() {
       <PostModal
         isOpen={isPostModalOpen}
         onClose={handleCloseModal}
-        userId={id}
+        userId={userId}
         post={selectedPost}
         groupId={groupId}
       />
