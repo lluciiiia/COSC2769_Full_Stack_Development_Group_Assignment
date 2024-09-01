@@ -5,22 +5,28 @@ import { AppState } from "../../app/store";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { selectAuthState } from "../../features/authSlice";
-import { selectGroupById } from "../../features/groupSlice"; 
+import { selectGroupById } from "../../features/groupSlice";
 
 export default function Discussion() {
   const posts = useSelector((state: AppState) => state.posts.groupPost);
-  const { groupId } = useParams<{ groupId: string }>(); 
+  const { groupId } = useParams<{ groupId: string }>();
   const { id } = useSelector(selectAuthState);
-  
+
   const group = useSelector((state: AppState) =>
     selectGroupById(state, groupId)
   );
 
   const [canViewPosts, setCanViewPosts] = React.useState(false);
+  const [isAdmin, setIsAdmin] = React.useState(false); // State to check if the user is admin
 
   useEffect(() => {
     if (group) {
-      if (group.visibility === "Public") {
+      // Check if the current user is the admin of the group
+      if (id === group.groupAdmin) {
+        setIsAdmin(true);
+        setCanViewPosts(true); // Admins should always be able to view posts
+        console.log("Welcome, Admin!");
+      } else if (group.visibility === "Public") {
         // Public groups allow all users to view posts
         setCanViewPosts(true);
         console.log("This is public! You can see everything!!");
@@ -60,15 +66,24 @@ export default function Discussion() {
   return (
     <div>
       {canViewPosts ? (
-        posts.length > 0 ? (
-          <div className="flex h-screen">
-            <div className="flex-1 overflow-y-auto">
-              <div className="flex flex-col items-center gap-6">{postList}</div>
+        <>
+          {isAdmin && (
+            <div className="mt-12 text-center font-bold text-xl text-green-600">
+              Welcome Admin
             </div>
-          </div>
-        ) : (
-          <p className="mt-12 text-center">No posts available</p>
-        )
+          )}
+          {posts.length > 0 ? (
+            <div className="flex h-screen">
+              <div className="flex-1 overflow-y-auto">
+                <div className="flex flex-col items-center gap-6">
+                  {postList}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <p className="mt-12 text-center">No posts available</p>
+          )}
+        </>
       ) : (
         <p className="mt-12 text-center">
           You're not in the group :)) Please consider signing up.
