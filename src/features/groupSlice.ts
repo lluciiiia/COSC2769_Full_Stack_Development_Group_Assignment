@@ -28,7 +28,7 @@ const groupSlice = createSlice({
 });
 
 // Selector to get group by ID
-export const selectGroupById = (state: AppState, groupId: string) => {
+export const selectGroupById = (state: AppState, groupId: string | undefined) => {
   if (!groupId) {
     console.log("No groupId provided");
     return undefined;
