@@ -66,7 +66,7 @@ export const fetchReaction = async (postId: string, userId: string) => {
   
       if (!existingReaction) {
         console.log("No reaction found for postId:", postId, "and userId:", userId);
-        return null; // Return null if no reaction is found
+        return null;
       }
       return existingReaction;
     } catch (error) {

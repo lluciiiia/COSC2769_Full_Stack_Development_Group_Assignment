@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {  GroupType } from "../interfaces/Group";
-import { UserType } from "../interfaces/Users";
 const API_URL = "http://localhost:8080/api/groups";
 
 
