@@ -6,6 +6,7 @@ const initialState: ReactProps = {
     createComplete: false,
     reactions: [],
     isReacted: false,
+    reactionType:'LIKE'
 };
 
 const reactSlice = createSlice({
@@ -15,9 +16,7 @@ const reactSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(createReaction.fulfilled, (state, action) => {
             state.createComplete = true;
-            // Since createReaction returns a single reaction, we push it to the reactions array
             state.reactions.push(action.payload);
-            // Optionally, you might want to set isReacted to true
             state.isReacted = true;
         });
         builder.addCase(fetchReaction.fulfilled, (state, action) => {
