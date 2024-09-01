@@ -3,15 +3,15 @@ import { useSelector } from 'react-redux';
 import { UserType } from '../../interfaces/Users';
 import { AppState } from '../../app/store';
 import React from 'react';
+
 export default function Member() {
-  const users: UserType[] = useSelector((state: AppState) => state.users);
-  const [dropdownOpen, setDropdownOpen] = useState<number | null>(null); 
+  const users: UserType[] = useSelector((state: AppState) => state.user.users);
+  const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  const toggleDropdown = (id: number) => {
+  const toggleDropdown = (id: string) => {
     setDropdownOpen(dropdownOpen === id ? null : id);
   };
-
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -29,7 +29,7 @@ export default function Member() {
     <div className="flex justify-center">
       <div className="space-y-4 p-4 max-w-xl w-full">
         {users.map((user: UserType) => (
-          <div key={user.id} className="flex items-center justify-between relative">
+          <div key={user._id} className="flex items-center justify-between relative">
             <div className="flex items-center">
               <img
                 src='/cat.png'
@@ -40,11 +40,11 @@ export default function Member() {
             </div>
             <button
               className="text-black text-2xl focus:outline-none ml-8"
-              onClick={() => toggleDropdown(user.id)} 
+              onClick={() => toggleDropdown(user._id)} 
             >
               ...
             </button>
-            {dropdownOpen === user.id && ( 
+            {dropdownOpen === user._id && ( 
               <div
                 ref={dropdownRef} 
                 className="absolute right-0 mt-2 w-32 bg-white border border-gray-300 rounded-md shadow-lg z-10"
@@ -52,7 +52,6 @@ export default function Member() {
                 <button
                   className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                   onClick={() => {
-                    // Handle delete action
                     console.log('Delete user:', user.name);
                     setDropdownOpen(null);
                   }}
@@ -67,3 +66,4 @@ export default function Member() {
     </div>
   );
 }
+

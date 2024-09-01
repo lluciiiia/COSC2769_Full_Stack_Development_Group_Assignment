@@ -1,17 +1,28 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import Reaction from "../models/reactions";
 import {
-  commentReaction,
-  fetchingUserReact,
+  createReaction,
+  fetchReaction,
 } from "../services/reactionService";
+import mongoose from "mongoose";
+
 const router = express.Router();
 
-router.post("/userReact", async (req, res) => {
+router.post("/userReact", async (req: Request, res: Response) => {
   try {
-    const { postId, reactionType,sentFrom } = req.body;
+    const { postId, reactionType, sentFrom } = req.body;
     const userId = req.session.user.id;
-    // console.log(postId + "HELLO ");
-    const result = await commentReaction(postId, userId, reactionType,sentFrom);
+
+    if (!mongoose.Types.ObjectId.isValid(postId)) {
+      throw new Error("Invalid postId format");
+    }
+
+    const result = await createReaction({
+      postId,
+      userId,
+      reactionType,
+      targetType: sentFrom,
+    });
     res.status(201).json({ message: "React created", post: result });
   } catch (error: any) {
     console.error("Error creating react:", error);
@@ -23,21 +34,28 @@ router.post("/userReact", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.post("/", async (req: Request, res: Response) => {
   try {
     const { postId } = req.body;
     const userId = req.session.user.id;
 
-    const result = await fetchingUserReact(postId, userId);
+    if (!mongoose.Types.ObjectId.isValid(postId)) {
+      throw new Error("Invalid postId format");
+    }
 
-    res.status(201).json({ message: "React created", post: result });
+    const result = await fetchReaction({
+      postId,
+      userId,
+    });
+
+    res.status(201).json({ message: "React fetched", post: result });
   } catch (error) {
     console.error("Error fetching reaction:", error);
     res.status(500).json({ error: "Failed to fetch reaction" });
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", async (req: Request, res: Response) => {
   try {
     const reactId = req.params.id;
     await Reaction.findByIdAndDelete(reactId);

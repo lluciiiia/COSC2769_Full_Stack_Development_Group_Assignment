@@ -35,7 +35,7 @@ const PostContainer: React.FC<PostParams> = ({
   useEffect(() => {
     const fetchUserReaction = async () => {
       try {
-        const reaction = await dispatch(fetchReaction({ postId }));
+        const reaction = await dispatch(fetchReaction(postId));
         if (reaction.payload) {
           setInitialReaction(reaction.payload.reactionType);
         }
@@ -43,9 +43,10 @@ const PostContainer: React.FC<PostParams> = ({
         console.error("Error fetching user reaction:", error);
       }
     };
-
+  
     fetchUserReaction();
   }, [dispatch, postId]);
+  
 
   const handleClick = () => {
     navigate(`/posts/${postId}`);
@@ -146,10 +147,10 @@ const PostContainer: React.FC<PostParams> = ({
         isReacted={isReacted} 
         handleClick={handleClick} 
         onReact={handleReaction} 
-        initialReaction={initialReaction} // Pass the initial reaction here
+        initialReaction={initialReaction}
       />
 
-      {/* Display comments if not in detail view and there are comments */}
+
       {!isDetail && comments?.length > 0 && (
         <div className="mt-4">
           <h3

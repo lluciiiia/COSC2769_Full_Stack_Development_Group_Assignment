@@ -23,7 +23,11 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
     console.log(`User reacted with: ${reaction} on comment ID: ${commentId}`);
     try {
       await dispatch(
-        createReaction({ postId: commentId, reactionType: reaction }),
+        createReaction({
+          postId: commentId,
+          reactionType: reaction,
+          sentFrom: "comment",  // Specify that the reaction is on a comment
+        }),
       );
       console.log(
         `Reaction "${reaction}" sent to server for comment ${commentId}`,
@@ -45,7 +49,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
     const fetchReactions = async () => {
       try {
         for (let comment of initComments) {
-          await dispatch(fetchReaction(comment._id));
+          await dispatch(fetchReaction({ postId: comment._id, sentFrom: "comment" }));
         }
       } catch (error) {
         console.error("Error fetching reactions:", error);
@@ -55,7 +59,6 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
     fetchComments();
     fetchReactions();
   }, [dispatch, initComments]);
-
 
   const handleCommentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setNewComment(e.target.value);
@@ -97,8 +100,12 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
                 <CommentItem comment={comment} />
                 <div className="">
                   <ReactionButton
-                    onReact={(reaction) => handleReaction(reaction, comment._id)}
-                    initialReaction={comment.reactions?.find(r => r.userId === userId)?.reactionType}
+                    onReact={(reaction) =>
+                      handleReaction(reaction, comment._id)
+                    }
+                    initialReaction={comment.reactions?.find(
+                      (r) => r.userId === userId,
+                    )?.reactionType}
                     isReacted={isReacted}
                   />
                 </div>

@@ -1,45 +1,55 @@
-import Comment from "../models/comment";
+import mongoose from "mongoose";
 import Reaction from "../models/reactions";
+import Comment from "../models/comment";
 import Post from "../models/post";
 
-export const commentReaction = async (
-  postId: string,
-  userId: string,
-  reactionType: string,
-  targetType: string, // Renamed for clarity
-) => {
+export const createReaction = async ({
+  postId,
+  userId,
+  reactionType,
+  targetType, // "post" or "comment"
+}: {
+  postId: string;
+  userId: string;
+  reactionType: string;
+  targetType: string;
+}) => {
   try {
-    let post;
+    let target;
     if (targetType === "post") {
-      post = await Post.findById(postId);
+      target = await Post.findById(postId);
     } else if (targetType === "comment") {
-      post = await Comment.findById(postId);
+      target = await Comment.findById(postId);
     } else {
       throw new Error("Invalid target type");
     }
 
-    if (!post) {
+    if (!target) {
       throw new Error(
         `${targetType.charAt(0).toUpperCase() + targetType.slice(1)} not found`,
       );
     }
 
-    let existingReaction = await Reaction.findOne({ postId, userId });
+    let existingReaction = await Reaction.findOne({
+      postId: new mongoose.Types.ObjectId(postId),
+      userId,
+    });
 
     if (existingReaction) {
       existingReaction.reactionType = reactionType;
       await existingReaction.save();
     } else {
       existingReaction = new Reaction({
-        userId: userId,
-        postId: postId,
+        userId: new mongoose.Types.ObjectId(userId),
+        postId: new mongoose.Types.ObjectId(postId),
         reactionType: reactionType,
         createdAt: new Date(),
+        onModel: targetType === "post" ? "Post" : "Comment",
       });
       await existingReaction.save();
 
-      post.reactions.push(existingReaction._id);
-      await post.save();
+      target.reactions.push(existingReaction._id);
+      await target.save();
     }
 
     return { message: "Reaction added/updated successfully" };
@@ -50,15 +60,17 @@ export const commentReaction = async (
 };
 
 export const fetchingUserReact = async (postId: string, userId: string) => {
-  try {
-    const existingReaction = await Reaction.findOne({ postId, userId });
-
-    if (!existingReaction) {
-      throw new Error("Reaction not found with the provided id");
+    try {
+      console.log("Attempting to find reaction for postId:", postId, "and userId:", userId);
+      const existingReaction = await Reaction.findOne({ postId, userId });
+  
+      if (!existingReaction) {
+        console.log("No reaction found for postId:", postId, "and userId:", userId);
+        return null; // Return null if no reaction is found
+      }
+      return existingReaction;
+    } catch (error) {
+      console.error("Error fetching reaction", error);
+      throw new Error("Failed to fetch reaction");
     }
-    return existingReaction;
-  } catch (error) {
-    console.error("Error fetching reaction", error);
-    throw new Error("Failed to fetch reaction");
-  }
-};
+  };
