@@ -75,7 +75,7 @@ const ProfileEditModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
         <div className="flex justify-end">
           <button
             onClick={handleSubmit}
-            className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+            className="rounded bg-[#FFC123] px-6 py-2 text-white hover:opacity-40"
           >
             Save
           </button>
