@@ -13,6 +13,7 @@ const GroupList: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const groups = useSelector((state: AppState) => state.groups);
+  console.log(groups);
   const { id } = useSelector(selectAuthState);
 
   useEffect(() => {

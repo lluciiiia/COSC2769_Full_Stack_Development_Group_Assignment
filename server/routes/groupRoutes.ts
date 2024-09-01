@@ -1,15 +1,36 @@
 import express from "express";
 import Group from "../models/group";
-import { acceptGroup, getAllGroups, getGroupsByUserId, createGroup } from "../services/groupservice";
+import {
+  acceptGroup,
+  getAllGroups,
+  getAllGroupsWithMembers,
+  getGroupsByUserId,
+  createGroup,
+} from "../services/groupservice";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const groups = await Group.find();
+    const groups = await Group.find().populate({
+      path: "members",
+      select: "name email profilePictureURL", // Only select these fields from the User documents
+    });
+
     res.json(groups);
   } catch (error) {
     console.error("Error fetching groups: ", error);
     res.status(500).json({ error: "Failed to fetch groups" });
+  }
+});
+
+router.get("/:groupId", async (req, res) => {
+  try {
+    const group = await Group.findById(req.params.groupId);
+
+    res.json(group);
+  } catch (error) {
+    console.error("Error fetching group with members:", error);
+    res.status(500).json({ error: "Failed to fetch group with members" });
   }
 });
 
@@ -61,8 +82,6 @@ router.post("/createGroup", async (req, res) => {
     res.status(500).json({ error: "Failed to create group" });
   }
 });
-
-
 
 router.put("/accepted/:id", async (req, res) => {
   try {

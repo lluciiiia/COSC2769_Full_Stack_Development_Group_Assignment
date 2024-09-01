@@ -37,6 +37,19 @@ export const acceptGroup = async (groupId: string) => {
   }
 };
 
+export const getAllGroupsWithMembers = async () => {
+  try {
+    const groupsWithMembers = await Group.find()
+      .select("members") 
+      .populate("members", "name email profilePictureURL");
+
+    return groupsWithMembers;
+  } catch (error) {
+    console.error("Error fetching all groups with members:", error);
+    throw new Error("Failed to fetch groups with members");
+  }
+};
+
 export const createGroup = async (data: any) => {
   try {
     const newGroup = new Group(data);
