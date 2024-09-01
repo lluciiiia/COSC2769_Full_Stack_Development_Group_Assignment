@@ -6,7 +6,7 @@ export const commentReaction = async (
   postId: string,
   userId: string,
   reactionType: string,
-  targetType: string, // Renamed for clarity
+  targetType: string,
 ) => {
   try {
     let post;
@@ -50,15 +50,17 @@ export const commentReaction = async (
 };
 
 export const fetchingUserReact = async (postId: string, userId: string) => {
-  try {
-    const existingReaction = await Reaction.findOne({ postId, userId });
-
-    if (!existingReaction) {
-      throw new Error("Reaction not found with the provided id");
+    try {
+      console.log("Attempting to find reaction for postId:", postId, "and userId:", userId);
+      const existingReaction = await Reaction.findOne({ postId, userId });
+  
+      if (!existingReaction) {
+        console.log("No reaction found for postId:", postId, "and userId:", userId);
+        return null; // Return null if no reaction is found
+      }
+      return existingReaction;
+    } catch (error) {
+      console.error("Error fetching reaction", error);
+      throw new Error("Failed to fetch reaction");
     }
-    return existingReaction;
-  } catch (error) {
-    console.error("Error fetching reaction", error);
-    throw new Error("Failed to fetch reaction");
-  }
-};
+  };
