@@ -14,6 +14,7 @@ import { selectAuthState } from "../features/authSlice";
 import { sendGroupRequest } from "../controllers/user"; 
 import {  selectGroupRequest } from "../features/notificationSlice";
 import { groupSentRequest } from "../controllers/notification";
+
 export default function GroupPage() {
   const groupId = useParams<{ groupId: string }>().groupId || "";
   const dispatch: AppDispatch = useDispatch();
@@ -21,8 +22,9 @@ export default function GroupPage() {
   const [loading, setLoading] = useState(true);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
-  const { id } = useSelector(selectAuthState);
+  const { id: userId } = useSelector(selectAuthState); // Renamed for clarity
   const [isMember, setIsMember] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false); // New state for admin check
 
   // Use the selector to get the selected group
   const selectedGroup = useSelector((state: AppState) =>
@@ -51,12 +53,17 @@ export default function GroupPage() {
 
   useEffect(() => {
     setGroup(selectedGroup || null);
-    // Check if the user is a member of the group
     if (selectedGroup) {
-      const memberStatus = selectedGroup.members.includes(id);
+      // Check if the user is a member of the group
+      const memberStatus = selectedGroup.members.includes(userId);
       setIsMember(memberStatus);
+
+      // Check if the user is the admin of the group
+      if (userId === selectedGroup.groupAdmin) {
+        setIsAdmin(true);
+      }
     }
-  }, [selectedGroup, id]);
+  }, [selectedGroup, userId]);
 
   useEffect(() => {
     dispatch(groupSentRequest());
@@ -138,20 +145,24 @@ export default function GroupPage() {
                 </button>
               </>
             ) : (
-              <button
-                onClick={handleJoinGroup}
-                className={`rounded-md px-4 text-sm text-white shadow-md ${
-                  existingGroupRequest ? "cursor-not-allowed bg-gray-400" : "bg-[#FFC123]"
-                }`}
-                disabled={!!existingGroupRequest}
-              >
-                {existingGroupRequest ? "Request Sent" : "Join"}
-              </button>
+              !isAdmin && ( // Only show "Join" button if user is not an admin
+                <button
+                  onClick={handleJoinGroup}
+                  className={`rounded-md px-4 text-sm text-white shadow-md ${
+                    existingGroupRequest ? "cursor-not-allowed bg-gray-400" : "bg-[#FFC123]"
+                  }`}
+                  disabled={!!existingGroupRequest}
+                >
+                  {existingGroupRequest ? "Request Sent" : "Join"}
+                </button>
+              )
             )}
 
-            <button className="rounded-md border border-gray-400 bg-white px-2 text-sm text-black shadow-md">
-              Report
-            </button>
+            {!isAdmin && ( // Only show "Report" button if user is not an admin
+              <button className="rounded-md border border-gray-400 bg-white px-2 text-sm text-black shadow-md">
+                Report
+              </button>
+            )}
           </div>
         </div>
 
@@ -197,7 +208,7 @@ export default function GroupPage() {
       <PostModal
         isOpen={isPostModalOpen}
         onClose={handleCloseModal}
-        userId={id}
+        userId={userId}
         post={selectedPost}
         groupId={groupId}
       />
