@@ -6,18 +6,21 @@ import { AppDispatch } from "../app/store";
 
 interface ProtectedRouteProps {
   children: JSX.Element;
+  adminOnly?: boolean;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  adminOnly = false,
+}) => {
   const dispatch: AppDispatch = useDispatch();
   const auth = useSelector(selectAuthState);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch session on component mount
     const fetchData = async () => {
       await dispatch(fetchSess());
-      setLoading(false); // Set loading to false once fetchSess is complete
+      setLoading(false);
     };
 
     if (!auth.isAuthenticated) {
@@ -28,19 +31,17 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   }, [dispatch, auth.isAuthenticated]);
 
   if (loading) {
-    return <p>Loading...</p>; // Display a loading message while the session is being fetched
+    return <p>Loading...</p>;
   }
 
-  
-
-  // Check Redux state for authentication
   if (!auth.isAuthenticated) {
     return <Navigate to="/" replace />;
   }
 
-  if (!auth.isAdmin) {
+  if (adminOnly && !auth.isAdmin) {
     return <Navigate to="/home" replace />;
   }
+
   return children;
 };
 
