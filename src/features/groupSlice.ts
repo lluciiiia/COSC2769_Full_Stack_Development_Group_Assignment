@@ -1,10 +1,22 @@
-// groupSlice.ts
 import { createSlice } from "@reduxjs/toolkit";
 import { GroupType } from "../interfaces/Group";
 import { AppState } from "../app/store";
-import { fetchGroups } from "../controllers/group";
+import { fetchGroups, fetchGroupWithMembers } from "../controllers/group";
 
-const initialState: GroupType[] = [];
+const initialState: GroupType[] = [
+  {
+    _id: "",
+    groupAdmin: "",
+    name: "",
+    visibility: "private",
+    imageURL: "",
+    backgroundImageURL: "",
+    dateCreated: "",
+    members: [],
+    accepted: false,
+    description: "",
+  },
+];
 
 const groupSlice = createSlice({
   name: "groups",
@@ -13,29 +25,29 @@ const groupSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchGroups.pending, (state) => {
-        // Handle loading state if needed
         console.log("Fetching groups...");
       })
       .addCase(fetchGroups.fulfilled, (state, action) => {
-        // Replace the state with the fetched groups
-        return action.payload;
+        // Instead of replacing the entire state, merge the new groups
+        action.payload.forEach(group => {
+          const index = state.findIndex(existingGroup => existingGroup._id === group._id);
+          if (index !== -1) {
+            state[index] = group;
+          } else {
+            state.push(group);
+          }
+        });
       })
-      .addCase(fetchGroups.rejected, (state, action) => {
-        console.error("Failed to fetch groups", action.error.message);
-      })
-      
   },
 });
 
-// Selector to get group by ID
-export const selectGroupById = (state: AppState, groupId: string | undefined) => {
+export const selectGroupById = (state: AppState, groupId: string) => {
   if (!groupId) {
     console.log("No groupId provided");
     return undefined;
   }
-
-  const group = state.groups.find((group) => group._id === groupId);
-  return group;
+  console.log(`selectGroupById called with groupId: ${groupId}`);
+  return state.groups.find((group) => group._id === groupId);
 };
 
 export default groupSlice.reducer;
