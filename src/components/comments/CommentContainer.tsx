@@ -45,18 +45,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
       }
     };
   
-    const fetchReactions = async () => {
-      try {
-        for (let comment of initComments) {
-          await dispatch(fetchReaction(comment._id)); 
-        }
-      } catch (error) {
-        console.error("Error fetching reactions:", error);
-      }
-    };
-  
     fetchComments();
-    fetchReactions();
   }, [dispatch, initComments]);
   
 
@@ -100,12 +89,10 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
                 <CommentItem comment={comment} />
                 <div className="">
                   <ReactionButton
+                    comment={comment._id}
                     onReact={(reaction) =>
                       handleReaction(reaction, comment._id)
                     }
-                    initialReaction={comment.reactions?.find(
-                      (r) => r.userId === userId,
-                    )?.reactionType}
                     isReacted={isReacted}
                   />
                 </div>

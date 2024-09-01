@@ -68,6 +68,7 @@ export const fetchReaction = async (postId: string, userId: string) => {
         console.log("No reaction found for postId:", postId, "and userId:", userId);
         return null;
       }
+      console.log(existingReaction)
       return existingReaction;
     } catch (error) {
       console.error("Error fetching reaction", error);

@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ReactProps } from "../interfaces/reactions";
 import { createReaction, fetchReaction } from "../controllers/reactions";
+import { AppState } from "../app/store";
 
 const initialState: ReactProps = {
     createComplete: false,
@@ -20,10 +21,11 @@ const reactSlice = createSlice({
             state.isReacted = true;
         });
         builder.addCase(fetchReaction.fulfilled, (state, action) => {
-            // fetchReaction could return an array of reactions or an empty array
+            console.log()
             if (action.payload && action.payload.length > 0) {
                 state.isReacted = true; 
                 state.reactions = action.payload;
+                state.reactionType=action.payload.reaction.reactionType;
             } else {
                 state.isReacted = false;  
                 state.reactions = [];
@@ -32,4 +34,7 @@ const reactSlice = createSlice({
     },
 });
 
+export const returnReactionType= (state: AppState)=>{
+    return state.react.reactionType;
+}
 export default reactSlice.reducer;
