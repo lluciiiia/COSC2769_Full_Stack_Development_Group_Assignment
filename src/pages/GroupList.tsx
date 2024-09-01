@@ -84,6 +84,7 @@ const GroupList: React.FC = () => {
         <CreateGroupModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
+          userId= {id}
         />
       )}
 
