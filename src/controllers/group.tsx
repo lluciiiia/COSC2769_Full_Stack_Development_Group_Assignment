@@ -39,6 +39,28 @@ export const handleAcceptGroup = async (groupId: string): Promise<GroupType> => 
     }
   };
 
-
-
-
+  export const createGroup = createAsyncThunk<GroupType, GroupParams>(
+    "groups/createGroup",
+    async (newGroup) => {
+      try {
+        const response = await fetch(`${API_URL}/createGroup`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newGroup),
+        });
+  
+        if (!response.ok) {
+          console.error("Failed to create group:", response.statusText);
+          throw new Error("Failed to create group");
+        }
+  
+        const data: GroupType = await response.json();
+        return data;
+      } catch (error) {
+        console.error("Error creating group:", error);
+        throw error; // Re-throw the error to be handled by the caller
+      }
+    }
+  );
