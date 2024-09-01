@@ -5,6 +5,7 @@ import {
   fetchReaction,
 } from "../services/reactionService";
 import mongoose from "mongoose";
+import { useParams } from "react-router-dom";
 
 const router = express.Router();
 
@@ -34,26 +35,37 @@ router.post("/userReact", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/", async (req: Request, res: Response) => {
+router.post("/:postId", async (req: Request, res: Response) => {
   try {
-    const { postId } = req.body;
+    const { postId } = req.params;
+
+    if (!req.session || !req.session.user || !req.session.user.id) {
+      return res.status(401).json({ error: "Unauthorized: User not logged in" });
+    }
     const userId = req.session.user.id;
 
     if (!mongoose.Types.ObjectId.isValid(postId)) {
-      throw new Error("Invalid postId format");
+      return res.status(400).json({ error: "Invalid postId format" });
     }
 
-    const result = await fetchReaction({
-      postId,
-      userId,
-    });
+    const result = await fetchReaction(postId, userId);
 
-    res.status(201).json({ message: "React fetched", post: result });
+    res.status(200).json({ message: "Reaction fetched", reaction: result });
   } catch (error) {
     console.error("Error fetching reaction:", error);
     res.status(500).json({ error: "Failed to fetch reaction" });
   }
 });
+
+// router.get("/getReaction/:postId", async(req: Request, res: Response)=>{
+//   try{
+//       const {postId}= req.params;
+
+      
+//   }catch(error){
+
+//   }
+// })
 
 router.delete("/:id", async (req: Request, res: Response) => {
   try {

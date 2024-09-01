@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { PostParams } from "../../interfaces/Posts";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ReactionSection } from "./ReactionSection";
+import { AdminSection } from "./AdminSection";
 import { ProfileSection } from "./ProfileSection";
 import { AppDispatch, AppState } from "../../app/store";
 import { createReaction, fetchReaction } from "../../controllers/reactions";
@@ -23,6 +24,9 @@ const PostContainer: React.FC<PostParams> = ({
 }) => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
+
+  const location = useLocation();
+
   const [showFullContent, setShowFullContent] = useState(false);
   const [initialReaction, setInitialReaction] = useState<string | undefined>(undefined);
 
@@ -46,7 +50,7 @@ const PostContainer: React.FC<PostParams> = ({
   
     fetchUserReaction();
   }, [dispatch, postId]);
-  
+
 
   const handleClick = () => {
     navigate(`/posts/${postId}`);
@@ -70,6 +74,9 @@ const PostContainer: React.FC<PostParams> = ({
     setShowFullContent(!showFullContent);
   };
 
+
+  const isAdminPage = location.pathname === "/admin";
+
   // Define the maximum length for the excerpt
   const maxLength = 100;
 
@@ -79,6 +86,7 @@ const PostContainer: React.FC<PostParams> = ({
     isContentLong && !showFullContent
       ? `${content.slice(0, maxLength)}...`
       : content;
+
 
   return (
     <div
@@ -142,26 +150,48 @@ const PostContainer: React.FC<PostParams> = ({
         )}
       </div>
 
-      <ReactionSection 
+
+      {isAdminPage ? (
+        <AdminSection
+          handleClick={handleClick}
+          post={{
+            _id,
+            creatorId,
+            content,
+            imageURL,
+            createdAt,
+            visibility,
+            profileSection,
+            isDetail,
+            history,
+            comments,
+          }}
+        />
+      ) : (
+       <ReactionSection 
         reactions={reactions} 
         isReacted={isReacted} 
         handleClick={handleClick} 
         onReact={handleReaction} 
         initialReaction={initialReaction}
+        commentCount={comments?.length || 0} // Pass the number of comments
       />
+      )}
 
-
-      {!isDetail && comments?.length > 0 && (
+      {!isDetail && (
         <div className="mt-4">
-          <h3
-            className="mb-2 ml-5 cursor-pointer text-left text-sm font-semibold"
-            onClick={handleClick}
-          >
-            View more comments ..
-          </h3>
-          {comments.slice(0, 2).map((comment) => (
+
+          {comments?.slice(0, 2).map((comment) => (
             <CommentItem key={comment._id} comment={comment} />
           ))}
+          {comments?.length > 2 && (
+            <h3
+              className="mb-2 ml-5 cursor-pointer text-left text-sm font-semibold"
+              onClick={handleClick}
+            >
+              View more comments ({comments.length - 2}) {/* Display the number of additional comments */}
+            </h3>
+          )}
         </div>
       )}
     </div>
