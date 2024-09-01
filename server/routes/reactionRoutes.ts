@@ -57,7 +57,15 @@ router.post("/:postId", async (req: Request, res: Response) => {
   }
 });
 
+// router.get("/getReaction/:postId", async(req: Request, res: Response)=>{
+//   try{
+//       const {postId}= req.params;
 
+      
+//   }catch(error){
+
+//   }
+// })
 
 router.delete("/:id", async (req: Request, res: Response) => {
   try {

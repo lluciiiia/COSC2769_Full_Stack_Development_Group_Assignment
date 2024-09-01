@@ -9,4 +9,5 @@ export interface ReactProps {
     createComplete: boolean;
     reactions: Reaction[];
     isReacted: boolean;
+    reactionType: string;
 }

@@ -68,9 +68,19 @@ export const fetchReaction = async (postId: string, userId: string) => {
         console.log("No reaction found for postId:", postId, "and userId:", userId);
         return null;
       }
+      console.log(existingReaction)
       return existingReaction;
     } catch (error) {
       console.error("Error fetching reaction", error);
       throw new Error("Failed to fetch reaction");
     }
   };
+
+  // export const fetchReactionByPost= async (postId: string)=>{
+  //   try{
+  //     const existingReaction= await Reaction.findOne({postId});
+  //   }catch(error){
+  //     console.error("Error fetching reaction", error);
+  //     throw new Error("Failed to fetch reaction");
+  //   }
+  // }
