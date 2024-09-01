@@ -7,6 +7,8 @@ import { fetchGroups } from "../controllers/group";
 import { GroupType } from "../interfaces/Group";
 import { selectAuthState } from "../features/authSlice";
 import CreateGroupModal from "../components/group/CreateGroupModal";
+import { sendGroupRequest } from "../controllers/user";
+import { selectRequest } from "../features/notificationSlice";
 
 const GroupList: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -16,6 +18,9 @@ const GroupList: React.FC = () => {
   const [activeSubtab, setActiveSubtab] = useState("all");
   const groups = useSelector((state: AppState) => state.groups);
   const { id } = useSelector(selectAuthState);
+
+  // Get all sent group requests
+  const sentGroupRequests = useSelector(selectRequest) || [];
 
   useEffect(() => {
     const loadGroups = async () => {
@@ -30,6 +35,25 @@ const GroupList: React.FC = () => {
 
     loadGroups();
   }, [dispatch]);
+
+  const handleJoinGroup = async (groupId: string) => {
+    // Check if a join request for this group already exists
+    const existingGroupRequest = sentGroupRequests.find(
+      (request) => request.groupId === groupId
+    );
+
+    if (existingGroupRequest) {
+      console.log("Group request already sent");
+      return;
+    }
+
+    try {
+      const response = await dispatch(sendGroupRequest(groupId));
+      console.log("Group request response:", response);
+    } catch (error) {
+      console.error("Failed to join group:", error);
+    }
+  };
 
   const filteredGroups = () => {
     if (activeTab === "groups") {
@@ -127,38 +151,50 @@ const GroupList: React.FC = () => {
                 No groups found
               </div>
             ) : (
-              filteredGroups().map((group: GroupType, index: number) => (
-                <div
-                  key={group._id}
-                  className={`relative flex items-center justify-center py-4 ${
-                    index < filteredGroups().length - 1 ? "border-b-2" : ""
-                  }`}
-                >
-                  <div className="flex items-center">
-                    <img
-                      src={group.imageURL}
-                      alt={group.name}
-                      className="h-12 w-12 rounded-full border-2 border-black"
-                    />
-                    <span className="ml-4 text-lg font-bold">{group.name}</span>
+              filteredGroups().map((group: GroupType, index: number) => {
+                const existingGroupRequest = sentGroupRequests.find(
+                  (request) => request.groupId === group._id.toString()
+                );
+
+                return (
+                  <div
+                    key={group._id}
+                    className={`relative flex items-center justify-center py-4 ${
+                      index < filteredGroups().length - 1 ? "border-b-2" : ""
+                    }`}
+                  >
+                    <div className="flex items-center">
+                      <img
+                        src={group.imageURL}
+                        alt={group.name}
+                        className="h-12 w-12 rounded-full border-2 border-black"
+                      />
+                      <span className="ml-4 text-lg font-bold">{group.name}</span>
+                    </div>
+                    <div className="ml-auto flex items-center space-x-4">
+                      <span className="text-gray text-sm">
+                        {group.members ? group.members.length : 0} members
+                      </span>
+                      {!group.members.includes(id) && (
+                        <button
+                          className={`cursor-pointer rounded px-4 py-2 font-bold text-black focus:outline-none ${
+                            existingGroupRequest ? "bg-gray-400 cursor-not-allowed" : "bg-[#FFC123] hover:bg-[#d89e1b]"
+                          }`}
+                          onClick={() => handleJoinGroup(group._id.toString())}
+                          disabled={!!existingGroupRequest}
+                        >
+                          {existingGroupRequest ? "Request Sent" : "Join"}
+                        </button>
+                      )}
+                      <Link to={`/groups/${group._id}/discussion`}>
+                        <button className="cursor-pointer rounded bg-gray-300 px-4 py-2 font-bold text-gray-700 hover:bg-gray-500 focus:outline-none">
+                          View
+                        </button>
+                      </Link>
+                    </div>
                   </div>
-                  <div className="ml-auto flex items-center space-x-4">
-                    <span className="text-gray text-sm">
-                      {group.members ? group.members.length : 0} members
-                    </span>
-                    {!group.members.includes(id) && (
-                      <button className="cursor-pointer rounded bg-[#FFC123] px-4 py-2 font-bold text-black hover:bg-[#d89e1b] focus:outline-none">
-                        Join
-                      </button>
-                    )}
-                    <Link to={`/groups/${group._id}/discussion`}>
-                      <button className="cursor-pointer rounded bg-gray-300 px-4 py-2 font-bold text-gray-700 hover:bg-gray-500 focus:outline-none">
-                        View
-                      </button>
-                    </Link>
-                  </div>
-                </div>
-              ))
+                );
+              })
             )}
           </>
         )}

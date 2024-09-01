@@ -42,4 +42,8 @@ export const selectGroupRequest = (state: AppState, groupId: string) =>
     (request) => request.groupId === groupId
   );
 
+export const selectRequest= (state: AppState)=>{
+  console.log(state.notifications, "alsdjclijasc");
+  state.notifications;
+}
 export default notificationSlice.reducer;

@@ -22,9 +22,9 @@ export default function GroupPage() {
   const [loading, setLoading] = useState(true);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
-  const { id: userId } = useSelector(selectAuthState); // Renamed for clarity
+  const { id: userId } = useSelector(selectAuthState);
   const [isMember, setIsMember] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false); // New state for admin check
+  const [isAdmin, setIsAdmin] = useState(false); 
 
   // Use the selector to get the selected group
   const selectedGroup = useSelector((state: AppState) =>
