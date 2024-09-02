@@ -18,7 +18,10 @@ const CommentEditor: React.FC<CommentEditorProps> = ({
 
   const handleSave = async () => {
     try {
-      const response = await updateComment(commentId, { content });
+      if (commentId == undefined)
+        alert("An error occurred while trying to update the comment.");
+
+      const response = await updateComment({ id: commentId, content });
       if (!response) {
         alert("Failed to update the comment. Please try again.");
       } else {

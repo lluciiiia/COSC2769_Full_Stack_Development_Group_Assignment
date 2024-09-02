@@ -10,18 +10,16 @@ export const createComment = async (comment: any) => {
   });
 };
 
-export const updateComment = async (
-  id: string | undefined,
-  updatedContent: { content: string },
-) => {
-  if (id == undefined) return false;
-
+export const updateComment = async (updatedComment: {
+  id: string;
+  content: string;
+}) => {
   const response = await fetch(BACKEND_URL + `/api/comments`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(updatedContent),
+    body: JSON.stringify(updatedComment),
     credentials: "include",
   });
 
