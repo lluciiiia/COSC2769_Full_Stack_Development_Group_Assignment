@@ -192,7 +192,9 @@ const PostContainer: React.FC<PostParams> = ({
         </p>
         {images && images.length > 0 && (
           <div
-            className="flex space-x-4 overflow-x-auto"
+            className={`flex space-x-4 overflow-x-auto ${
+              images.length === 1 ? "justify-center" : "px-4"
+            }`}
             style={{ scrollbarWidth: "thin" }} // For Firefox
           >
             {images.map((image, index) => (
@@ -235,27 +237,29 @@ const PostContainer: React.FC<PostParams> = ({
       )}
 
       {/* Ensure Comments Section Exists */}
-      <div className="mt-4">
-        {comments?.length === 0 ? (
-          <p className="mb-2 ml-5 text-left text-sm text-gray-500">
-            No comments yet.
-          </p>
-        ) : (
-          comments
-            ?.slice(0, 2)
-            .map((comment) => (
-              <CommentItem key={comment._id} comment={comment} />
-            ))
-        )}
-        {comments?.length > 2 && (
-          <h3
-            className="mb-2 ml-5 cursor-pointer text-left text-sm font-semibold"
-            onClick={handleClick}
-          >
-            View more comments ({comments.length - 2})
-          </h3>
-        )}
-      </div>
+      {!isDetail && (
+        <div className="mt-4">
+          {comments?.length === 0 ? (
+            <p className="mb-4 ml-5 text-left text-center text-sm text-gray-500">
+              Write the first comment!
+            </p>
+          ) : (
+            comments
+              ?.slice(0, 2)
+              .map((comment) => (
+                <CommentItem key={comment._id} comment={comment} />
+              ))
+          )}
+          {comments?.length > 2 && (
+            <h3
+              className="mb-2 ml-5 cursor-pointer text-left text-sm font-semibold"
+              onClick={handleClick}
+            >
+              View more comments ({comments.length - 2})
+            </h3>
+          )}
+        </div>
+      )}
 
       {isSyncing && (
         <div className="mt-2 text-center text-sm text-gray-500">
