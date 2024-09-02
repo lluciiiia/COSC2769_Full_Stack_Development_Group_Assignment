@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { Notifications } from "../../interfaces/Notifications";
@@ -92,6 +92,10 @@ const RequestItems = ({
   handleRemoveNotification: (notificationId: string) => void;
 }) => {
   const navigate = useNavigate();
+
+  // Local state to track if the request has been accepted
+  const [accepted, setAccepted] = useState(isAccepted);
+
   return (
     <div className="relative w-full rounded-lg bg-gray-100 p-2">
       <button
@@ -142,21 +146,31 @@ const RequestItems = ({
         ) : requestType === "GROUP_REQUEST_ACCEPTED" ? (
           <p className="text-sm text-gray-700">
             <span>
-              <span className="font-bold">{name}</span> has accepted your
+            <span className="font-bold">{name}</span> has accepted your
               joining group request
             </span>
           </p>
+        ) : requestType === "RECEIVE_REACTION" ? (
+          <div>
+            <p className="text-sm text-gray-700">
+              <span>
+                <span className="font-bold">{name}</span> reacted to your post
+              </span>
+            </p>
+          </div>
         ) : (
           <div></div>
         )}
       </div>
 
-      {requestType === "FRIEND_REQUEST" && !isAccepted && (
+      {/* Conditionally render the buttons based on the accepted state */}
+      {requestType === "FRIEND_REQUEST" && !accepted && (
         <div className="mt-4 flex justify-end space-x-2">
           <button
             className="rounded-lg bg-[#FFC123] px-3 py-1 text-sm font-bold text-white hover:opacity-40"
             onClick={() => {
               handleAcceptFriendRequest(friendId, notificationId);
+              setAccepted(true); // Update the local state
             }}
           >
             Accept
@@ -172,12 +186,13 @@ const RequestItems = ({
         </div>
       )}
 
-      {requestType === "GROUP_REQUEST" && !isAccepted && (
+      {requestType === "GROUP_REQUEST" && !accepted && (
         <div className="mt-4 flex justify-end space-x-2">
           <button
             className="rounded-lg bg-[#FFC123] px-3 py-1 text-sm font-bold text-white hover:opacity-40"
             onClick={() => {
               handleAcceptGroupRequest(friendId, notificationId);
+              setAccepted(true); // Update the local state
             }}
           >
             Accept

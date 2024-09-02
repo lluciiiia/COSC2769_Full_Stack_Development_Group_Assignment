@@ -8,8 +8,7 @@ export const ReactionSection: React.FC<ReactionSectionProps> = ({
   onReact,
   initialReaction,
   isReacted,
-  reactions,
-  commentCount // New prop for comment count
+  commentCount
 }) => {
   const [liked, setLiked] = useState(isReacted);
   const [showReactions, setShowReactions] = useState(false);

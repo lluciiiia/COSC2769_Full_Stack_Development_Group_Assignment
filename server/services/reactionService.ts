@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import Reaction from "../models/reactions";
 import Comment from "../models/comment";
 import Post from "../models/post";
-
+import Notifications from "../models/notification";
 export const createReaction = async ({
   postId,
   userId,
@@ -16,20 +16,33 @@ export const createReaction = async ({
 }) => {
   try {
     let target;
+    let newNoti;
     if (targetType === "post") {
       target = await Post.findById(postId);
+      newNoti= {
+        senderId:userId,
+        receiverId:target?.creatorId,
+        type:"RECEIVE_REACTION",
+      }
     } else if (targetType === "comment") {
       target = await Comment.findById(postId);
+      newNoti= {
+        senderId:userId,
+        receiverId:target?.userId,
+        type:"RECEIVE_REACTION",
+      }
     } else {
       throw new Error("Invalid target type");
     }
+   
+    const notification= new Notifications(newNoti);
 
     if (!target) {
       throw new Error(
         `${targetType.charAt(0).toUpperCase() + targetType.slice(1)} not found`,
       );
     }
-
+    notification.save();
     let existingReaction = await Reaction.findOne({
       postId: new mongoose.Types.ObjectId(postId),
       userId,

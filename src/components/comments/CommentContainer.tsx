@@ -56,7 +56,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
         setQueuedReactions((prev) => {
           const updatedQueue = [...prev, reaction];
           saveReactionsToLocal(updatedQueue);
-          alert("Your reaction has been queued due to offline status."); // Alert only when queuing
+          alert("Your reaction has been queued due to offline status.");
           return updatedQueue;
         });
         console.log("Offline: Reaction queued for later syncing.");

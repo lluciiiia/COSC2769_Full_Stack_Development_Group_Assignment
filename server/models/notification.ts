@@ -18,11 +18,13 @@ const notificationSchema = new mongoose.Schema({
       "FRIEND_REQUEST_ACCEPTED",
       "GROUP_REQUEST",
       "GROUP_REQUEST_ACCEPTED",
+      "RECEIVE_REACTION",
     ],
     required: true,
   },
   groupId: { type: String },
   isAccepted: { type: Boolean, require: true, default: false },
+  reactionType:{type:String},
   isSeen: { type: Boolean, required: true, default: false },
   createdAt: { type: Date, default: Date.now },
 });
