@@ -61,11 +61,10 @@ export const createReaction = async ({
 
 export const fetchReaction = async (postId: string, userId: string) => {
     try {
-      console.log("Attempting to find reaction for postId:", postId, "and userId:", userId);
+
       const existingReaction = await Reaction.findOne({ postId, userId });
   
       if (!existingReaction) {
-        console.log("No reaction found for postId:", postId, "and userId:", userId);
         return null;
       }
       console.log(existingReaction)

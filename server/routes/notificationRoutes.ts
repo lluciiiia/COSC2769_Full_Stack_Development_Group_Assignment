@@ -6,6 +6,7 @@ import {
   getNotificationByReciver,
   getNotificationBySender,
   getGroupRequest,
+  acceptGroupRequest
 } from "../services/notificationsService";
 
 const router = express.Router();
@@ -70,6 +71,18 @@ router.get("/groupRequest", isAuthenticated, async (req, res) => {
   } catch (error) {
     console.error("Error deleting notification:", error);
     res.status(500).json({ error: "Failed to delete notification" });
+  }
+});
+
+router.put("/acceptRequest",isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.session.user.id;
+    const { notiId, senderId } = req.body;
+
+    const notification = await acceptGroupRequest(userId, notiId, senderId);
+    res.json(notification);
+  } catch (error) {
+    res.status(500).json({ error: error });
   }
 });
 

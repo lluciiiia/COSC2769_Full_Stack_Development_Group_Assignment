@@ -12,14 +12,14 @@ const groupSchema = new mongoose.Schema(
     dateCreated: { type: Date, default: Date.now },
     visibility: {
       type: String,
-      enum: ["public", "private"],
-      default: "public",
+      enum: ["Public", "Private"],
+      default: "Public",
     },
     imageURL: String,
     backgroundImageURL: String,
     members: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    description: { type: String },  
-    accepted: { type: Boolean, default: false }, 
+    description: { type: String },
+    accepted: { type: Boolean, default: false },
   },
   { timestamps: true },
 ); // Automatically adds createdAt and updatedAt fields
