@@ -2,35 +2,45 @@ import Group from "../models/group";
 import Post from "../models/post";
 import User from "../models/user";
 
-export const getAllPosts = async () => {
+
+export const getAllPosts = async (userId: string) => {
   try {
-    const posts = await Post.find()
-      .sort({ createdAt: -1 })
-      .populate({
-        path: "comments",
-        populate: {
-          path: "reactions",
+    // First, find the user to check if they are an admin
+    const user = await User.findById(userId);
+    if (!user) throw new Error(`User not found for userId: ${userId}`);
+    console.log(userId);
+    if (user.isAdmin) {
+      // If the user is an admin, get all posts
+      const posts = await Post.find()
+        .sort({ createdAt: -1 })
+        .populate({
+          path: "comments",
           populate: {
-            path: "userId", // Populate user details for reactions
-            select: "name profilePictureURL", // Select the fields you want
+            path: "reactions",
+            populate: {
+              path: "userId", // Populate user details for reactions
+              select: "name profilePictureURL", // Select the fields you want
+            },
           },
-        },
-      });
+        });
 
-    // Filter and enhance posts based on visibility & their own posts
-    const enhancedPosts = await Promise.all(
-      posts.map(async (post) => {
-        return await enhancePostWithUser(post);
-      }),
-    );
+      // Enhance each post with user information
+      const enhancedPosts = await Promise.all(
+        posts.map(async (post) => {
+          return await enhancePostWithUser(post);
+        }),
+      );
 
-    return enhancedPosts;
+      return enhancedPosts;
+    } else {
+      // If the user is not an admin, get posts based on user visibility
+      return await getPostsForUser(userId);
+    }
   } catch (error) {
     console.error("Error fetching posts", error);
     throw new Error("Failed to fetch posts");
   }
 };
-
 export const getPostsForUser = async (userId: string) => {
   try {
     const user = await User.findById(userId);

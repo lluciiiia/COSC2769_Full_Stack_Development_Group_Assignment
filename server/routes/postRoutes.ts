@@ -14,7 +14,9 @@ const router = express.Router();
 
 router.get("/all", async (req, res) => {
   try {
-    const posts = await getAllPosts();
+    const userId = req.session.user.id;
+
+    const posts = await getAllPosts(userId);
     res.json(posts);
   } catch (error) {
     res.status(500).json({ error: error });
