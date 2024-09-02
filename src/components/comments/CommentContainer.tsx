@@ -24,6 +24,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   const [queuedReactions, setQueuedReactions] = useState<any[]>(
     loadReactionsFromLocal("queuedCommentReactions"),
   );
+  const [isOffline, setIsOffline] = useState<boolean>(false);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const isReacted = useSelector((state: AppState) => state.react.isReacted);
 
@@ -33,32 +34,21 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
     if (navigator.onLine) {
       await sendReaction(reaction);
     } else {
+      setIsOffline(true);
       queueReaction(reaction);
     }
   };
 
   const sendReaction = async (reaction: any) => {
     try {
+      // Only attempt to send if online
       if (navigator.onLine) {
         // If online, send the reaction directly to the server
         await dispatch(createReaction(reaction));
         console.log(
-          `Reaction "${reaction.reactionType}" sent to server for comment ${comments}`,
+          `Reaction "${reaction.reactionType}" sent to server for comment ${reaction.postId}`,
         );
-      } else {
-        // If offline, queue the reaction and save it to local storage
-        setQueuedReactions((prev) => {
-          const updatedQueue = [...prev, reaction];
-          saveReactionsToLocal("queuedCommentReactions", updatedQueue);
-          alert("Your reaction has been queued due to offline status.");
-          return updatedQueue;
-        });
-        console.log("Offline: Reaction queued for later syncing.");
       }
-      await dispatch(createReaction(reaction));
-      console.log(
-        `Reaction "${reaction.reactionType}" sent to server for comment ${reaction.postId}`,
-      );
     } catch (error) {
       console.error("Error reacting to comment:", error);
     }
@@ -77,12 +67,15 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   const syncReactions = async () => {
     if (queuedReactions.length === 0) return;
 
+    setIsOffline(false);
     setIsSyncing(true);
+
     try {
       for (const reaction of queuedReactions) {
         await sendReaction(reaction);
       }
       clearQueuedReactions();
+
       alert("All queued reactions have been successfully synced.");
     } catch (error) {
       console.error("Error syncing reactions:", error);
@@ -135,7 +128,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   return (
     <div className="h-full w-full max-w-md">
       <div className="h-[600px] w-[700px] rounded-lg bg-gray-100 p-4 shadow-md">
-        <h2 className="mb-4 text-xl font-bold">Comments</h2>
+        <h2 className="mb-4 mr-auto text-xl font-bold">Comments</h2>
         <div className="flex h-[300px] flex-col gap-2 overflow-y-auto">
           {comments.length === 0 ? (
             <div className="flex flex-1 items-center justify-center">
@@ -145,6 +138,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
             comments.map((comment) => (
               <div key={comment._id}>
                 <CommentItem comment={comment} />
+
                 <CommentReactions
                   comment={comment._id}
                   onReact={(reaction) => handleReaction(reaction, comment._id)}
@@ -154,16 +148,23 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
             ))
           )}
         </div>
+        <div className="flex flex-1 items-center justify-center">
+          {/* Display offline or syncing message */}
+          {isOffline ? (
+            <span className="mt-2 text-center text-sm text-gray-500">
+              You’re offline. Reactions will be synced as soon as you reconnect.
+            </span>
+          ) : isSyncing ? (
+            <span className="mt-2 text-center text-sm text-gray-500">
+              Syncing reactions...
+            </span>
+          ) : null}
+        </div>
         <CommentForm
           newComment={newComment}
           onCommentChange={handleCommentChange}
           onSubmit={handleSubmit}
         />
-        {isSyncing && (
-          <div className="mt-2 text-center text-sm text-gray-500">
-            Syncing reactions...
-          </div>
-        )}
       </div>
     </div>
   );

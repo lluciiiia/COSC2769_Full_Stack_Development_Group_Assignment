@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppState } from "../../app/store";
+import { useDispatch } from "react-redux";
 import { fetchReaction } from "../../controllers/reactions";
 import { ReactionButtonProps, ReactionIcons } from "../../interfaces/Reactions";
 import ReactionIconButton from "./ReactionIconButton";
@@ -30,31 +29,33 @@ const CommentReactions: React.FC<ReactionButtonProps> = ({
   };
 
   return (
-    <div
-      className="relative z-10"
-      onMouseEnter={() => setShowReactions(true)}
-      onMouseLeave={() => setShowReactions(false)}
-    >
-      <ReactionIconButton
-        reactionType={selectedReaction}
-        isSelected={false}
-        onClick={() => {}}
-        icon={ReactionIcons[selectedReaction] || "REACT"}
-      />
-      {showReactions && (
-        <div className="absolute left-0 flex gap-2 rounded-lg bg-white p-2 shadow-md">
-          {Object.entries(ReactionIcons).map(([reaction, icon]) => (
-            <ReactionIconButton
-              key={reaction}
-              reactionType={reaction}
-              isSelected={selectedReaction === reaction}
-              onClick={handleReactionClick}
-              icon={icon}
-            />
-          ))}
-        </div>
-      )}
-    </div>
+    <>
+      <div
+        className="relative z-10"
+        onMouseEnter={() => setShowReactions(true)}
+        onMouseLeave={() => setShowReactions(false)}
+      >
+        <ReactionIconButton
+          reactionType={selectedReaction}
+          isSelected={false}
+          onClick={() => {}}
+          icon={ReactionIcons[selectedReaction] || "REACT"}
+        />
+        {showReactions && (
+          <div className="absolute left-0 flex gap-2 rounded-lg bg-white p-2 shadow-md">
+            {Object.entries(ReactionIcons).map(([reaction, icon]) => (
+              <ReactionIconButton
+                key={reaction}
+                reactionType={reaction}
+                isSelected={selectedReaction === reaction}
+                onClick={handleReactionClick}
+                icon={icon}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 
