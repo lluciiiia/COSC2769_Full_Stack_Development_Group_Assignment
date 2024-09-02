@@ -13,12 +13,11 @@ export default function Discussion() {
   const { id } = useSelector(selectAuthState);
 
   const group = useSelector((state: AppState) =>
-    selectGroupById(state, groupId)
+    selectGroupById(state, groupId),
   );
 
   const [canViewPosts, setCanViewPosts] = React.useState(false);
   const [isAdmin, setIsAdmin] = React.useState(false); // State to check if the user is admin
-
   useEffect(() => {
     if (group) {
       // Check if the current user is the admin of the group
@@ -32,7 +31,8 @@ export default function Discussion() {
         console.log("This is public! You can see everything!!");
       } else if (group.visibility === "Private") {
         // Private groups require membership to view posts
-        if (id && group.members.includes(id)) {
+        const memberIds = group.members.map((member) => member._id);
+        if (id && memberIds.includes(id)) {
           setCanViewPosts(true);
           console.log("You're in the group, you can see the posts.");
         } else {
@@ -68,7 +68,7 @@ export default function Discussion() {
       {canViewPosts ? (
         <>
           {isAdmin && (
-            <div className="mt-12 text-center font-bold text-xl text-green-600">
+            <div className="mt-12 text-center text-xl font-bold text-green-600">
               Welcome Admin
             </div>
           )}
@@ -86,7 +86,7 @@ export default function Discussion() {
         </>
       ) : (
         <p className="mt-12 text-center">
-          You're not in the group :)) Please consider signing up.
+          You're not in the group! Please consider signing up.
         </p>
       )}
     </div>

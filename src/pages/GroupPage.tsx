@@ -25,7 +25,7 @@ export default function GroupPage() {
   const { id: userId } = useSelector(selectAuthState);
   const [isMember, setIsMember] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-
+  const [isInGroup, setIsInGroup] = useState(false);
   // Use the selector to get the selected group
   const selectedGroup = useSelector((state: AppState) =>
     selectGroupById(state, groupId),
@@ -58,7 +58,7 @@ export default function GroupPage() {
       // Check if the user is a member of the group
       const memberStatus = selectedGroup.members.includes(userId);
       setIsMember(memberStatus);
-
+      setIsInGroup(true);
       // Check if the user is the admin of the group
       if (userId === selectedGroup.groupAdmin) {
         setIsAdmin(true);
@@ -146,7 +146,8 @@ export default function GroupPage() {
                 </button>
               </>
             ) : (
-              !isAdmin && ( // Only show "Join" button if user is not an admin
+              !isAdmin &&
+              !isInGroup && (
                 <button
                   onClick={handleJoinGroup}
                   className={`rounded-md px-4 text-sm text-white shadow-md ${
@@ -160,10 +161,16 @@ export default function GroupPage() {
                 </button>
               )
             )}
-
-            {!isAdmin && ( // Only show "Report" button if user is not an admin
-              <button className="rounded-md border border-gray-400 bg-white px-2 text-sm text-black shadow-md">
-                Report
+            {isInGroup && (
+              <button
+                onClick={handleJoinGroup}
+                className={`rounded-md px-4 text-sm text-white hover:bg-orange-700 shadow-md ${
+                  existingGroupRequest
+                    ? "cursor-not-allowed bg-gray-400"
+                    : "bg-[#FFC123]"
+                }`}
+              >
+                {"Leave Group"}
               </button>
             )}
           </div>
