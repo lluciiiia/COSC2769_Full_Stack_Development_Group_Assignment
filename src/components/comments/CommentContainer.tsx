@@ -5,8 +5,18 @@ import CommentItem from "./CommentItem.tsx";
 import CommentForm from "./CommentForm.tsx";
 import { createComment } from "../../controllers/comments";
 import ReactionButton from "../reactions/ReactionButton.js";
-import { createReaction, fetchReaction } from "../../controllers/reactions.js";
+import { createReaction } from "../../controllers/reactions.js";
 import { AppDispatch, AppState } from "../../app/store.js";
+
+// Utility functions for local storage or IndexedDB (simplified example)
+const saveReactionsToLocal = (reactions: any[]) => {
+  localStorage.setItem("queuedReactions", JSON.stringify(reactions));
+};
+
+const loadReactionsFromLocal = (): any[] => {
+  const data = localStorage.getItem("queuedReactions");
+  return data ? JSON.parse(data) : [];
+};
 
 const CommentContainer: React.FC<CommentContainerProps> = ({
   initComments,
@@ -16,26 +26,79 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   const dispatch: AppDispatch = useDispatch();
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState<string>("");
+  const [queuedReactions, setQueuedReactions] = useState<any[]>(
+    loadReactionsFromLocal(),
+  );
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
 
   const isReacted = useSelector((state: AppState) => state.react.isReacted);
 
-  const handleReaction = async (reaction: string, commentId: string) => {
-    console.log(`User reacted with: ${reaction} on comment ID: ${commentId}`);
+  const handleReaction = async (reactionType: string, commentId: string) => {
+    console.log(
+      `User reacted with: ${reactionType} on comment ID: ${commentId}`,
+    );
+
+    const reaction = {
+      postId: commentId,
+      reactionType: reactionType,
+      sentFrom: "comment",
+    };
+
     try {
-      await dispatch(
-        createReaction({
-          postId: commentId,
-          reactionType: reaction,
-          sentFrom: "comment",
-        }),
-      );
-      console.log(
-        `Reaction "${reaction}" sent to server for comment ${commentId}`,
-      );
+      if (navigator.onLine) {
+        // If online, send the reaction directly to the server
+        await dispatch(createReaction(reaction));
+        console.log(
+          `Reaction "${reactionType}" sent to server for comment ${commentId}`,
+        );
+      } else {
+        // If offline, queue the reaction and save it to local storage
+        setQueuedReactions((prev) => {
+          const updatedQueue = [...prev, reaction];
+          saveReactionsToLocal(updatedQueue);
+          alert("Your reaction has been queued due to offline status."); // Alert only when queuing
+          return updatedQueue;
+        });
+        console.log("Offline: Reaction queued for later syncing.");
+      }
     } catch (error) {
       console.error("Error reacting to comment:", error);
     }
   };
+
+  // Sync queued reactions when coming back online
+  const syncReactions = async () => {
+    if (queuedReactions.length === 0) return;
+
+    setIsSyncing(true);
+    try {
+      for (const reaction of queuedReactions) {
+        await dispatch(createReaction(reaction));
+        console.log(
+          `Synced reaction: ${reaction.reactionType} for post ${reaction.postId}`,
+        );
+      }
+
+      // Clear queue after syncing
+      setQueuedReactions([]);
+      saveReactionsToLocal([]);
+      alert("All queued reactions have been successfully synced."); // Alert when synced
+    } catch (error) {
+      console.error("Error syncing reactions:", error);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  useEffect(() => {
+    // Sync reactions when the app comes back online
+    window.addEventListener("online", syncReactions);
+
+    return () => {
+      window.removeEventListener("online", syncReactions);
+    };
+  }, [queuedReactions]);
+
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -104,6 +167,11 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
           onCommentChange={handleCommentChange}
           onSubmit={handleSubmit}
         />
+        {isSyncing && (
+          <div className="mt-2 text-center text-sm text-gray-500">
+            Syncing reactions...
+          </div>
+        )}
       </div>
     </div>
   );
