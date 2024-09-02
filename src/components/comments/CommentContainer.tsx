@@ -34,9 +34,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   const isReacted = useSelector((state: AppState) => state.react.isReacted);
 
   const handleReaction = async (reactionType: string, commentId: string) => {
-    console.log(
-      `User reacted with: ${reactionType} on comment ID: ${commentId}`,
-    );
+
     const reaction = { postId: commentId, reactionType, sentFrom: "comment" };
 
     if (navigator.onLine) {

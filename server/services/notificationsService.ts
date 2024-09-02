@@ -274,6 +274,13 @@ export const createCommentNotification = async (
       throw new Error("Post not found");
     }
 
+    const creatorId = post.creatorId;
+    if (creatorId.toString() === senderId) {
+      return {
+        message: "No notification created as the comment is on own post",
+      };
+    }
+
     const newNotification = new Notifications({
       senderId: senderObjectId,
       receiverId: post.creatorId,

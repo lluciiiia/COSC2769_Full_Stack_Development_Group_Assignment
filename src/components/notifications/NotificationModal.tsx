@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { Notifications } from "../../interfaces/Notifications";
@@ -20,7 +20,7 @@ const NotificationModal = ({
   notifications: Notifications[];
 }) => {
   const dispatch: AppDispatch = useDispatch();
-  console.log(notifications);
+
   const handleAcceptGroupRequest = (
     senderId: string,
     notificationId: string,
@@ -108,7 +108,6 @@ const RequestItems = ({
 }) => {
   const navigate = useNavigate();
 
-  // Local state to track if the request has been accepted
   const [accepted, setAccepted] = useState(isAccepted);
 
   return (
@@ -122,9 +121,10 @@ const RequestItems = ({
       <div
         className="flex cursor-pointer items-center gap-2"
         onClick={() => {
+          console.log(postId);
           requestType === "RECEIVE_REACTION" ||
           requestType === "RECEIVE_COMMENT"
-            ? navigate(`/posts/${postId}`)
+            ? navigate(`/posts/${postId}`, { replace: true })
             : requestType === "GROUP_CREATION_APPROVAL"
               ? navigate(`/groups/${groupId}/discussion`)
               : navigate(`/profile/${friendId}`);
