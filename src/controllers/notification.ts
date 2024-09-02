@@ -90,6 +90,37 @@ export const acceptFriendRequestNotification = createAsyncThunk<
   return data;
 });
 
+export const acceptGroupRequest = createAsyncThunk<
+  {
+    message: string;
+    notification: { type: string; senderId: string; notiId: string };
+  },
+  { senderId: string; notiId: string }
+>("user/acceptGroupRequest", async ({ senderId, notiId }) => {
+  const response = await fetch(
+    `${BACKEND_URL}/api/notifications/acceptRequest`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        senderId: senderId,
+        notiId: notiId,
+      }),
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    console.error("Failed to accept group request:", response.statusText);
+    throw new Error("Failed to accept group request");
+  }
+
+  const data = await response.json();
+  return data;
+});
+
 export const removeFriendRequestNotification = createAsyncThunk<
   { message: string },
   string
