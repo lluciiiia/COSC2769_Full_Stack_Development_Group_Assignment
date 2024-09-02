@@ -47,6 +47,22 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
 
   const sendReaction = async (reaction: any) => {
     try {
+      if (navigator.onLine) {
+        // If online, send the reaction directly to the server
+        await dispatch(createReaction(reaction));
+        console.log(
+          `Reaction "${reactionType}" sent to server for comment ${commentId}`,
+        );
+      } else {
+        // If offline, queue the reaction and save it to local storage
+        setQueuedReactions((prev) => {
+          const updatedQueue = [...prev, reaction];
+          saveReactionsToLocal(updatedQueue);
+          alert("Your reaction has been queued due to offline status.");
+          return updatedQueue;
+        });
+        console.log("Offline: Reaction queued for later syncing.");
+      }
       await dispatch(createReaction(reaction));
       console.log(
         `Reaction "${reaction.reactionType}" sent to server for comment ${reaction.postId}`,
