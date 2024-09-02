@@ -20,6 +20,7 @@ const notificationSchema = new mongoose.Schema({
       "GROUP_REQUEST_ACCEPTED",
       "GROUP_CREATION_APPROVAL",
       "RECEIVE_REACTION",
+      "RECEIVE_COMMENT",
     ],
     required: true,
   },

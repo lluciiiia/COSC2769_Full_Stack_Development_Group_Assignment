@@ -109,8 +109,8 @@ const RequestItems = ({
   const navigate = useNavigate();
 
   // Local state to track if the request has been accepted
-
   const [accepted, setAccepted] = useState(isAccepted);
+
   return (
     <div className="relative w-full rounded-lg bg-gray-100 p-2">
       <button
@@ -122,7 +122,8 @@ const RequestItems = ({
       <div
         className="flex cursor-pointer items-center gap-2"
         onClick={() => {
-          requestType === "RECEIVE_REACTION"
+          requestType === "RECEIVE_REACTION" ||
+          requestType === "RECEIVE_COMMENT"
             ? navigate(`/posts/${postId}`)
             : requestType === "GROUP_CREATION_APPROVAL"
               ? navigate(`/groups/${groupId}/discussion`)
@@ -186,6 +187,10 @@ const RequestItems = ({
         ) : requestType === "GROUP_CREATION_APPROVAL" ? (
           <p className="text-sm text-gray-700">
             <span>{groupName} is approved</span>
+          </p>
+        ) : requestType === "RECEIVE_COMMENT" ? (
+          <p className="text-sm text-gray-700">
+            <span>{name} commented to your post</span>
           </p>
         ) : (
           ""

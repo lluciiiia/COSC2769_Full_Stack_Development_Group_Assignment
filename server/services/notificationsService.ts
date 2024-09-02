@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Notifications from "../models/notification";
 import Group from "../models/group";
+import Post from "../models/post";
 
 export const getNotificationByReciver = async (receiverId: string) => {
   try {
@@ -46,10 +47,6 @@ export const acceptGroupRequest = async (
   groupId: string,
 ) => {
   try {
-    console.log("userId:", userId);
-    console.log("notiId:", notiId);
-    console.log("groupId:", groupId);
-
     // Validate ObjectId
     if (!mongoose.Types.ObjectId.isValid(notiId)) {
       throw new Error("Invalid ID format");
@@ -67,7 +64,6 @@ export const acceptGroupRequest = async (
     }
     const groupAdmin = userId;
     const group = await Group.findOne({ groupAdmin: groupAdmin.toString() });
-    console.log("group:", group);
 
     if (!group) {
       throw new Error("Group not found");
@@ -91,14 +87,11 @@ export const acceptGroupRequest = async (
     };
 
     const notification = new Notifications(newNoti);
-    console.log(`Group request accepted: Notification ID ${notiId}`);
-    console.log("New notification:", notification);
 
     await notification.save();
 
     // Delete the old notification
     await Notifications.findByIdAndDelete(notiId);
-    console.log(`Old notification deleted: Notification ID ${notiId}`);
 
     return {
       success: true,
@@ -261,6 +254,38 @@ export const createGroupApprovalNotification = async (
     await newNotification.save();
 
     return { message: "Notificatin is created successfully" };
+  } catch (error) {
+    console.error("Error sending notifications", error);
+    throw new Error("Failed to sending notifications");
+  }
+};
+
+export const createCommentNotification = async (
+  senderId: string,
+  postId: string,
+) => {
+  try {
+    const senderObjectId = new mongoose.Types.ObjectId(senderId);
+    const postObjectId = new mongoose.Types.ObjectId(postId);
+
+    const post = await Post.findById(postObjectId);
+
+    if (!post) {
+      throw new Error("Post not found");
+    }
+
+    const newNotification = new Notifications({
+      senderId: senderObjectId,
+      receiverId: post.creatorId,
+      type: "RECEIVE_COMMENT",
+      postId: postObjectId,
+      isAccepted: false,
+      isSeen: false,
+    });
+
+    await newNotification.save();
+
+    return { message: "Create notification successfully" };
   } catch (error) {
     console.error("Error sending notifications", error);
     throw new Error("Failed to sending notifications");
