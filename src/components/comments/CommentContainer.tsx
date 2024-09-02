@@ -128,7 +128,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   return (
     <div className="h-full w-full max-w-md">
       <div className="h-[600px] w-[700px] rounded-lg bg-gray-100 p-4 shadow-md">
-        <h2 className="mb-4 text-xl font-bold">Comments</h2>
+        <h2 className="mb-4 mr-auto text-xl font-bold">Comments</h2>
         <div className="flex h-[300px] flex-col gap-2 overflow-y-auto">
           {comments.length === 0 ? (
             <div className="flex flex-1 items-center justify-center">
@@ -143,12 +143,22 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
                   comment={comment._id}
                   onReact={(reaction) => handleReaction(reaction, comment._id)}
                   isReacted={isReacted}
-                  isOffline={isOffline}
-                  isSyncing={isSyncing}
                 />
               </div>
             ))
           )}
+        </div>
+        <div className="flex flex-1 items-center justify-center">
+          {/* Display offline or syncing message */}
+          {isOffline ? (
+            <span className="mt-2 text-center text-sm text-gray-500">
+              You’re offline. Reactions will be synced as soon as you reconnect.
+            </span>
+          ) : isSyncing ? (
+            <span className="mt-2 text-center text-sm text-gray-500">
+              Syncing reactions...
+            </span>
+          ) : null}
         </div>
         <CommentForm
           newComment={newComment}
