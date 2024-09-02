@@ -8,12 +8,10 @@ import {
   fetchNotification,
   removeFriendRequestNotification,
 } from "../../controllers/notification";
-import {
-  acceptFriendRequest,
-  
-} from "../../controllers/user";
+import { acceptFriendRequest } from "../../controllers/user";
 import { useNavigate } from "react-router-dom";
 import { acceptGroupRequest } from "../../controllers/notification";
+
 const NotificationModal = ({
   isOpen,
   notifications,
@@ -141,13 +139,14 @@ const RequestItems = ({
               <span className="font-bold">{name}</span> wants to join your group
             </span>
           </p>
-        ) : requestType === "GROUP_REQUEST_ACCEPTED"? (
+        ) : requestType === "GROUP_REQUEST_ACCEPTED" ? (
           <p className="text-sm text-gray-700">
             <span>
-              <span className="font-bold">{name}</span> has accepted your joining group request
+              <span className="font-bold">{name}</span> has accepted your
+              joining group request
             </span>
           </p>
-        ):(
+        ) : (
           <div></div>
         )}
       </div>
