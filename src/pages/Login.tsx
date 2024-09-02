@@ -21,7 +21,7 @@ const Login: React.FC = () => {
 
     if (loginUserThunk.fulfilled.match(result)) {
       const user = result.payload.user;
-      const isAdmin = user.isAdmin === "true" || user.isAdmin === true;
+      const isAdmin = user.isAdmin;
 
       if (isAdmin) {
         navigate(`/admin`);
@@ -64,7 +64,6 @@ const Login: React.FC = () => {
               Email Address
             </label>
             <input
-              type="email"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

@@ -12,6 +12,7 @@ import commentRoutes from "./routes/commentRoutes";
 import reactionRoutes from "./routes/reactionRoutes";
 import authenticationRoutes from "./routes/authenticationRoutes";
 import sessionRoute from "./routes/sessionRoutes";
+import adminRoute from "./routes/adminRoutes";
 import session from "express-session";
 
 const app = express();
@@ -53,6 +54,7 @@ app.use("/api/comments", commentRoutes);
 app.use("/api/reactions", reactionRoutes);
 app.use("/api/user", authenticationRoutes);
 app.use("/api/session", sessionRoute);
+app.use("/api/admin",adminRoute);
 
 app.get("/", (req: Request, res: Response) => {
   res.json("From backend side");
