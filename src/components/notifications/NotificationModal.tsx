@@ -20,7 +20,7 @@ const NotificationModal = ({
   notifications: Notifications[];
 }) => {
   const dispatch: AppDispatch = useDispatch();
-
+  console.log(notifications);
   const handleAcceptGroupRequest = (
     senderId: string,
     notificationId: string,
@@ -55,6 +55,10 @@ const NotificationModal = ({
               isAccepted={noti.isAccepted}
               isSeen={noti.isSeen}
               postId={noti.postId}
+              groupId={noti?.groupId}
+              groupAdminId={noti?.groupDetails?.adminId}
+              groupImgURL={noti?.groupDetails?.groupImageURL}
+              groupName={noti?.groupDetails?.groupName}
               handleAcceptFriendRequest={handleAcceptFriendRequest}
               handleRemoveNotification={handleRemoveNotification}
               handleAcceptGroupRequest={handleAcceptGroupRequest}
@@ -78,6 +82,10 @@ const RequestItems = ({
   isAccepted,
   isSeen,
   postId,
+  groupId,
+  groupAdminId,
+  groupImgURL,
+  groupName,
   handleAcceptGroupRequest,
   handleAcceptFriendRequest,
   handleRemoveNotification,
@@ -89,19 +97,20 @@ const RequestItems = ({
   requestType: string;
   isAccepted: boolean;
   postId: string;
+  groupAdminId: string;
+  groupImgURL: string;
+  groupName: string;
   isSeen: boolean;
+  groupId: string;
   handleAcceptGroupRequest: (senderId: string, notificationId: string) => void;
   handleAcceptFriendRequest: (friendId: string, notificationId: string) => void;
   handleRemoveNotification: (notificationId: string) => void;
 }) => {
   const navigate = useNavigate();
-  let raectionNoti = false;
-  if (requestType === "RECEIVE_REACTION") {
-    raectionNoti = true;
-  }
-  // Local state to track if the request has been accepted
-  const [accepted, setAccepted] = useState(isAccepted);
 
+  // Local state to track if the request has been accepted
+
+  const [accepted, setAccepted] = useState(isAccepted);
   return (
     <div className="relative w-full rounded-lg bg-gray-100 p-2">
       <button
@@ -113,12 +122,20 @@ const RequestItems = ({
       <div
         className="flex cursor-pointer items-center gap-2"
         onClick={() => {
-          raectionNoti
+          requestType === "RECEIVE_REACTION"
             ? navigate(`/posts/${postId}`)
-            : navigate(`/profile/${friendId}`);
+            : requestType === "GROUP_CREATION_APPROVAL"
+              ? navigate(`/groups/${groupId}/discussion`)
+              : navigate(`/profile/${friendId}`);
         }}
       >
-        {imgUrl ? (
+        {requestType === "GROUP_CREATION_APPROVAL" ? (
+          <img
+            src={groupImgURL}
+            alt="Profile"
+            className="h-[40px] w-[40px] rounded-full"
+          />
+        ) : imgUrl ? (
           <img
             src={imgUrl}
             alt="Profile"
@@ -166,8 +183,12 @@ const RequestItems = ({
               </span>
             </p>
           </div>
+        ) : requestType === "GROUP_CREATION_APPROVAL" ? (
+          <p className="text-sm text-gray-700">
+            <span>{groupName} is approved</span>
+          </p>
         ) : (
-          <div></div>
+          ""
         )}
       </div>
 

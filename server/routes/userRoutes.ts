@@ -13,6 +13,7 @@ import {
 } from "../services/userServices";
 import { isAuthenticated } from "../middleware/authenticate";
 import mongoose from "mongoose";
+
 const router = express.Router();
 
 //GET /user- fetch all user
@@ -108,8 +109,6 @@ router.put("/:id", async (req, res) => {
     res.status(500).json({ error: error });
   }
 });
-
-
 
 router.post("/", async (req, res) => {
   try {

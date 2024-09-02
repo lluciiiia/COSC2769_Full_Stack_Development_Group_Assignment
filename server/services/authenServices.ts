@@ -47,9 +47,9 @@ export const regisNewAccount = async (data: any) => {
 export const loginUser = async (req: any) => {
   try {
     const { email, password } = req.body;
-
     // Check if the user exists
     const user = await User.findOne({ email });
+
     if (!user) {
       return { status: 400, message: "User not found" };
     }

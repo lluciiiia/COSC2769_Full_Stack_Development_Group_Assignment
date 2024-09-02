@@ -18,6 +18,7 @@ const notificationSchema = new mongoose.Schema({
       "FRIEND_REQUEST_ACCEPTED",
       "GROUP_REQUEST",
       "GROUP_REQUEST_ACCEPTED",
+      "GROUP_CREATION_APPROVAL",
       "RECEIVE_REACTION",
     ],
     required: true,

@@ -22,9 +22,8 @@ const groupSchema = new mongoose.Schema(
     accepted: { type: Boolean, default: false },
   },
   { timestamps: true },
-); // Automatically adds createdAt and updatedAt fields
+);
 
-// Create the model using the schema
 const Group = mongoose.model("Group", groupSchema);
 
 export default Group;
