@@ -1,5 +1,6 @@
 import User from "../models/user";
 import bcrypt from "bcrypt";
+import Admin from "../models/admin";
 export const regisNewAccount = async (data: any) => {
   try {
     const { email, name, password } = data;
@@ -44,15 +45,21 @@ export const regisNewAccount = async (data: any) => {
     return { status: 500, message: "Server error" };
   }
 };
-
 export const loginUser = async (req: any) => {
   try {
     const { email, password } = req.body;
-    // Check if the user exists
-    const user = await User.findOne({ email });
+
+    // Check if the email belongs to a regular user
+    let user = await User.findOne({ email });
+    let isAdmin = false;
 
     if (!user) {
-      return { status: 400, message: "User not found" };
+      // If not a user, check if it's an admin
+      user = await Admin.findOne({ username: email });
+      if (!user) {
+        return { status: 400, message: "User not found" };
+      }
+      isAdmin = true;
     }
 
     // Validate password
@@ -61,8 +68,8 @@ export const loginUser = async (req: any) => {
       return { status: 400, message: "Invalid credentials" };
     }
 
-    // Check if the account is active
-    if (!user.activeStatus) {
+    // For regular users, check if the account is active
+    if (!isAdmin && !user.activeStatus) {
       return { status: 400, message: "Your account is inactive" };
     }
 
@@ -70,11 +77,10 @@ export const loginUser = async (req: any) => {
     req.session.user = {
       id: user._id,
       isAuthenticated: true,
-      name: user.name,
-      profilePictureURL: user.profilePictureURL,
-      backgroundPictureURL: user.backgroundPictureURL,
-      isAdmin: user.isAdmin,
-      email: user.email,
+      name: user.name || '',
+      profilePictureURL: user.profilePictureURL || "",
+      isAdmin: isAdmin,
+      email: user.email || '',
     };
 
     return {
