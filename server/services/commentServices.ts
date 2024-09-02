@@ -47,28 +47,27 @@ export const createComment = async (commentData: any) => {
   }
 };
 
-export const updateComment = async (id: string, updatedData: any) => {
+export const updateComment = async (updatedData: any) => {
   try {
-    const existingComment = await Comment.findById(id);
+    const existingComment = await Comment.findById(updatedData.id);
     if (!existingComment) throw new Error("Comment not found");
 
     // Add the current content to the history before updating
     existingComment.history.push({
       content: existingComment.content, // Store the previous content
-      updatedAt: new Date(), // Store the timestamp of the update
     });
 
     // Update the comment's content and updatedAt
     existingComment.content = updatedData.content;
     existingComment.updatedAt = new Date();
 
+    // Fetch the user who created the comment to populate the profileSection
+    const user = await User.findById(existingComment.userId);
+    if (!user)
+      throw new Error(`User not found for userId: ${existingComment.userId}`);
+
     // Save the updated comment
     const updatedComment = await existingComment.save();
-
-    // Fetch the user who created the comment to populate the profileSection
-    const user = await User.findById(updatedComment.userId);
-    if (!user)
-      throw new Error(`User not found for userId: ${updatedComment.userId}`);
 
     return {
       ...updatedComment.toObject(),
@@ -78,6 +77,7 @@ export const updateComment = async (id: string, updatedData: any) => {
       },
     };
   } catch (error: any) {
+    console.error("Error updating comment:", error);
     if (error.name === "ValidationError") throw new Error(error.message);
     throw new Error("Failed to update comment");
   }
