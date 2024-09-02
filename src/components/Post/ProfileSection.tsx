@@ -3,7 +3,7 @@ import { ProfileSectionParams } from "../../interfaces/Posts";
 import { useNavigate, useParams } from "react-router-dom";
 import { deletePostById } from "../../controllers/posts";
 import MenuDropDown from "../MenuDropDown";
-import PostModal from "../post/PostModal";
+import PostModal from "../post/modals/PostModal";
 import DefaultProfile from "../../assets/icons/DefaultProfile.tsx";
 import PostHistoryModal from "./PostHistoryModal.tsx";
 import { formatRelativeTime } from "../../utils/formatRelativeTime.ts";
@@ -64,7 +64,7 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
 
   return (
     <div className="relative flex items-start p-6">
-      <div className="items-center flex">
+      <div className="flex items-center">
         <div className="mr-4 flex-shrink-0">
           {safeProfileImage ? (
             <img

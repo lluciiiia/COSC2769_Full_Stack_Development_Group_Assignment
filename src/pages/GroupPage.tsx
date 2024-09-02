@@ -9,10 +9,10 @@ import { selectGroupById } from "../features/groupSlice";
 import { getPostsByGroup } from "../controllers/posts";
 import LoadingSpinner from "../assets/icons/Loading";
 import { fetchGroups } from "../controllers/group";
-import PostModal from "../components/post/PostModal";
+import PostModal from "../components/post/modals/PostModal";
 import { selectAuthState } from "../features/authSlice";
-import { sendGroupRequest } from "../controllers/user"; 
-import {  selectGroupRequest } from "../features/notificationSlice";
+import { sendGroupRequest } from "../controllers/user";
+import { selectGroupRequest } from "../features/notificationSlice";
 import { groupSentRequest } from "../controllers/notification";
 
 export default function GroupPage() {
@@ -24,16 +24,16 @@ export default function GroupPage() {
   const [selectedPost, setSelectedPost] = useState(null);
   const { id: userId } = useSelector(selectAuthState);
   const [isMember, setIsMember] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false); 
+  const [isAdmin, setIsAdmin] = useState(false);
 
   // Use the selector to get the selected group
   const selectedGroup = useSelector((state: AppState) =>
-    selectGroupById(state, groupId)
+    selectGroupById(state, groupId),
   );
 
   // Use the selector to check if a group request has already been sent
   const existingGroupRequest = useSelector((state: AppState) =>
-    selectGroupRequest(state, groupId)
+    selectGroupRequest(state, groupId),
   );
 
   useEffect(() => {
@@ -54,6 +54,7 @@ export default function GroupPage() {
   useEffect(() => {
     setGroup(selectedGroup || null);
     if (selectedGroup) {
+      // TODO: fix the error
       // Check if the user is a member of the group
       const memberStatus = selectedGroup.members.includes(userId);
       setIsMember(memberStatus);
@@ -149,7 +150,9 @@ export default function GroupPage() {
                 <button
                   onClick={handleJoinGroup}
                   className={`rounded-md px-4 text-sm text-white shadow-md ${
-                    existingGroupRequest ? "cursor-not-allowed bg-gray-400" : "bg-[#FFC123]"
+                    existingGroupRequest
+                      ? "cursor-not-allowed bg-gray-400"
+                      : "bg-[#FFC123]"
                   }`}
                   disabled={!!existingGroupRequest}
                 >
