@@ -80,24 +80,6 @@ const Login: React.FC = () => {
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             />
           </div>
-          {error && (
-            <div className="mb-4 text-center text-sm text-red-500">
-              {error}
-            </div>
-          )}
-          <div className="mb-6 flex items-center">
-            <input
-              type="checkbox"
-              id="remember-me"
-              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-            />
-            <label
-              htmlFor="remember-me"
-              className="ml-2 block text-sm text-gray-900"
-            >
-              Remember Me
-            </label>
-          </div>
           <button
             type="submit"
             className="w-full rounded-md bg-black py-2 text-sm font-bold text-white hover:bg-gray-800"
