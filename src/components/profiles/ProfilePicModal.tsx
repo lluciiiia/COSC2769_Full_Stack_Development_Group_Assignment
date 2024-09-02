@@ -4,6 +4,7 @@ import { AppDispatch, AppState } from "../../app/store";
 import { updateUser } from "../../controllers/user";
 import { updateLocalUser } from "../../features/userSlice";
 import { fetchSess } from "../../features/authSlice";
+import imageCompression from "browser-image-compression";
 
 interface ModalProps {
   isOpen: boolean;
@@ -13,7 +14,6 @@ interface ModalProps {
 
 const RModal: React.FC<ModalProps> = ({ isOpen, onClose, currentAvatar }) => {
   const dispatch: AppDispatch = useDispatch();
-  console.log(currentAvatar);
 
   const user = useSelector((state: AppState) => state.user.currentUser);
   const [avatar, setAvatar] = useState<string>(currentAvatar);
@@ -26,9 +26,29 @@ const RModal: React.FC<ModalProps> = ({ isOpen, onClose, currentAvatar }) => {
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImageFile(file);
-      const base64 = await convertToBase64(file);
-      setAvatar(base64 as string);
+      // Check if the file is larger than the desired limit, e.g., 2MB
+      const maxSize = 2 * 1024 * 1024; // 2MB
+      if (file.size > maxSize) {
+        alert("File is too large. Please upload an image smaller than 2MB.");
+        return;
+      }
+
+      // Compress the image if needed
+      const options = {
+        maxSizeMB: 1, // Desired max size in MB
+        maxWidthOrHeight: 1024, // Max width/height in pixels
+        useWebWorker: true, // Use web workers for faster compression
+      };
+
+      try {
+        const compressedFile = await imageCompression(file, options);
+        setImageFile(compressedFile);
+
+        const base64 = await convertToBase64(compressedFile);
+        setAvatar(base64 as string);
+      } catch (error) {
+        console.error("Error compressing the image:", error);
+      }
     }
   };
 
@@ -46,7 +66,7 @@ const RModal: React.FC<ModalProps> = ({ isOpen, onClose, currentAvatar }) => {
       const updatedUser = { ...user, profilePictureURL: avatar };
       dispatch(updateLocalUser(updatedUser));
       dispatch(updateUser({ userId: user._id, userData: updatedUser }));
-      dispatch(fetchSess);
+      dispatch(fetchSess());
       window.location.reload();
 
       onClose();
