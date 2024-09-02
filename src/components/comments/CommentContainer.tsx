@@ -8,16 +8,10 @@ import CommentReactions from "../reactions/CommentReactions.js";
 import { createReaction } from "../../controllers/reactions.js";
 import { AppDispatch, AppState } from "../../app/store.js";
 import { createCommentNotification } from "../../controllers/notification.ts";
-
-// Utility functions for local storage
-const saveReactionsToLocal = (reactions: any[]) => {
-  localStorage.setItem("queuedCommentReactions", JSON.stringify(reactions));
-};
-
-const loadReactionsFromLocal = (): any[] => {
-  const data = localStorage.getItem("queuedCommentReactions");
-  return data ? JSON.parse(data) : [];
-};
+import {
+  loadReactionsFromLocal,
+  saveReactionsToLocal,
+} from "../../utils/localStorageUtils.ts";
 
 const CommentContainer: React.FC<CommentContainerProps> = ({
   initComments,
@@ -28,13 +22,12 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   const [comments, setComments] = useState<Comment[]>(initComments || []);
   const [newComment, setNewComment] = useState<string>("");
   const [queuedReactions, setQueuedReactions] = useState<any[]>(
-    loadReactionsFromLocal(),
+    loadReactionsFromLocal("queuedCommentReactions"),
   );
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const isReacted = useSelector((state: AppState) => state.react.isReacted);
 
   const handleReaction = async (reactionType: string, commentId: string) => {
-
     const reaction = { postId: commentId, reactionType, sentFrom: "comment" };
 
     if (navigator.onLine) {
@@ -56,7 +49,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
         // If offline, queue the reaction and save it to local storage
         setQueuedReactions((prev) => {
           const updatedQueue = [...prev, reaction];
-          saveReactionsToLocal(updatedQueue);
+          saveReactionsToLocal("queuedCommentReactions", updatedQueue);
           alert("Your reaction has been queued due to offline status.");
           return updatedQueue;
         });
@@ -74,7 +67,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   const queueReaction = (reaction: any) => {
     setQueuedReactions((prev) => {
       const updatedQueue = [...prev, reaction];
-      saveReactionsToLocal(updatedQueue);
+      saveReactionsToLocal("queuedCommentReactions", updatedQueue);
       alert("Your reaction has been queued due to offline status.");
       console.log("Offline: Reaction queued for later syncing.");
       return updatedQueue;
@@ -100,7 +93,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
 
   const clearQueuedReactions = () => {
     setQueuedReactions([]);
-    saveReactionsToLocal([]);
+    saveReactionsToLocal("queuedCommentReactions", []);
   };
 
   useEffect(() => {
@@ -145,7 +138,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
             </div>
           ) : (
             comments.map((comment) => (
-              <div  key={comment._id}>
+              <div key={comment._id}>
                 <CommentItem comment={comment} />
                 <CommentReactions
                   comment={comment._id}
