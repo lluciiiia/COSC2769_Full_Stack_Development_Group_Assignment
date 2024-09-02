@@ -14,7 +14,7 @@ import { selectAuthState } from "../features/authSlice";
 import { sendGroupRequest } from "../controllers/user";
 import { selectGroupRequest } from "../features/notificationSlice";
 import { groupSentRequest } from "../controllers/notification";
-
+import { leaveGroup } from "../controllers/group";
 export default function GroupPage() {
   const groupId = useParams<{ groupId: string }>().groupId || "";
   const dispatch: AppDispatch = useDispatch();
@@ -84,6 +84,14 @@ export default function GroupPage() {
     }
   };
 
+  const handleLeaveGroup= async () =>{
+    try{
+      const response = await dispatch(leaveGroup(groupId));
+      console.log("Leave group successfully ",response);
+    }catch(error){
+      console.error("Failed to leave group:", error);
+    }
+  }
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -163,7 +171,7 @@ export default function GroupPage() {
             )}
             {isInGroup && (
               <button
-                onClick={handleJoinGroup}
+                onClick={handleLeaveGroup}
                 className={`rounded-md px-4 text-sm text-white hover:bg-orange-700 shadow-md ${
                   existingGroupRequest
                     ? "cursor-not-allowed bg-gray-400"
