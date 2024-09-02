@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../app/store";
+import { AppDispatch } from "../../../app/store";
 import PostForm from "./PostForm";
 import {
   createPost,
   updatePost,
   getGroupsByUserId,
-} from "../../controllers/posts";
-import { GroupType } from "../../interfaces/Group";
+} from "../../../controllers/posts";
+import { GroupType } from "../../../interfaces/Group";
 
 const PostModal = ({ isOpen, onClose, userId, post, groupId }) => {
   const dispatch = useDispatch<AppDispatch>();
