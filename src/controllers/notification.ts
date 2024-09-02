@@ -162,3 +162,25 @@ export const groupApprovalNotification = createAsyncThunk<
 
   return data;
 });
+
+export const createCommentNotification = createAsyncThunk<
+  { message: string },
+  string | undefined
+>("notifications/createCommentNotification", async (postId) => {
+  const response = await fetch(
+    BACKEND_URL + `/api/notifications/comment/${postId}`,
+    {
+      method: "POST",
+      credentials: "include",
+    },
+  );
+  if (!response.ok) {
+    console.error("Failed to create notifcation:", response.statusText);
+    throw new Error("Failed to create notifcation");
+  }
+
+  const data = await response.json();
+  console.log("thunk", data);
+
+  return data;
+});

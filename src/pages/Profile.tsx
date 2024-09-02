@@ -56,7 +56,6 @@ const Profile = () => {
   };
 
   if (loading) {
-    // Show loading spinner while fetching user data
     return (
       <div className="flex h-screen items-center justify-center">
         <LoadingSpinner />
@@ -71,6 +70,7 @@ const Profile = () => {
           name={user?.name}
           bio={user?.bio}
           avatar={user?.profilePictureURL}
+          background={user?.backgroundPictureURL}
           friends={user?.friends}
           handleEditProfile={handleEditProfile}
           isAuthenticatedUser={isAuthenticatedUser}

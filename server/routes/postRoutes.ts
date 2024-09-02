@@ -14,7 +14,7 @@ const router = express.Router();
 
 router.get("/all", async (req, res) => {
   try {
-    const posts = await getAllPosts(req.session.user.id);
+    const posts = await getAllPosts();
     res.json(posts);
   } catch (error) {
     res.status(500).json({ error: error });
@@ -47,10 +47,9 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ error: error });
   }
 });
+
 router.post("/", async (req, res) => {
   try {
-
-
     const newPost = await createPost(req.body);
     res.status(201).json({ message: "Post created", post: newPost });
   } catch (error) {
@@ -58,8 +57,6 @@ router.post("/", async (req, res) => {
     res.status(400).json({ error: error }); // Provide a clearer error message
   }
 });
-
-
 
 router.put("/:id", async (req, res) => {
   try {

@@ -18,6 +18,7 @@ export const regisNewAccount = async (data: any) => {
       email,
       password: hashPassword,
       profilePictureURL: "",
+      backgroundPictureURL: "",
       introduction: "",
       address: "",
       age: null,

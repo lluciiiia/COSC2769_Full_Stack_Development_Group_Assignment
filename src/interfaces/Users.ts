@@ -4,6 +4,7 @@ export type UserType = {
   email: string;
   password: string;
   profilePictureURL?: string;
+  backgroundPictureURL?: string;
   introduction?: string;
   address?: string;
   age?: number;

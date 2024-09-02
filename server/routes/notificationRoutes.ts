@@ -8,6 +8,7 @@ import {
   getGroupRequest,
   acceptGroupRequest,
   createGroupApprovalNotification,
+  createCommentNotification,
 } from "../services/notificationsService";
 
 const router = express.Router();
@@ -41,10 +42,7 @@ router.post("/group-approval/:groupId", async (req, res) => {
     const siteAdminId = req.session.user.id;
     const { groupId } = req.params;
 
-    const result = await createGroupApprovalNotification(
-      siteAdminId,
-      groupId,
-    );
+    const result = await createGroupApprovalNotification(siteAdminId, groupId);
     res.json(result);
   } catch (error) {
     res.status(500).json({ error: "Failed to sent notifications" });
@@ -96,6 +94,18 @@ router.put("/acceptRequest", isAuthenticated, async (req, res) => {
 
     const notification = await acceptGroupRequest(userId, notiId, senderId);
     res.json(notification);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
+
+router.post("/comment/:postId", isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.session.user.id;
+    const { postId } = req.params;
+
+    const result = await createCommentNotification(userId, postId);
+    res.json(result);
   } catch (error) {
     res.status(500).json({ error: error });
   }
