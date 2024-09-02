@@ -58,7 +58,7 @@ export default function GroupPage() {
       // Check if the user is a member of the group
       const memberStatus = selectedGroup.members.includes(userId);
       setIsMember(memberStatus);
-      setIsInGroup(true);
+      setIsInGroup(memberStatus);
       // Check if the user is the admin of the group
       if (userId === selectedGroup.groupAdmin) {
         setIsAdmin(true);
@@ -84,14 +84,16 @@ export default function GroupPage() {
     }
   };
 
-  const handleLeaveGroup= async () =>{
-    try{
+  const handleLeaveGroup = async () => {
+    try {
       const response = await dispatch(leaveGroup(groupId));
-      console.log("Leave group successfully ",response);
-    }catch(error){
+      console.log("Leave group successfully ", response);
+      setIsMember(false);
+      setIsInGroup(false);
+    } catch (error) {
       console.error("Failed to leave group:", error);
     }
-  }
+  };
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -172,7 +174,7 @@ export default function GroupPage() {
             {isInGroup && (
               <button
                 onClick={handleLeaveGroup}
-                className={`rounded-md px-4 text-sm text-white hover:bg-orange-700 shadow-md ${
+                className={`rounded-md px-4 text-sm text-white shadow-md hover:bg-orange-700 ${
                   existingGroupRequest
                     ? "cursor-not-allowed bg-gray-400"
                     : "bg-[#FFC123]"
