@@ -82,7 +82,6 @@ router.get("/groupRequest", isAuthenticated, async (req, res) => {
     const userId = req.session.user.id;
 
     const result = await getGroupRequest(userId);
-    console.log("cajs", result);
     res.json(result);
   } catch (error) {
     console.error("Error deleting notification:", error);

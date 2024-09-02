@@ -31,7 +31,6 @@ export const getNotificationByReciver = async (receiverId: string) => {
         }
       }),
     );
-    console.log(notificationsWithGroupDetails);
 
     return notificationsWithGroupDetails;
   } catch (error) {
@@ -137,7 +136,6 @@ export const getGroupRequest = async (userId: string) => {
       select: "name profilePictureURL _id",
     });
 
-    // For each notification, find the corresponding group where the receiver is the groupAdmin
     const groupRequests = await Promise.all(
       notifications.map(async (notification) => {
         const group = await Group.findOne({
