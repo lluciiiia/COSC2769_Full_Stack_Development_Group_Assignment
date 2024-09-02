@@ -40,7 +40,10 @@ export const acceptGroupRequest = async (
     if (!oldNoti) {
       throw new Error("Notification not found");
     }
-
+    if (userId === oldNoti.id) {
+      console.log("Can not join owned group");
+      return;
+    }
     const groupAdmin = userId;
     const group = await Group.findOne({ groupAdmin: groupAdmin.toString() });
     console.log("group:", group);
@@ -49,11 +52,16 @@ export const acceptGroupRequest = async (
       throw new Error("Group not found");
     }
 
-    const senderObjectId = new mongoose.Types.ObjectId(userId);
+    const senderObjectId = new mongoose.Types.ObjectId(oldNoti.senderId);
+    console.log(senderObjectId, "Member already in group");
     if (!group.members.includes(senderObjectId)) {
       group.members.push(senderObjectId);
+    } else {
+      console.log("Already in group");
+      return;
     }
-
+    console.log(group, "Member already in group");
+    await group.save();
     const newNoti = {
       senderId: userId,
       receiverId: oldNoti.senderId,
@@ -66,7 +74,7 @@ export const acceptGroupRequest = async (
     console.log("New notification:", notification);
 
     await notification.save();
-    await group.save();
+   
 
     // Delete the old notification
     await Notifications.findByIdAndDelete(notiId);
@@ -74,7 +82,8 @@ export const acceptGroupRequest = async (
 
     return {
       success: true,
-      message: "Group request accepted, new notification created, and old notification deleted",
+      message:
+        "Group request accepted, new notification created, and old notification deleted",
       notification,
     };
   } catch (error) {
@@ -82,8 +91,6 @@ export const acceptGroupRequest = async (
     throw new Error("Failed to accept group request");
   }
 };
-
-
 
 export const getNotificationBySender = async (senderId: string) => {
   try {
