@@ -116,7 +116,7 @@ const PostModal = ({ isOpen, onClose, userId, post, groupId }) => {
             </p>
           ) : (
             <select
-              className="mt-2 block w-full rounded-md border-gray-300 text-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              className="mt-2 block w-full cursor-pointer rounded-md border-gray-300 text-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               value={visibility}
               onChange={(e) =>
                 setVisibility(

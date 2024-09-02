@@ -63,7 +63,7 @@ const PostForm: React.FC<PostFormProps> = ({
               Content
             </label>
             <textarea
-              className="mt-2 block w-full resize rounded-md border-gray-300 text-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              className="mt-2 block w-full resize rounded-md border-gray-300 p-4 text-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="What's buzzing?"
@@ -86,9 +86,9 @@ const PostForm: React.FC<PostFormProps> = ({
           </label>
 
           {images.length > 0 && (
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex flex-wrap gap-2">
               {images.slice(0, 4).map((image, index) => (
-                <div key={index} className="relative w-24 h-24">
+                <div key={index} className="relative h-24 w-24">
                   <img
                     src={image} // Displaying base64 images directly
                     alt={`Upload Preview ${index + 1}`}
@@ -104,7 +104,7 @@ const PostForm: React.FC<PostFormProps> = ({
                 </div>
               ))}
               {images.length > 4 && (
-                <div className="relative w-24 h-24 flex items-center justify-center rounded-md bg-gray-200 text-lg font-bold text-gray-600">
+                <div className="relative flex h-24 w-24 items-center justify-center rounded-md bg-gray-200 text-lg font-bold text-gray-600">
                   +{images.length - 4} more
                 </div>
               )}
@@ -133,4 +133,3 @@ const PostForm: React.FC<PostFormProps> = ({
 };
 
 export default PostForm;
-
