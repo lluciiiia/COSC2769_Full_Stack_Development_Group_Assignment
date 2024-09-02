@@ -8,16 +8,10 @@ import { AppDispatch, AppState } from "../../app/store";
 import { createReaction, fetchReaction } from "../../controllers/reactions";
 import CommentItem from "../comments/CommentItem";
 import { useDispatch, useSelector } from "react-redux";
-
-// Utility functions for local storage
-const saveReactionsToLocal = (reactions: any[]) => {
-  localStorage.setItem("queuedPostReactions", JSON.stringify(reactions));
-};
-
-const loadReactionsFromLocal = (): any[] => {
-  const data = localStorage.getItem("queuedPostReactions");
-  return data ? JSON.parse(data) : [];
-};
+import {
+  saveReactionsToLocal,
+  loadReactionsFromLocal,
+} from "../../utils/localStorageUtils";
 
 const PostContainer: React.FC<PostParams> = ({
   _id,
@@ -41,7 +35,7 @@ const PostContainer: React.FC<PostParams> = ({
     undefined,
   );
   const [queuedReactions, setQueuedReactions] = useState<any[]>(
-    loadReactionsFromLocal(),
+    loadReactionsFromLocal("queuedPostReactions"),
   );
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
 
@@ -99,7 +93,7 @@ const PostContainer: React.FC<PostParams> = ({
   const queueReaction = (reaction: any) => {
     setQueuedReactions((prev) => {
       const updatedQueue = [...prev, reaction];
-      saveReactionsToLocal(updatedQueue);
+      saveReactionsToLocal("queuedPostReactions", updatedQueue);
       alert("Your reaction has been queued due to offline status.");
       console.log("Offline: Reaction queued for later syncing.");
       return updatedQueue;
@@ -125,7 +119,7 @@ const PostContainer: React.FC<PostParams> = ({
 
   const clearQueuedReactions = () => {
     setQueuedReactions([]);
-    saveReactionsToLocal([]);
+    saveReactionsToLocal("queuedPostReactions", []);
   };
 
   useEffect(() => {
