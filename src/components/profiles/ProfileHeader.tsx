@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import DefaultProfile from "../../assets/icons/DefaultProfile";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthState } from "../../features/authSlice";
@@ -20,6 +20,8 @@ import {
   fetchSentFriendRequests,
   removeFriendRequestNotification,
 } from "../../controllers/notification";
+import RModal from "./ProfilePicModal";
+
 const ProfileHeader = ({
   name,
   bio,
@@ -42,21 +44,21 @@ const ProfileHeader = ({
     (request) =>
       request.receiverId === friendId &&
       !request.isAccepted &&
-      request.type === "FRIEND_REQUEST",
+      request.type === "FRIEND_REQUEST"
   );
 
   const isIncomingFriendRequest = receivedFriendRequestList?.some(
     (request) =>
       request.senderId._id === friendId &&
       !request.isAccepted &&
-      request.type === "FRIEND_REQUEST",
+      request.type === "FRIEND_REQUEST"
   );
 
   const incomingFriendRequest = receivedFriendRequestList?.find(
     (request) =>
       request.senderId._id === friendId &&
       !request.isAccepted &&
-      request.type === "FRIEND_REQUEST",
+      request.type === "FRIEND_REQUEST"
   );
   const notificationId = incomingFriendRequest?._id;
 
@@ -87,6 +89,12 @@ const ProfileHeader = ({
     });
   };
 
+  // State to manage the modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
   return (
     <div className="relative h-64 w-full bg-gray-200 bg-cover bg-center">
       <div className="absolute -bottom-16 left-10">
@@ -102,7 +110,10 @@ const ProfileHeader = ({
           </div>
         )}
         {isAuthenticatedUser && (
-          <div className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-black bg-opacity-50 opacity-0 transition-opacity duration-200 hover:opacity-100">
+          <div
+            onClick={openModal} // Open modal on click
+            className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-black bg-opacity-50 opacity-0 transition-opacity duration-200 hover:opacity-100"
+          >
             <span className="text-white">Edit Image</span>
           </div>
         )}
@@ -160,7 +171,13 @@ const ProfileHeader = ({
           Add Friend
         </button>
       )}
+      <RModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        currentAvatar={avatar}
+      />
     </div>
   );
 };
+
 export default ProfileHeader;
