@@ -19,6 +19,15 @@ export interface ReactionButtonProps {
   comment?: string;
 }
 
+export interface PostReactionsProps {
+  handleClick: () => void;
+  onReact: (reaction: string) => void;
+  initialReaction?: string;
+  isReacted: boolean;
+  reactions: Reaction[];
+  commentCount?: number;
+}
+
 export const ReactionIcons = {
   LIKE: "👍",
   LOVE: "❤️",
