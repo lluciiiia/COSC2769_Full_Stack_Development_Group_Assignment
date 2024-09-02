@@ -6,11 +6,14 @@ import { deleteCommentById } from "../../controllers/comments";
 import CommentHistoryModal from "./CommentHistoryModal";
 import DefaultProfile from "../../assets/icons/DefaultProfile";
 import CommentEditor from "./CommentEditor";
+import { selectAuthState } from "../../features/authSlice";
+import { useSelector } from "react-redux";
 
 const CommentItem: React.FC<CommentProps> = ({ comment }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+  const { id } = useSelector(selectAuthState);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -116,8 +119,10 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
       </div>
       {isHistoryModalOpen && (
         <CommentHistoryModal
+          currentEntryId={comment._id}
           history={comment.history}
           onClose={() => setIsHistoryModalOpen(false)}
+          isOwner={id === comment.userId}
         />
       )}
     </div>

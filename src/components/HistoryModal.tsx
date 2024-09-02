@@ -1,4 +1,12 @@
 import React from "react";
+import { RevertIcon } from "../assets/icons/RevertIcon";
+import { updateComment } from "../controllers/comments";
+import { revertPost, updatePost } from "../controllers/posts";
+import { AsyncThunkAction, UnknownAction } from "@reduxjs/toolkit";
+import { ThunkDispatch } from "redux-thunk";
+import { PostParams, RevertPostParams } from "../interfaces/Posts";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../app/store";
 
 interface HistoryEntry {
   content: string;
@@ -7,16 +15,46 @@ interface HistoryEntry {
 }
 
 interface HistoryModalProps<T extends HistoryEntry> {
+  currentEntryId: string;
   history: T[];
   onClose: () => void;
   title: string;
+  isOwner: boolean;
+  isComment: boolean;
 }
 
 const HistoryModal = <T extends HistoryEntry>({
+  currentEntryId,
   history,
   onClose,
   title,
+  isOwner,
+  isComment,
 }: HistoryModalProps<T>) => {
+  const dispatch: AppDispatch = useDispatch();
+
+  const handleRevertClick = async (entry: any) => {
+    try {
+      let response;
+      if (isComment) {
+        entry.id = currentEntryId;
+        response = await updateComment(entry);
+      } else {
+        const params: RevertPostParams = {
+          _id: currentEntryId,
+          content: entry.content,
+          images: entry.images || [], // Provide a default empty array
+        };
+        response = await dispatch(revertPost(params)).unwrap(); // unwrap() to handle the resolved value
+      }
+      if (!response) alert("Failed to revert. Please try again.");
+    } catch (error) {
+      console.error("Error reverting:", error);
+      alert("An error occurred while reverting");
+    }
+    window.location.reload();
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="flex h-[550px] w-[650px] flex-col rounded-lg bg-white p-4">
@@ -29,7 +67,7 @@ const HistoryModal = <T extends HistoryEntry>({
               </li>
             ) : (
               history.map((entry, index) => (
-                <li key={index} className="border-b py-4">
+                <li key={index} className="flex flex-col border-b py-4">
                   <div className="flex">
                     <p className="flex flex-col gap-1 text-sm">
                       <span className="font-bold">Version {index + 1}</span>
@@ -55,6 +93,17 @@ const HistoryModal = <T extends HistoryEntry>({
                       </div>
                     )}
                   </div>
+                  {isOwner && (
+                    <div
+                      className="ml-auto mt-2 flex cursor-pointer flex-col items-center"
+                      onClick={() => {
+                        handleRevertClick(entry);
+                      }}
+                    >
+                      <RevertIcon></RevertIcon>
+                      <span className="text-gray text-xs">Revert</span>
+                    </div>
+                  )}
                 </li>
               ))
             )}
@@ -74,3 +123,21 @@ const HistoryModal = <T extends HistoryEntry>({
 };
 
 export default HistoryModal;
+function dispatch(
+  arg0: AsyncThunkAction<
+    PostParams,
+    PostParams,
+    {
+      state?: unknown;
+      dispatch?: ThunkDispatch<unknown, unknown, UnknownAction>;
+      extra?: unknown;
+      rejectValue?: unknown;
+      serializedErrorType?: unknown;
+      pendingMeta?: unknown;
+      fulfilledMeta?: unknown;
+      rejectedMeta?: unknown;
+    }
+  >,
+) {
+  throw new Error("Function not implemented.");
+}

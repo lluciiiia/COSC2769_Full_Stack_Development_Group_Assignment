@@ -82,7 +82,7 @@ const Navbar = () => {
         {/* <div className="relative flex items-center gap-4"></div> */}
         <div className="flex max-w-xs flex-1 flex-grow justify-around gap-2">
           <SearchIcon
-            className="h-8 w-8 cursor-pointer text-black"
+            className="mr-2 h-10 w-10 cursor-pointer text-black"
             onClick={handleSearchClick}
           />
           <NavItem src={homeIcon} label="Home" onClick={handleHomeClick} />
