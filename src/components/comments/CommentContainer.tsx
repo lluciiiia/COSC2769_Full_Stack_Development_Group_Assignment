@@ -7,6 +7,7 @@ import { createComment } from "../../controllers/comments";
 import CommentReactions from "../reactions/CommentReactions.js";
 import { createReaction } from "../../controllers/reactions.js";
 import { AppDispatch, AppState } from "../../app/store.js";
+import { createCommentNotification } from "../../controllers/notification.ts";
 
 // Utility functions for local storage
 const saveReactionsToLocal = (reactions: any[]) => {
@@ -33,9 +34,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   const isReacted = useSelector((state: AppState) => state.react.isReacted);
 
   const handleReaction = async (reactionType: string, commentId: string) => {
-    console.log(
-      `User reacted with: ${reactionType} on comment ID: ${commentId}`,
-    );
+
     const reaction = { postId: commentId, reactionType, sentFrom: "comment" };
 
     if (navigator.onLine) {
@@ -117,7 +116,9 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     try {
+      dispatch(createCommentNotification(postId));
       const response = await createComment({
         userId,
         postId,
