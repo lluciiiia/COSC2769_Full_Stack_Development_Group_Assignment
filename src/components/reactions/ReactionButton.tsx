@@ -2,20 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppState } from "../../app/store";
 import { fetchReaction } from "../../controllers/reactions";
-
-interface ReactionButtonProps {
-  onReact: (reaction: string) => void;
-  initialReaction?: string;
-  isReacted: boolean;
-  comment?: string;
-}
-
-const reactionIcons = {
-  LIKE: "👍",
-  LOVE: "❤️",
-  HAHA: "😊",
-  ANGRY: "😡",
-};
+import { ReactionButtonProps, ReactionIcons } from "../../interfaces/Reactions";
 
 const ReactionButton: React.FC<ReactionButtonProps> = ({
   onReact,
@@ -25,7 +12,7 @@ const ReactionButton: React.FC<ReactionButtonProps> = ({
 }) => {
   const [showReactions, setShowReactions] = useState(false);
   const [selectedReaction, setSelectedReaction] = useState(
-    reactionIcons[initialReaction] ? initialReaction : "REACT",
+    ReactionIcons[initialReaction] ? initialReaction : "REACT",
   );
   const reactionType = useSelector(
     (state: AppState) => state.react.reactionType,
@@ -50,11 +37,11 @@ const ReactionButton: React.FC<ReactionButtonProps> = ({
       onMouseLeave={() => setShowReactions(false)}
     >
       <button className="p-2 text-gray-500 hover:text-gray-700">
-        {reactionIcons[selectedReaction] || "REACT"}
+        {ReactionIcons[selectedReaction] || "REACT"}
       </button>
       {showReactions && (
         <div className="absolute left-0 flex gap-2 rounded-lg bg-white p-2 shadow-md">
-          {Object.entries(reactionIcons).map(([reaction, icon]) => (
+          {Object.entries(ReactionIcons).map(([reaction, icon]) => (
             <button
               key={reaction}
               onClick={() => handleReactionClick(reaction)}

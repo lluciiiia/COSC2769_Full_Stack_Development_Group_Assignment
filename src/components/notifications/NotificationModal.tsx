@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
-import { Notifications } from "../../interfaces/notification";
+import { Notifications } from "../../interfaces/Notifications";
 
 import {
   acceptFriendRequestNotification,

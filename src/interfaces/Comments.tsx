@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent } from "react";
 import { ProfileSectionParams } from "./Posts";
-import { Reaction } from "./reactions";
+import { Reaction } from "./Reactions";
 export interface CommentHistory {
   content: string;
   updatedAt: Date;
