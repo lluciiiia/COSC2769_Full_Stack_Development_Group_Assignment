@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import MenuDropDown from "../MenuDropDown";
 import { CommentProps } from "../../interfaces/Comments";
 import { formatRelativeTime } from "../../utils/formatRelativeTime";
-import { deleteCommentById, updateComment } from "../../controllers/comments";
+import { deleteCommentById } from "../../controllers/comments";
 import CommentHistoryModal from "./CommentHistoryModal";
 import DefaultProfile from "../../assets/icons/DefaultProfile";
+import CommentEditor from "./CommentEditor";
 
 const CommentItem: React.FC<CommentProps> = ({ comment }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [content, setContent] = useState(comment.content);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -39,26 +39,6 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
   const handleViewHistory = () => {
     setIsHistoryModalOpen(true);
     setIsDropdownOpen(false);
-  };
-
-  const handleSave = async () => {
-    try {
-      const response = await updateComment(comment._id, { content });
-      if (!response) {
-        alert("Failed to update the comment. Please try again.");
-      } else {
-        setIsEditing(false);
-        window.location.reload();
-      }
-    } catch (error) {
-      console.error("Error updating comment:", error);
-      alert("An error occurred while trying to update the comment.");
-    }
-  };
-
-  const handleCancel = () => {
-    setContent(comment.content);
-    setIsEditing(false);
   };
 
   const safeProfileImage =
@@ -118,33 +98,15 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
             </div>
           </div>
           {isEditing ? (
-            <div>
-              <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                className="w-full rounded-md border-gray-300 p-2 text-sm text-gray-800"
-                rows={1}
-                style={{ resize: "vertical" }} // Allow vertical resizing
-                onInput={(e) => {
-                  e.currentTarget.style.height = "auto"; // Reset height
-                  e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`; // Adjust height based on content
-                }}
-              />
-              <div className="mt-2 flex justify-end gap-2">
-                <button
-                  onClick={handleCancel}
-                  className="rounded-md bg-gray-300 px-2 py-1 text-sm text-gray-700"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSave}
-                  className="rounded-md bg-[#FFC123] px-2 py-1 text-sm text-black"
-                >
-                  Save
-                </button>
-              </div>
-            </div>
+            <CommentEditor
+              commentId={comment._id}
+              initialContent={comment.content}
+              onSave={() => {
+                setIsEditing(false);
+                window.location.reload();
+              }}
+              onCancel={() => setIsEditing(false)}
+            />
           ) : (
             <p className="w-[570px] whitespace-normal break-words text-sm text-gray-800">
               {comment.content}
@@ -152,7 +114,6 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
           )}
         </div>
       </div>
-      {/* Modal for viewing edit history */}
       {isHistoryModalOpen && (
         <CommentHistoryModal
           history={comment.history}
