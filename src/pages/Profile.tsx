@@ -71,6 +71,7 @@ const Profile = () => {
           name={user?.name}
           bio={user?.bio}
           avatar={user?.profilePictureURL}
+          background={user?.backgroundPictureURL}
           friends={user?.friends}
           handleEditProfile={handleEditProfile}
           isAuthenticatedUser={isAuthenticatedUser}
