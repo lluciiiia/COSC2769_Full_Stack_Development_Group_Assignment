@@ -60,6 +60,11 @@ export const loginUser = async (req: any) => {
       return { status: 400, message: "Invalid credentials" };
     }
 
+    // Check if the account is active
+    if (!user.activeStatus) {
+      return { status: 400, message: "Your account is inactive" };
+    }
+
     // Save user information in session
     req.session.user = {
       id: user._id,
@@ -80,6 +85,7 @@ export const loginUser = async (req: any) => {
     return { status: 500, message: "Server error" };
   }
 };
+
 export const logoutUser = (req: any, res: any) => {
   req.session.destroy((err: any) => {
     if (err) {

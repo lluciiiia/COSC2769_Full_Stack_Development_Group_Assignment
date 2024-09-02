@@ -10,7 +10,7 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState("");
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
-  
+  const [loginFailed, setIsLoginFailed] = useState("");
   // Get error message from Redux state
   const { error } = useSelector(selectAuthState);
 
@@ -31,6 +31,14 @@ const Login: React.FC = () => {
       }
     } else {
       console.error("Login failed:", result.payload || "Unknown error");
+
+      if (result.payload === "Invalid credentials") {
+        setIsLoginFailed("Invalid credentials");
+      } else if (result.payload === "Your account is inactive") {
+        setIsLoginFailed("Your account is inactive");
+      } else {
+        setIsLoginFailed("Login failed");
+      }
     }
   };
 
@@ -79,6 +87,7 @@ const Login: React.FC = () => {
               placeholder="********"
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             />
+            {loginFailed && <div className="text-red-400">{loginFailed}</div>}
           </div>
           <button
             type="submit"
