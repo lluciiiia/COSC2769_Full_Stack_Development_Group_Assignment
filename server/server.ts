@@ -1,7 +1,6 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import connectDB from "./db";
-import multer from "multer";
 import cookieParser from "cookie-parser";
 // Importing Routes
 import groupRoutes from "./routes/groupRoutes";

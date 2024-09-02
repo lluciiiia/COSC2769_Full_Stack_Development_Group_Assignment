@@ -151,9 +151,11 @@ export const unfriendById = createAsyncThunk<{ message: string }, string>(
   },
 );
 
-
 export const sendGroupRequest = createAsyncThunk<
-  { message: string; notification: { type: string; receiverId: string; senderId: string } },
+  {
+    message: string;
+    notification: { type: string; receiverId: string; senderId: string };
+  },
   string
 >("user/sendGroupRequest", async (groupId) => {
   const response = await fetch(
@@ -173,27 +175,5 @@ export const sendGroupRequest = createAsyncThunk<
   }
 
   const data = await response.json();
-  return data;
-});
-
-export const acceptGroupRequest = createAsyncThunk<
-  { message: string },
-  string | undefined
->("user/acceptGroupRequest", async (friendId) => {
-  const response = await fetch(
-    BACKEND_URL + `/api/users/friend-requests/${friendId}/accept`,
-    {
-      method: "PUT",
-      credentials: "include",
-    },
-  );
-
-  if (!response.ok) {
-    console.error("Failed to accept group request:", response.statusText);
-    throw new Error("Failed to accept group request");
-  }
-
-  const data: { message: string } = await response.json();
-
   return data;
 });

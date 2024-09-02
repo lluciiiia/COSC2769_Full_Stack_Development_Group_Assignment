@@ -8,9 +8,12 @@ import {
   fetchNotification,
   removeFriendRequestNotification,
 } from "../../controllers/notification";
-import { acceptFriendRequest } from "../../controllers/user";
+import {
+  acceptFriendRequest,
+  
+} from "../../controllers/user";
 import { useNavigate } from "react-router-dom";
-
+import { acceptGroupRequest } from "../../controllers/notification";
 const NotificationModal = ({
   isOpen,
   notifications,
@@ -20,9 +23,12 @@ const NotificationModal = ({
 }) => {
   const dispatch: AppDispatch = useDispatch();
 
-  const handleAcceptGroupRequest= (senderId, notificationId)=>{
-    
-  }
+  const handleAcceptGroupRequest = (
+    senderId: string,
+    notificationId: string,
+  ) => {
+    dispatch(acceptGroupRequest({ senderId, notiId: notificationId }));
+  };
   const handleAcceptFriendRequest = (friendId, notificationId) => {
     dispatch(acceptFriendRequest(friendId));
     dispatch(acceptFriendRequestNotification(notificationId)).then(() => {
@@ -52,6 +58,7 @@ const NotificationModal = ({
               isSeen={noti.isSeen}
               handleAcceptFriendRequest={handleAcceptFriendRequest}
               handleRemoveNotification={handleRemoveNotification}
+              handleAcceptGroupRequest={handleAcceptGroupRequest}
             />
           ))
         ) : (
@@ -63,8 +70,7 @@ const NotificationModal = ({
 };
 
 export default NotificationModal;
-
-export const RequestItems = ({
+const RequestItems = ({
   notificationId,
   friendId,
   name,
@@ -72,6 +78,7 @@ export const RequestItems = ({
   requestType,
   isAccepted,
   isSeen,
+  handleAcceptGroupRequest,
   handleAcceptFriendRequest,
   handleRemoveNotification,
 }: {
@@ -82,8 +89,9 @@ export const RequestItems = ({
   requestType: string;
   isAccepted: boolean;
   isSeen: boolean;
-  handleAcceptFriendRequest: (param1: string, param2: string) => void;
-  handleRemoveNotification: (param1: string) => void;
+  handleAcceptGroupRequest: (senderId: string, notificationId: string) => void;
+  handleAcceptFriendRequest: (friendId: string, notificationId: string) => void;
+  handleRemoveNotification: (notificationId: string) => void;
 }) => {
   const navigate = useNavigate();
   return (
@@ -111,7 +119,7 @@ export const RequestItems = ({
             src="/src/assets/icons/default-profile.png"
             alt="Profile"
             className="h-[40px] w-[40px] rounded-full"
-          ></img>
+          />
         )}
         {requestType === "FRIEND_REQUEST" ? (
           <p className="text-sm text-gray-700">
@@ -133,8 +141,14 @@ export const RequestItems = ({
               <span className="font-bold">{name}</span> wants to join your group
             </span>
           </p>
-        ) : (
-          ""
+        ) : requestType === "GROUP_REQUEST_ACCEPTED"? (
+          <p className="text-sm text-gray-700">
+            <span>
+              <span className="font-bold">{name}</span> has accepted your joining group request
+            </span>
+          </p>
+        ):(
+          <div></div>
         )}
       </div>
 
@@ -164,7 +178,7 @@ export const RequestItems = ({
           <button
             className="rounded-lg bg-[#FFC123] px-3 py-1 text-sm font-bold text-white hover:opacity-40"
             onClick={() => {
-              handleAcceptFriendRequest(friendId, notificationId);
+              handleAcceptGroupRequest(friendId, notificationId);
             }}
           >
             Accept
