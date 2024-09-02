@@ -192,7 +192,9 @@ const PostContainer: React.FC<PostParams> = ({
         </p>
         {images && images.length > 0 && (
           <div
-            className="flex space-x-4 overflow-x-auto"
+            className={`flex space-x-4 overflow-x-auto ${
+              images.length === 1 ? "justify-center" : "px-4"
+            }`}
             style={{ scrollbarWidth: "thin" }} // For Firefox
           >
             {images.map((image, index) => (
