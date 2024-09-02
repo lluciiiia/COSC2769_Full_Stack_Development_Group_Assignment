@@ -4,16 +4,18 @@ import User from "../models/user";
 
 export const getAllPosts = async () => {
   try {
-    const posts = await Post.find().populate({
-      path: "comments",
-      populate: {
-        path: "reactions",
+    const posts = await Post.find()
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "comments",
         populate: {
-          path: "userId", // Populate user details for reactions
-          select: "name profilePictureURL", // Select the fields you want
+          path: "reactions",
+          populate: {
+            path: "userId", // Populate user details for reactions
+            select: "name profilePictureURL", // Select the fields you want
+          },
         },
-      },
-    });
+      });
 
     // Filter and enhance posts based on visibility & their own posts
     const enhancedPosts = await Promise.all(
