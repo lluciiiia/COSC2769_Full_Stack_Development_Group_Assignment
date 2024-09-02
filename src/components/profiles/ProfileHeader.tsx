@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DefaultProfile from "../../assets/icons/DefaultProfile";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthState } from "../../features/authSlice";
@@ -21,11 +21,13 @@ import {
   removeFriendRequestNotification,
 } from "../../controllers/notification";
 import RModal from "./ProfilePicModal";
+import BackgroundImageModal from "./BackgroundImageModal";
 
 const ProfileHeader = ({
   name,
   bio,
   avatar,
+  background, 
   friends,
   handleEditProfile,
   isAuthenticatedUser,
@@ -35,7 +37,7 @@ const ProfileHeader = ({
   const { profileId } = useParams();
 
   const friendId = isAuthenticatedUser ? "" : profileId;
-  const isFriend = friends?.some((f) => f._id == id);
+  const isFriend = friends?.some((f) => f._id === id);
 
   const sentFriendRequestsList = useSelector(selectSentFriendRequests);
   const receivedFriendRequestList = useSelector(selectNotifications);
@@ -89,14 +91,39 @@ const ProfileHeader = ({
     });
   };
 
-  // State to manage the modal visibility
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+  const openAvatarModal = () => setIsAvatarModalOpen(true);
+  const closeAvatarModal = () => setIsAvatarModalOpen(false);
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const [isBackgroundModalOpen, setIsBackgroundModalOpen] = useState(false);
+  const [backgroundImage, setBackgroundImage] = useState(background);
+
+  const openBackgroundModal = () => setIsBackgroundModalOpen(true);
+  const closeBackgroundModal = () => setIsBackgroundModalOpen(false);
+
+  const handleSaveBackground = (newBackground) => {
+    setBackgroundImage(newBackground);
+  };
+
+  useEffect(() => {
+    setBackgroundImage(background); // Update background image when props change
+  }, [background]);
 
   return (
-    <div className="relative h-64 w-full bg-gray-200 bg-cover bg-center">
+    <div className="relative h-64 w-full">
+      <img
+        src={backgroundImage} // Use the state for background image
+        alt="Background"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+      {isAuthenticatedUser && (
+        <div
+          onClick={openBackgroundModal} // Open modal on click
+          className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black bg-opacity-50 opacity-0 transition-opacity duration-200 hover:opacity-100"
+        >
+          <span className="text-white">Edit Background</span>
+        </div>
+      )}
       <div className="absolute -bottom-16 left-10">
         {avatar ? (
           <img
@@ -111,7 +138,7 @@ const ProfileHeader = ({
         )}
         {isAuthenticatedUser && (
           <div
-            onClick={openModal} // Open modal on click
+            onClick={openAvatarModal} // Open avatar modal on click
             className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-black bg-opacity-50 opacity-0 transition-opacity duration-200 hover:opacity-100"
           >
             <span className="text-white">Edit Image</span>
@@ -172,9 +199,15 @@ const ProfileHeader = ({
         </button>
       )}
       <RModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
+        isOpen={isAvatarModalOpen}
+        onClose={closeAvatarModal}
         currentAvatar={avatar}
+      />
+      <BackgroundImageModal
+        isOpen={isBackgroundModalOpen}
+        onClose={closeBackgroundModal}
+        currentBackground={backgroundImage}
+        onSave={handleSaveBackground} // Pass the save handler to modal
       />
     </div>
   );

@@ -17,6 +17,7 @@ export const regisNewAccount = async (data: any) => {
       email,
       password: hashPassword,
       profilePictureURL: "",
+      backgroundPictureURL: "",
       introduction: "",
       address: "",
       age: null,
@@ -66,6 +67,7 @@ export const loginUser = async (req: any) => {
       isAuthenticated: true,
       name: user.name,
       profilePictureURL: user.profilePictureURL,
+      backgroundPictureURL: user.backgroundPictureURL,
       isAdmin: user.isAdmin,
       email: user.email,
     };

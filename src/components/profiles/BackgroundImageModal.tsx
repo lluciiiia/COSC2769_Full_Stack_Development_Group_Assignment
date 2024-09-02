@@ -9,19 +9,25 @@ import imageCompression from "browser-image-compression";
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  currentAvatar: string;
+  currentBackground: string;
+  onSave: (newBackground: string) => void; // Add this prop
 }
 
-const RModal: React.FC<ModalProps> = ({ isOpen, onClose, currentAvatar }) => {
+const BackgroundImageModal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  currentBackground,
+  onSave, // Use the onSave prop to handle background updates
+}) => {
   const dispatch: AppDispatch = useDispatch();
-
   const user = useSelector((state: AppState) => state.user.currentUser);
-  const [avatar, setAvatar] = useState<string>(currentAvatar);
+
+  const [background, setBackground] = useState<string>(currentBackground);
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   useEffect(() => {
-    setAvatar(currentAvatar);
-  }, [currentAvatar]);
+    setBackground(currentBackground);
+  }, [currentBackground]);
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -34,9 +40,9 @@ const RModal: React.FC<ModalProps> = ({ isOpen, onClose, currentAvatar }) => {
 
       // Compress the image if needed
       const options = {
-        maxSizeMB: 1, // Desired max size in MB
-        maxWidthOrHeight: 1024, // Max width/height in pixels
-        useWebWorker: true, // Use web workers for faster compression
+        maxSizeMB: 1, 
+        maxWidthOrHeight: 1024, 
+        useWebWorker: true, 
       };
 
       try {
@@ -44,7 +50,7 @@ const RModal: React.FC<ModalProps> = ({ isOpen, onClose, currentAvatar }) => {
         setImageFile(compressedFile);
 
         const base64 = await convertToBase64(compressedFile);
-        setAvatar(base64 as string);
+        setBackground(base64 as string);
       } catch (error) {
         console.error("Error compressing the image:", error);
       }
@@ -61,14 +67,15 @@ const RModal: React.FC<ModalProps> = ({ isOpen, onClose, currentAvatar }) => {
   };
 
   const handleSubmit = () => {
-    if (avatar) {
-      const updatedUser = { ...user, profilePictureURL: avatar };
+    if (background) {
+      const updatedUser = { ...user, backgroundPictureURL: background };
       dispatch(updateLocalUser(updatedUser));
-      dispatch(updateUser({ userId: user._id, userData: updatedUser }));
-      dispatch(fetchSess());
-      window.location.reload();
-
-      onClose();
+      dispatch(updateUser({ userId: user._id, userData: updatedUser })).then(() => {
+        dispatch(fetchSess());
+        onSave(background); // Call the onSave function to update the background
+        window.location.reload(); // Reload the page to reflect changes
+      });
+      onClose(); // Close the modal after saving
     }
   };
 
@@ -77,14 +84,14 @@ const RModal: React.FC<ModalProps> = ({ isOpen, onClose, currentAvatar }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
       <div className="w-1/3 rounded bg-white p-6 shadow-lg">
-        <h2 className="mb-4 text-xl font-semibold">Edit Profile Image</h2>
+        <h2 className="mb-4 text-xl font-semibold">Edit Background Image</h2>
 
         {/* Image Preview */}
         <div className="mb-4 flex justify-center">
           <img
-            src={avatar}
-            alt="Profile Preview"
-            className="h-32 w-32 rounded-full border"
+            src={background}
+            alt="Background Preview"
+            className="h-64 w-full object-cover border rounded"
           />
         </div>
 
@@ -118,4 +125,5 @@ const RModal: React.FC<ModalProps> = ({ isOpen, onClose, currentAvatar }) => {
   );
 };
 
-export default RModal;
+export default BackgroundImageModal;
+

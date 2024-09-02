@@ -13,6 +13,7 @@ declare module "express-session" {
       id: string;
       name: string;
       profilePictureURL: string;
+      backgroundImageURL: string;
       email: string;
       isAdmin: boolean;
       isAuthenticated: boolean;
