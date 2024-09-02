@@ -8,7 +8,7 @@ import ReactionButton from "../reactions/ReactionButton.js";
 import { createReaction } from "../../controllers/reactions.js";
 import { AppDispatch, AppState } from "../../app/store.js";
 
-// Utility functions for local storage or IndexedDB (simplified example)
+// Utility functions for local storage
 const saveReactionsToLocal = (reactions: any[]) => {
   localStorage.setItem("queuedReactions", JSON.stringify(reactions));
 };
@@ -24,65 +24,58 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   postId,
 }) => {
   const dispatch: AppDispatch = useDispatch();
-  const [comments, setComments] = useState<Comment[]>([]);
+  const [comments, setComments] = useState<Comment[]>(initComments || []);
   const [newComment, setNewComment] = useState<string>("");
   const [queuedReactions, setQueuedReactions] = useState<any[]>(
     loadReactionsFromLocal(),
   );
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
-
   const isReacted = useSelector((state: AppState) => state.react.isReacted);
 
   const handleReaction = async (reactionType: string, commentId: string) => {
     console.log(
       `User reacted with: ${reactionType} on comment ID: ${commentId}`,
     );
+    const reaction = { postId: commentId, reactionType, sentFrom: "comment" };
 
-    const reaction = {
-      postId: commentId,
-      reactionType: reactionType,
-      sentFrom: "comment",
-    };
+    if (navigator.onLine) {
+      await sendReaction(reaction);
+    } else {
+      queueReaction(reaction);
+    }
+  };
 
+  const sendReaction = async (reaction: any) => {
     try {
-      if (navigator.onLine) {
-        // If online, send the reaction directly to the server
-        await dispatch(createReaction(reaction));
-        console.log(
-          `Reaction "${reactionType}" sent to server for comment ${commentId}`,
-        );
-      } else {
-        // If offline, queue the reaction and save it to local storage
-        setQueuedReactions((prev) => {
-          const updatedQueue = [...prev, reaction];
-          saveReactionsToLocal(updatedQueue);
-          alert("Your reaction has been queued due to offline status."); // Alert only when queuing
-          return updatedQueue;
-        });
-        console.log("Offline: Reaction queued for later syncing.");
-      }
+      await dispatch(createReaction(reaction));
+      console.log(
+        `Reaction "${reaction.reactionType}" sent to server for comment ${reaction.postId}`,
+      );
     } catch (error) {
       console.error("Error reacting to comment:", error);
     }
   };
 
-  // Sync queued reactions when coming back online
+  const queueReaction = (reaction: any) => {
+    setQueuedReactions((prev) => {
+      const updatedQueue = [...prev, reaction];
+      saveReactionsToLocal(updatedQueue);
+      alert("Your reaction has been queued due to offline status.");
+      console.log("Offline: Reaction queued for later syncing.");
+      return updatedQueue;
+    });
+  };
+
   const syncReactions = async () => {
     if (queuedReactions.length === 0) return;
 
     setIsSyncing(true);
     try {
       for (const reaction of queuedReactions) {
-        await dispatch(createReaction(reaction));
-        console.log(
-          `Synced reaction: ${reaction.reactionType} for post ${reaction.postId}`,
-        );
+        await sendReaction(reaction);
       }
-
-      // Clear queue after syncing
-      setQueuedReactions([]);
-      saveReactionsToLocal([]);
-      alert("All queued reactions have been successfully synced."); // Alert when synced
+      clearQueuedReactions();
+      alert("All queued reactions have been successfully synced.");
     } catch (error) {
       console.error("Error syncing reactions:", error);
     } finally {
@@ -90,26 +83,17 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
     }
   };
 
-  useEffect(() => {
-    // Sync reactions when the app comes back online
-    window.addEventListener("online", syncReactions);
+  const clearQueuedReactions = () => {
+    setQueuedReactions([]);
+    saveReactionsToLocal([]);
+  };
 
+  useEffect(() => {
+    window.addEventListener("online", syncReactions);
     return () => {
       window.removeEventListener("online", syncReactions);
     };
   }, [queuedReactions]);
-
-  useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        setComments(initComments ? initComments : []);
-      } catch (error) {
-        console.error("Error fetching comments:", error);
-      }
-    };
-
-    fetchComments();
-  }, [dispatch, initComments]);
 
   const handleCommentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setNewComment(e.target.value);
@@ -117,19 +101,16 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     try {
       const response = await createComment({
-        userId: userId,
-        postId: postId,
+        userId,
+        postId,
         content: newComment,
       });
-
       if (!response.ok) throw new Error("Failed to create comment");
 
       const result = await response.json();
-
-      setComments([...comments, result.comment]);
+      setComments((prev) => [...prev, result.comment]);
       setNewComment("");
     } catch (error) {
       console.error("Error adding comment:", error);
@@ -149,15 +130,11 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
             comments.map((comment) => (
               <div key={comment._id}>
                 <CommentItem comment={comment} />
-                <div className="">
-                  <ReactionButton
-                    comment={comment._id}
-                    onReact={(reaction) =>
-                      handleReaction(reaction, comment._id)
-                    }
-                    isReacted={isReacted}
-                  />
-                </div>
+                <ReactionButton
+                  comment={comment._id}
+                  onReact={(reaction) => handleReaction(reaction, comment._id)}
+                  isReacted={isReacted}
+                />
               </div>
             ))
           )}
