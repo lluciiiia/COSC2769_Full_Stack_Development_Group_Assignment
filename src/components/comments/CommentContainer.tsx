@@ -4,7 +4,7 @@ import { Comment, CommentContainerProps } from "../../interfaces/Comments.tsx";
 import CommentItem from "./CommentItem.tsx";
 import CommentForm from "./CommentForm.tsx";
 import { createComment } from "../../controllers/comments";
-import ReactionButton from "../reactions/ReactionButton.js";
+import CommentReactions from "../reactions/CommentReactions.js";
 import { createReaction } from "../../controllers/reactions.js";
 import { AppDispatch, AppState } from "../../app/store.js";
 
@@ -146,7 +146,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
             comments.map((comment) => (
               <div key={comment._id}>
                 <CommentItem comment={comment} />
-                <ReactionButton
+                <CommentReactions
                   comment={comment._id}
                   onReact={(reaction) => handleReaction(reaction, comment._id)}
                   isReacted={isReacted}

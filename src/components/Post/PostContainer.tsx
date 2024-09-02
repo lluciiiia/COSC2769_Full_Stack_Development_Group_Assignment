@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { PostParams } from "../../interfaces/Posts";
 import { useNavigate, useLocation } from "react-router-dom";
-import { ReactionSection } from "./ReactionSection";
+import { PostReactions } from "../reactions/PostReactions";
 import { AdminSection } from "./AdminSection";
 import { ProfileSection } from "./ProfileSection";
 import { AppDispatch, AppState } from "../../app/store";
@@ -230,12 +230,12 @@ const PostContainer: React.FC<PostParams> = ({
           }}
         />
       ) : (
-        <ReactionSection
-          reactions={reactions}
-          isReacted={isReacted}
+        <PostReactions
           handleClick={handleClick}
           onReact={handleReaction}
           initialReaction={initialReaction}
+          isReacted={isReacted}
+          reactions={reactions}
           commentCount={comments?.length || 0} // Pass the number of comments
         />
       )}
