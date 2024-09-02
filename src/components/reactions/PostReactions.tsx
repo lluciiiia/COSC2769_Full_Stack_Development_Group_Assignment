@@ -31,7 +31,7 @@ export const PostReactions: React.FC<PostReactionsProps> = ({
   };
 
   return (
-    <div className="relative">
+    <div className="relative z-10">
       <div
         className="flex justify-between p-4"
         onMouseEnter={() => setShowReactions(true)}
@@ -58,12 +58,11 @@ export const PostReactions: React.FC<PostReactionsProps> = ({
           />
         )}
 
+        {/* Comment Button Always Visible */}
         <div className="flex flex-col items-center">
-          {commentCount > 0 && (
-            <div className="mb-1 ml-6 text-sm text-gray-600">
-              {commentCount} {commentCount === 1 ? "comment" : "comments"}
-            </div>
-          )}
+          <div className="mb-1 ml-6 text-sm text-gray-600">
+            {commentCount} {commentCount === 1 ? "comment" : "comments"}
+          </div>
           <button
             onClick={handleClick}
             className="flex items-center space-x-2 rounded px-3 py-1 text-gray-500 hover:bg-gray-100"

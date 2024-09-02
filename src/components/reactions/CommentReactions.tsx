@@ -31,7 +31,7 @@ const CommentReactions: React.FC<ReactionButtonProps> = ({
 
   return (
     <div
-      className="relative"
+      className="relative z-10"
       onMouseEnter={() => setShowReactions(true)}
       onMouseLeave={() => setShowReactions(false)}
     >

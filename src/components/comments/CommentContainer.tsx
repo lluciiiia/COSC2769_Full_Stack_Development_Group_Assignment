@@ -51,7 +51,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
         // If online, send the reaction directly to the server
         await dispatch(createReaction(reaction));
         console.log(
-          `Reaction "${reactionType}" sent to server for comment ${commentId}`,
+          `Reaction "${reaction.reactionType}" sent to server for comment ${comments}`,
         );
       } else {
         // If offline, queue the reaction and save it to local storage
@@ -135,7 +135,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
 
   return (
     <div className="h-full w-full max-w-md">
-      <div className="h-[550px] w-[700px] rounded-lg bg-gray-100 p-4 shadow-md">
+      <div className="h-[600px] w-[700px] rounded-lg bg-gray-100 p-4 shadow-md">
         <h2 className="mb-4 text-xl font-bold">Comments</h2>
         <div className="flex h-[300px] flex-col gap-2 overflow-y-auto">
           {comments.length === 0 ? (
@@ -144,7 +144,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
             </div>
           ) : (
             comments.map((comment) => (
-              <div key={comment._id}>
+              <div  key={comment._id}>
                 <CommentItem comment={comment} />
                 <CommentReactions
                   comment={comment._id}

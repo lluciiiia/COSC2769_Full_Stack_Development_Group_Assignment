@@ -6,7 +6,7 @@ const CommentForm: React.FC<CommentFormProps> = ({
   onCommentChange,
   onSubmit,
 }) => (
-  <form onSubmit={onSubmit} className="mt-4 flex flex-col items-center">
+  <form onSubmit={onSubmit} className="mt-10 flex flex-col items-center">
     <textarea
       value={newComment}
       onChange={onCommentChange}

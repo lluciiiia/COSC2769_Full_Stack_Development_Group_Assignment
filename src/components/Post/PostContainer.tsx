@@ -236,27 +236,32 @@ const PostContainer: React.FC<PostParams> = ({
           initialReaction={initialReaction}
           isReacted={isReacted}
           reactions={reactions}
-          commentCount={comments?.length || 0} // Pass the number of comments
+          commentCount={comments?.length || 0}
         />
       )}
 
-      {!isDetail && (
-        <div className="mt-4">
-          {comments
+      {/* Ensure Comments Section Exists */}
+      <div className="mt-4">
+        {comments?.length === 0 ? (
+          <p className="mb-2 ml-5 text-left text-sm text-gray-500">
+            No comments yet.
+          </p>
+        ) : (
+          comments
             ?.slice(0, 2)
             .map((comment) => (
               <CommentItem key={comment._id} comment={comment} />
-            ))}
-          {comments?.length > 2 && (
-            <h3
-              className="mb-2 ml-5 cursor-pointer text-left text-sm font-semibold"
-              onClick={handleClick}
-            >
-              View more comments ({comments.length - 2})
-            </h3>
-          )}
-        </div>
-      )}
+            ))
+        )}
+        {comments?.length > 2 && (
+          <h3
+            className="mb-2 ml-5 cursor-pointer text-left text-sm font-semibold"
+            onClick={handleClick}
+          >
+            View more comments ({comments.length - 2})
+          </h3>
+        )}
+      </div>
 
       {isSyncing && (
         <div className="mt-2 text-center text-sm text-gray-500">
