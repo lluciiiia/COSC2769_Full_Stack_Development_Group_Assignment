@@ -110,6 +110,11 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (newComment.trim() === "") {
+      alert("Comment can't be empty");
+      return;
+    }
+
     try {
       dispatch(createCommentNotification(postId));
       const response = await createComment({
