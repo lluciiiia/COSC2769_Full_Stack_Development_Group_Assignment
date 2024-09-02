@@ -238,8 +238,8 @@ const PostContainer: React.FC<PostParams> = ({
       {!isDetail && (
         <div className="mt-4">
           {comments?.length === 0 ? (
-            <p className="mb-2 ml-5 text-left text-sm text-gray-500">
-              No comments yet.
+            <p className="mb-4 ml-5 text-left text-center text-sm text-gray-500">
+              Write the first comment!
             </p>
           ) : (
             comments
