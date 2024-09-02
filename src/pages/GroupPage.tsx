@@ -55,11 +55,10 @@ export default function GroupPage() {
   }, [dispatch, groupId]);
 
   useEffect(() => {
-
     if (selectedGroup) {
       setGroup(selectedGroup);
       const memberStatus = selectedGroup.members.some(
-        (member) => member._id === userId
+        (member) => member._id === userId,
       );
       if (memberStatus) {
         setIsMember(true);
