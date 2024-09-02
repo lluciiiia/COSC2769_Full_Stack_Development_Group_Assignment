@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Notifications from "../models/notification";
 import Group from "../models/group";
+
 export const getNotificationByReciver = async (receiverId: string) => {
   try {
     const receiverObjectId = new mongoose.Types.ObjectId(receiverId);
@@ -74,7 +75,6 @@ export const acceptGroupRequest = async (
     console.log("New notification:", notification);
 
     await notification.save();
-   
 
     // Delete the old notification
     await Notifications.findByIdAndDelete(notiId);
@@ -212,5 +212,31 @@ export const deleteNotification = async (notificationId: string) => {
   } catch (error) {
     console.error("Error deleting notifications", error);
     throw new Error("Failed to delete notifications");
+  }
+};
+
+export const createGroupApprovalNotification = async (
+  siteAdminId: string,
+  groupAdminId: string,
+) => {
+  try {
+    const siteAdminObjectId = new mongoose.Types.ObjectId(siteAdminId);
+    const groupAdminOjbect = new mongoose.Types.ObjectId(groupAdminId);
+
+    const newNotification = new Notifications({
+      senderId: siteAdminObjectId,
+      receiverId: groupAdminOjbect,
+      type: "GROUP_CREATION_APPROVAL",
+      isAccepted: true,
+      isSeen: false,
+    });
+
+    await newNotification.save();
+
+    return newNotification;
+
+  } catch (error) {
+    console.error("Error sending notifications", error);
+    throw new Error("Failed to sending notifications");
   }
 };

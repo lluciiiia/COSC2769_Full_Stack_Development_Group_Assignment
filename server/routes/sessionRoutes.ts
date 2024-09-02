@@ -16,15 +16,13 @@ router.get("/", async (req, res) => {
     const profilePictureURL = req.session.user.profilePictureURL;
 
     if (!isAuthenticated) {
-      return res
-        .status(403)
-        .json({
-          isAuthenticated: false,
-          isAdmin: false,
-          id: "",
-          name: "",
-          profilePictureURL: "",
-        });
+      return res.status(403).json({
+        isAuthenticated: false,
+        isAdmin: false,
+        id: "",
+        name: "",
+        profilePictureURL: "",
+      });
     }
 
     // If authenticated, return the status
