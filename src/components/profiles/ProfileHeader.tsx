@@ -20,7 +20,7 @@ import {
   fetchSentFriendRequests,
   removeFriendRequestNotification,
 } from "../../controllers/notification";
-import RModal from "./ProfilePicModal";
+import RModal from "./ProfilePictureModel";
 import BackgroundImageModal from "./BackgroundImageModal";
 
 const ProfileHeader = ({

@@ -56,7 +56,6 @@ const Profile = () => {
   };
 
   if (loading) {
-    // Show loading spinner while fetching user data
     return (
       <div className="flex h-screen items-center justify-center">
         <LoadingSpinner />

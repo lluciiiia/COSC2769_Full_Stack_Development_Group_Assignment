@@ -12,7 +12,7 @@ interface ModalProps {
   currentAvatar: string;
 }
 
-const RModal: React.FC<ModalProps> = ({ isOpen, onClose, currentAvatar }) => {
+const ProfilePictureModel: React.FC<ModalProps> = ({ isOpen, onClose, currentAvatar }) => {
   const dispatch: AppDispatch = useDispatch();
 
   const user = useSelector((state: AppState) => state.user.currentUser);
@@ -118,4 +118,4 @@ const RModal: React.FC<ModalProps> = ({ isOpen, onClose, currentAvatar }) => {
   );
 };
 
-export default RModal;
+export default ProfilePictureModel;
