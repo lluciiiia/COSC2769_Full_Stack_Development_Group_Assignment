@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { PostParams } from "../interfaces/Posts";
+import { PostParams, RevertPostParams } from "../interfaces/Posts";
 
 export const BACKEND_URL = "http://localhost:8080";
 
@@ -25,7 +25,7 @@ export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
   async () => {
     const response = await fetch(BACKEND_URL + `/api/posts/all`, {
       method: "GET",
-      credentials: 'include',
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -43,7 +43,7 @@ export const getPostById = async (id: String | undefined) => {
 
   const response = await fetch(BACKEND_URL + `/api/posts/${id}`, {
     method: "GET",
-    credentials: 'include',
+    credentials: "include",
   });
 
   console.log("response: " + JSON.stringify(response));
@@ -64,7 +64,7 @@ export const getPostsByCreatorId = createAsyncThunk<
     BACKEND_URL + `/api/posts/profile/${creatorId}`,
     {
       method: "GET",
-      credentials: 'include',
+      credentials: "include",
     },
   );
 
@@ -82,7 +82,7 @@ export const getGroupsByUserId = async (userId: string | undefined) => {
 
   const response = await fetch(`${BACKEND_URL}/api/groups/user/${userId}`, {
     method: "GET",
-    credentials: 'include',
+    credentials: "include",
   });
 
   console.log("response: " + JSON.stringify(response));
@@ -105,10 +105,13 @@ export const getPostsByGroup = createAsyncThunk<PostParams[], string>(
         throw new Error("No group ID provided");
       }
 
-      const response = await fetch(BACKEND_URL + `/api/posts/groups/${groupId}`, {
-        method: "GET",
-        credentials: 'include',
-      });
+      const response = await fetch(
+        BACKEND_URL + `/api/posts/groups/${groupId}`,
+        {
+          method: "GET",
+          credentials: "include",
+        },
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch posts: " + response.statusText);
@@ -122,12 +125,14 @@ export const getPostsByGroup = createAsyncThunk<PostParams[], string>(
   },
 );
 
-
 export const createPost = createAsyncThunk<PostParams, PostParams | undefined>(
   "posts/createPost",
   async (postParams) => {
     // Log the post parameters being sent
-    console.log("Creating post with parameters:", JSON.stringify(postParams, null, 2));
+    console.log(
+      "Creating post with parameters:",
+      JSON.stringify(postParams, null, 2),
+    );
 
     const response = await fetch(`${BACKEND_URL}/api/posts`, {
       method: "POST",
@@ -135,8 +140,7 @@ export const createPost = createAsyncThunk<PostParams, PostParams | undefined>(
         "Content-Type": "application/json", // Set content type to JSON
       },
       body: JSON.stringify(postParams), // Send postParams as JSON
-      credentials: 'include',
-
+      credentials: "include",
     });
 
     // Log the response status and response body
@@ -160,7 +164,6 @@ export const createPost = createAsyncThunk<PostParams, PostParams | undefined>(
   },
 );
 
-
 export const updatePost = createAsyncThunk<PostParams, PostParams>(
   "posts/updatePost",
   async (postData) => {
@@ -169,7 +172,7 @@ export const updatePost = createAsyncThunk<PostParams, PostParams>(
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: 'include',
+      credentials: "include",
       body: JSON.stringify(postData),
     });
 
@@ -179,6 +182,34 @@ export const updatePost = createAsyncThunk<PostParams, PostParams>(
     return data;
   },
 );
+
+export const revertPost = createAsyncThunk<
+  RevertPostParams,
+  RevertPostParams,
+  { rejectValue: string }
+>("posts/revertPost", async (postData, { rejectWithValue }) => {
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/posts/${postData._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(postData),
+    });
+
+    if (!response.ok) {
+      // Return a custom error message
+      const errorData = await response.json();
+      return rejectWithValue(errorData.message || "Failed to update post");
+    }
+
+    const data: RevertPostParams = await response.json();
+    return data;
+  } catch (error) {
+    return rejectWithValue("An unexpected error occurred"); // Handle other errors
+  }
+});
 
 export const deletePostById = async (id: string | undefined) => {
   if (id == undefined) return false;

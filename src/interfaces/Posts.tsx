@@ -1,12 +1,19 @@
 import { Comment } from "./Comments";
+
 export interface PostHistory {
   content: string;
   images?: string[];
   updatedAt: Date;
 }
 
+export interface RevertPostParams {
+  _id: string;
+  content: string;
+  images?: string[];
+}
+
 export interface PostParams {
-  _id?: string;
+  _id: string;
   creatorId: string;
   groupId?: string;
   content: string;
