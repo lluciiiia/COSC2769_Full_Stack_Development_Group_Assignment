@@ -4,7 +4,7 @@ import { Comment, CommentContainerProps } from "../../interfaces/Comments.tsx";
 import CommentItem from "./CommentItem.tsx";
 import CommentForm from "./CommentForm.tsx";
 import { createComment } from "../../controllers/comments";
-import ReactionButton from "../reactions/reactionButtonProps.js";
+import ReactionButton from "../reactions/ReactionButton.js";
 import { createReaction, fetchReaction } from "../../controllers/reactions.js";
 import { AppDispatch, AppState } from "../../app/store.js";
 
@@ -26,7 +26,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
         createReaction({
           postId: commentId,
           reactionType: reaction,
-          sentFrom: "comment",  
+          sentFrom: "comment",
         }),
       );
       console.log(
@@ -44,10 +44,9 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
         console.error("Error fetching comments:", error);
       }
     };
-  
+
     fetchComments();
   }, [dispatch, initComments]);
-  
 
   const handleCommentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setNewComment(e.target.value);
