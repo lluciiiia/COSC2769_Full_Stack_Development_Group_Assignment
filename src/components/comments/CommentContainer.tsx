@@ -10,11 +10,11 @@ import { AppDispatch, AppState } from "../../app/store.js";
 
 // Utility functions for local storage
 const saveReactionsToLocal = (reactions: any[]) => {
-  localStorage.setItem("queuedReactions", JSON.stringify(reactions));
+  localStorage.setItem("queuedCommentReactions", JSON.stringify(reactions));
 };
 
 const loadReactionsFromLocal = (): any[] => {
-  const data = localStorage.getItem("queuedReactions");
+  const data = localStorage.getItem("queuedCommentReactions");
   return data ? JSON.parse(data) : [];
 };
 
