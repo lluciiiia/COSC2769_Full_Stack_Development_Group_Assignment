@@ -216,16 +216,16 @@ export const updatePost = async (postId: string, postData: any) => {
     if (!post) throw new Error("Post not found with the provided id");
 
     // Check if the creator exists
-    const user = await User.findById(postData.creatorId);
+    const user = await User.findById(post.creatorId);
     if (!user) throw new Error("User not found with the provided creatorId");
 
     // Check if group exists if a groupId is provided
-    if (postData.groupId && postData.groupId !== "") {
-      const group = await Group.findById(postData.groupId);
+    if (post.groupId && post.groupId !== "") {
+      const group = await Group.findById(post.groupId);
       if (!group) throw new Error("Group not found with the provided groupId");
 
       // Check if the user is a member of the group
-      const isMember = group.members.includes(postData.creatorId);
+      const isMember = group.members.includes(post.creatorId);
       if (!isMember) throw new Error("User is not a member of the group");
     }
 

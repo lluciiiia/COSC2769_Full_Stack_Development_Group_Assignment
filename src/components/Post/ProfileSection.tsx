@@ -129,8 +129,10 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
       {/* Modal for viewing edit history */}
       {isHistoryModalOpen && (
         <PostHistoryModal
+          currentEntryId={post._id}
           history={post.history}
           onClose={() => setIsHistoryModalOpen(false)}
+          isOwner={id === post.creatorId}
         />
       )}
     </div>
