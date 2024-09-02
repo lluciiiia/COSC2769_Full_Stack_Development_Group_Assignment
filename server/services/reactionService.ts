@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 import Reaction from "../models/reactions";
 import Comment from "../models/comment";
 import Post from "../models/post";
-
+import Notifications from "../models/notification";
 export const createReaction = async ({
   postId,
   userId,
   reactionType,
-  targetType, 
+  targetType,
 }: {
   postId: string;
   userId: string;
@@ -16,20 +16,35 @@ export const createReaction = async ({
 }) => {
   try {
     let target;
+    let newNoti;
     if (targetType === "post") {
       target = await Post.findById(postId);
+      newNoti = {
+        senderId: userId,
+        receiverId: target?.creatorId,
+        type: "RECEIVE_REACTION",
+        postId: target?.id,
+      };
     } else if (targetType === "comment") {
       target = await Comment.findById(postId);
+      newNoti = {
+        senderId: userId,
+        receiverId: target?.userId,
+        type: "RECEIVE_REACTION",
+        postId: target?.postId,
+      };
     } else {
       throw new Error("Invalid target type");
     }
+
+    const notification = new Notifications(newNoti);
 
     if (!target) {
       throw new Error(
         `${targetType.charAt(0).toUpperCase() + targetType.slice(1)} not found`,
       );
     }
-
+    notification.save();
     let existingReaction = await Reaction.findOne({
       postId: new mongoose.Types.ObjectId(postId),
       userId,
@@ -60,26 +75,25 @@ export const createReaction = async ({
 };
 
 export const fetchReaction = async (postId: string, userId: string) => {
-    try {
+  try {
+    const existingReaction = await Reaction.findOne({ postId, userId });
 
-      const existingReaction = await Reaction.findOne({ postId, userId });
-  
-      if (!existingReaction) {
-        return null;
-      }
-      console.log(existingReaction)
-      return existingReaction;
-    } catch (error) {
-      console.error("Error fetching reaction", error);
-      throw new Error("Failed to fetch reaction");
+    if (!existingReaction) {
+      return null;
     }
-  };
+    console.log(existingReaction);
+    return existingReaction;
+  } catch (error) {
+    console.error("Error fetching reaction", error);
+    throw new Error("Failed to fetch reaction");
+  }
+};
 
-  // export const fetchReactionByPost= async (postId: string)=>{
-  //   try{
-  //     const existingReaction= await Reaction.findOne({postId});
-  //   }catch(error){
-  //     console.error("Error fetching reaction", error);
-  //     throw new Error("Failed to fetch reaction");
-  //   }
-  // }
+// export const fetchReactionByPost= async (postId: string)=>{
+//   try{
+//     const existingReaction= await Reaction.findOne({postId});
+//   }catch(error){
+//     console.error("Error fetching reaction", error);
+//     throw new Error("Failed to fetch reaction");
+//   }
+// }

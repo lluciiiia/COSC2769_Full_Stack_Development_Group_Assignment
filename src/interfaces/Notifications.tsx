@@ -11,6 +11,7 @@ export interface GroupRequest {
 }
 
 export interface Notifications {
+  postId: any;
   _id: string;
   senderId: Sender;
   receiverId: string;
