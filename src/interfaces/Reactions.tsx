@@ -17,6 +17,8 @@ export interface ReactionButtonProps {
   initialReaction?: string;
   isReacted: boolean;
   comment?: string;
+  isOffline: boolean;
+  isSyncing: boolean;
 }
 
 export interface PostReactionsProps {

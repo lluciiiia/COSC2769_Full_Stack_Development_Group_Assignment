@@ -37,6 +37,8 @@ const PostContainer: React.FC<PostParams> = ({
   const [queuedReactions, setQueuedReactions] = useState<any[]>(
     loadReactionsFromLocal("queuedPostReactions"),
   );
+  const [isOffline, setIsOffline] = useState<boolean>(false);
+
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
 
   const isReacted = useSelector((state: AppState) => state.react.isReacted);
@@ -75,6 +77,7 @@ const PostContainer: React.FC<PostParams> = ({
     if (navigator.onLine) {
       await sendReaction(reactionPayload);
     } else {
+      setIsOffline(true);
       queueReaction(reactionPayload);
     }
   };
@@ -103,6 +106,7 @@ const PostContainer: React.FC<PostParams> = ({
   const syncReactions = async () => {
     if (queuedReactions.length === 0) return;
 
+    setIsOffline(false);
     setIsSyncing(true);
     try {
       for (const reaction of queuedReactions) {
@@ -260,12 +264,15 @@ const PostContainer: React.FC<PostParams> = ({
           )}
         </div>
       )}
-
-      {isSyncing && (
-        <div className="mt-2 text-center text-sm text-gray-500">
+      {isOffline ? (
+        <span className="mt-2 text-center text-sm text-gray-500">
+          You’re offline. Reactions will be synced as soon as you reconnect.
+        </span>
+      ) : isSyncing ? (
+        <span className="mt-2 text-center text-sm text-gray-500">
           Syncing reactions...
-        </div>
-      )}
+        </span>
+      ) : null}
     </div>
   );
 };
