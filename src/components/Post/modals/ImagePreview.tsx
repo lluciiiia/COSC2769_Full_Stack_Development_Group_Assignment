@@ -28,7 +28,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
       <button
         type="button"
         onClick={handleRemoveImage}
-        className="absolute right-0 top-0 rounded-full bg-red-500 p-1 text-white"
+        className="absolute right-0 top-0 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-white"
       >
         &times;
       </button>
