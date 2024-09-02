@@ -55,6 +55,10 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
     setIsDropdownOpen(false);
   };
 
+  const handleProfileClick = () => {
+    navigate(`/profile/${post.creatorId}`);
+  };
+
   // Determine safe profile image and name
   const safeProfileImage =
     typeof profileImage === "string" && profileImage.length > 0
@@ -65,7 +69,10 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
   return (
     <div className="relative flex items-start p-6">
       <div className="flex items-center">
-        <div className="mr-4 flex-shrink-0">
+        <div
+          className="mr-4 flex-shrink-0 cursor-pointer"
+          onClick={handleProfileClick}
+        >
           {safeProfileImage ? (
             <img
               src={safeProfileImage}
@@ -79,7 +86,12 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
           )}
         </div>
         <div>
-          <div className="mr-12 font-bold">{safeProfileName}</div>
+          <div
+            className="mr-12 cursor-pointer font-bold"
+            onClick={handleProfileClick}
+          >
+            {safeProfileName}
+          </div>
         </div>
       </div>
       <div className="relative ml-auto flex items-center justify-center gap-1">
