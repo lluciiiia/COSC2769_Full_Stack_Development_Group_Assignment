@@ -9,11 +9,31 @@ export const getNotificationByReciver = async (receiverId: string) => {
     const notifications = await Notifications.find({
       receiverId: receiverObjectId,
     }).populate({
-      path: "senderId", // The field in Notification schema
-      select: "name profilePictureURL _id", // The fields you want to retrieve from User model
+      path: "senderId",
+      select: "name profilePictureURL _id",
     });
 
-    return notifications;
+    const notificationsWithGroupDetails = await Promise.all(
+      notifications.map(async (notification) => {
+        if (notification.type === "GROUP_CREATION_APPROVAL") {
+          const group = await Group.findById(notification?.groupId);
+
+          return {
+            ...notification.toObject(),
+            groupDetails: {
+              adminId: group?.groupAdmin,
+              groupName: group?.name,
+              groupImageURL: group?.imageURL,
+            },
+          };
+        } else {
+          return notification;
+        }
+      }),
+    );
+    console.log(notificationsWithGroupDetails);
+
+    return notificationsWithGroupDetails;
   } catch (error) {
     console.error("Error fetching notifications", error);
     throw new Error("Failed to fetch notifications ");
@@ -217,24 +237,30 @@ export const deleteNotification = async (notificationId: string) => {
 
 export const createGroupApprovalNotification = async (
   siteAdminId: string,
-  groupAdminId: string,
+  groupId: string,
 ) => {
   try {
     const siteAdminObjectId = new mongoose.Types.ObjectId(siteAdminId);
-    const groupAdminOjbect = new mongoose.Types.ObjectId(groupAdminId);
+    const groupObjectId = new mongoose.Types.ObjectId(groupId);
+
+    const group = await Group.findById(groupObjectId);
+
+    if (!group) {
+      throw new Error("Group not found");
+    }
 
     const newNotification = new Notifications({
       senderId: siteAdminObjectId,
-      receiverId: groupAdminOjbect,
+      receiverId: group.groupAdmin,
       type: "GROUP_CREATION_APPROVAL",
+      groupId: groupId,
       isAccepted: true,
       isSeen: false,
     });
 
     await newNotification.save();
 
-    return newNotification;
-
+    return { message: "Notificatin is created successfully" };
   } catch (error) {
     console.error("Error sending notifications", error);
     throw new Error("Failed to sending notifications");

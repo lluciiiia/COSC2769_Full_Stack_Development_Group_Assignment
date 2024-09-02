@@ -141,3 +141,24 @@ export const removeFriendRequestNotification = createAsyncThunk<
 
   return data;
 });
+
+export const groupApprovalNotification = createAsyncThunk<
+  { message: string },
+  string
+>("notifications/groupApprovalNotification", async (groupId) => {
+  const response = await fetch(
+    BACKEND_URL + `/api/notifications/group-approval/${groupId}`,
+    {
+      method: "POST",
+      credentials: "include",
+    },
+  );
+  if (!response.ok) {
+    console.error("Failed to create notifcation:", response.statusText);
+    throw new Error("Failed to create notifcation");
+  }
+
+  const data = await response.json();
+
+  return data;
+});

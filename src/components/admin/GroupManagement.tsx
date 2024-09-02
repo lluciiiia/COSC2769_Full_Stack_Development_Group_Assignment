@@ -2,11 +2,9 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "../../app/store";
-// import { fetchGroups, updateGroup } from "../../features/groupSlice";
-import { GroupType } from "../../types/group";
 import { fetchGroups } from "../../controllers/group";
-//import { handleAcceptGroup as acceptGroup } from "../../path/to/your/handleAcceptGroupFunction"; // Replace with the correct path
-// import { handleAcceptGroup as acceptGroup } from "../../controllers/group";
+import { groupApprovalNotification } from "../../controllers/notification";
+
 export const GroupManagement = () => {
   const [activeTab, setActiveTab] = React.useState("groups");
   const navigate = useNavigate();
@@ -22,6 +20,8 @@ export const GroupManagement = () => {
   };
 
   const handleAcceptGroupClick = async (groupId: string) => {
+    dispatch(groupApprovalNotification(groupId));
+
     try {
       const response = await fetch(
         `http://localhost:8080/api/groups/accepted/${groupId}`,
@@ -33,7 +33,7 @@ export const GroupManagement = () => {
 
       if (response.ok) {
         console.log(`Group ${groupId} accepted.`);
-        dispatch(fetchGroups()); 
+        dispatch(fetchGroups());
       } else {
         console.error("Failed to reject group. Status:", response.status);
       }
@@ -161,6 +161,7 @@ export const GroupManagement = () => {
                     alt={group.name}
                     className="h-48 w-full rounded-t-lg object-cover"
                   />
+
                   <div className="p-4">
                     <h2 className="mb-2 text-xl font-bold text-gray-900">
                       {group.name}

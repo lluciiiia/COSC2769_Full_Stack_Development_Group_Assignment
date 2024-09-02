@@ -36,14 +36,14 @@ router.get("/sent", isAuthenticated, async (req, res) => {
   }
 });
 
-router.post("/group-approval/:creatorId", async (req, res) => {
+router.post("/group-approval/:groupId", async (req, res) => {
   try {
     const siteAdminId = req.session.user.id;
-    const { creatorId } = req.params;
+    const { groupId } = req.params;
 
     const result = await createGroupApprovalNotification(
       siteAdminId,
-      creatorId,
+      groupId,
     );
     res.json(result);
   } catch (error) {

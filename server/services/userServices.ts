@@ -103,7 +103,6 @@ export const groupJoinRequest = async (userId: string, groupId: string) => {
   }
 };
 
-
 export const unfriendById = async (userId: string, friendId: string) => {
   try {
     const userObjectId = new mongoose.Types.ObjectId(userId);

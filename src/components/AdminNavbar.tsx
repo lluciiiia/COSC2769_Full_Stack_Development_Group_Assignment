@@ -13,7 +13,7 @@ const AdminNavbar = ({
   const navigate = useNavigate();
 
   const handleHomeClick = () => {
-    navigate(`/`);
+    navigate(`/home`);
   };
 
   return (
