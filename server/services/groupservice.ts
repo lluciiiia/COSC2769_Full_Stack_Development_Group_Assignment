@@ -37,6 +37,24 @@ export const acceptGroup = async (groupId: string) => {
   }
 };
 
+export const removeMemberFromGroup = async (groupId: string, memberId: string) => {
+  try {
+    const updatedGroup = await Group.findByIdAndUpdate(
+      groupId,
+      { $pull: { members: memberId } }, 
+      { new: true }
+    );
+
+    if (!updatedGroup) {
+      throw new Error("Group not found");
+    }
+
+    return updatedGroup;
+  } catch (error) {
+    console.error("Error removing member from group:", error);
+    throw new Error("Failed to remove member from group");
+  }
+};
 export const getAllGroupsWithMembers = async () => {
   try {
     const groupsWithMembers = await Group.find()

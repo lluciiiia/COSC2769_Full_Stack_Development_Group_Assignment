@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { GroupType } from "../interfaces/Group";
 import { AppState } from "../app/store";
-import { fetchGroups, fetchGroupWithMembers } from "../controllers/group";
+import { fetchGroups, fetchGroupWithMembers, leaveGroup } from "../controllers/group";
 
 const initialState: GroupType[] = [
   {
@@ -37,6 +37,9 @@ const groupSlice = createSlice({
             state.push(group);
           }
         });
+      })
+      .addCase(leaveGroup.fulfilled, (state, action) =>{
+          console.log(action.payload);
       })
   },
 });

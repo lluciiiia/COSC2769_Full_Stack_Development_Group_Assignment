@@ -3,7 +3,7 @@ import Group from "../models/group";
 import {
   acceptGroup,
   getAllGroups,
-  getAllGroupsWithMembers,
+  removeMemberFromGroup,
   getGroupsByUserId,
   createGroup,
 } from "../services/groupservice";
@@ -83,6 +83,22 @@ router.post("/createGroup", async (req, res) => {
   }
 });
 
+router.put("/leaveGroup/:groupId", async (req, res) => {
+  try {
+    const groupId = req.params.groupId;
+    const userId = req.session.user.id;
+
+    const updatedGroup= await removeMemberFromGroup(groupId,userId);
+    if(!updatedGroup){
+      return res.status(404).json({message:"Group not found"});
+    }
+
+    return res.json({message:"Member deleted successfully", group:updatedGroup});
+  } catch (error) {
+    console.error("Error accepting group:", error);
+    res.status(500).json({ error: "Failed to accept group" });
+  }
+});
 router.put("/accepted/:id", async (req, res) => {
   try {
     const groupId = req.params.id;

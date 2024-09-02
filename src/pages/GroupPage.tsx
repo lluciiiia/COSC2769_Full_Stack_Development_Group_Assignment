@@ -14,6 +14,7 @@ import { selectAuthState } from "../features/authSlice";
 import { sendGroupRequest } from "../controllers/user";
 import { selectGroupRequest } from "../features/notificationSlice";
 import { groupSentRequest } from "../controllers/notification";
+import { leaveGroup } from "../controllers/group";
 
 export default function GroupPage() {
   const groupId = useParams<{ groupId: string }>().groupId || "";
@@ -22,16 +23,17 @@ export default function GroupPage() {
   const [loading, setLoading] = useState(true);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
+  const [error, setError] = useState<string | null>(null); // State to handle errors
   const { id: userId } = useSelector(selectAuthState);
   const [isMember, setIsMember] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isClick, setIsClick] = useState(false);
+  const [isInGroup, setIsInGroup] = useState(false);
 
-  // Use the selector to get the selected group
   const selectedGroup = useSelector((state: AppState) =>
     selectGroupById(state, groupId),
   );
 
-  // Use the selector to check if a group request has already been sent
   const existingGroupRequest = useSelector((state: AppState) =>
     selectGroupRequest(state, groupId),
   );
@@ -43,6 +45,7 @@ export default function GroupPage() {
         await dispatch(getPostsByGroup(groupId));
       } catch (error) {
         console.error("Error fetching group data:", error);
+        setError("Failed to load group data. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -52,23 +55,23 @@ export default function GroupPage() {
   }, [dispatch, groupId]);
 
   useEffect(() => {
-    setGroup(selectedGroup || null);
     if (selectedGroup) {
-      // TODO: fix the error
-      // Check if the user is a member of the group
-      const memberStatus = selectedGroup.members.includes(userId);
-      setIsMember(memberStatus);
+      setGroup(selectedGroup);
+      const memberStatus = selectedGroup.members.some(
+        (member) => member._id === userId,
+      );
+      if (memberStatus) {
+        setIsMember(true);
+        setIsInGroup(true);
+      } else {
+        console.log("eroror alksdnaclknaklscnac");
+      }
 
-      // Check if the user is the admin of the group
       if (userId === selectedGroup.groupAdmin) {
         setIsAdmin(true);
       }
     }
   }, [selectedGroup, userId]);
-
-  useEffect(() => {
-    dispatch(groupSentRequest());
-  }, [dispatch]);
 
   const handleJoinGroup = async () => {
     if (existingGroupRequest) {
@@ -77,10 +80,23 @@ export default function GroupPage() {
     }
 
     try {
-      const response = await dispatch(sendGroupRequest(groupId));
-      console.log("Group request response:", response);
+      await dispatch(sendGroupRequest(groupId));
+      setIsClick(true);
+      setIsMember(true);
     } catch (error) {
       console.error("Failed to join group:", error);
+      setError("Failed to send group request. Please try again later.");
+    }
+  };
+
+  const handleLeaveGroup = async () => {
+    try {
+      await dispatch(leaveGroup(groupId));
+      setIsMember(false);
+      setIsInGroup(false);
+    } catch (error) {
+      console.error("Failed to leave group:", error);
+      setError("Failed to leave group. Please try again later.");
     }
   };
 
@@ -141,30 +157,27 @@ export default function GroupPage() {
                 >
                   Create Post
                 </button>
-                <button className="rounded-md bg-red-600 px-2 text-sm text-white shadow-md">
+                <button
+                  onClick={handleLeaveGroup}
+                  className="rounded-md bg-red-600 px-2 text-sm text-white shadow-md"
+                >
                   Leave Group
                 </button>
               </>
             ) : (
-              !isAdmin && ( // Only show "Join" button if user is not an admin
+              !isAdmin && (
                 <button
                   onClick={handleJoinGroup}
                   className={`rounded-md px-4 text-sm text-white shadow-md ${
-                    existingGroupRequest
+                    existingGroupRequest || isClick
                       ? "cursor-not-allowed bg-gray-400"
                       : "bg-[#FFC123]"
                   }`}
-                  disabled={!!existingGroupRequest}
+                  disabled={existingGroupRequest || isClick}
                 >
-                  {existingGroupRequest ? "Request Sent" : "Join"}
+                  {isClick ? "Request Sent" : "Join"}
                 </button>
               )
-            )}
-
-            {!isAdmin && ( // Only show "Report" button if user is not an admin
-              <button className="rounded-md border border-gray-400 bg-white px-2 text-sm text-black shadow-md">
-                Report
-              </button>
             )}
           </div>
         </div>
