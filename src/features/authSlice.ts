@@ -4,14 +4,14 @@ import {
   loginUser,
   registerUser,
   fetchedSession,
-  logout as logoutUser, // Import the logout function from your controller
+  logout as logoutUser,
 } from "../controllers/authentications";
 
 export const registerUserThunk = createAsyncThunk(
   "auth/registerUser",
   async (
     userData: { email: string; password: string; name?: string },
-    { rejectWithValue },
+    { rejectWithValue }
   ) => {
     try {
       const data = await registerUser(userData);
@@ -19,7 +19,7 @@ export const registerUserThunk = createAsyncThunk(
     } catch (err) {
       return rejectWithValue(err);
     }
-  },
+  }
 );
 
 export const fetchSess = createAsyncThunk(
@@ -31,25 +31,25 @@ export const fetchSess = createAsyncThunk(
     } catch (err: any) {
       return rejectWithValue(err.message || "Error fetching session");
     }
-  },
+  }
 );
 
 export const loginUserThunk = createAsyncThunk(
   "auth/loginUser",
   async (
     userData: { email: string; password: string },
-    { rejectWithValue },
+    { rejectWithValue }
   ) => {
     try {
       const data = await loginUser(userData);
       return data;
-    } catch (err) {
-      return rejectWithValue(err);
+    } catch (err: any) {
+      // Capture the error message
+      return rejectWithValue(err.message || "Error logging in");
     }
-  },
+  }
 );
 
-// Add the logout thunk
 export const logoutUserThunk = createAsyncThunk(
   "auth/logoutUser",
   async (_, { rejectWithValue }) => {
@@ -59,7 +59,7 @@ export const logoutUserThunk = createAsyncThunk(
     } catch (err: any) {
       return rejectWithValue(err.message || "Error logging out");
     }
-  },
+  }
 );
 
 const initialState = {
@@ -69,14 +69,13 @@ const initialState = {
   isAdmin: false,
   name: "",
   profilePictureURL: "",
-  error: null,
+  error: null,  // Initialize the error state
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    // Update logout reducer to handle local state
     logout: (state) => {
       state.isAuthenticated = false;
       state.id = "";
@@ -91,20 +90,26 @@ const authSlice = createSlice({
       .addCase(registerUserThunk.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.isAuthenticated = true;
+        state.error = null;  // Reset error on successful register
       })
       .addCase(loginUserThunk.pending, (state) => {
         state.status = "loading";
+        state.error = null;  // Reset error on new login attempt
       })
       .addCase(loginUserThunk.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.id = action.payload.id;
         state.isAdmin = action.payload.user.isAdmin;
         state.isAuthenticated = true;
+        state.error = null;  // Reset error on successful login
+      })
+      .addCase(loginUserThunk.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;  // Set error message on failed login
       })
       .addCase(fetchSess.fulfilled, (state, action) => {
         return action.payload;
       })
-      // Add case for logoutUserThunk
       .addCase(logoutUserThunk.pending, (state) => {
         state.status = "loading";
       })
@@ -118,7 +123,5 @@ const authSlice = createSlice({
 });
 
 export const { logout } = authSlice.actions;
-
 export const selectAuthState = (state: AppState) => state.auth;
-
 export default authSlice.reducer;

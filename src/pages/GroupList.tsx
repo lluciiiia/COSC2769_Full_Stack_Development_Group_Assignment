@@ -56,19 +56,28 @@ const GroupList: React.FC = () => {
   };
 
   const filteredGroups = () => {
-    if (activeTab === "groups") {
-      if (activeSubtab === "joined") {
-        return groups.filter(group => group.members.includes(id));
+    return groups.filter((group) => {
+      // Ensure the group is accepted before checking other conditions
+      if (!group.accepted) {
+        return false;
       }
-      if (activeSubtab === "notJoined") {
-        return groups.filter(group => !group.members.includes(id));
+
+      if (activeTab === "groups") {
+        if (activeSubtab === "joined") {
+          return group.members.includes(id);
+        }
+        if (activeSubtab === "notJoined") {
+          return !group.members.includes(id);
+        }
+        return true; // "all" tab
       }
-      return groups; // "all" tab
-    }
-    if (activeTab === "manage") {
-      return groups.filter(group => group.groupAdmin === id);
-    }
-    return [];
+
+      if (activeTab === "manage") {
+        return group.groupAdmin === id;
+      }
+
+      return false;
+    });
   };
 
   return (
@@ -108,7 +117,7 @@ const GroupList: React.FC = () => {
         <CreateGroupModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          userId= {id}
+          userId={id}
         />
       )}
 
