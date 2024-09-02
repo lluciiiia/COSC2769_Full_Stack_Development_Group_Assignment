@@ -12,7 +12,11 @@ interface ModalProps {
   currentAvatar: string;
 }
 
-const ProfilePictureModel: React.FC<ModalProps> = ({ isOpen, onClose, currentAvatar }) => {
+const ProfilePictureModel: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  currentAvatar,
+}) => {
   const dispatch: AppDispatch = useDispatch();
 
   const user = useSelector((state: AppState) => state.user.currentUser);
@@ -75,7 +79,7 @@ const ProfilePictureModel: React.FC<ModalProps> = ({ isOpen, onClose, currentAva
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+    <div className="fixed inset-0 z-20 flex items-center justify-center bg-gray-900 bg-opacity-50">
       <div className="w-1/3 rounded bg-white p-6 shadow-lg">
         <h2 className="mb-4 text-xl font-semibold">Edit Profile Image</h2>
 
@@ -94,7 +98,7 @@ const ProfilePictureModel: React.FC<ModalProps> = ({ isOpen, onClose, currentAva
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+            className="block w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 p-2 text-sm text-gray-900 focus:outline-none"
           />
         </div>
 

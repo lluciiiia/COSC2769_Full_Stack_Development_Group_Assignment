@@ -40,9 +40,9 @@ const BackgroundImageModal: React.FC<ModalProps> = ({
 
       // Compress the image if needed
       const options = {
-        maxSizeMB: 1, 
-        maxWidthOrHeight: 1024, 
-        useWebWorker: true, 
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1024,
+        useWebWorker: true,
       };
 
       try {
@@ -70,11 +70,13 @@ const BackgroundImageModal: React.FC<ModalProps> = ({
     if (background) {
       const updatedUser = { ...user, backgroundPictureURL: background };
       dispatch(updateLocalUser(updatedUser));
-      dispatch(updateUser({ userId: user._id, userData: updatedUser })).then(() => {
-        dispatch(fetchSess());
-        onSave(background); // Call the onSave function to update the background
-        window.location.reload(); // Reload the page to reflect changes
-      });
+      dispatch(updateUser({ userId: user._id, userData: updatedUser })).then(
+        () => {
+          dispatch(fetchSess());
+          onSave(background); // Call the onSave function to update the background
+          window.location.reload(); // Reload the page to reflect changes
+        },
+      );
       onClose(); // Close the modal after saving
     }
   };
@@ -82,7 +84,7 @@ const BackgroundImageModal: React.FC<ModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+    <div className="fixed inset-0 z-20 flex items-center justify-center bg-gray-900 bg-opacity-50">
       <div className="w-1/3 rounded bg-white p-6 shadow-lg">
         <h2 className="mb-4 text-xl font-semibold">Edit Background Image</h2>
 
@@ -91,7 +93,7 @@ const BackgroundImageModal: React.FC<ModalProps> = ({
           <img
             src={background}
             alt="Background Preview"
-            className="h-64 w-full object-cover border rounded"
+            className="h-64 w-full rounded border object-cover"
           />
         </div>
 
@@ -101,7 +103,7 @@ const BackgroundImageModal: React.FC<ModalProps> = ({
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+            className="block w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 p-2 text-sm text-gray-900 focus:outline-none"
           />
         </div>
 
@@ -126,4 +128,3 @@ const BackgroundImageModal: React.FC<ModalProps> = ({
 };
 
 export default BackgroundImageModal;
-

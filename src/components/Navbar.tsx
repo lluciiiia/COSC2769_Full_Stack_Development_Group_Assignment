@@ -79,13 +79,12 @@ const Navbar = () => {
           />
           <h1 className="text-2xl font-bold">BuZzNet</h1>
         </div>
-        <div className="relative flex items-center gap-4">
+        {/* <div className="relative flex items-center gap-4"></div> */}
+        <div className="flex max-w-xs flex-1 flex-grow justify-around gap-2">
           <SearchIcon
             className="h-8 w-8 cursor-pointer text-black"
             onClick={handleSearchClick}
           />
-        </div>
-        <div className="flex max-w-xs flex-1 flex-grow justify-around gap-5">
           <NavItem src={homeIcon} label="Home" onClick={handleHomeClick} />
           <NavItem src={groupIcon} onClick={handleGroupClick} label="Group" />
           <NavItem

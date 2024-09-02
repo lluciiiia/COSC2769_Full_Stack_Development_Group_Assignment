@@ -110,11 +110,12 @@ const ProfileHeader = ({
   }, [background]);
 
   return (
-    <div className="relative h-64 w-full">
+    <div className="relative h-72 w-full">
       <img
         src={backgroundImage} // Use the state for background image
         alt="Background"
-        className="absolute inset-0 h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-fill" 
+        
       />
       {isAuthenticatedUser && (
         <div
