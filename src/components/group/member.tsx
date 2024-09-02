@@ -44,7 +44,7 @@ const toggleDropdown = (id: string) => {
             <div key={member._id} className="flex items-center justify-between relative">
               <div className="flex items-center">
                 <img
-                  src={member.profilePictureURL || '/cat.png'} 
+                  src={member.profilePictureURL || '/src/assets/icons/default-profile.png'} 
                   alt={member.name}
                   className="w-12 h-12 rounded-full border-2 border-black"
                 />

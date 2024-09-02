@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { Notifications } from "../../interfaces/Notifications";
@@ -54,6 +54,7 @@ const NotificationModal = ({
               requestType={noti.type}
               isAccepted={noti.isAccepted}
               isSeen={noti.isSeen}
+              postId={noti.postId}
               handleAcceptFriendRequest={handleAcceptFriendRequest}
               handleRemoveNotification={handleRemoveNotification}
               handleAcceptGroupRequest={handleAcceptGroupRequest}
@@ -76,6 +77,7 @@ const RequestItems = ({
   requestType,
   isAccepted,
   isSeen,
+  postId,
   handleAcceptGroupRequest,
   handleAcceptFriendRequest,
   handleRemoveNotification,
@@ -86,12 +88,20 @@ const RequestItems = ({
   imgUrl: string;
   requestType: string;
   isAccepted: boolean;
+  postId: string;
   isSeen: boolean;
   handleAcceptGroupRequest: (senderId: string, notificationId: string) => void;
   handleAcceptFriendRequest: (friendId: string, notificationId: string) => void;
   handleRemoveNotification: (notificationId: string) => void;
 }) => {
   const navigate = useNavigate();
+  let raectionNoti = false;
+  if (requestType === "RECEIVE_REACTION") {
+    raectionNoti = true;
+  }
+  // Local state to track if the request has been accepted
+  const [accepted, setAccepted] = useState(isAccepted);
+
   return (
     <div className="relative w-full rounded-lg bg-gray-100 p-2">
       <button
@@ -103,7 +113,9 @@ const RequestItems = ({
       <div
         className="flex cursor-pointer items-center gap-2"
         onClick={() => {
-          navigate(`/profile/${friendId}`);
+          raectionNoti
+            ? navigate(`/posts/${postId}`)
+            : navigate(`/profile/${friendId}`);
         }}
       >
         {imgUrl ? (
@@ -146,17 +158,27 @@ const RequestItems = ({
               joining group request
             </span>
           </p>
+        ) : requestType === "RECEIVE_REACTION" ? (
+          <div>
+            <p className="text-sm text-gray-700">
+              <span>
+                <span className="font-bold">{name}</span> reacted to your post
+              </span>
+            </p>
+          </div>
         ) : (
           <div></div>
         )}
       </div>
 
-      {requestType === "FRIEND_REQUEST" && !isAccepted && (
+      {/* Conditionally render the buttons based on the accepted state */}
+      {requestType === "FRIEND_REQUEST" && !accepted && (
         <div className="mt-4 flex justify-end space-x-2">
           <button
             className="rounded-lg bg-[#FFC123] px-3 py-1 text-sm font-bold text-white hover:opacity-40"
             onClick={() => {
               handleAcceptFriendRequest(friendId, notificationId);
+              setAccepted(true); // Update the local state
             }}
           >
             Accept
@@ -172,12 +194,13 @@ const RequestItems = ({
         </div>
       )}
 
-      {requestType === "GROUP_REQUEST" && !isAccepted && (
+      {requestType === "GROUP_REQUEST" && !accepted && (
         <div className="mt-4 flex justify-end space-x-2">
           <button
             className="rounded-lg bg-[#FFC123] px-3 py-1 text-sm font-bold text-white hover:opacity-40"
             onClick={() => {
               handleAcceptGroupRequest(friendId, notificationId);
+              setAccepted(true); // Update the local state
             }}
           >
             Accept
