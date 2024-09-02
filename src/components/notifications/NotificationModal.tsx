@@ -54,6 +54,7 @@ const NotificationModal = ({
               requestType={noti.type}
               isAccepted={noti.isAccepted}
               isSeen={noti.isSeen}
+              postId={noti.postId}
               handleAcceptFriendRequest={handleAcceptFriendRequest}
               handleRemoveNotification={handleRemoveNotification}
               handleAcceptGroupRequest={handleAcceptGroupRequest}
@@ -76,6 +77,7 @@ const RequestItems = ({
   requestType,
   isAccepted,
   isSeen,
+  postId,
   handleAcceptGroupRequest,
   handleAcceptFriendRequest,
   handleRemoveNotification,
@@ -86,13 +88,17 @@ const RequestItems = ({
   imgUrl: string;
   requestType: string;
   isAccepted: boolean;
+  postId: string;
   isSeen: boolean;
   handleAcceptGroupRequest: (senderId: string, notificationId: string) => void;
   handleAcceptFriendRequest: (friendId: string, notificationId: string) => void;
   handleRemoveNotification: (notificationId: string) => void;
 }) => {
   const navigate = useNavigate();
-
+  let raectionNoti = false;
+  if (requestType === "RECEIVE_REACTION") {
+    raectionNoti = true;
+  }
   // Local state to track if the request has been accepted
   const [accepted, setAccepted] = useState(isAccepted);
 
@@ -107,7 +113,9 @@ const RequestItems = ({
       <div
         className="flex cursor-pointer items-center gap-2"
         onClick={() => {
-          navigate(`/profile/${friendId}`);
+          raectionNoti
+            ? navigate(`/posts/${postId}`)
+            : navigate(`/profile/${friendId}`);
         }}
       >
         {imgUrl ? (
@@ -146,7 +154,7 @@ const RequestItems = ({
         ) : requestType === "GROUP_REQUEST_ACCEPTED" ? (
           <p className="text-sm text-gray-700">
             <span>
-            <span className="font-bold">{name}</span> has accepted your
+              <span className="font-bold">{name}</span> has accepted your
               joining group request
             </span>
           </p>

@@ -23,8 +23,9 @@ const notificationSchema = new mongoose.Schema({
     required: true,
   },
   groupId: { type: String },
+  postId: { type: String },
   isAccepted: { type: Boolean, require: true, default: false },
-  reactionType:{type:String},
+  reactionType: { type: String },
   isSeen: { type: Boolean, required: true, default: false },
   createdAt: { type: Date, default: Date.now },
 });
