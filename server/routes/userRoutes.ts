@@ -8,10 +8,11 @@ import {
   updateUser,
   addFriend,
   acceptFriendRequest,
-  groupJoinRequest
+  groupJoinRequest,
+  acceptGroupRequest,
 } from "../services/userServices";
 import { isAuthenticated } from "../middleware/authenticate";
-
+import mongoose from "mongoose";
 const router = express.Router();
 
 //GET /user- fetch all user
@@ -108,6 +109,8 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+
+
 router.post("/", async (req, res) => {
   try {
     const newUser = new User(req.body);
@@ -144,10 +147,13 @@ router.post("/sentGroup/:groupId", async (req, res) => {
     // Call the createNotification function
     const result = await groupJoinRequest(userId, groupId);
 
-    // Respond with success
-    res.status(200).json({ message: "Notification sent successfully", notification: result });
+    // Respondx with success
+    res.status(200).json({
+      message: "Notification sent successfully",
+      notification: result,
+    });
   } catch (error) {
-    res.status(500).json({ error: error});
+    res.status(500).json({ error: error });
   }
 });
 

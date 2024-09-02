@@ -19,6 +19,72 @@ export const getNotificationByReciver = async (receiverId: string) => {
   }
 };
 
+export const acceptGroupRequest = async (
+  userId: string,
+  notiId: string,
+  groupId: string,
+) => {
+  try {
+    console.log("userId:", userId);
+    console.log("notiId:", notiId);
+    console.log("groupId:", groupId);
+
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(notiId)) {
+      throw new Error("Invalid ID format");
+    }
+
+    const oldNoti = await Notifications.findById(notiId);
+    console.log("oldNoti:", oldNoti);
+
+    if (!oldNoti) {
+      throw new Error("Notification not found");
+    }
+
+    const groupAdmin = userId;
+    const group = await Group.findOne({ groupAdmin: groupAdmin.toString() });
+    console.log("group:", group);
+
+    if (!group) {
+      throw new Error("Group not found");
+    }
+
+    const senderObjectId = new mongoose.Types.ObjectId(userId);
+    if (!group.members.includes(senderObjectId)) {
+      group.members.push(senderObjectId);
+    }
+
+    const newNoti = {
+      senderId: userId,
+      receiverId: oldNoti.senderId,
+      groupId: groupId,
+      type: "GROUP_REQUEST_ACCEPTED",
+    };
+
+    const notification = new Notifications(newNoti);
+    console.log(`Group request accepted: Notification ID ${notiId}`);
+    console.log("New notification:", notification);
+
+    await notification.save();
+    await group.save();
+
+    // Delete the old notification
+    await Notifications.findByIdAndDelete(notiId);
+    console.log(`Old notification deleted: Notification ID ${notiId}`);
+
+    return {
+      success: true,
+      message: "Group request accepted, new notification created, and old notification deleted",
+      notification,
+    };
+  } catch (error) {
+    console.error("Error accepting group request:", error);
+    throw new Error("Failed to accept group request");
+  }
+};
+
+
+
 export const getNotificationBySender = async (senderId: string) => {
   try {
     const senderObjectId = new mongoose.Types.ObjectId(senderId);
@@ -40,7 +106,7 @@ export const getGroupRequest = async (userId: string) => {
     const notifications = await Notifications.find({
       senderId: userId,
     }).populate({
-      path: "senderId", 
+      path: "senderId",
       select: "name profilePictureURL _id",
     });
 
@@ -55,7 +121,7 @@ export const getGroupRequest = async (userId: string) => {
           notification,
           groupId: group?._id.toString(),
         };
-      })
+      }),
     );
 
     return groupRequests;

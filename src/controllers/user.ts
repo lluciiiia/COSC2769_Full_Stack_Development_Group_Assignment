@@ -151,9 +151,11 @@ export const unfriendById = createAsyncThunk<{ message: string }, string>(
   },
 );
 
-
 export const sendGroupRequest = createAsyncThunk<
-  { message: string; notification: { type: string; receiverId: string; senderId: string } },
+  {
+    message: string;
+    notification: { type: string; receiverId: string; senderId: string };
+  },
   string
 >("user/sendGroupRequest", async (groupId) => {
   const response = await fetch(

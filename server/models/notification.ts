@@ -21,6 +21,7 @@ const notificationSchema = new mongoose.Schema({
     ],
     required: true,
   },
+  groupId: { type: String },
   isAccepted: { type: Boolean, require: true, default: false },
   isSeen: { type: Boolean, required: true, default: false },
   createdAt: { type: Date, default: Date.now },

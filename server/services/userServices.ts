@@ -3,6 +3,7 @@ import User from "../models/user";
 import Notifications from "../models/notification";
 import { createFriendRequestNotification } from "./notificationsService";
 import Group from "../models/group";
+import { group } from "console";
 
 export const getAllUsers = async () => {
   try {
@@ -88,6 +89,7 @@ export const groupJoinRequest = async (userId: string, groupId: string) => {
     const newNoti = {
       senderId: userId,
       receiverId: group?.groupAdmin,
+      groupId: groupId,
       type: "GROUP_REQUEST",
     };
 
@@ -95,12 +97,13 @@ export const groupJoinRequest = async (userId: string, groupId: string) => {
     await result.save();
     console.log("Notification created successfully");
     return result;
-    
   } catch (error) {
     console.error("Error removing friend", error);
     throw new Error("Failed to remove friend");
   }
 };
+
+
 export const unfriendById = async (userId: string, friendId: string) => {
   try {
     const userObjectId = new mongoose.Types.ObjectId(userId);
