@@ -1,16 +1,17 @@
-
 export interface Sender {
   _id: string;
   name: string;
   email: string;
   profilePictureURL: string;
 }
+
 export interface GroupRequest {
   groupId?: string;
-  notification: Notifications; 
+  notification: Notifications;
 }
+
 export interface Notifications {
-  _id: string
+  _id: string;
   senderId: Sender;
   receiverId: string;
   type: string;

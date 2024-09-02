@@ -2,9 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   fetchNotification,
   fetchSentFriendRequests,
-  groupSentRequest
+  groupSentRequest,
 } from "../controllers/notification";
-import { NotiProps, GroupRequest } from "../interfaces/notification";
+import { NotiProps, GroupRequest } from "../interfaces/Notifications";
 import { AppState } from "../app/store";
 
 const initialState: NotiProps = {
@@ -39,11 +39,11 @@ export const selectNotifications = (state: AppState) =>
 
 export const selectGroupRequest = (state: AppState, groupId: string) =>
   state.notifications.sentGroupRequests.find(
-    (request) => request.groupId === groupId
+    (request) => request.groupId === groupId,
   );
 
-export const selectRequest= (state: AppState)=>{
+export const selectRequest = (state: AppState) => {
   console.log(state.notifications, "alsdjclijasc");
   state.notifications;
-}
+};
 export default notificationSlice.reducer;

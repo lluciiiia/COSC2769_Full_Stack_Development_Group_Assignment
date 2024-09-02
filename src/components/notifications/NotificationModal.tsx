@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
-import { Notifications } from "../../interfaces/notification";
+import { Notifications } from "../../interfaces/Notifications";
 
 import {
   acceptFriendRequestNotification,
@@ -52,9 +52,7 @@ const NotificationModal = ({
             />
           ))
         ) : (
-          <div className="p-4 text-center text-gray-500">
-            No notifications
-          </div>
+          <div className="p-4 text-center text-gray-500">No notifications</div>
         )}
       </div>
     )

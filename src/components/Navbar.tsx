@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectAuthState } from "../features/authSlice";
 import { AppDispatch } from "../app/store";
 import { fetchNotification } from "../controllers/notification";
-import { Notifications } from "../interfaces/notification";
+import { Notifications } from "../interfaces/Notifications";
 import { selectNotifications } from "../features/notificationSlice";
 
 const Navbar = () => {

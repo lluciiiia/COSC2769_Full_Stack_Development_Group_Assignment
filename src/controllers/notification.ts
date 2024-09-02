@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { Notifications } from "../interfaces/notification";
+import { Notifications } from "../interfaces/Notifications";
 import { BACKEND_URL } from "./posts";
 
 export const fetchNotification = createAsyncThunk<Notifications[]>(
@@ -47,10 +47,13 @@ export const groupSentRequest = createAsyncThunk<Notifications[]>(
   "notifications/groupSentRequest",
 
   async () => {
-    const response = await fetch(BACKEND_URL + `/api/notifications/groupRequest`, {
-      method: "GET",
-      credentials: "include",
-    });
+    const response = await fetch(
+      BACKEND_URL + `/api/notifications/groupRequest`,
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
 
     if (!response.ok) {
       console.error(
@@ -65,7 +68,6 @@ export const groupSentRequest = createAsyncThunk<Notifications[]>(
     return data;
   },
 );
-
 
 export const acceptFriendRequestNotification = createAsyncThunk<
   { message: string },
