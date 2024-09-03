@@ -92,12 +92,15 @@ export const fetchReaction = async (postId: string, userId: string) => {
 
 export const undoReaction = async (notiId: string) => {
   try {
+    console.log(`Attempting to delete reaction with ID: ${notiId}`);
     const existingReaction = await Reaction.findById(notiId);
 
     if (!existingReaction) {
       console.log("Cannot find the reaction");
       return null;
     }
+
+    console.log(`Found reaction: ${existingReaction}`);
 
     const target =
       existingReaction.onModel === "Post"
@@ -109,12 +112,17 @@ export const undoReaction = async (notiId: string) => {
       return null;
     }
 
+    console.log(`Found target: ${target}`);
+
     // Remove the reaction from the reactions array
     target.reactions = target.reactions.filter(
-      (reactionId: mongoose.Types.ObjectId) => !reactionId.equals(existingReaction._id)
+      (reactionId: mongoose.Types.ObjectId) =>
+        !reactionId.equals(existingReaction._id),
     );
 
     await target.save();
+    console.log("Target updated, removing reaction");
+
     await Reaction.findByIdAndDelete(notiId);
 
     console.log("Reaction deleted successfully");
@@ -125,12 +133,3 @@ export const undoReaction = async (notiId: string) => {
     throw new Error("Failed to delete reaction");
   }
 };
-
-// export const fetchReactionByPost= async (postId: string)=>{
-//   try{
-//     const existingReaction= await Reaction.findOne({postId});
-//   }catch(error){
-//     console.error("Error fetching reaction", error);
-//     throw new Error("Failed to fetch reaction");
-//   }
-// }

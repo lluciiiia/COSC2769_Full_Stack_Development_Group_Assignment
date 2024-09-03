@@ -1,6 +1,10 @@
 import Group from "../models/group";
 import Post from "../models/post";
 import User from "../models/user";
+import Comment from "../models/comment";
+import Reaction from "../models/reactions";
+import mongoose from "mongoose";
+
 
 export const getAllPosts = async () => {
   try {
@@ -24,7 +28,6 @@ export const getAllPosts = async () => {
         return await enhancePostWithUser(post);
       }),
     );
-    console.log(enhancedPosts);
     return enhancedPosts;
   } catch (err) {
     console.error(err);

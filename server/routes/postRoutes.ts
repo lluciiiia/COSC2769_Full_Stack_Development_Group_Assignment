@@ -8,6 +8,7 @@ import {
   getPostByGroupId,
   getPostsForUser,
   getAllPosts,
+  undoReaction
 } from "../services/postServices";
 
 const router = express.Router();
@@ -67,13 +68,6 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
-  try {
-    await deletePostById(req.params.id);
-    res.json({ message: "Post deleted" });
-  } catch (error) {
-    res.status(500).json({ error: error });
-  }
-});
+
 
 export default router;

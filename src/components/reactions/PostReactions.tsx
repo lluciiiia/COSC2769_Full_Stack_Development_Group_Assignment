@@ -19,11 +19,17 @@ export const PostReactions: React.FC<PostReactionsProps> = ({
   const [isReacted, setIsReacted] = useState(initialIsReacted);
 
   const handleReactionClick = (reaction: string) => {
+    console.log(
+      `Previous Reaction: ${selectedReaction}, New Reaction: ${reaction}, Is Reacted: ${isReacted}`,
+    );
+
     if (selectedReaction === reaction && isReacted) {
+      console.log("Triggering UNDO_REACT");
       setIsReacted(false);
       setSelectedReaction("REACT");
       onReact("UNDO_REACT");
     } else {
+      console.log("Triggering NEW_REACT");
       setIsReacted(true);
       setSelectedReaction(reaction);
       onReact(reaction);
@@ -39,7 +45,7 @@ export const PostReactions: React.FC<PostReactionsProps> = ({
   };
 
   const uniqueReactions = Array.from(
-    new Set(reactions.map((r) => r.reactionType))
+    new Set(reactions.map((r) => r.reactionType)),
   )
     .slice(0, 3)
     .map((reactionType) => ReactionIcons[reactionType]);
@@ -72,7 +78,7 @@ export const PostReactions: React.FC<PostReactionsProps> = ({
           {selectedReaction === "REACT" ? (
             <button
               onClick={() => setShowReactions(!showReactions)}
-              className="py-1 hover:bg-gray-200 flex items-center space-x-2 rounded px-3"
+              className="flex items-center space-x-2 rounded px-3 py-1 hover:bg-gray-200"
               aria-label="React"
             >
               <div className="flex items-center space-x-2">
@@ -91,7 +97,7 @@ export const PostReactions: React.FC<PostReactionsProps> = ({
 
           {showReactions && (
             <div
-              className="absolute flex space-x-2 rounded-lg bg-white p-2 shadow-lg bottom-full mb-2"
+              className="absolute bottom-full mb-2 flex space-x-2 rounded-lg bg-white p-2 shadow-lg"
               onMouseEnter={() => setShowReactions(true)}
               onMouseLeave={() => setShowReactions(false)}
               role="menu"

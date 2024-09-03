@@ -61,6 +61,7 @@ const PostContainer: React.FC<PostContainerProps> = ({
   };
 
   const handleReaction = async (reaction: string) => {
+    console.log(reaction, "reaction type dlere/")
     if (reaction === "UNDO_REACT") {
       console.log(`User undid their reaction on post ID: ${postId}`);
       // Implement your undo logic here, such as removing the reaction from the database
