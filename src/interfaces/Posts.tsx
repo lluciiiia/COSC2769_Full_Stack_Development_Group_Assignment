@@ -1,5 +1,5 @@
 import { Comment } from "./Comments";
-
+import { Reaction } from "./Reactions";
 export interface PostHistory {
   content: string;
   images?: string[];
@@ -21,7 +21,7 @@ export interface PostParams {
   createdAt: Date;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
   comments: Comment[];
-  reactions?: string[];
+  reactions?: Reaction[];
   isDetail?: boolean;
   profileSection?: ProfileSectionParams;
   history: PostHistory[];

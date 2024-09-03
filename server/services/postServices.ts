@@ -10,24 +10,27 @@ export const getAllPosts = async () => {
         path: "comments",
         populate: {
           path: "reactions",
-          populate: {
-            path: "userId", // Populate user details for reactions
-            select: "name profilePictureURL", // Select the fields you want
-          },
+          select: "userId reactionType postId onModel", // Select only the fields you want
         },
+      })
+      .populate({
+        path: "reactions",
+        select: "userId reactionType postId onModel", // Select only the fields you want
       });
+
+    
 
     // Filter and enhance posts based on visibility & their own posts
     const enhancedPosts = await Promise.all(
       posts.map(async (post) => {
         return await enhancePostWithUser(post);
-      }),
+      })
     );
-
+    console.log(enhancedPosts);
     return enhancedPosts;
-  } catch (error) {
-    console.error("Error fetching posts", error);
-    throw new Error("Failed to fetch posts");
+  } catch (err) {
+    console.error(err);
+    throw err;
   }
 };
 
