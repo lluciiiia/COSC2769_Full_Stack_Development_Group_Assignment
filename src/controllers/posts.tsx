@@ -6,7 +6,7 @@ export const BACKEND_URL = "http://localhost:8080";
 export const getAllPosts = createAsyncThunk<PostParams[]>(
   "posts/getAllPosts",
   async () => {
-    const response = await fetch(BACKEND_URL + `/api/posts/`, {
+    const response = await fetch(BACKEND_URL + `/api/posts/all`, {
       method: "GET",
     });
 
@@ -23,7 +23,7 @@ export const getAllPosts = createAsyncThunk<PostParams[]>(
 export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
   "posts/getPosts",
   async () => {
-    const response = await fetch(BACKEND_URL + `/api/posts/all`, {
+    const response = await fetch(BACKEND_URL + `/api/posts/`, {
       method: "GET",
       credentials: "include",
     });
@@ -34,11 +34,12 @@ export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
     }
 
     const data: PostParams[] = await response.json();
+    console.log("thunk", data);
     return data;
   },
 );
 
-export const getPostById = async (id: String | undefined) => {
+export const getPostById = async (id: string | undefined) => {
   if (id == undefined) return;
 
   const response = await fetch(BACKEND_URL + `/api/posts/${id}`, {
@@ -56,6 +57,7 @@ export const getPostById = async (id: String | undefined) => {
   const data: PostParams = await response.json();
   return data;
 };
+
 export const getPostsByCreatorId = createAsyncThunk<
   PostParams[],
   string | undefined
