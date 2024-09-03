@@ -80,7 +80,7 @@ const Navbar = () => {
           <h1 className="text-2xl font-bold">BuZzNet</h1>
         </div>
         {/* <div className="relative flex items-center gap-4"></div> */}
-        <div className="flex max-w-xs flex-1 flex-grow justify-around gap-2">
+        <div className="flex max-w-xs flex-1 flex-grow justify-around gap-1">
           <SearchIcon
             className="mr-2 h-10 w-10 cursor-pointer text-black"
             onClick={handleSearchClick}
