@@ -245,7 +245,7 @@ const PostContainer: React.FC<PostContainerProps> = ({
         <div className="mt-4">
           {comments?.length === 0 ? (
             <p className="mb-4 ml-5  text-center text-sm text-gray-500">
-              Write the first comment!
+              Be the first to comment!
             </p>
           ) : (
             comments
