@@ -19,6 +19,7 @@ const PostDetail: React.FC = () => {
     const fetchPost = async () => {
       try {
         const post = await getPostById(postId);
+        console.log(post, "Hello duong iu dau ")
         if (post) {
           setPost(post);
         } else {

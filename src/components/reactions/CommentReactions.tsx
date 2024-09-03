@@ -35,6 +35,7 @@ const CommentReactions: React.FC<ReactionButtonProps> = ({
         onMouseEnter={() => setShowReactions(true)}
         onMouseLeave={() => setShowReactions(false)}
       >
+
         <ReactionIconButton
           reactionType={selectedReaction}
           isSelected={false}

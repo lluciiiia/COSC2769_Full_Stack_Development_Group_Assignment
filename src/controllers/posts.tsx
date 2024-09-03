@@ -8,6 +8,7 @@ export const getAllPosts = createAsyncThunk<PostParams[]>(
   async () => {
     const response = await fetch(BACKEND_URL + `/api/posts/`, {
       method: "GET",
+      credentials: "include"
     });
 
     if (!response.ok) {

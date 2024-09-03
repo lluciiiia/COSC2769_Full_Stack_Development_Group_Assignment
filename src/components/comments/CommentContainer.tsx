@@ -17,6 +17,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   initComments,
   userId,
   postId,
+  post,
 }) => {
   const dispatch: AppDispatch = useDispatch();
   const [comments, setComments] = useState<Comment[]>(initComments || []);

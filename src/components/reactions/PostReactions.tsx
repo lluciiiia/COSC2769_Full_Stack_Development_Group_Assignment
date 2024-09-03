@@ -14,7 +14,7 @@ export const PostReactions: React.FC<PostReactionsProps> = ({
 }) => {
   const [showReactions, setShowReactions] = useState(false);
   const [selectedReaction, setSelectedReaction] = useState(
-    ReactionIcons[initialReaction] ? initialReaction : "REACT",
+    ReactionIcons[initialReaction] ? initialReaction : "REACT"
   );
   const [isReacted, setIsReacted] = useState(initialIsReacted);
 
@@ -32,11 +32,20 @@ export const PostReactions: React.FC<PostReactionsProps> = ({
     handleClick();
   };
 
-  const uniqueReactions = Array.from(
-    new Set(reactions.map((r) => r.reactionType))
-  )
+  // Count reactions by type
+  const reactionCounts = reactions.reduce((acc, reaction) => {
+    acc[reaction.reactionType] = (acc[reaction.reactionType] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  // Get unique reactions for display
+  const uniqueReactions = Array.from(new Set(reactions.map((r) => r.reactionType)))
     .slice(0, 3)
-    .map((reactionType) => ReactionIcons[reactionType]);
+    .map((reactionType) => ({
+      type: reactionType,
+      icon: ReactionIcons[reactionType],
+      count: reactionCounts[reactionType],
+    }));
 
   const totalReactions = reactions.length;
 
@@ -48,9 +57,10 @@ export const PostReactions: React.FC<PostReactionsProps> = ({
 
       <div className="flex items-center space-x-2 p-4">
         <div className="flex -space-x-1">
-          {uniqueReactions.map((icon, index) => (
-            <span key={index} className="inline-flex items-center">
+          {uniqueReactions.map(({ type, icon, count }) => (
+            <span key={type} className="inline-flex items-center space-x-1">
               <span>{icon}</span>
+              <span className="text-sm text-gray-600">{count}</span>
             </span>
           ))}
         </div>
