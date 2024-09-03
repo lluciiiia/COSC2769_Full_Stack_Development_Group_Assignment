@@ -116,7 +116,7 @@ export const getPostListByCreatorId = async (creatorId: string) => {
 
 export const getPostById = async (postId: string) => {
   try {
-    const post = await Post.find()
+    const post = await Post.findById(postId)
       .sort({ createdAt: -1 })
       .populate({
         path: "comments",
