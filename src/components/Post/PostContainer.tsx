@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { PostParams } from "../../interfaces/Posts";
 import { useNavigate, useLocation } from "react-router-dom";
 import { PostReactions } from "../reactions/PostReactions";
 import { AdminSection } from "./AdminSection";
@@ -13,8 +12,9 @@ import {
   saveReactionsToLocal,
   loadReactionsFromLocal,
 } from "../../utils/localStorageUtils";
+import { PostContainerProps } from "../../interfaces/Posts";  // Import the extended interface
 
-const PostContainer: React.FC<PostParams> = ({
+const PostContainer: React.FC<PostContainerProps> = ({
   _id,
   creatorId,
   groupId,
@@ -24,6 +24,7 @@ const PostContainer: React.FC<PostParams> = ({
   visibility,
   reactions,
   profileSection,
+  onReact,
   isDetail,
   history,
   comments,

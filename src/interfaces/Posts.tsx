@@ -12,6 +12,9 @@ export interface RevertPostParams {
   images?: string[];
 }
 
+export interface PostContainerProps extends PostParams {
+  onReact: (reaction: string) => Promise<void>;
+}
 export interface PostParams {
   _id: string;
   creatorId: string;
