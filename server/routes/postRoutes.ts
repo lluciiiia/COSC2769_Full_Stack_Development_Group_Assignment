@@ -8,7 +8,6 @@ import {
   getPostByGroupId,
   getPostsForUser,
   getAllPosts,
-  undoReaction
 } from "../services/postServices";
 
 const router = express.Router();
@@ -42,6 +41,7 @@ router.get("/groups/:groupId", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
+    console.log("hello e iu", req.params.id);
     const post = await getPostById(req.params.id);
     res.json(post);
   } catch (error) {

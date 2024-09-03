@@ -48,6 +48,7 @@ export const handleAcceptGroup = async (groupId: string): Promise<GroupType> => 
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(newGroup),
+          
         });
   
         if (!response.ok) {

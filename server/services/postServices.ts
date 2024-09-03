@@ -5,7 +5,6 @@ import Comment from "../models/comment";
 import Reaction from "../models/reactions";
 import mongoose from "mongoose";
 
-
 export const getAllPosts = async () => {
   try {
     const posts = await Post.find()
@@ -118,7 +117,7 @@ export const getPostListByCreatorId = async (creatorId: string) => {
 
 export const getPostById = async (postId: string) => {
   try {
-    const post = await Post.find()
+    const post = await Post.findById(postId)
       .sort({ createdAt: -1 })
       .populate({
         path: "comments",
@@ -126,7 +125,7 @@ export const getPostById = async (postId: string) => {
           path: "reactions",
           select: "userId reactionType postId onModel", // Select only the fields you want
         },
-      })
+      });
     if (!post) throw new Error("Post not found with the provided id");
 
     const enhancedPost = await enhancePostWithUser(post);
