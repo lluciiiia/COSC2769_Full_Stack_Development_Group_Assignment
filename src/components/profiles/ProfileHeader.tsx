@@ -20,14 +20,14 @@ import {
   fetchSentFriendRequests,
   removeFriendRequestNotification,
 } from "../../controllers/notification";
-import RModal from "./ProfilePictureModel";
+import ProfilePictureModel from "./ProfilePictureModel";
 import BackgroundImageModal from "./BackgroundImageModal";
 
 const ProfileHeader = ({
   name,
   bio,
   avatar,
-  background, 
+  background,
   friends,
   handleEditProfile,
   isAuthenticatedUser,
@@ -37,30 +37,30 @@ const ProfileHeader = ({
   const { profileId } = useParams();
 
   const friendId = isAuthenticatedUser ? "" : profileId;
-  const isFriend = friends?.some((f) => f._id === id);
+  const isFriend = friends?.some((f) => f?._id === id);
 
   const sentFriendRequestsList = useSelector(selectSentFriendRequests);
   const receivedFriendRequestList = useSelector(selectNotifications);
 
   const isSendingRequest = sentFriendRequestsList?.some(
     (request) =>
-      request.receiverId === friendId &&
-      !request.isAccepted &&
-      request.type === "FRIEND_REQUEST"
+      request?.receiverId === friendId &&
+      !request?.isAccepted &&
+      request?.type === "FRIEND_REQUEST",
   );
 
   const isIncomingFriendRequest = receivedFriendRequestList?.some(
     (request) =>
-      request.senderId._id === friendId &&
-      !request.isAccepted &&
-      request.type === "FRIEND_REQUEST"
+      request?.senderId?._id === friendId &&
+      !request?.isAccepted &&
+      request?.type === "FRIEND_REQUEST",
   );
 
   const incomingFriendRequest = receivedFriendRequestList?.find(
     (request) =>
-      request.senderId._id === friendId &&
+      request?.senderId?._id === friendId &&
       !request.isAccepted &&
-      request.type === "FRIEND_REQUEST"
+      request.type === "FRIEND_REQUEST",
   );
   const notificationId = incomingFriendRequest?._id;
 
@@ -114,8 +114,7 @@ const ProfileHeader = ({
       <img
         src={backgroundImage} // Use the state for background image
         alt="Background"
-        className="absolute inset-0 h-full w-full object-fill" 
-        
+        className="absolute inset-0 h-full w-full object-fill"
       />
       {isAuthenticatedUser && (
         <div
@@ -199,7 +198,7 @@ const ProfileHeader = ({
           Add Friend
         </button>
       )}
-      <RModal
+      <ProfilePictureModel
         isOpen={isAvatarModalOpen}
         onClose={closeAvatarModal}
         currentAvatar={avatar}

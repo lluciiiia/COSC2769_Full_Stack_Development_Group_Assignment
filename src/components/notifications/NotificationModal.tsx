@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { Notifications } from "../../interfaces/Notifications";
@@ -48,13 +48,13 @@ const NotificationModal = ({
             <RequestItems
               key={noti._id}
               notificationId={noti._id}
-              friendId={noti.senderId._id}
-              name={noti.senderId.name}
-              imgUrl={noti.senderId.profilePictureURL}
-              requestType={noti.type}
-              isAccepted={noti.isAccepted}
-              isSeen={noti.isSeen}
-              postId={noti.postId}
+              friendId={noti?.senderId?._id}
+              name={noti?.senderId?.name}
+              imgUrl={noti?.senderId?.profilePictureURL}
+              requestType={noti?.type}
+              isAccepted={noti?.isAccepted}
+              isSeen={noti?.isSeen}
+              postId={noti?.postId}
               groupId={noti?.groupId}
               groupAdminId={noti?.groupDetails?.adminId}
               groupImgURL={noti?.groupDetails?.groupImageURL}
