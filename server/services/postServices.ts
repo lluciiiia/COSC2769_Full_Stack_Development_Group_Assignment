@@ -18,13 +18,11 @@ export const getAllPosts = async () => {
         select: "userId reactionType postId onModel", // Select only the fields you want
       });
 
-    
-
     // Filter and enhance posts based on visibility & their own posts
     const enhancedPosts = await Promise.all(
       posts.map(async (post) => {
         return await enhancePostWithUser(post);
-      })
+      }),
     );
     console.log(enhancedPosts);
     return enhancedPosts;
@@ -41,16 +39,19 @@ export const getPostsForUser = async (userId: string) => {
 
     const userObjectId = user._id;
 
-    const posts = await Post.find().populate({
-      path: "comments",
-      populate: {
-        path: "reactions",
+    const posts = await Post.find()
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "comments",
         populate: {
-          path: "userId", // Populate user details for reactions
-          select: "name profilePictureURL", // Select the fields you want
+          path: "reactions",
+          select: "userId reactionType postId onModel", // Select only the fields you want
         },
-      },
-    });
+      })
+      .populate({
+        path: "reactions",
+        select: "userId reactionType postId onModel", // Select only the fields you want
+      });
 
     // Filter and enhance posts based on visibility & their own posts
     const enhancedPosts = await Promise.all(
@@ -84,16 +85,19 @@ export const getPostsForUser = async (userId: string) => {
 
 export const getPostListByCreatorId = async (creatorId: string) => {
   try {
-    const posts = await Post.find({ creatorId }).populate({
-      path: "comments",
-      populate: {
-        path: "reactions",
+    const posts = await Post.find()
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "comments",
         populate: {
-          path: "userId", // Populate user details for reactions
-          select: "name profilePictureURL", // Select the fields you want
+          path: "reactions",
+          select: "userId reactionType postId onModel", // Select only the fields you want
         },
-      },
-    });
+      })
+      .populate({
+        path: "reactions",
+        select: "userId reactionType postId onModel", // Select only the fields you want
+      });
 
     // Enhance each post with user information
     const enhancedPosts = await Promise.all(
@@ -111,16 +115,19 @@ export const getPostListByCreatorId = async (creatorId: string) => {
 
 export const getPostById = async (postId: string) => {
   try {
-    const post = await Post.findById(postId).populate({
-      path: "comments",
-      populate: {
-        path: "reactions",
+    const post = await Post.find()
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "comments",
         populate: {
-          path: "userId", // Populate user details for reactions
-          select: "name profilePictureURL", // Select the fields you want
+          path: "reactions",
+          select: "userId reactionType postId onModel", // Select only the fields you want
         },
-      },
-    });
+      })
+      .populate({
+        path: "reactions",
+        select: "userId reactionType postId onModel", // Select only the fields you want
+      });;
     if (!post) throw new Error("Post not found with the provided id");
 
     const enhancedPost = await enhancePostWithUser(post);
