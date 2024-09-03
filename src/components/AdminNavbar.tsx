@@ -1,19 +1,28 @@
 import { useNavigate } from "react-router-dom";
 import React from "react";
+import { useDispatch } from "react-redux";
 import logo from "../assets/icons/logo.png";
 import profileIcon from "../assets/icons/profileIcon.png";
 import groupIcon from "../assets/icons/groupIcon.png";
 import postIcon from "../assets/icons/postIcon.png";
+import { logoutUserThunk, fetchSess } from "../features/authSlice"; 
 
-const AdminNavbar = ({
-  setActiveTab,
-}: {
-  setActiveTab: (arg: string) => void;
-}) => {
+const AdminNavbar = ({ setActiveTab }: { setActiveTab: (arg: string) => void; }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleHomeClick = () => {
     navigate(`/home`);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUserThunk());
+      dispatch(fetchSess());
+      navigate("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   return (
@@ -44,10 +53,16 @@ const AdminNavbar = ({
           setActiveTab={setActiveTab}
         />
       </div>
-      <div></div>
+      <button
+        onClick={handleLogout}
+        className="rounded-full bg-red-500 px-6 py-2 text-white font-semibold shadow-md hover:bg-red-600 transition duration-300 ease-in-out"
+      >
+        Logout
+      </button>
     </nav>
   );
 };
+
 export default AdminNavbar;
 
 interface AdminNavItemProps {
@@ -56,11 +71,7 @@ interface AdminNavItemProps {
   setActiveTab: (arg: string) => void;
 }
 
-export const AdminNavItem: React.FC<AdminNavItemProps> = ({
-  src,
-  label,
-  setActiveTab,
-}) => (
+export const AdminNavItem: React.FC<AdminNavItemProps> = ({ src, label, setActiveTab }) => (
   <div
     onClick={() => {
       if (setActiveTab) {
