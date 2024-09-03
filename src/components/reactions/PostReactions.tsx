@@ -19,21 +19,9 @@ export const PostReactions: React.FC<PostReactionsProps> = ({
   const [isReacted, setIsReacted] = useState(initialIsReacted);
 
   const handleReactionClick = (reaction: string) => {
-    console.log(
-      `Previous Reaction: ${selectedReaction}, New Reaction: ${reaction}, Is Reacted: ${isReacted}`,
-    );
-
-    if (selectedReaction === reaction && isReacted) {
-      console.log("Triggering UNDO_REACT");
-      setIsReacted(false);
-      setSelectedReaction("REACT");
-      onReact("UNDO_REACT");
-    } else {
-      console.log("Triggering NEW_REACT");
-      setIsReacted(true);
-      setSelectedReaction(reaction);
-      onReact(reaction);
-    }
+    setIsReacted(true);
+    setSelectedReaction(reaction);
+    onReact(reaction);
     setShowReactions(false);
   };
 
@@ -45,7 +33,7 @@ export const PostReactions: React.FC<PostReactionsProps> = ({
   };
 
   const uniqueReactions = Array.from(
-    new Set(reactions.map((r) => r.reactionType)),
+    new Set(reactions.map((r) => r.reactionType))
   )
     .slice(0, 3)
     .map((reactionType) => ReactionIcons[reactionType]);
@@ -78,7 +66,7 @@ export const PostReactions: React.FC<PostReactionsProps> = ({
           {selectedReaction === "REACT" ? (
             <button
               onClick={() => setShowReactions(!showReactions)}
-              className="flex items-center space-x-2 rounded px-3 py-1 hover:bg-gray-200"
+              className="py-1 hover:bg-gray-200 flex items-center space-x-2 rounded px-3"
               aria-label="React"
             >
               <div className="flex items-center space-x-2">
@@ -97,7 +85,7 @@ export const PostReactions: React.FC<PostReactionsProps> = ({
 
           {showReactions && (
             <div
-              className="absolute bottom-full mb-2 flex space-x-2 rounded-lg bg-white p-2 shadow-lg"
+              className="absolute flex space-x-2 rounded-lg bg-white p-2 shadow-lg bottom-full mb-2"
               onMouseEnter={() => setShowReactions(true)}
               onMouseLeave={() => setShowReactions(false)}
               role="menu"

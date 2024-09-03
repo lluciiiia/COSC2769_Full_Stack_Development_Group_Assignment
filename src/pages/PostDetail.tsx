@@ -5,9 +5,10 @@ import { PostParams } from "../interfaces/Posts";
 import CommentContainer from "../components/comments/CommentContainer";
 import { getPostById } from "../controllers/posts";
 import PostContainer from "../components/post/PostContainer";
+import LoadingSpinner from "../assets/icons/Loading";
 import { useSelector } from "react-redux";
 import { selectAuthState } from "../features/authSlice";
-import { createReaction } from "../controllers/reactions";
+import { createReaction } from "../controllers/reactions"; // Import your reaction creation function
 
 const PostDetail: React.FC = () => {
   const [post, setPost] = useState<PostParams | null>(null);
@@ -34,8 +35,13 @@ const PostDetail: React.FC = () => {
   const handleReaction = async (reaction: string) => {
     if (post) {
       try {
-        await createReaction({ postId: post._id, reactionType: reaction });
+        await createReaction({
+          postId: post._id,
+          reactionType: reaction,
+          sentFrom: "",
+        });
         console.log(`Reaction ${reaction} saved for post ${post._id}`);
+        // Optionally update the post state if needed
       } catch (error) {
         console.error("Error saving reaction:", error);
       }
@@ -64,8 +70,9 @@ const PostDetail: React.FC = () => {
                 reactions={post.reactions}
                 isDetail={true}
                 history={post.history}
-                onReact={handleReaction} // Pass the onReact function
+                onReact={handleReaction} // Ensure this is used correctly
               />
+
               <CommentContainer
                 initComments={post.comments}
                 userId={id}

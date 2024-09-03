@@ -13,7 +13,7 @@ import {
   loadReactionsFromLocal,
 } from "../../utils/localStorageUtils";
 import { PostContainerProps } from "../../interfaces/Posts";  // Import the extended interface
-import { deleteReaction } from "../../controllers/reactions";
+
 const PostContainer: React.FC<PostContainerProps> = ({
   _id,
   creatorId,
@@ -61,25 +61,18 @@ const PostContainer: React.FC<PostContainerProps> = ({
   };
 
   const handleReaction = async (reaction: string) => {
-    console.log(reaction, "reaction type dlere/")
-    if (reaction === "UNDO_REACT") {
-      console.log(`User undid their reaction on post ID: ${postId}`);
-      // Implement your undo logic here, such as removing the reaction from the database
-      await dispatch(deleteReaction(postId));  // Dispatch action to delete the reaction
+    console.log(`User reacted with: ${reaction} on post ID: ${postId}`);
+    const reactionPayload = {
+      postId: postId,
+      reactionType: reaction,
+      sentFrom: "post",
+    };
+
+    if (navigator.onLine) {
+      await sendReaction(reactionPayload);
     } else {
-      console.log(`User reacted with: ${reaction} on post ID: ${postId}`);
-      const reactionPayload = {
-        postId: postId,
-        reactionType: reaction,
-        sentFrom: "post",
-      };
-  
-      if (navigator.onLine) {
-        await sendReaction(reactionPayload);
-      } else {
-        setIsOffline(true);
-        queueReaction(reactionPayload);
-      }
+      setIsOffline(true);
+      queueReaction(reactionPayload);
     }
   };
 

@@ -1,12 +1,10 @@
 import express, { Request, Response } from "express";
-import Reaction from "../models/reactions";
 import {
   createReaction,
   fetchReaction,
   undoReaction,
 } from "../services/reactionService";
 import mongoose from "mongoose";
-import { useParams } from "react-router-dom";
 
 const router = express.Router();
 
@@ -35,6 +33,7 @@ router.post("/userReact", async (req: Request, res: Response) => {
     res.status(500).json({ error: "Failed to create reaction" });
   }
 });
+
 
 router.post("/:postId", async (req: Request, res: Response) => {
   try {

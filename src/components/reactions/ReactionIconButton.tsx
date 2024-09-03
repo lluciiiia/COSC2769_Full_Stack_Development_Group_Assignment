@@ -15,7 +15,7 @@ const ReactionIconButton: React.FC<ReactionIconButtonProps> = ({
 }) => {
   return (
     <button
-      onClick={() => onClick(reactionType)}
+      onClick={() => onClick(isSelected?"UNDO_REACT" :reactionType)}
       className={`flex items-center space-x-2 rounded px-3 py-1 ${
         isSelected ? "bg-gray-300" : "hover:bg-gray-200"
       }`}

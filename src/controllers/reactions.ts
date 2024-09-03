@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-
 export const createReaction = createAsyncThunk(
   "reactions/createReaction",
   async (
@@ -63,11 +62,10 @@ export const fetchReaction = createAsyncThunk(
   },
 );
 
-
-
-export const deleteReaction= createAsyncThunk("reaction/deleteReaction", 
-async (notiId: string, {rejectWithValue})=>{
-  try{
+export const deleteReaction = createAsyncThunk(
+  "reaction/deleteReaction",
+  async (notiId: string, { rejectWithValue }) => {
+    try {
       const response = await fetch(
         `http://localhost:8080/api/reactions/${notiId}`,
         {

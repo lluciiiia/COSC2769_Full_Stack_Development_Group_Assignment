@@ -127,10 +127,6 @@ export const getPostById = async (postId: string) => {
           select: "userId reactionType postId onModel", // Select only the fields you want
         },
       })
-      .populate({
-        path: "reactions",
-        select: "userId reactionType postId onModel", // Select only the fields you want
-      });;
     if (!post) throw new Error("Post not found with the provided id");
 
     const enhancedPost = await enhancePostWithUser(post);
