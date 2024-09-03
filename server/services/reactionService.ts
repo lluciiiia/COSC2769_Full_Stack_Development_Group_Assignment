@@ -90,6 +90,42 @@ export const fetchReaction = async (postId: string, userId: string) => {
   }
 };
 
+export const undoReaction = async (notiId: string) => {
+  try {
+    const existingReaction = await Reaction.findById(notiId);
+
+    if (!existingReaction) {
+      console.log("Cannot find the reaction");
+      return null;
+    }
+
+    const target =
+      existingReaction.onModel === "Post"
+        ? await Post.findById(existingReaction.postId)
+        : await Comment.findById(existingReaction.postId);
+
+    if (!target) {
+      console.log("Target post or comment not found");
+      return null;
+    }
+
+    // Remove the reaction from the reactions array
+    target.reactions = target.reactions.filter(
+      (reactionId: mongoose.Types.ObjectId) => !reactionId.equals(existingReaction._id)
+    );
+
+    await target.save();
+    await Reaction.findByIdAndDelete(notiId);
+
+    console.log("Reaction deleted successfully");
+
+    return target.reactions;
+  } catch (error) {
+    console.error("Error in undoReaction", error);
+    throw new Error("Failed to delete reaction");
+  }
+};
+
 // export const fetchReactionByPost= async (postId: string)=>{
 //   try{
 //     const existingReaction= await Reaction.findOne({postId});

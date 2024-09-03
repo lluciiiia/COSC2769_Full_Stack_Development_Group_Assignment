@@ -62,3 +62,33 @@ export const fetchReaction = createAsyncThunk(
     }
   },
 );
+
+
+
+export const deleteReaction= createAsyncThunk("reaction/deleteReaction", 
+async (notiId: string, {rejectWithValue})=>{
+  try{
+      const response = await fetch(
+        `http://localhost:8080/api/reactions/${notiId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        },
+      );
+
+      if (!response.ok) {
+        console.error("Failed to delete reactions:", response.statusText);
+        return rejectWithValue(response.statusText);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error: any) {
+      console.error("Network error:", error.message);
+      return rejectWithValue(error.message || "Network error");
+    }
+  },
+);

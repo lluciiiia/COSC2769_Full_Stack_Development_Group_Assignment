@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ReactProps } from "../interfaces/Reactions";
-import { createReaction, fetchReaction } from "../controllers/reactions";
+import { createReaction, fetchReaction, deleteReaction } from "../controllers/reactions";
 import { AppState } from "../app/store";
 
 const initialState: ReactProps = {
@@ -31,10 +31,17 @@ const reactSlice = createSlice({
         state.reactions = [];
       }
     });
+    builder.addCase(deleteReaction.fulfilled, (state, action) =>{
+      state.isReacted= false;
+      state.reactions = action.payload;
+    })
   },
 });
 
 export const returnReactionType = (state: AppState) => {
   return state.react.reactionType;
 };
+export const selectReactions = (state: AppState) => state.react.reactions;
+export const selectIsReacted = (state: AppState) => state.react.isReacted;
+export const selectCreateComplete = (state: AppState) => state.react.createComplete;
 export default reactSlice.reducer;

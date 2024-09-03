@@ -3,6 +3,7 @@ import Reaction from "../models/reactions";
 import {
   createReaction,
   fetchReaction,
+  undoReaction
 } from "../services/reactionService";
 import mongoose from "mongoose";
 import { useParams } from "react-router-dom";
@@ -70,12 +71,18 @@ router.post("/:postId", async (req: Request, res: Response) => {
 router.delete("/:id", async (req: Request, res: Response) => {
   try {
     const reactId = req.params.id;
-    await Reaction.findByIdAndDelete(reactId);
-    res.json({ message: "Reaction deleted" });
+    const updatedReactions = await undoReaction(reactId);
+
+    if (!updatedReactions) {
+      return res.status(404).json({ error: "Reaction or target not found" });
+    }
+
+    res.json({ message: "Reaction deleted", reactions: updatedReactions });
   } catch (error) {
     console.error("Error deleting reaction:", error);
     res.status(500).json({ error: "Failed to delete reaction" });
   }
 });
+
 
 export default router;
