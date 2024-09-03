@@ -90,6 +90,21 @@ export const fetchReaction = async (postId: string, userId: string) => {
   }
 };
 
+export const undoReaction= async (notiId: string)=>{
+  try{
+    const existingReaction = await Reaction.findById(notiId);
+
+    if(!existingReaction){
+      console.log("Cant find notification");
+      return;
+    }
+
+    console.log("Reaction deleted successfully");
+    return 
+  }catch(error){
+    console.error("Error in undoReaction");
+  }
+}
 // export const fetchReactionByPost= async (postId: string)=>{
 //   try{
 //     const existingReaction= await Reaction.findOne({postId});
