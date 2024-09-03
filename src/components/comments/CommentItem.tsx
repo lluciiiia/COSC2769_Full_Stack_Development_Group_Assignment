@@ -69,7 +69,12 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
         <div className="flex-1">
           <div className="flex items-center">
             <div className="mr-2 font-bold">
-              {comment.profileSection?.profileName}
+              <a
+                href={`/profile/${comment.userId}`}  // Replace with the correct URL structure
+                className="text-blue-500 hover:underline"
+              >
+                {comment.profileSection?.profileName}
+              </a>
             </div>
             <div className="ml-auto flex items-center justify-center gap-1">
               <div className="flex flex-col">
