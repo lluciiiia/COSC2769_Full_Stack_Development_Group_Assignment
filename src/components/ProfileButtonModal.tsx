@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { logoutUserThunk, fetchSess } from "../features/authSlice"; // Import the logout thunk
+import { logoutUserThunk, fetchSess } from "../features/authSlice"; 
 import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "../app/store";
 import { useSelector } from "react-redux";

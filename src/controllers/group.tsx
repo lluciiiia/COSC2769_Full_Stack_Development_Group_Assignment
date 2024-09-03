@@ -6,15 +6,23 @@ const API_URL = "http://localhost:8080/api/groups";
 export const fetchGroups = createAsyncThunk<GroupType[]>(
   "groups/fetchGroups",  
   async () => {
-    const response = await fetch(API_URL);
-    if (!response.ok) {
-      console.error("Failed to fetch groups:", response.statusText);
-      throw new Error("Failed to fetch groups");
+    try {
+      const response = await fetch(API_URL);
+      if (!response.ok) {
+        console.error("Failed to fetch groups:", response.statusText);
+        throw new Error("Failed to fetch groups");
+      }
+      const data: GroupType[] = await response.json();
+      console.log("Fetched groups successfully:", data); 
+      return data;
+    } catch (error) {
+      console.error("Error in fetchGroups thunk:", error);
+      throw error; 
     }
-    const data: GroupType[] = await response.json();
-    return data;
-  },
+  }
 );
+
+
 
 export const handleAcceptGroup = async (groupId: string): Promise<GroupType> => {
     try {

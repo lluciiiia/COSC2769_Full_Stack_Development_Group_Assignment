@@ -1,15 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "../../app/store";
 import { fetchGroups } from "../../controllers/group";
 import { groupApprovalNotification } from "../../controllers/notification";
+import GroupManagementNotifications from "./GroupManagementNotifications";
 
 export const GroupManagement = () => {
-  const [activeTab, setActiveTab] = React.useState("groups");
+  const [activeTab, setActiveTab] = useState("groups");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const groups = useSelector((state: AppState) => state.groups);
+  const groups = useSelector((state: AppState) => state.admin.groups);
 
   useEffect(() => {
     dispatch(fetchGroups());
@@ -28,17 +32,22 @@ export const GroupManagement = () => {
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-        },
+        }
       );
 
       if (response.ok) {
-        console.log(`Group ${groupId} accepted.`);
-        dispatch(fetchGroups());
+        setModalMessage(`Group accepted successfully.`);
+        setModalOpen(true);
+        dispatch(fetchGroups()); // Refresh groups
       } else {
-        console.error("Failed to reject group. Status:", response.status);
+        setModalMessage("Failed to accept group.");
+        setModalOpen(true);
+        console.error("Failed to accept group. Status:", response.status);
       }
     } catch (error) {
-      console.error("Error rejecting group:", error);
+      setModalMessage("Error accepting group.");
+      setModalOpen(true);
+      console.error("Error accepting group:", error);
     }
   };
 
@@ -49,21 +58,31 @@ export const GroupManagement = () => {
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
-        },
+        }
       );
+
       if (response.ok) {
-        console.log(`Group ${groupId} rejected.`);
-        dispatch(fetchGroups()); // Re-fetch groups after rejection
+        setModalMessage(`Group rejected successfully.`);
+        setModalOpen(true);
+        dispatch(fetchGroups()); // Refresh groups
       } else {
+        setModalMessage("Failed to reject group.");
+        setModalOpen(true);
         console.error("Failed to reject group. Status:", response.status);
       }
     } catch (error) {
+      setModalMessage("Error rejecting group.");
+      setModalOpen(true);
       console.error("Error rejecting group:", error);
     }
   };
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
   };
 
   return (
@@ -161,7 +180,6 @@ export const GroupManagement = () => {
                     alt={group.name}
                     className="h-48 w-full rounded-t-lg object-cover"
                   />
-
                   <div className="p-4">
                     <h2 className="mb-2 text-xl font-bold text-gray-900">
                       {group.name}
@@ -199,6 +217,13 @@ export const GroupManagement = () => {
           </div>
         )}
       </div>
+
+      {/* Notification Modal */}
+      <GroupManagementNotifications
+        isOpen={modalOpen}
+        message={modalMessage}
+        onClose={closeModal}
+      />
     </div>
   );
 };
