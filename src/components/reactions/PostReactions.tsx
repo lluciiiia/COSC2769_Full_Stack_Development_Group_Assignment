@@ -8,27 +8,36 @@ export const PostReactions: React.FC<PostReactionsProps> = ({
   handleClick,
   onReact,
   initialReaction = "REACT",
-  isReacted,
-  reactions,
+  isReacted: initialIsReacted,
+  reactions = [],
   commentCount,
 }) => {
   const [showReactions, setShowReactions] = useState(false);
   const [selectedReaction, setSelectedReaction] = useState(
     ReactionIcons[initialReaction] ? initialReaction : "REACT",
   );
+  const [isReacted, setIsReacted] = useState(initialIsReacted);
 
   const handleReactionClick = (reaction: string) => {
-    isReacted = true;
+    setIsReacted(true);
     setSelectedReaction(reaction);
     onReact(reaction);
     setShowReactions(false);
   };
 
-  const defaultReactionButton = {
-    icon: <LikeIcon className="h-5 w-5" fill="currentColor" />,
-    label: "React",
-    color: "text-gray-500",
+  const handleCommentClick = () => {
+    if (!isReacted && selectedReaction === "REACT") {
+      onReact(selectedReaction); // Save the reaction even if it's the default "REACT"
+    }
+    handleClick();
   };
+
+  // Get the first 3 unique reactions and their icons
+  const uniqueReactions = Array.from(new Set(reactions.map(r => r.reactionType)))
+    .slice(0, 3)
+    .map(reactionType => ReactionIcons[reactionType]);
+
+  const totalReactions = reactions.length;
 
   return (
     <div className="relative z-10 flex flex-col">
@@ -36,27 +45,39 @@ export const PostReactions: React.FC<PostReactionsProps> = ({
         {commentCount} {commentCount === 1 ? "comment" : "comments"}
       </div>
 
+      <div className="flex items-center space-x-2 p-4">
+        {/* Display the first 3 unique reactions */}
+        <div className="flex -space-x-1">
+          {uniqueReactions.map((icon, index) => (
+            <span key={index} className="inline-flex items-center">
+              <span>{icon}</span>
+            </span>
+          ))}
+        </div>
+        {/* Display the total number of reactions */}
+        <span className="text-sm text-gray-500">{totalReactions}</span>
+      </div>
+
       <div
         className="flex justify-between p-4"
         onMouseEnter={() => setShowReactions(true)}
         onMouseLeave={() => setShowReactions(false)}
       >
-        {selectedReaction == "REACT" ? (
+        {selectedReaction === "REACT" ? (
           <button
             onClick={() => {}}
-            className={
-              "py-1hover:bg-gray-200 flex items-center space-x-2 rounded px-3"
-            }
+            className="py-1 hover:bg-gray-200 flex items-center space-x-2 rounded px-3"
+            aria-label="React"
           >
             <div className="flex items-center space-x-2">
-              {defaultReactionButton.icon}
-              <span>{defaultReactionButton.label}</span>
+              <LikeIcon className="h-5 w-5" fill="currentColor" />
+              <span>React</span>
             </div>
           </button>
         ) : (
           <ReactionIconButton
             reactionType={selectedReaction}
-            isSelected={false}
+            isSelected={isReacted}
             onClick={() => {}}
             icon={ReactionIcons[selectedReaction] || "REACT"}
           />
@@ -65,19 +86,22 @@ export const PostReactions: React.FC<PostReactionsProps> = ({
         {/* Comment Button Always Visible */}
         <div className="flex flex-col items-center">
           <button
-            onClick={handleClick}
+            onClick={handleCommentClick}
             className="flex items-center space-x-2 rounded px-3 py-1 text-gray-500 hover:bg-gray-100"
+            aria-label="Comment"
           >
             <CommentIcon />
             <span>Comment</span>
           </button>
         </div>
       </div>
+
       {showReactions && (
         <div
           className="absolute left-0 flex space-x-2 rounded-lg bg-white p-2 shadow-lg"
           onMouseEnter={() => setShowReactions(true)}
           onMouseLeave={() => setShowReactions(false)}
+          role="menu"
         >
           {Object.entries(ReactionIcons).map(([reaction, icon]) => (
             <ReactionIconButton
@@ -86,6 +110,7 @@ export const PostReactions: React.FC<PostReactionsProps> = ({
               isSelected={selectedReaction === reaction}
               onClick={handleReactionClick}
               icon={icon}
+              aria-label={`React with ${reaction}`}
             />
           ))}
         </div>

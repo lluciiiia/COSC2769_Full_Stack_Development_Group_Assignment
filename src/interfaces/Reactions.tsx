@@ -1,8 +1,9 @@
-interface Reaction {
-  userId: string;
-  reactionType: string;
-  postId: string;
-  createdAt: string;
+export interface Reaction{
+  userId: string,
+  reactionType: string,
+  postId: string,
+  createdAt: string,
+  onModel: string
 }
 
 export interface ReactProps {

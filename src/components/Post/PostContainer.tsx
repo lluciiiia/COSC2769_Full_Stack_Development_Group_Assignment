@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { PostParams } from "../../interfaces/Posts";
 import { useNavigate, useLocation } from "react-router-dom";
 import { PostReactions } from "../reactions/PostReactions";
 import { AdminSection } from "./AdminSection";
 import { ProfileSection } from "./ProfileSection";
 import { AppDispatch, AppState } from "../../app/store";
-import { createReaction, fetchReaction } from "../../controllers/reactions";
+import { createReaction } from "../../controllers/reactions";
 import CommentItem from "../comments/CommentItem";
+import { selectAuthState } from "../../features/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
   saveReactionsToLocal,
   loadReactionsFromLocal,
 } from "../../utils/localStorageUtils";
+import { PostContainerProps } from "../../interfaces/Posts";  // Import the extended interface
 
-const PostContainer: React.FC<PostParams> = ({
+const PostContainer: React.FC<PostContainerProps> = ({
   _id,
   creatorId,
   groupId,
@@ -21,7 +22,9 @@ const PostContainer: React.FC<PostParams> = ({
   images,
   createdAt,
   visibility,
+  reactions,
   profileSection,
+  onReact,
   isDetail,
   history,
   comments,
@@ -31,36 +34,27 @@ const PostContainer: React.FC<PostParams> = ({
   const location = useLocation();
 
   const [showFullContent, setShowFullContent] = useState(false);
-  const [initialReaction, setInitialReaction] = useState<string | undefined>(
-    undefined,
-  );
   const [queuedReactions, setQueuedReactions] = useState<any[]>(
     loadReactionsFromLocal("queuedPostReactions"),
   );
   const [isOffline, setIsOffline] = useState<boolean>(false);
-
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
 
+  const { id: userId } = useSelector(selectAuthState);
   const isReacted = useSelector((state: AppState) => state.react.isReacted);
-  const reactions = useSelector((state: AppState) => state.react.reactions);
 
   // Convert _id to a string
   const postId = _id!.toString();
 
-  useEffect(() => {
-    const fetchUserReaction = async () => {
-      try {
-        const reaction = await dispatch(fetchReaction(postId));
-        if (reaction.payload) {
-          setInitialReaction(reaction.payload.reactionType);
-        }
-      } catch (error) {
-        console.error("Error fetching user reaction:", error);
-      }
-    };
+  // Filter the reactions array to find the initial reaction by the current user
+  const userReaction = reactions?.find(
+    (reaction) =>
+      reaction?.userId?.toString() === userId?.toString()
+  );
 
-    fetchUserReaction();
-  }, [dispatch, postId]);
+  const [initialReaction, setInitialReaction] = useState<string>(
+    userReaction ? userReaction.reactionType : "REACT"
+  );
 
   const handleClick = () => {
     navigate(`/posts/${postId}`);
@@ -244,7 +238,7 @@ const PostContainer: React.FC<PostParams> = ({
       {!isDetail && (
         <div className="mt-4">
           {comments?.length === 0 ? (
-            <p className="mb-4 ml-5 text-left text-center text-sm text-gray-500">
+            <p className="mb-4 ml-5  text-center text-sm text-gray-500">
               Write the first comment!
             </p>
           ) : (

@@ -1,5 +1,5 @@
 import { Comment } from "./Comments";
-
+import { Reaction } from "./Reactions";
 export interface PostHistory {
   content: string;
   images?: string[];
@@ -12,6 +12,9 @@ export interface RevertPostParams {
   images?: string[];
 }
 
+export interface PostContainerProps extends PostParams {
+  onReact: (reaction: string) => Promise<void>;
+}
 export interface PostParams {
   _id: string;
   creatorId: string;
@@ -21,7 +24,7 @@ export interface PostParams {
   createdAt: Date;
   visibility: "PUBLIC" | "FRIEND_ONLY" | "GROUP";
   comments: Comment[];
-  reactions?: string[];
+  reactions?: Reaction[];
   isDetail?: boolean;
   profileSection?: ProfileSectionParams;
   history: PostHistory[];
