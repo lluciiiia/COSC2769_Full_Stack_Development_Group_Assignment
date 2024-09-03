@@ -9,7 +9,9 @@ const CommentReactions: React.FC<ReactionButtonProps> = ({
   initialReaction = "REACT",
   comment,
   isReacted,
+  reactionType
 }) => {
+  console.log("be thich buscu",reactionType);
   const [showReactions, setShowReactions] = useState(false);
   const [selectedReaction, setSelectedReaction] = useState(
     ReactionIcons[initialReaction] ? initialReaction : "REACT",

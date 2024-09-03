@@ -31,7 +31,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   const isReacted = useSelector((state: AppState) => state.react.isReacted);
 
   const handleReaction = async (reactionType: string, commentId: string) => {
-    const reaction = { postId: commentId, reactionType, sentFrom: "comment" };
+    const reaction = { postId: commentId, reactionType, sentFrom: "comment", userId };
 
     if (navigator.onLine) {
       await sendReaction(reaction);
@@ -124,9 +124,10 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
     }
   };
 
-  // Function to calculate reaction counts based on reaction types
+  // Function to calculate reaction counts based on reaction types and filter by userId
   const getReactionCounts = (comment) => {
-    const reactionCounts = comment.reactions.reduce((acc, reaction) => {
+    const userReactions = comment.reactions.filter(reaction => reaction.userId === userId); // Filter reactions by userId
+    const reactionCounts = userReactions.reduce((acc, reaction) => {
       acc[reaction.reactionType] = (acc[reaction.reactionType] || 0) + 1;
       return acc;
     }, {});
@@ -148,7 +149,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
             </div>
           ) : (
             comments.map((comment) => {
-              const reactionCounts = getReactionCounts(comment); // Get reaction counts
+              const reactionCounts = getReactionCounts(comment); // Get reaction counts for the current user
 
               return (
                 <div key={comment._id} className="mb-4">
@@ -165,6 +166,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
                   </div>
 
                   <CommentReactions
+                    reactionType={comment.reactions.filter(reaction => reaction.userId === userId)} // Filter reactions by userId
                     comment={comment._id}
                     onReact={(reaction) => handleReaction(reaction, comment._id)}
                     isReacted={isReacted}
