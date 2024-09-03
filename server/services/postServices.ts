@@ -1,30 +1,79 @@
+import internal from "stream";
 import Group from "../models/group";
 import Post from "../models/post";
 import User from "../models/user";
+import { Types } from "mongoose";
 
-export const getAllPosts = async () => {
+export const getAllPosts = async (limit: number, offset: number) => {
   try {
+    // Fetch posts with necessary fields and populated comments and reactions in one query
     const posts = await Post.find()
-      .sort({ createdAt: -1 })
+      // .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(limit)
       .populate({
         path: "comments",
         populate: {
           path: "reactions",
           populate: {
             path: "userId", // Populate user details for reactions
-            select: "name profilePictureURL", // Select the fields you want
+            select: "userId name profilePictureURL", // Select the fields you want
           },
         },
       });
 
-    // Filter and enhance posts based on visibility & their own posts
-    const enhancedPosts = await Promise.all(
-      posts.map(async (post) => {
-        return await enhancePostWithUser(post);
-      }),
+    // Collect userIds from comments and reactions
+    const userIds = new Set<string | Types.ObjectId>();
+
+    posts.forEach((post) => {
+      post.comments.forEach((comment: any) => {
+        userIds.add(comment.userId);
+        comment.reactions.forEach((reaction: any) => {
+          userIds.add(reaction.userId);
+        });
+      });
+    });
+
+    // Convert Set to Array for MongoDB query
+    const userIdArray = Array.from(userIds);
+    const users = await User.find({ _id: { $in: userIdArray } }).select(
+      "name profilePictureURL _id",
     );
 
-    return enhancedPosts;
+    // Create a map of userId to user data for fast access
+    const userMap = users.reduce(
+      (acc, user: any) => {
+        acc[user._id] = user; // Use ObjectId directly
+        return acc;
+      },
+      {} as { [key: string]: any },
+    );
+
+    // Enhance posts with user information
+    const enhancedPosts = posts.map((post: any) => {
+      const creator = userMap[post.creatorId] || {};
+      const commentsWithProfileSection = post.comments.map((comment: any) => {
+        const commentUser = userMap[comment.userId] || {};
+        return {
+          ...comment.toObject(),
+          profileSection: {
+            profileImage: commentUser.profilePictureURL,
+            profileName: commentUser.name,
+          },
+        };
+      });
+
+      return {
+        ...post.toObject(),
+        profileSection: {
+          profileImage: creator.profilePictureURL,
+          profileName: creator.name,
+        },
+        comments: commentsWithProfileSection,
+      };
+    });
+
+    return enhancedPosts; // Return enhanced posts
   } catch (error) {
     console.error("Error fetching posts", error);
     throw new Error("Failed to fetch posts");

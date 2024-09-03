@@ -14,7 +14,10 @@ const router = express.Router();
 
 router.get("/all", async (req, res) => {
   try {
-    const posts = await getAllPosts();
+    const limit = parseInt(req.query.limit as string) || 10; // Default to 10 posts per page
+    const offset = parseInt(req.query.offset as string) || 0;
+
+    const posts = await getAllPosts(limit, offset);
     res.json(posts);
   } catch (error) {
     res.status(500).json({ error: error });

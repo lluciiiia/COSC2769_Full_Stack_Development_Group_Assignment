@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { PostState } from "../interfaces/Posts";
+import { PostParams, PostState } from "../interfaces/Posts";
 import {
   getAllPosts,
   getPosts,
@@ -19,6 +19,12 @@ const postSlice = createSlice({
   reducers: {
     likePost: (state, action: PayloadAction<string>) => {
       return state;
+    },
+    setPosts: (state, action: PayloadAction<PostParams[]>) => {
+      state.posts = action.payload;
+    },
+    appendPosts: (state, action: PayloadAction<PostParams[]>) => {
+      state.posts.push(...action.payload); // Use spread operator to append new posts
     },
   },
   extraReducers: (builder) => {

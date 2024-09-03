@@ -23,7 +23,7 @@ const postSchema = new mongoose.Schema({
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
   reactions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Reaction" }],
 
-  createdAt: { type: Date, default: Date.now },
+  createdAt: { type: Date, default: Date.now, index: true },
   updatedAt: { type: Date, default: Date.now },
   history: [
     {

@@ -20,23 +20,26 @@ export const getAllPosts = createAsyncThunk<PostParams[]>(
   },
 );
 
-export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
-  "posts/getPosts",
-  async () => {
-    const response = await fetch(BACKEND_URL + `/api/posts/all`, {
+export const getPosts = createAsyncThunk<
+  PostParams[],
+  { limit: number; offset: number }
+>("posts/getPosts", async ({ limit, offset }) => {
+  const response = await fetch(
+    `${BACKEND_URL}/api/posts/all?limit=${limit}&offset=${offset}`,
+    {
       method: "GET",
       credentials: "include",
-    });
+    },
+  );
+  console.log("Response received for offset ", offset);
+  if (!response.ok) {
+    console.error("Failed to fetch posts:", response.statusText);
+    throw new Error("Failed to fetch posts");
+  }
 
-    if (!response.ok) {
-      console.error("Failed to fetch posts:", response.statusText);
-      throw new Error("Failed to fetch posts");
-    }
-
-    const data: PostParams[] = await response.json();
-    return data;
-  },
-);
+  const data: PostParams[] = await response.json();
+  return data;
+});
 
 export const getPostById = async (id: String | undefined) => {
   if (id == undefined) return;
