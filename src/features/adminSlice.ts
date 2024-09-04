@@ -1,11 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AdminSliceProps } from "../interfaces/Admin";
-import { fetchGroups, createGroup, fetchGroupWithMembers, leaveGroup } from "../controllers/group";
+import {
+  fetchGroups,
+  createGroup,
+  fetchGroupWithMembers,
+  leaveGroup,
+} from "../controllers/group";
 
 const initialState: AdminSliceProps = {
   users: [],
   posts: [],
-  groups: [], 
+  groups: [],
 };
 
 const adminSlice = createSlice({
@@ -14,7 +19,7 @@ const adminSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchGroups.pending, (state) => {
+      .addCase(fetchGroups.pending, (state, action) => {
         // Optionally handle pending state
         console.log("Fetching groups...");
       })
@@ -34,7 +39,9 @@ const adminSlice = createSlice({
       })
       .addCase(fetchGroupWithMembers.fulfilled, (state, action) => {
         // Optionally handle fetched group with members
-        const index = state.groups.findIndex(group => group._id === action.payload._id);
+        const index = state.groups.findIndex(
+          (group) => group._id === action.payload._id,
+        );
         if (index !== -1) {
           state.groups[index] = action.payload;
         } else {
@@ -44,7 +51,9 @@ const adminSlice = createSlice({
       })
       .addCase(leaveGroup.fulfilled, (state, action) => {
         // Optionally handle when a user leaves a group
-        const index = state.groups.findIndex(group => group._id === action.payload._id);
+        const index = state.groups.findIndex(
+          (group) => group._id === action.payload._id,
+        );
         if (index !== -1) {
           state.groups[index] = action.payload;
         }
