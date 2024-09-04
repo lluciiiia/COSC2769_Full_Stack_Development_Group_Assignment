@@ -66,20 +66,20 @@ export const GroupManagement = () => {
       {/* Tab Content */}
       <div className="flex-1 overflow-auto p-4">
         {activeTab === "groups" && (
-          <div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {groups
               .filter((group) => group.accepted)
               .map((group) => (
                 <div
                   key={group._id}
-                  className="mb-4 flex w-full flex-col rounded-lg border border-gray-200 bg-white shadow-lg"
+                  className="flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg"
                 >
                   <img
                     src={group.imageURL}
                     alt={group.name}
-                    className="h-48 w-full rounded-t-lg object-cover"
+                    className="h-48 w-full object-fill"
                   />
-                  <div className="p-4">
+                  <div className="flex flex-grow flex-col p-4">
                     <h2 className="mb-2 text-xl font-bold text-gray-900">
                       {group.name}
                     </h2>
@@ -95,7 +95,7 @@ export const GroupManagement = () => {
                         ? new Date(group.dateCreated).toLocaleDateString()
                         : "Unknown"}
                     </p>
-                    <p className="mb-4 text-sm text-gray-600">
+                    <p className="mb-4 flex-grow text-sm text-gray-600">
                       Description: {group.description}
                     </p>
                     <div className="flex justify-between">
@@ -119,20 +119,20 @@ export const GroupManagement = () => {
         )}
 
         {activeTab === "requests" && (
-          <div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {groups
               .filter((group) => !group.accepted)
               .map((group) => (
                 <div
                   key={group._id}
-                  className="mb-4 flex w-full flex-col rounded-lg border border-gray-200 bg-white shadow-lg"
+                  className="flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg"
                 >
                   <img
                     src={group.imageURL}
                     alt={group.name}
-                    className="h-48 w-full rounded-t-lg object-cover"
+                    className="h-48 w-full object-fit"
                   />
-                  <div className="p-4">
+                  <div className="flex flex-grow flex-col p-4">
                     <h2 className="mb-2 text-xl font-bold text-gray-900">
                       {group.name}
                     </h2>
@@ -148,7 +148,7 @@ export const GroupManagement = () => {
                         ? new Date(group.dateCreated).toLocaleDateString()
                         : "Unknown"}
                     </p>
-                    <p className="mb-4 text-sm text-gray-600">
+                    <p className="mb-4 flex-grow text-sm text-gray-600">
                       Description: {group.description}
                     </p>
                     <div className="flex justify-between">
@@ -156,13 +156,13 @@ export const GroupManagement = () => {
                         onClick={() => handleDeleteGroup(group._id)}
                         className="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600"
                       >
-                        Reject
+                        Deny
                       </button>
                       <button
                         onClick={() => handleAcceptGroupClick(group._id)}
-                        className="rounded-md bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+                        className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
                       >
-                        Accept
+                        Accpet
                       </button>
                     </div>
                   </div>
