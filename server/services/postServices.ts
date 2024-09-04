@@ -62,7 +62,7 @@ export const getPostsForUser = async (userId: string) => {
           return await enhancePostWithUser(post);
         } else if (post.visibility === "GROUP") {
           const group = await Group.findById(post.groupId);
-          if (group && group.members.includes(userObjectId))
+          if (group && group.members.includes(userObjectId) && group.groupAdmin.toString() === userObjectId.toString()) 
             return await enhancePostWithUser(post);
         } else if (post.visibility === "FRIEND_ONLY") {
           const creator = await User.findById(post.creatorId);
@@ -202,12 +202,15 @@ export const createPost = async (postData: any) => {
     const user = await User.findById(postData.creatorId);
     if (!user) throw new Error("User not found with the provided creatorId");
 
-    // Check if group exists and if the user is a member
+    // Check if group exists and if the user is a member or admin
     if (postData.groupId) {
       const group = await Group.findById(postData.groupId);
       if (!group) throw new Error("Group not found with the provided groupId");
+
       const isMember = group.members.includes(postData.creatorId);
-      if (!isMember) throw new Error("User is not a member of the group");
+      const isAdmin = group.groupAdmin === postData.creatorId; // Check if the user is the group admin
+
+      // if (!isMember || !isAdmin) throw new Error("User is not a member or admin of the group");
     }
 
     // Create new post
@@ -219,6 +222,7 @@ export const createPost = async (postData: any) => {
     throw new Error("Failed to create post");
   }
 };
+
 
 export const updatePost = async (postId: string, postData: any) => {
   try {

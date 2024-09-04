@@ -13,8 +13,14 @@ export const getAllGroups = async () => {
 };
 export const getGroupsByUserId = async (userId: string) => {
   try {
-    const groups = await Group.find({ members: userId }).select("_id name");
-    console.log("Fetched Groups:", groups); 
+    const groups = await Group.find({
+      $or: [
+        { members: userId },            
+        { groupAdmin: userId }          
+      ]
+    }).select("_id name");
+    
+    console.log("Fetched Groups:", groups);
     return groups;
   } catch (error) {
     console.error("Error fetching groups by user ID in service:", error);
@@ -78,5 +84,20 @@ export const createGroup = async (data: any) => {
   } catch (error) {
     console.error("Error creating group:", error);
     throw new Error("Failed to create group");
+  }
+};
+
+export const updateGroup = async (groupId: string, updateData: any) => {
+  try {
+    const group = await Group.findByIdAndUpdate(groupId, updateData, {
+      new: true,
+    });
+
+    if (!group) throw new Error("no group with the provided id");
+
+    return group;
+  } catch (error) {
+    console.error("Error fetching group by id", error);
+    throw new Error("Failed to fetch group");
   }
 };
