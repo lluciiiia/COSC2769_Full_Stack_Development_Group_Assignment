@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppState } from "../../app/store";
-import { updateUser } from "../../controllers/user";
+import { AppDispatch, AppState } from "../../app/store";
+import { getAllUsers } from "../../controllers/user";
+import { resumeUser, suspendUser } from "../../controllers/admin";
 
 const UserManagement = () => {
-  const dispatch = useDispatch();
-  const users = useSelector((state: AppState) => state.user.users);
-  
+  const dispatch: AppDispatch = useDispatch();
+  const users = useSelector((state: AppState) => state.admin.users);
+  console.log("user", users);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState<"newest" | "oldest">("newest");
   const [currentPage, setCurrentPage] = useState(1);
-  const [updateTrigger, setUpdateTrigger] = useState(false);
 
   const usersPerPage = 10;
 
@@ -27,20 +28,36 @@ const UserManagement = () => {
   };
 
   const handleStatusToggle = async (userId: string, currentStatus: boolean) => {
-    try {
-      console.log(`Toggling status for user ${userId}. Current status: ${currentStatus}`);
-      const action = updateUser({ userId, userData: { activeStatus: !currentStatus } });
-      console.log('Dispatching action:', action);
-      await dispatch(action as any); 
-      console.log(`Status for user ${userId} updated successfully.`);
-      window.location.reload(); 
-    } catch (error) {
-      console.error("Failed to update user:", error);
+    if (currentStatus) {
+      dispatch(suspendUser(userId)).then(() => {
+        dispatch(getAllUsers());
+      });
+    } else {
+      dispatch(resumeUser(userId)).then(() => {
+        dispatch(getAllUsers());
+      });
     }
+    // try {
+    //   console.log(
+    //     `Toggling status for user ${userId}. Current status: ${currentStatus}`,
+    //   );
+    //   const action = updateUser({
+    //     userId,
+    //     userData: { activeStatus: !currentStatus },
+    //   });
+    //   console.log("Dispatching action:", action);
+    //   await dispatch(action as any);
+    //   console.log(`Status for user ${userId} updated successfully.`);
+    //   window.location.reload();
+    // } catch (error) {
+    //   console.error("Failed to update user:", error);
+    // }
   };
 
   const filteredUsers = users
-    .filter((user) => user.name.toLowerCase().includes(searchQuery.toLowerCase()))
+    .filter((user) =>
+      user.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    )
     .sort((a, b) => {
       const dateA = new Date(a.createdAt).getTime();
       const dateB = new Date(b.createdAt).getTime();
@@ -79,24 +96,20 @@ const UserManagement = () => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                User Name
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                Date Joined
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                Phone Number
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                Email
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                Location
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                Status
-              </th>
+              {[
+                "User Name",
+                "Date Joined",
+                "Phone Number",
+                "Email",
+                "Location",
+                "Status",
+              ].map((info) => {
+                return (
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    {info}
+                  </th>
+                );
+              })}
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
@@ -119,9 +132,13 @@ const UserManagement = () => {
                 </td>
                 <td className="whitespace-nowrap px-6 py-4">
                   <button
-                    onClick={() => handleStatusToggle(user._id, user.activeStatus)}
+                    onClick={() =>
+                      handleStatusToggle(user._id, user.activeStatus)
+                    }
                     className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
-                      user.activeStatus ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                      user.activeStatus
+                        ? "bg-green-100 text-green-800"
+                        : "bg-red-100 text-red-800"
                     }`}
                   >
                     {user.activeStatus ? "Active" : "Inactive"}
@@ -135,7 +152,8 @@ const UserManagement = () => {
 
       <div className="mt-4 flex items-center justify-between">
         <span className="text-sm text-gray-700">
-          Showing {indexOfFirstUser + 1} to {indexOfLastUser} of {filteredUsers.length} entries
+          Showing {indexOfFirstUser + 1} to {indexOfLastUser} of{" "}
+          {filteredUsers.length} entries
         </span>
         <div className="xs:mt-0 mt-2 inline-flex">
           {[...Array(totalPages)].map((_, i) => (
@@ -164,5 +182,3 @@ const UserManagement = () => {
 };
 
 export default UserManagement;
-
-

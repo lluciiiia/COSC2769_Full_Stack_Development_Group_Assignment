@@ -6,9 +6,9 @@ import UserManagement from "../components/admin/UserManagement";
 import { useDispatch } from "react-redux";
 import { getAllUsers } from "../controllers/user";
 import { AppDispatch } from "../app/store";
-import PostManagement from "../components/admin/ContentManagement";
 import { getAllPosts } from "../controllers/posts";
 import ContentManagement from "../components/admin/ContentManagement";
+import { fetchGroups } from "../controllers/group";
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState<string>("Group");
@@ -18,6 +18,7 @@ const Admin = () => {
 
   useEffect(() => {
     if (firstRender.current) {
+      dispatch(fetchGroups());
       dispatch(getAllUsers());
       dispatch(getAllPosts());
       firstRender.current = false;

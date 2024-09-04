@@ -99,6 +99,7 @@ router.put("/leaveGroup/:groupId", async (req, res) => {
     res.status(500).json({ error: "Failed to accept group" });
   }
 });
+
 router.put("/accepted/:id", async (req, res) => {
   try {
     const groupId = req.params.id;
