@@ -3,7 +3,6 @@ import User from "../models/user";
 import Notifications from "../models/notification";
 import { createFriendRequestNotification } from "./notificationsService";
 import Group from "../models/group";
-import { group } from "console";
 
 export const getAllUsers = async () => {
   try {
@@ -174,3 +173,5 @@ export const acceptFriendRequest = async (userId: string, friendId: string) => {
     throw new Error("Failed to accept friend request ");
   }
 };
+
+

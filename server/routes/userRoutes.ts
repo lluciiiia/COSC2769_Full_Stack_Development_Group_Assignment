@@ -9,7 +9,6 @@ import {
   addFriend,
   acceptFriendRequest,
   groupJoinRequest,
-  acceptGroupRequest,
 } from "../services/userServices";
 import { isAuthenticated } from "../middleware/authenticate";
 import mongoose from "mongoose";
@@ -155,5 +154,7 @@ router.post("/sentGroup/:groupId", async (req, res) => {
     res.status(500).json({ error: error });
   }
 });
+
+
 
 export default router;

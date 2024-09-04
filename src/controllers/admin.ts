@@ -42,3 +42,47 @@ export const deleteGroup = createAsyncThunk<{ message: string }, string>(
     return data;
   },
 );
+
+export const suspendUser = createAsyncThunk<{ message: string }, string>(
+  "admin/suspendUser",
+  async (userId) => {
+    const response = await fetch(
+      `http://localhost:8080/api/admin/suspend/${userId}`,
+      { method: "PUT", headers: { "Content-Type": "application/json" } },
+    );
+
+    if (!response.ok) {
+      console.error(
+        "Failed to suspend this user. Status:",
+        response.statusText,
+      );
+      throw new Error("Failed to suspend this user");
+    }
+
+    const data = await response.json();
+
+    return data;
+  },
+);
+
+export const resumeUser = createAsyncThunk<{ message: string }, string>(
+  "admin/resumeUser",
+  async (userId) => {
+    const response = await fetch(
+      `http://localhost:8080/api/admin/resume/${userId}`,
+      { method: "PUT", headers: { "Content-Type": "application/json" } },
+    );
+
+    if (!response.ok) {
+      console.error(
+        "Failed to suspend this user. Status:",
+        response.statusText,
+      );
+      throw new Error("Failed to suspend this user");
+    }
+
+    const data = await response.json();
+
+    return data;
+  },
+);

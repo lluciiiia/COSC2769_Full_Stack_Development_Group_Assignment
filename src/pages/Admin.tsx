@@ -6,7 +6,6 @@ import UserManagement from "../components/admin/UserManagement";
 import { useDispatch } from "react-redux";
 import { getAllUsers } from "../controllers/user";
 import { AppDispatch } from "../app/store";
-import PostManagement from "../components/admin/ContentManagement";
 import { getAllPosts } from "../controllers/posts";
 import ContentManagement from "../components/admin/ContentManagement";
 import { fetchGroups } from "../controllers/group";

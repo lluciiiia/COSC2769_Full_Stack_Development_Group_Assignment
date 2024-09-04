@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppState } from "../../app/store";
-import { updateUser } from "../../controllers/user";
+import { AppDispatch, AppState } from "../../app/store";
+import { getAllUsers } from "../../controllers/user";
+import { resumeUser, suspendUser } from "../../controllers/admin";
 
 const UserManagement = () => {
-  const dispatch = useDispatch();
-  const users = useSelector((state: AppState) => state.user.users);
+  const dispatch: AppDispatch = useDispatch();
+  const users = useSelector((state: AppState) => state.admin.users);
+  console.log("user", users);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState<"newest" | "oldest">("newest");
   const [currentPage, setCurrentPage] = useState(1);
-  const [updateTrigger, setUpdateTrigger] = useState(false);
 
   const usersPerPage = 10;
 
@@ -27,21 +28,30 @@ const UserManagement = () => {
   };
 
   const handleStatusToggle = async (userId: string, currentStatus: boolean) => {
-    try {
-      console.log(
-        `Toggling status for user ${userId}. Current status: ${currentStatus}`,
-      );
-      const action = updateUser({
-        userId,
-        userData: { activeStatus: !currentStatus },
+    if (currentStatus) {
+      dispatch(suspendUser(userId)).then(() => {
+        dispatch(getAllUsers());
       });
-      console.log("Dispatching action:", action);
-      await dispatch(action as any);
-      console.log(`Status for user ${userId} updated successfully.`);
-      window.location.reload();
-    } catch (error) {
-      console.error("Failed to update user:", error);
+    } else {
+      dispatch(resumeUser(userId)).then(() => {
+        dispatch(getAllUsers());
+      });
     }
+    // try {
+    //   console.log(
+    //     `Toggling status for user ${userId}. Current status: ${currentStatus}`,
+    //   );
+    //   const action = updateUser({
+    //     userId,
+    //     userData: { activeStatus: !currentStatus },
+    //   });
+    //   console.log("Dispatching action:", action);
+    //   await dispatch(action as any);
+    //   console.log(`Status for user ${userId} updated successfully.`);
+    //   window.location.reload();
+    // } catch (error) {
+    //   console.error("Failed to update user:", error);
+    // }
   };
 
   const filteredUsers = users
