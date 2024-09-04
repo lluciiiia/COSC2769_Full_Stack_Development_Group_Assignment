@@ -16,27 +16,32 @@ export const createReaction = async ({
   targetType: string;
 }) => {
   try {
+    let isCreator=true;
     let target;
     let newNoti;
     if (targetType === "post") {
       target = await Post.findById(postId);
-      newNoti = {
-        senderId: userId,
-        receiverId: target?.creatorId,
-        type: "RECEIVE_REACTION",
-        postId: target?.id,
-      };
-    } else if (targetType === "comment") {
-      target = await Comment.findById(postId);
-      newNoti = {
-        senderId: userId,
-        receiverId: target?.userId,
-        type: "RECEIVE_REACTION",
-        postId: target?.postId,
-      };
+      if (target?.creatorId.toString() !== userId) {
+        isCreator= false;
+        newNoti = {
+          senderId: userId,
+          receiverId: target?.creatorId,
+          type: "RECEIVE_REACTION",
+          postId: target?.id,
+        };
+      }
     } else {
-      throw new Error("Invalid target type");
-    }
+      target = await Comment.findById(postId);
+      if (target?.userId.toString() !== userId) {
+        isCreator= false;
+        newNoti = {
+          senderId: userId,
+          receiverId: target?.userId,
+          type: "RECEIVE_REACTION",
+          postId: target?.postId,
+        };
+      }
+    } 
 
     const notification = new Notifications(newNoti);
 
@@ -45,7 +50,12 @@ export const createReaction = async ({
         `${targetType.charAt(0).toUpperCase() + targetType.slice(1)} not found`,
       );
     }
-    notification.save();
+
+    if(isCreator){
+      console.log("Cannot create noti for post owner")
+    }else{
+      notification.save();
+    }
     let existingReaction = await Reaction.findOne({
       postId: new mongoose.Types.ObjectId(postId),
       userId,
@@ -74,6 +84,7 @@ export const createReaction = async ({
     throw new Error("Failed to add/update reaction");
   }
 };
+
 
 export const fetchReaction = async (postId: string, userId: string) => {
   try {
@@ -111,7 +122,8 @@ export const undoReaction = async (notiId: string) => {
 
     // Remove the reaction from the reactions array
     target.reactions = target.reactions.filter(
-      (reactionId: mongoose.Types.ObjectId) => !reactionId.equals(existingReaction._id)
+      (reactionId: mongoose.Types.ObjectId) =>
+        !reactionId.equals(existingReaction._id),
     );
 
     await target.save();
