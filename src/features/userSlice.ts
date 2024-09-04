@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { UserSliceParam } from "../interfaces/Users";
 import {
-  getAllUsers,
   getUser,
   getViewedUser,
   sendFriendRequest,
@@ -32,9 +31,6 @@ const userSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(getAllUsers.fulfilled, (state, action) => {
-      state.users = action.payload;
-    });
     builder.addCase(getUser.fulfilled, (state, action) => {
       state.currentUser = action.payload;
     });

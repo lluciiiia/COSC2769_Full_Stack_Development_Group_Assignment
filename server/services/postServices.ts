@@ -85,19 +85,20 @@ export const getPostsForUser = async (userId: string) => {
 
 export const getPostListByCreatorId = async (creatorId: string) => {
   try {
-    const posts = await Post.find()
+    const posts = await Post.find({ creatorId })
       .sort({ createdAt: -1 })
       .populate({
         path: "comments",
         populate: {
           path: "reactions",
-          select: "userId reactionType postId onModel", // Select only the fields you want
+          select: "userId reactionType postId onModel",
         },
       })
       .populate({
         path: "reactions",
-        select: "userId reactionType postId onModel", // Select only the fields you want
+        select: "userId reactionType postId onModel",
       });
+
 
     // Enhance each post with user information
     const enhancedPosts = await Promise.all(
@@ -127,7 +128,7 @@ export const getPostById = async (postId: string) => {
       .populate({
         path: "reactions",
         select: "userId reactionType postId onModel", // Select only the fields you want
-      });;
+      });
     if (!post) throw new Error("Post not found with the provided id");
 
     const enhancedPost = await enhancePostWithUser(post);
