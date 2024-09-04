@@ -12,11 +12,13 @@ import {
   loadReactionsFromLocal,
   saveReactionsToLocal,
 } from "../../utils/localStorageUtils.ts";
+import { ReactionIcons } from "../../interfaces/Reactions.tsx";
 
 const CommentContainer: React.FC<CommentContainerProps> = ({
   initComments,
   userId,
   postId,
+  post,
 }) => {
   const dispatch: AppDispatch = useDispatch();
   const [comments, setComments] = useState<Comment[]>(initComments || []);
@@ -29,7 +31,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   const isReacted = useSelector((state: AppState) => state.react.isReacted);
 
   const handleReaction = async (reactionType: string, commentId: string) => {
-    const reaction = { postId: commentId, reactionType, sentFrom: "comment" };
+    const reaction = { postId: commentId, reactionType, sentFrom: "comment", userId };
 
     if (navigator.onLine) {
       await sendReaction(reaction);
@@ -41,9 +43,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
 
   const sendReaction = async (reaction: any) => {
     try {
-      // Only attempt to send if online
       if (navigator.onLine) {
-        // If online, send the reaction directly to the server
         await dispatch(createReaction(reaction));
         console.log(
           `Reaction "${reaction.reactionType}" sent to server for comment ${reaction.postId}`,
@@ -75,7 +75,6 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
         await sendReaction(reaction);
       }
       clearQueuedReactions();
-
       alert("All queued reactions have been successfully synced.");
     } catch (error) {
       console.error("Error syncing reactions:", error);
@@ -125,6 +124,20 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
     }
   };
 
+  // Function to calculate reaction counts based on reaction types and filter by userId
+  const getReactionCounts = (comment) => {
+    const userReactions = comment.reactions.filter(reaction => reaction.userId === userId); // Filter reactions by userId
+    const reactionCounts = userReactions.reduce((acc, reaction) => {
+      acc[reaction.reactionType] = (acc[reaction.reactionType] || 0) + 1;
+      return acc;
+    }, {});
+
+    // Get up to 3 unique reactions
+    return Object.entries(reactionCounts)
+      .slice(0, 3)
+      .map(([reactionType, count]) => ({ type: reactionType, count }));
+  };
+
   return (
     <div className="h-full w-full max-w-md">
       <div className="h-[600px] w-[700px] rounded-lg bg-gray-100 p-4 shadow-md">
@@ -135,21 +148,35 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
               <p className="text-center text-gray-500">No Comments</p>
             </div>
           ) : (
-            comments.map((comment) => (
-              <div key={comment._id}>
-                <CommentItem comment={comment} />
+            comments.map((comment) => {
+              const reactionCounts = getReactionCounts(comment); // Get reaction counts for the current user
 
-                <CommentReactions
-                  comment={comment._id}
-                  onReact={(reaction) => handleReaction(reaction, comment._id)}
-                  isReacted={isReacted}
-                />
-              </div>
-            ))
+              return (
+                <div key={comment._id} className="mb-4">
+                  <CommentItem comment={comment} />
+
+                  {/* Display the number of reactions with icons */}
+                  <div className="flex space-x-2 text-sm text-gray-600">
+                    {reactionCounts.map(({ type, count }) => (
+                      <span key={type} className="flex items-center">
+                        <span className="mr-1">{ReactionIcons[type]}</span>
+                        <span className="font-bold">{count}</span>
+                      </span>
+                    ))}
+                  </div>
+
+                  <CommentReactions
+                    reactionType={comment.reactions.filter(reaction => reaction.userId === userId)} // Filter reactions by userId
+                    comment={comment._id}
+                    onReact={(reaction) => handleReaction(reaction, comment._id)}
+                    isReacted={isReacted}
+                  />
+                </div>
+              );
+            })
           )}
         </div>
         <div className="flex flex-1 items-center justify-center">
-          {/* Display offline or syncing message */}
           {isOffline ? (
             <span className="mt-2 text-center text-sm text-gray-500">
               You’re offline. Reactions will be synced as soon as you reconnect.
