@@ -22,8 +22,6 @@ export const fetchGroups = createAsyncThunk<GroupType[]>(
   }
 );
 
-
-
 export const handleAcceptGroup = async (groupId: string): Promise<GroupType> => {
     try {
       const response = await fetch(`${API_URL}/accepted/${groupId}`, {
@@ -103,5 +101,30 @@ export const handleAcceptGroup = async (groupId: string): Promise<GroupType> => 
     }
   );
 
-
-
+  export const updateGroup = createAsyncThunk<GroupType, { groupId: string; updatedGroup: Partial<GroupType> }>(
+    "groups/updateGroup",
+    async ({ groupId, updatedGroup }) => {
+      try {
+        const response = await fetch(`${API_URL}/${groupId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedGroup),
+          credentials: 'include',
+        });
+  
+        if (!response.ok) {
+          console.error('Failed to update group:', response.statusText);
+          throw new Error('Failed to update group');
+        }
+  
+        const data: GroupType = await response.json();
+        return data;
+      } catch (error) {
+        console.error('Error updating group:', error);
+        throw error; // Re-throw the error to be handled by the caller
+      }
+    }
+  );
+  

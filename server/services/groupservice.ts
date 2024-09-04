@@ -80,3 +80,18 @@ export const createGroup = async (data: any) => {
     throw new Error("Failed to create group");
   }
 };
+
+export const updateGroup = async (groupId: string, updateData: any) => {
+  try {
+    const group = await Group.findByIdAndUpdate(groupId, updateData, {
+      new: true,
+    });
+
+    if (!group) throw new Error("no group with the provided id");
+
+    return group;
+  } catch (error) {
+    console.error("Error fetching group by id", error);
+    throw new Error("Failed to fetch group");
+  }
+};
