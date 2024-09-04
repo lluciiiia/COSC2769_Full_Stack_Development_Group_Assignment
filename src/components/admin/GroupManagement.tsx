@@ -1,23 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "../../app/store";
 import { fetchGroups } from "../../controllers/group";
 import { groupApprovalNotification } from "../../controllers/notification";
-import GroupManagementNotifications from "./GroupManagementNotifications";
+import { acceptGroup, deleteGroup } from "../../controllers/admin";
 
 export const GroupManagement = () => {
   const [activeTab, setActiveTab] = useState("groups");
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const groups = useSelector((state: AppState) => state.admin.groups);
-
-  useEffect(() => {
-    dispatch(fetchGroups());
-  }, [dispatch]);
+  console.log("manags: ", groups);
 
   const handleViewGroup = (groupId: string) => {
     navigate(`/groups/${groupId}/discussion`);
@@ -25,64 +20,19 @@ export const GroupManagement = () => {
 
   const handleAcceptGroupClick = async (groupId: string) => {
     dispatch(groupApprovalNotification(groupId));
-
-    try {
-      const response = await fetch(
-        `http://localhost:8080/api/groups/accepted/${groupId}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-
-      if (response.ok) {
-        setModalMessage(`Group accepted successfully.`);
-        setModalOpen(true);
-        dispatch(fetchGroups()); // Refresh groups
-      } else {
-        setModalMessage("Failed to accept group.");
-        setModalOpen(true);
-        console.error("Failed to accept group. Status:", response.status);
-      }
-    } catch (error) {
-      setModalMessage("Error accepting group.");
-      setModalOpen(true);
-      console.error("Error accepting group:", error);
-    }
+    dispatch(acceptGroup(groupId)).then(() => {
+      dispatch(fetchGroups());
+    });
   };
 
-  const handleRejectGroup = async (groupId: string) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/api/groups/${groupId}`,
-        {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-
-      if (response.ok) {
-        setModalMessage(`Group rejected successfully.`);
-        setModalOpen(true);
-        dispatch(fetchGroups()); // Refresh groups
-      } else {
-        setModalMessage("Failed to reject group.");
-        setModalOpen(true);
-        console.error("Failed to reject group. Status:", response.status);
-      }
-    } catch (error) {
-      setModalMessage("Error rejecting group.");
-      setModalOpen(true);
-      console.error("Error rejecting group:", error);
-    }
+  const handleDeleteGroup = async (groupId: string) => {
+    dispatch(deleteGroup(groupId)).then(() => {
+      dispatch(fetchGroups());
+    });
   };
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
-  };
-
-  const closeModal = () => {
-    setModalOpen(false);
   };
 
   return (
@@ -116,20 +66,20 @@ export const GroupManagement = () => {
       {/* Tab Content */}
       <div className="flex-1 overflow-auto p-4">
         {activeTab === "groups" && (
-          <div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {groups
               .filter((group) => group.accepted)
               .map((group) => (
                 <div
                   key={group._id}
-                  className="mb-4 flex w-full flex-col rounded-lg border border-gray-200 bg-white shadow-lg"
+                  className="flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg"
                 >
                   <img
                     src={group.imageURL}
                     alt={group.name}
-                    className="h-48 w-full rounded-t-lg object-cover"
+                    className="h-48 w-full object-fill"
                   />
-                  <div className="p-4">
+                  <div className="flex flex-grow flex-col p-4">
                     <h2 className="mb-2 text-xl font-bold text-gray-900">
                       {group.name}
                     </h2>
@@ -141,14 +91,16 @@ export const GroupManagement = () => {
                     </p>
                     <p className="mb-2 text-sm text-gray-600">
                       Date Created:{" "}
-                      {new Date(group.dateCreated).toLocaleDateString()}
+                      {group.dateCreated
+                        ? new Date(group.dateCreated).toLocaleDateString()
+                        : "Unknown"}
                     </p>
-                    <p className="mb-4 text-sm text-gray-600">
+                    <p className="mb-4 flex-grow text-sm text-gray-600">
                       Description: {group.description}
                     </p>
                     <div className="flex justify-between">
                       <button
-                        onClick={() => handleRejectGroup(group._id)}
+                        onClick={() => handleDeleteGroup(group._id)}
                         className="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600"
                       >
                         Delete
@@ -167,20 +119,20 @@ export const GroupManagement = () => {
         )}
 
         {activeTab === "requests" && (
-          <div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {groups
               .filter((group) => !group.accepted)
               .map((group) => (
                 <div
                   key={group._id}
-                  className="mb-4 flex w-full flex-col rounded-lg border border-gray-200 bg-white shadow-lg"
+                  className="flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg"
                 >
                   <img
                     src={group.imageURL}
                     alt={group.name}
-                    className="h-48 w-full rounded-t-lg object-cover"
+                    className="h-48 w-full object-fit"
                   />
-                  <div className="p-4">
+                  <div className="flex flex-grow flex-col p-4">
                     <h2 className="mb-2 text-xl font-bold text-gray-900">
                       {group.name}
                     </h2>
@@ -192,23 +144,25 @@ export const GroupManagement = () => {
                     </p>
                     <p className="mb-2 text-sm text-gray-600">
                       Date Created:{" "}
-                      {new Date(group.dateCreated).toLocaleDateString()}
+                      {group.dateCreated
+                        ? new Date(group.dateCreated).toLocaleDateString()
+                        : "Unknown"}
                     </p>
-                    <p className="mb-4 text-sm text-gray-600">
+                    <p className="mb-4 flex-grow text-sm text-gray-600">
                       Description: {group.description}
                     </p>
                     <div className="flex justify-between">
                       <button
-                        onClick={() => handleRejectGroup(group._id)}
+                        onClick={() => handleDeleteGroup(group._id)}
                         className="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600"
                       >
-                        Reject
+                        Deny
                       </button>
                       <button
                         onClick={() => handleAcceptGroupClick(group._id)}
-                        className="rounded-md bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+                        className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
                       >
-                        Accept
+                        Accpet
                       </button>
                     </div>
                   </div>
@@ -217,13 +171,6 @@ export const GroupManagement = () => {
           </div>
         )}
       </div>
-
-      {/* Notification Modal */}
-      <GroupManagementNotifications
-        isOpen={modalOpen}
-        message={modalMessage}
-        onClose={closeModal}
-      />
     </div>
   );
 };

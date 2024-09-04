@@ -29,8 +29,7 @@ const corsOptions: cors.CorsOptions = {
 
 app.use(cors(corsOptions));
 
-
-app.use(express.json({ limit: "50mb" })); 
+app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // Connect to MongoDB
@@ -54,7 +53,7 @@ app.use("/api/comments", commentRoutes);
 app.use("/api/reactions", reactionRoutes);
 app.use("/api/user", authenticationRoutes);
 app.use("/api/session", sessionRoute);
-app.use("/api/admin",adminRoute);
+app.use("/api/admin", adminRoute);
 
 app.get("/", (req: Request, res: Response) => {
   res.json("From backend side");

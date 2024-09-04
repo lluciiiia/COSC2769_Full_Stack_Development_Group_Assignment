@@ -35,3 +35,10 @@ export const ReactionIcons = {
   HAHA: "😊",
   ANGRY: "😡",
 };
+
+export const ReactionIconsWithText = {
+  LIKE: "👍 LIKE",
+  LOVE: "❤️ LOVE",
+  HAHA: "😊 HAHA",
+  ANGRY: "😡 ANGRY",
+};
