@@ -13,8 +13,14 @@ export const getAllGroups = async () => {
 };
 export const getGroupsByUserId = async (userId: string) => {
   try {
-    const groups = await Group.find({ members: userId }).select("_id name");
-    console.log("Fetched Groups:", groups); 
+    const groups = await Group.find({
+      $or: [
+        { members: userId },            
+        { groupAdmin: userId }          
+      ]
+    }).select("_id name");
+    
+    console.log("Fetched Groups:", groups);
     return groups;
   } catch (error) {
     console.error("Error fetching groups by user ID in service:", error);

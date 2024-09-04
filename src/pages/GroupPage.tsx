@@ -13,8 +13,9 @@ import PostModal from "../components/post/modals/PostModal";
 import { selectAuthState } from "../features/authSlice";
 import { sendGroupRequest } from "../controllers/user";
 import { selectGroupRequest } from "../features/notificationSlice";
+import { groupSentRequest } from "../controllers/notification";
 import { leaveGroup } from "../controllers/group";
-import UpdateGroupModal from "../components/group/EditFullGroupModal";
+import UpdateGroupModal from "../components/group/EditFullGroupModal"; // Import the EditGroupModal
 
 export default function GroupPage() {
   const groupId = useParams<{ groupId: string }>().groupId || "";
@@ -22,9 +23,9 @@ export default function GroupPage() {
   const [group, setGroup] = useState<GroupType | null>(null);
   const [loading, setLoading] = useState(true);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State for Edit Group Modal
   const [selectedPost, setSelectedPost] = useState(null);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null); // State to handle errors
   const { id: userId } = useSelector(selectAuthState);
   const [isMember, setIsMember] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -61,15 +62,17 @@ export default function GroupPage() {
       const memberStatus = selectedGroup.members.some(
         (member) => member._id === userId
       );
-      setIsMember(memberStatus);
-      setIsInGroup(memberStatus);
+      if (memberStatus) {
+        setIsMember(true);
+        setIsInGroup(true);
+      }
 
       if (userId === selectedGroup.groupAdmin) {
         setIsAdmin(true);
-        console.log(userId === selectedGroup.groupAdmin);
       }
     }
   }, [selectedGroup, userId]);
+  
 
   const handleJoinGroup = async () => {
     if (existingGroupRequest) {
@@ -147,49 +150,54 @@ export default function GroupPage() {
             />
           </div>
         </header>
-
-        <div className="ml-auto mr-2 flex space-x-2">
-          {(isMember || isAdmin) && (
-            <button
-              onClick={handleCreatePost}
-              className="rounded-md bg-[#FFC123] px-2 text-sm text-white shadow-md"
-            >
-              Create Post
-            </button>
-          )}
-          {isMember && (
-            <button
-              onClick={handleLeaveGroup}
-              className="rounded-md bg-red-600 px-2 text-sm text-white shadow-md"
-            >
-              Leave Group
-            </button>
-          )}
-          {!isMember && !isAdmin && (
-            <button
-              onClick={handleJoinGroup}
-              className={`rounded-md px-4 text-sm text-white shadow-md ${
-                existingGroupRequest || isClick
-                  ? "cursor-not-allowed bg-gray-400"
-                  : "bg-[#FFC123]"
-              }`}
-              disabled={existingGroupRequest || isClick}
-            >
-              {isClick ? "Request Sent" : "Join"}
-            </button>
-          )}
-        </div>
-
-        {isAdmin && (
-          <div className="fixed top-4 right-4 z-10">
-            <button
-              onClick={handleOpenEditModal}
-              className="rounded-md bg-blue-500 px-4 py-2 text-sm text-white shadow-md"
-            >
-              Edit Group
-            </button>
+        <div className="ml-64 mt-4 flex">
+          <div className="flex flex-col">
+            <h1 className="text-xl font-bold text-black">{group.name}</h1>
+            <p className="text-sm text-gray-600">
+              {group.members ? group.members.length : 0} members
+            </p>
           </div>
-        )}
+          <div className="ml-auto mr-2 flex space-x-2">
+  {isMember || isAdmin ? ( // Show buttons for members or admins
+    <>
+      <button
+        onClick={handleCreatePost}
+        className="rounded-md bg-[#FFC123] px-2 text-sm text-white shadow-md"
+      >
+        Create Post
+      </button>
+      {isMember && ( // Only show if user is a member
+        <button
+          onClick={handleLeaveGroup}
+          className="rounded-md bg-red-600 px-2 text-sm text-white shadow-md"
+        >
+          Leave Group
+        </button>
+      )}
+      {isAdmin && ( // Show if user is an admin
+        <button
+          onClick={handleOpenEditModal}
+          className="rounded-md bg-blue-500 px-2 text-sm text-white shadow-md"
+        >
+          Edit Group
+        </button>
+      )}
+    </>
+  ) : (
+    <button
+      onClick={handleJoinGroup}
+      className={`rounded-md px-4 text-sm text-white shadow-md ${
+        existingGroupRequest || isClick
+          ? "cursor-not-allowed bg-gray-400"
+          : "bg-[#FFC123]"
+      }`}
+      disabled={existingGroupRequest || isClick}
+    >
+      {isClick ? "Request Sent" : "Join"}
+    </button>
+  )}
+</div>
+        </div>
 
         <nav className="mt-4 border-b border-gray-300 bg-white">
           <div className="flex justify-around py-2">
@@ -240,7 +248,7 @@ export default function GroupPage() {
       <UpdateGroupModal
         isOpen={isEditModalOpen}
         onClose={handleCloseEditModal}
-        group={group}
+        group={group} // Passing the group data to the modal
       />
     </div>
   );

@@ -70,10 +70,11 @@ const UpdateGroupModal: React.FC<UpdateGroupModalProps> = ({
     try {
       await dispatch(updateGroup({ groupId: group._id, updatedGroup }));
       onClose(); // Close modal on submit
+      window.location.reload();
     } catch (error) {
       console.error("Failed to update group:", error);
       // Handle error as needed
-      window.location.reload();
+      
     }
   };
 
