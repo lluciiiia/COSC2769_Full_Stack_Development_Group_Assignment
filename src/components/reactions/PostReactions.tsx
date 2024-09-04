@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ReactionIcons, PostReactionsProps } from "../../interfaces/Reactions";
 import ReactionIconButton from "./ReactionIconButton";
+import { ReactionIconsWithText } from "../../interfaces/Reactions";
 import { CommentIcon } from "../../assets/icons/CommentIcon";
 import { LikeIcon } from "../../assets/icons/LikeIcon";
 
@@ -85,7 +86,7 @@ export const PostReactions: React.FC<PostReactionsProps> = ({
               reactionType={selectedReaction}
               isSelected={isReacted}
               onClick={() => setShowReactions(!showReactions)}
-              icon={ReactionIcons[selectedReaction] || "REACT"}
+              icon={ReactionIconsWithText[selectedReaction] || "REACT"}
             />
           )}
 
