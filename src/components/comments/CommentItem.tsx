@@ -14,7 +14,7 @@ const CommentItem: React.FC<CommentProps & { groupId: string }> = ({ comment, gr
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
-  const { id } = useSelector(selectAuthState);
+  const { id, isAdmin } = useSelector(selectAuthState);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -101,8 +101,9 @@ const CommentItem: React.FC<CommentProps & { groupId: string }> = ({ comment, gr
                     onDelete={handleDelete}
                     onViewHistory={handleViewHistory}
                     creatorId={comment.userId}
-                    groupId={groupId} // Pass groupId to MenuDropDown
+                    groupId={groupId} 
                     isDiscussionTab = {true}
+                    isAdmin = {isAdmin}
                   />
                 )}
               </div>
