@@ -39,7 +39,7 @@ const GroupList: React.FC = () => {
   const handleJoinGroup = async (groupId: string) => {
     // Check if a join request for this group already exists
     const existingGroupRequest = sentGroupRequests.find(
-      (request) => request.groupId === groupId
+      (request) => request.groupId === groupId,
     );
 
     if (existingGroupRequest) {
@@ -88,7 +88,9 @@ const GroupList: React.FC = () => {
           <div className="flex space-x-4">
             <button
               className={`px-4 py-2 font-bold ${
-                activeTab === "manage" ? "border-b-2 border-[#FFC123] text-[#FFC123]" : "text-gray-700"
+                activeTab === "manage"
+                  ? "border-b-2 border-[#FFC123] text-[#FFC123]"
+                  : "text-gray-700"
               }`}
               onClick={() => setActiveTab("manage")}
             >
@@ -96,7 +98,9 @@ const GroupList: React.FC = () => {
             </button>
             <button
               className={`px-4 py-2 font-bold ${
-                activeTab === "groups" ? "border-b-2 border-[#FFC123] text-[#FFC123]" : "text-gray-700"
+                activeTab === "groups"
+                  ? "border-b-2 border-[#FFC123] text-[#FFC123]"
+                  : "text-gray-700"
               }`}
               onClick={() => setActiveTab("groups")}
             >
@@ -122,13 +126,15 @@ const GroupList: React.FC = () => {
       )}
 
       {/* Tab Content */}
-      <div className="flex h-full w-[700px] flex-col overflow-y-auto px-4 mt-6">
+      <div className="mt-6 flex h-full w-[700px] flex-col overflow-y-auto px-4">
         {activeTab === "groups" && !isModalOpen && (
           <>
-            <div className="flex space-x-4 mb-4">
+            <div className="mb-4 flex space-x-4">
               <button
                 className={`px-4 py-2 font-bold ${
-                  activeSubtab === "all" ? "border-b-2 border-[#FFC123] text-[#FFC123]" : "text-gray-700"
+                  activeSubtab === "all"
+                    ? "border-b-2 border-[#FFC123] text-[#FFC123]"
+                    : "text-gray-700"
                 }`}
                 onClick={() => setActiveSubtab("all")}
               >
@@ -136,7 +142,9 @@ const GroupList: React.FC = () => {
               </button>
               <button
                 className={`px-4 py-2 font-bold ${
-                  activeSubtab === "joined" ? "border-b-2 border-[#FFC123] text-[#FFC123]" : "text-gray-700"
+                  activeSubtab === "joined"
+                    ? "border-b-2 border-[#FFC123] text-[#FFC123]"
+                    : "text-gray-700"
                 }`}
                 onClick={() => setActiveSubtab("joined")}
               >
@@ -144,7 +152,9 @@ const GroupList: React.FC = () => {
               </button>
               <button
                 className={`px-4 py-2 font-bold ${
-                  activeSubtab === "notJoined" ? "border-b-2 border-[#FFC123] text-[#FFC123]" : "text-gray-700"
+                  activeSubtab === "notJoined"
+                    ? "border-b-2 border-[#FFC123] text-[#FFC123]"
+                    : "text-gray-700"
                 }`}
                 onClick={() => setActiveSubtab("notJoined")}
               >
@@ -162,7 +172,7 @@ const GroupList: React.FC = () => {
             ) : (
               filteredGroups().map((group: GroupType, index: number) => {
                 const existingGroupRequest = sentGroupRequests.find(
-                  (request) => request.groupId === group._id.toString()
+                  (request) => request.groupId === group._id.toString(),
                 );
 
                 return (
@@ -178,7 +188,9 @@ const GroupList: React.FC = () => {
                         alt={group.name}
                         className="h-12 w-12 rounded-full border-2 border-black"
                       />
-                      <span className="ml-4 text-lg font-bold">{group.name}</span>
+                      <span className="ml-4 text-lg font-bold">
+                        {group.name}
+                      </span>
                     </div>
                     <div className="ml-auto flex items-center space-x-4">
                       <span className="text-gray text-sm">
@@ -187,7 +199,9 @@ const GroupList: React.FC = () => {
                       {!group.members.includes(id) && (
                         <button
                           className={`cursor-pointer rounded px-4 py-2 font-bold text-black focus:outline-none ${
-                            existingGroupRequest ? "bg-gray-400 cursor-not-allowed" : "bg-[#FFC123] hover:bg-[#d89e1b]"
+                            existingGroupRequest
+                              ? "cursor-not-allowed bg-gray-400"
+                              : "bg-[#FFC123] hover:bg-[#d89e1b]"
                           }`}
                           onClick={() => handleJoinGroup(group._id.toString())}
                           disabled={!!existingGroupRequest}
