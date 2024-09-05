@@ -11,6 +11,7 @@ interface MenuDropDownProps {
   onViewHistory: () => void;
   creatorId: string;
   groupId?: string;
+  isDiscussionTab? : boolean;
 }
 
 const MenuDropDown: React.FC<MenuDropDownProps> = ({
@@ -18,7 +19,8 @@ const MenuDropDown: React.FC<MenuDropDownProps> = ({
   onDelete,
   onViewHistory,
   creatorId,
-  groupId
+  groupId,
+  isDiscussionTab
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { id } = useSelector(selectAuthState); // The authenticated user's ID
@@ -68,7 +70,7 @@ const MenuDropDown: React.FC<MenuDropDownProps> = ({
         )}
 
         {/* Both the owner and group admin can delete */}
-        {(isOwner || isGroupAdmin) && (
+        {(isOwner || isDiscussionTab && isGroupAdmin) && (
           <button
             onClick={handleDeleteClick}
             className="block w-full border-b border-gray-200 px-4 py-2 text-left text-sm text-gray-700 last:rounded-b-md hover:bg-gray-100"

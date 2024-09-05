@@ -3,7 +3,7 @@ import { GroupPostParams } from "../../interfaces/Posts";
 import PostContainer from "../post/PostContainer";
 import { AppState } from "../../app/store";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { selectAuthState } from "../../features/authSlice";
 import { selectGroupById } from "../../features/groupSlice";
 
@@ -11,11 +11,12 @@ export default function Discussion() {
   const posts = useSelector((state: AppState) => state.posts.groupPost);
   const { groupId } = useParams<{ groupId: string }>();
   const { id } = useSelector(selectAuthState);
-
+  const location = useLocation();
   const group = useSelector((state: AppState) =>
     selectGroupById(state, groupId),
   );
-
+  const isDiscussionTab = location.pathname.includes("discussion");
+ 
   const [canViewPosts, setCanViewPosts] = React.useState(false);
   const [isAdmin, setIsAdmin] = React.useState(false); // State to check if the user is admin
   useEffect(() => {
@@ -60,6 +61,7 @@ export default function Discussion() {
       createdAt={p.createdAt}
       comments={p.comments}
       history={p.history}
+      isDiscussionTab = {isDiscussionTab}
     />
   ));
 
