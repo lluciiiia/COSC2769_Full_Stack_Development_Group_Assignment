@@ -18,7 +18,7 @@ const PostModal = ({ isOpen, onClose, userId, post, groupId }) => {
   const [groups, setGroups] = useState<GroupType[]>([]);
   const [selectedGroupId, setSelectedGroupId] = useState<string>("");
   const [images, setImages] = useState<string[]>([]);
- console.log("say me",selectedGroupId);
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -135,11 +135,18 @@ const PostModal = ({ isOpen, onClose, userId, post, groupId }) => {
         {visibility === "GROUP" && (
           <div className="mb-4">
             <label className="mb-2 block text-base font-medium">
-              {groupId ? "Selected Group:" : "Select Group:"}
+              Selected Group:
             </label>
             {groupId ? (
               <p className="rounded border border-gray-300 bg-gray-100 p-2">
-                {groups[0]?.name || "None"}
+                  {groupId ? (
+      <p className="rounded border border-gray-300 bg-gray-100 p-2">
+        {/* Find the group that matches the groupId */}
+        {groups.find(group => group._id === groupId)?.name || "None"}
+      </p>
+    ) : (
+      <p className="text-gray-500">No group selected</p>
+    )}
               </p>
             ) : (
               <select

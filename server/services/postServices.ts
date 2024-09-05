@@ -240,7 +240,13 @@ export const updatePost = async (postId: string, postData: any) => {
 
       // Check if the user is a member of the group
       const isMember = group.members.includes(post.creatorId);
-      if (!isMember) throw new Error("User is not a member of the group");
+      
+      // If the user is not a member, check if they are the group admin
+      const isGroupAdmin = group.groupAdmin.toString() === post.creatorId.toString(); // Ensure comparison with proper types
+
+      if (!isMember && !isGroupAdmin) {
+        throw new Error("User is neither a member nor the group admin");
+      }
     }
 
     // Push the current content and images to the history before updating
@@ -264,6 +270,7 @@ export const updatePost = async (postId: string, postData: any) => {
     throw new Error("Failed to update post");
   }
 };
+
 
 export const deletePostById = async (postId: String) => {
   try {
