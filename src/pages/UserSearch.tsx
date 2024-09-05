@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { AppState } from "../app/store";
-import { getAllUsers } from "../controllers/user";
-import { UserType } from "../interfaces/Users";
+import { AppDispatch, AppState } from "../app/store";
+import { getAllViewedUsers } from "../controllers/user";
+import { ViewedUser } from "../interfaces/Users";
 
 const UserSearch = () => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
-  const users = useSelector((state: AppState) => state.user.users);
+  const users = useSelector((state: AppState) => state.user.viewUsers);
+  console.log(users);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    dispatch(getAllUsers()); // Fetch users when component mounts
+    dispatch(getAllViewedUsers()); // Fetch users when component mounts
   }, [dispatch]);
 
   // Handle input changes for search
@@ -27,8 +28,8 @@ const UserSearch = () => {
 
   // Filter users based on search query
   const filteredUsers = searchQuery
-    ? users.filter((user: UserType) =>
-        user.name.toLowerCase().includes(searchQuery.toLowerCase())
+    ? users.filter((user: ViewedUser) =>
+        user.name.toLowerCase().includes(searchQuery.toLowerCase()),
       )
     : users;
 
@@ -46,30 +47,32 @@ const UserSearch = () => {
           placeholder="Search by name..."
           value={searchQuery}
           onChange={handleSearchChange}
-          className="rounded-md border px-4 py-2 w-full"
+          className="w-full rounded-md border px-4 py-2"
         />
       </div>
 
       {/* User cards */}
       <div className="space-y-4">
         {displayedUsers.length > 0 ? (
-          displayedUsers.map((user: UserType) => (
+          displayedUsers.map((user: ViewedUser) => (
             <div
               key={user._id}
               onClick={() => handleUserClick(user._id)}
-              className="flex items-center border rounded-lg p-4 shadow-md w-full cursor-pointer"
+              className="flex w-full cursor-pointer items-center rounded-lg border p-4 shadow-md"
             >
               {/* User Profile Picture */}
               <img
                 src={user.profilePictureURL || "/default-profile.png"} // Fallback image if no profile picture
                 alt={`${user.name}'s profile`}
-                className="w-24 h-24 rounded-full object-cover mr-4"
+                className="mr-4 h-24 w-24 rounded-full object-cover"
               />
               {/* User Info */}
               <div className="flex-1">
                 <h2 className="text-xl font-semibold">{user.name}</h2>
                 {user.location && (
-                  <p className="text-sm text-gray-600">Location: {user.location}</p>
+                  <p className="text-sm text-gray-600">
+                    Location: {user.location}
+                  </p>
                 )}
               </div>
             </div>
