@@ -115,6 +115,7 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
             onDelete={handleDelete}
             onViewHistory={handleViewHistory}
             creatorId={post.creatorId}
+            groupId = {post.groupId}
           />
         )}
       </div>
