@@ -1,3 +1,4 @@
+// CommentItem.tsx
 import React, { useState } from "react";
 import MenuDropDown from "../MenuDropDown";
 import { CommentProps } from "../../interfaces/Comments";
@@ -9,7 +10,7 @@ import CommentEditor from "./CommentEditor";
 import { selectAuthState } from "../../features/authSlice";
 import { useSelector } from "react-redux";
 
-const CommentItem: React.FC<CommentProps> = ({ comment }) => {
+const CommentItem: React.FC<CommentProps & { groupId: string }> = ({ comment, groupId }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
@@ -70,7 +71,7 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
           <div className="flex items-center">
             <div className="mr-2 font-bold">
               <a
-                href={`/profile/${comment.userId}`}  // Replace with the correct URL structure
+                href={`/profile/${comment.userId}`} // Replace with the correct URL structure
                 className="text-blue-500 hover:underline"
               >
                 {comment.profileSection?.profileName}
@@ -100,6 +101,8 @@ const CommentItem: React.FC<CommentProps> = ({ comment }) => {
                     onDelete={handleDelete}
                     onViewHistory={handleViewHistory}
                     creatorId={comment.userId}
+                    groupId={groupId} // Pass groupId to MenuDropDown
+                    isDiscussionTab = {true}
                   />
                 )}
               </div>

@@ -19,6 +19,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   userId,
   postId,
   post,
+  groupId
 }) => {
   const dispatch: AppDispatch = useDispatch();
   const [comments, setComments] = useState<Comment[]>(initComments || []);
@@ -40,6 +41,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
       queueReaction(reaction);
     }
   };
+  console.log("mot lan nua day la group id", groupId);
 
   const sendReaction = async (reaction: any) => {
     try {
@@ -153,7 +155,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
 
               return (
                 <div key={comment._id} className="mb-4">
-                  <CommentItem comment={comment} />
+                    <CommentItem comment={comment} groupId={groupId} /> 
 
                   {/* Display the number of reactions with icons */}
                   <div className="flex space-x-2 text-sm text-gray-600">

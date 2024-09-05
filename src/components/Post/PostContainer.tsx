@@ -28,6 +28,7 @@ const PostContainer: React.FC<PostContainerProps> = ({
   isDetail,
   history,
   comments,
+  isDiscussionTab
 }) => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
@@ -170,6 +171,7 @@ const PostContainer: React.FC<PostContainerProps> = ({
       <ProfileSection
         profileImage={profileSection?.profileImage}
         profileName={profileSection?.profileName}
+        isDiscussionTab = { isDiscussionTab}
         post={{
           _id: postId,
           creatorId,
@@ -182,6 +184,7 @@ const PostContainer: React.FC<PostContainerProps> = ({
           isDetail,
           history,
           comments,
+          
         }}
       />
 
@@ -269,6 +272,7 @@ const PostContainer: React.FC<PostContainerProps> = ({
                   onReact={(reaction) =>
                     handleCommentReaction(comment._id, reaction)
                   }
+                  groupId={groupId}
                 />
               ))
           )}
