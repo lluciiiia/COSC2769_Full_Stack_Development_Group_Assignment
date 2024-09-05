@@ -1,36 +1,89 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ReactionIcons, PostReactionsProps } from "../../interfaces/Reactions";
 import ReactionIconButton from "./ReactionIconButton";
 import { ReactionIconsWithText } from "../../interfaces/Reactions";
 import { CommentIcon } from "../../assets/icons/CommentIcon";
 import { LikeIcon } from "../../assets/icons/LikeIcon";
+import { useSelector } from "react-redux";
+import { selectAuthState } from "../../features/authSlice";
 
 export const PostReactions: React.FC<PostReactionsProps> = ({
   handleClick,
   onReact,
   initialReaction = "REACT",
-  isReacted: initialIsReacted,
   reactions = [],
   commentCount,
 }) => {
   const [showReactions, setShowReactions] = useState(false);
-  const [selectedReaction, setSelectedReaction] = useState(
-    ReactionIcons[initialReaction] ? initialReaction : "REACT",
-  );
-  const [isReacted, setIsReacted] = useState(initialIsReacted);
+  const [selectedReaction, setSelectedReaction] = useState("REACT");
+  const { id: userId } = useSelector(selectAuthState); // Get current userId from auth state
+  const [isReacted, setIsReacted] = useState(false);
+  const [displayedReactions, setDisplayedReactions] = useState<string[]>([]);
+  const [totalReaction, setTotalReaction] = useState(reactions.length);
+
+  useEffect(() => {
+    // Update displayed reactions and total reaction count when 'reactions' prop changes
+    const uniqueReactions = Array.from(
+      new Set(reactions.map((reaction) => ReactionIcons[reaction.reactionType]))
+    ).slice(0, 3);
+
+    setDisplayedReactions(uniqueReactions);
+    setTotalReaction(reactions.length);
+
+    // Check if the user has already reacted
+    const userReaction = reactions.find(
+      (reaction) => reaction.userId && reaction.userId.toString() === userId
+    );
+
+    if (userReaction) {
+      setSelectedReaction(userReaction.reactionType);
+      setIsReacted(true);
+    } else {
+      setSelectedReaction("REACT");
+      setIsReacted(false);
+    }
+  }, [reactions, userId]);
 
   const handleReactionClick = (reaction: string) => {
-    if (selectedReaction === reaction && isReacted) {
+    if (isReacted && selectedReaction === reaction) {
+      // Undo the reaction if the user clicks the same reaction
       setIsReacted(false);
       setSelectedReaction("REACT");
       onReact("UNDO_REACT");
+  
+      // Remove the reaction from displayed reactions
+      setDisplayedReactions((prevReactions) =>
+        prevReactions.filter((r) => r !== ReactionIcons[reaction])
+      );
+      setTotalReaction(totalReaction - 1);
+    } else if (isReacted && selectedReaction !== reaction) {
+      // Update the reaction if the user is changing their reaction
+      setSelectedReaction(reaction);
+      onReact(reaction);
+  
+      // Update displayed reactions by replacing the old reaction
+      setDisplayedReactions((prevReactions) => {
+        const updatedReactions = prevReactions.map((r) =>
+          r === ReactionIcons[selectedReaction] ? ReactionIcons[reaction] : r
+        );
+        return Array.from(new Set(updatedReactions)).slice(0, 3);
+      });
     } else {
+      // Add new reaction if the user hasn't reacted yet
       setIsReacted(true);
       setSelectedReaction(reaction);
       onReact(reaction);
+  
+      // Add new reaction to displayed reactions
+      setDisplayedReactions((prevReactions) => {
+        const updatedReactions = [ReactionIcons[reaction], ...prevReactions];
+        return Array.from(new Set(updatedReactions)).slice(0, 3);
+      });
+      setTotalReaction(totalReaction + 1);
     }
     setShowReactions(false);
   };
+  
 
   const handleCommentClick = () => {
     if (!isReacted && selectedReaction === "REACT") {
@@ -38,14 +91,6 @@ export const PostReactions: React.FC<PostReactionsProps> = ({
     }
     handleClick();
   };
-
-  const uniqueReactions = Array.from(
-    new Set(reactions.map((r) => r.reactionType))
-  )
-    .slice(0, 3)
-    .map((reactionType) => ReactionIcons[reactionType]);
-
-  const totalReactions = reactions.length;
 
   return (
     <div className="relative flex flex-col">
@@ -55,13 +100,13 @@ export const PostReactions: React.FC<PostReactionsProps> = ({
 
       <div className="flex items-center space-x-2 p-4">
         <div className="flex -space-x-1">
-          {uniqueReactions.map((icon, index) => (
+          {displayedReactions.map((icon, index) => (
             <span key={index} className="inline-flex items-center">
               <span>{icon}</span>
             </span>
           ))}
         </div>
-        <span className="text-sm text-gray-500">{totalReactions}</span>
+        <span className="text-sm text-gray-500">{totalReaction}</span>
       </div>
 
       <div

@@ -30,7 +30,6 @@ const ReactionIconButton: React.FC<ReactionIconButtonProps> = ({
       break;
 
   }
-  console.log(color)
   return (
     <button
       onClick={() => onClick(reactionType)}

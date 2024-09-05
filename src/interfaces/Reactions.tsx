@@ -17,6 +17,7 @@ export interface ReactionButtonProps {
   onReact: (reaction: string) => void;
   initialReaction?: string;
   isReacted: boolean;
+  reactionType?: string,
   comment?: string;
 }
 
