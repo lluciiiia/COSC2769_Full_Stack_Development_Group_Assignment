@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { UserType } from "../interfaces/Users";
+import { UserType, ViewedUser } from "../interfaces/Users";
 import { BACKEND_URL } from "./posts";
 
 export const getAllUsers = createAsyncThunk<UserType[]>(
@@ -16,6 +16,26 @@ export const getAllUsers = createAsyncThunk<UserType[]>(
     }
 
     const data: UserType[] = await response.json();
+    return data;
+  },
+);
+
+export const getAllViewedUsers = createAsyncThunk<ViewedUser[]>(
+  "user/getAllUsers",
+  async () => {
+    const response = await fetch(BACKEND_URL + `/api/users/view-users`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    console.log(response);
+
+    if (!response.ok) {
+      console.error("Failed to fetch users:", response.statusText);
+      throw new Error("Failed to fetch users");
+    }
+
+    const data: ViewedUser[] = await response.json();
     return data;
   },
 );

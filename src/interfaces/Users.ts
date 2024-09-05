@@ -22,11 +22,18 @@ export type UserType = {
   bio?: string;
   dateCreated?: string;
   friends?: Array<{ _id: string; name: string; profilePictureURL?: string }>;
-  createdAt: string; 
+  createdAt: string;
+};
+
+export type ViewedUser = {
+  _id: string;
+  name: string;
+  profilePictureURL?: string;
+  location?: string;
 };
 
 export type UserSliceParam = {
-  users: UserType[];
+  viewUsers: ViewedUser[];
   currentUser: UserType;
   viewedUser: Partial<UserType> | null;
 };

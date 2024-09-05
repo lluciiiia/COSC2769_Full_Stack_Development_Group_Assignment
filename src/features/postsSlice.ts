@@ -5,11 +5,13 @@ import {
   getPosts,
   getPostsByCreatorId,
   getPostsByGroup,
+  getViewedUserPosts,
 } from "../controllers/posts";
 
 const initialState: PostState = {
   posts: [],
   creatorPost: [],
+  viewedPosts: [],
   groupPost: [], // Ensure this is part of the initial state
 };
 
@@ -23,14 +25,13 @@ const postSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getPosts.fulfilled, (state, action) => {
-      console.log("his");
       state.posts = action.payload;
     });
     builder.addCase(getPostsByCreatorId.fulfilled, (state, action) => {
       state.creatorPost = action.payload;
     });
-    builder.addCase(getAllPosts.fulfilled, (state, action) => {
-      state.posts = action.payload;
+    builder.addCase(getViewedUserPosts.fulfilled, (state, action) => {
+      state.viewedPosts = action.payload;
     });
     builder.addCase(getPostsByGroup.fulfilled, (state, action) => {
       state.groupPost = action.payload;

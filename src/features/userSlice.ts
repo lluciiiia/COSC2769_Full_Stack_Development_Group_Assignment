@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { UserSliceParam } from "../interfaces/Users";
 import {
+  getAllViewedUsers,
   getUser,
   getViewedUser,
   sendFriendRequest,
@@ -10,7 +11,7 @@ import { AppState } from "../app/store";
 
 //current user
 const initialState: UserSliceParam = {
-  users: [],
+  viewUsers: [], //for for searching
   currentUser: {
     _id: "",
     name: "",
@@ -19,7 +20,7 @@ const initialState: UserSliceParam = {
     activeStatus: false,
     createdAt: "",
   },
-  viewedUser: null,
+  viewedUser: null, //for profile page
 };
 
 const userSlice = createSlice({
@@ -33,6 +34,9 @@ const userSlice = createSlice({
   extraReducers(builder) {
     builder.addCase(getUser.fulfilled, (state, action) => {
       state.currentUser = action.payload;
+    });
+    builder.addCase(getAllViewedUsers.fulfilled, (state, action) => {
+      state.viewUsers = action.payload;
     });
     builder.addCase(getViewedUser.fulfilled, (state, action) => {
       state.viewedUser = action.payload;

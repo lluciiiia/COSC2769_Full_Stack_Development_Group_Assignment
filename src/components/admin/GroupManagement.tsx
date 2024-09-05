@@ -130,7 +130,7 @@ export const GroupManagement = () => {
                   <img
                     src={group.imageURL}
                     alt={group.name}
-                    className="h-48 w-full object-fit"
+                    className="object-fit h-48 w-full"
                   />
                   <div className="flex flex-grow flex-col p-4">
                     <h2 className="mb-2 text-xl font-bold text-gray-900">
@@ -162,7 +162,7 @@ export const GroupManagement = () => {
                         onClick={() => handleAcceptGroupClick(group._id)}
                         className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
                       >
-                        Accpet
+                        Accept
                       </button>
                     </div>
                   </div>

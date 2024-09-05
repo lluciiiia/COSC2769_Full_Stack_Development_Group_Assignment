@@ -15,75 +15,77 @@ export const PostReactions: React.FC<PostReactionsProps> = ({
   commentCount,
 }) => {
   const [showReactions, setShowReactions] = useState(false);
-  const [selectedReaction, setSelectedReaction] = useState("REACT");
-  const { id: userId } = useSelector(selectAuthState); // Get current userId from auth state
-  const [isReacted, setIsReacted] = useState(false);
+  const [selectedReaction, setSelectedReaction] = useState(initialReaction);
+  const { id: userId } = useSelector(selectAuthState);
+  const [isReacted, setIsReacted] = useState(initialReaction !== "REACT");
   const [displayedReactions, setDisplayedReactions] = useState<string[]>([]);
   const [totalReaction, setTotalReaction] = useState(reactions.length);
 
   useEffect(() => {
-    // Update displayed reactions and total reaction count when 'reactions' prop changes
+    // Calculate unique reactions
     const uniqueReactions = Array.from(
       new Set(reactions.map((reaction) => ReactionIcons[reaction.reactionType]))
     ).slice(0, 3);
 
-    setDisplayedReactions(uniqueReactions);
-    setTotalReaction(reactions.length);
+    // Update displayed reactions if different
+    setDisplayedReactions(prev => {
+      const newDisplay = uniqueReactions;
+      return newDisplay.join() === prev.join() ? prev : newDisplay;
+    });
 
-    // Check if the user has already reacted
+    // Update total reaction count if different
+    setTotalReaction(prev => reactions.length !== prev ? reactions.length : prev);
+
+    // Check if the user has reacted
     const userReaction = reactions.find(
       (reaction) => reaction.userId && reaction.userId.toString() === userId
     );
 
     if (userReaction) {
-      setSelectedReaction(userReaction.reactionType);
-      setIsReacted(true);
+      setSelectedReaction(prev => userReaction.reactionType !== prev ? userReaction.reactionType : prev);
+      setIsReacted(prev => true);
     } else {
-      setSelectedReaction("REACT");
-      setIsReacted(false);
+      setSelectedReaction(prev => "REACT" !== prev ? "REACT" : prev);
+      setIsReacted(prev => false);
     }
   }, [reactions, userId]);
 
   const handleReactionClick = (reaction: string) => {
     if (isReacted && selectedReaction === reaction) {
-      // Undo the reaction if the user clicks the same reaction
       setIsReacted(false);
       setSelectedReaction("REACT");
       onReact("UNDO_REACT");
-  
+
       // Remove the reaction from displayed reactions
-      setDisplayedReactions((prevReactions) =>
-        prevReactions.filter((r) => r !== ReactionIcons[reaction])
+      setDisplayedReactions(prevReactions =>
+        prevReactions.filter(r => r !== ReactionIcons[reaction])
       );
-      setTotalReaction(totalReaction - 1);
+      setTotalReaction(prev => prev - 1);
     } else if (isReacted && selectedReaction !== reaction) {
-      // Update the reaction if the user is changing their reaction
       setSelectedReaction(reaction);
       onReact(reaction);
-  
+
       // Update displayed reactions by replacing the old reaction
-      setDisplayedReactions((prevReactions) => {
-        const updatedReactions = prevReactions.map((r) =>
+      setDisplayedReactions(prevReactions => {
+        const updatedReactions = prevReactions.map(r =>
           r === ReactionIcons[selectedReaction] ? ReactionIcons[reaction] : r
         );
         return Array.from(new Set(updatedReactions)).slice(0, 3);
       });
     } else {
-      // Add new reaction if the user hasn't reacted yet
       setIsReacted(true);
       setSelectedReaction(reaction);
       onReact(reaction);
-  
+
       // Add new reaction to displayed reactions
-      setDisplayedReactions((prevReactions) => {
+      setDisplayedReactions(prevReactions => {
         const updatedReactions = [ReactionIcons[reaction], ...prevReactions];
         return Array.from(new Set(updatedReactions)).slice(0, 3);
       });
-      setTotalReaction(totalReaction + 1);
+      setTotalReaction(prev => prev + 1);
     }
     setShowReactions(false);
   };
-  
 
   const handleCommentClick = () => {
     if (!isReacted && selectedReaction === "REACT") {

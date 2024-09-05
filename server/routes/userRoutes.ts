@@ -9,6 +9,7 @@ import {
   addFriend,
   acceptFriendRequest,
   groupJoinRequest,
+  getAllViewedUsers,
 } from "../services/userServices";
 import { isAuthenticated } from "../middleware/authenticate";
 import mongoose from "mongoose";
@@ -19,6 +20,16 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const users = await getAllUsers();
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
+
+// get all users for searching (only return neccessary information)
+router.get("/view-users", async (req, res) => {
+  try {
+    const users = await getAllViewedUsers();
     res.json(users);
   } catch (error) {
     res.status(500).json({ error: error });
@@ -154,7 +165,5 @@ router.post("/sentGroup/:groupId", async (req, res) => {
     res.status(500).json({ error: error });
   }
 });
-
-
 
 export default router;

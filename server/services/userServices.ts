@@ -20,6 +20,22 @@ export const getAllUsers = async () => {
   }
 };
 
+export const getAllViewedUsers = async () => {
+  try {
+    const users = await User.find().select(
+      "_id name profilePictureURL location",
+    ); 
+
+    if (users.length === 0) throw new Error("No users found");
+
+    return users;
+
+  } catch (error) {
+    console.error("Error fetching users", error);
+    throw new Error("Failed to fetch users");
+  }
+};
+
 //get 1 user by id
 export const getUserById = async (userId: string) => {
   try {
@@ -173,5 +189,3 @@ export const acceptFriendRequest = async (userId: string, friendId: string) => {
     throw new Error("Failed to accept friend request ");
   }
 };
-
-

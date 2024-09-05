@@ -1,4 +1,6 @@
+import mongoose from "mongoose";
 import Group from "../models/group";
+import { group } from "console";
 
 export const getAllGroups = async () => {
   try {
@@ -14,12 +16,9 @@ export const getAllGroups = async () => {
 export const getGroupsByUserId = async (userId: string) => {
   try {
     const groups = await Group.find({
-      $or: [
-        { members: userId },            
-        { groupAdmin: userId }          
-      ]
+      $or: [{ members: userId }, { groupAdmin: userId }],
     }).select("_id name");
-    
+
     console.log("Fetched Groups:", groups);
     return groups;
   } catch (error) {
@@ -33,7 +32,7 @@ export const acceptGroup = async (groupId: string) => {
     const updatedGroup = await Group.findByIdAndUpdate(
       groupId,
       { accepted: true },
-      { new: true }
+      { new: true },
     );
 
     return updatedGroup;
@@ -43,12 +42,17 @@ export const acceptGroup = async (groupId: string) => {
   }
 };
 
-export const removeMemberFromGroup = async (groupId: string, memberId: string) => {
+export const removeMemberFromGroup = async (
+  groupId: string,
+  memberId: string,
+) => {
   try {
+    const groupObjectId = new mongoose.Types.ObjectId(groupId);
+    const memberObjectId = new mongoose.Types.ObjectId(memberId);
     const updatedGroup = await Group.findByIdAndUpdate(
-      groupId,
-      { $pull: { members: memberId } }, 
-      { new: true }
+      groupObjectId,
+      { $pull: { members: memberObjectId } },
+      { new: true },
     );
 
     if (!updatedGroup) {
@@ -61,10 +65,11 @@ export const removeMemberFromGroup = async (groupId: string, memberId: string) =
     throw new Error("Failed to remove member from group");
   }
 };
+
 export const getAllGroupsWithMembers = async () => {
   try {
     const groupsWithMembers = await Group.find()
-      .select("members") 
+      .select("members")
       .populate("members", "name email profilePictureURL");
 
     return groupsWithMembers;
@@ -101,4 +106,3 @@ export const updateGroup = async (groupId: string, updateData: any) => {
     throw new Error("Failed to fetch group");
   }
 };
-

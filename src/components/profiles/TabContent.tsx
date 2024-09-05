@@ -5,7 +5,10 @@ import About from "./About";
 import PhotoList from "./PhotoList";
 import PostsProfileList from "./PostsProfileList";
 import { useEffect, useRef } from "react";
-import { getPostsByCreatorId } from "../../controllers/posts";
+import {
+  getPostsByCreatorId,
+  getViewedUserPosts,
+} from "../../controllers/posts";
 import ProfileFriendList from "./ProfileFriendList";
 
 const TabContent = ({
@@ -21,13 +24,17 @@ const TabContent = ({
   const firstRender = useRef(true);
 
   useEffect(() => {
-    dispatch(getPostsByCreatorId(userId));
+    if (isAuthenticatedUser) {
+      dispatch(getPostsByCreatorId(userId));
+    } else {
+      dispatch(getViewedUserPosts(userId));
+    }
     firstRender.current = false;
-  }, [dispatch, userId]);
+  }, [dispatch, userId, isAuthenticatedUser]);
 
   switch (activeTab) {
     case "Posts":
-      return <PostsProfileList />;
+      return <PostsProfileList isAuthenticatedUser={isAuthenticatedUser}/>;
     case "About":
       return <About isAuthenticatedUser={isAuthenticatedUser} />;
     case "Friends":

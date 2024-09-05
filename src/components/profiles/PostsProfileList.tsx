@@ -4,9 +4,15 @@ import { PostParams } from "../../interfaces/Posts.tsx";
 import { AppState } from "../../app/store.ts";
 import PostContainer from "../Post/PostContainer.tsx";
 
+const PostsProfileList = ({ isAuthenticatedUser }) => {
+  const creatorPosts = useSelector(
+    (state: AppState) => state.posts.creatorPost,
+  );
 
-const PostsProfileList = () => {
-  const posts = useSelector((state: AppState) => state.posts.creatorPost);
+  const viewedPosts = useSelector((state: AppState) => state.posts.viewedPosts);
+
+  const posts: PostParams[] = isAuthenticatedUser ? creatorPosts : viewedPosts;
+  console.log(posts);
 
   const postList = posts.map((p: PostParams) => (
     <PostContainer key={p._id} {...p} />

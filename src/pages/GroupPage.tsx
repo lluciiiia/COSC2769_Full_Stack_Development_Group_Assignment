@@ -32,11 +32,11 @@ export default function GroupPage() {
   const [isInGroup, setIsInGroup] = useState(false);
 
   const selectedGroup = useSelector((state: AppState) =>
-    selectGroupById(state, groupId)
+    selectGroupById(state, groupId),
   );
 
   const existingGroupRequest = useSelector((state: AppState) =>
-    selectGroupRequest(state, groupId)
+    selectGroupRequest(state, groupId),
   );
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export default function GroupPage() {
     if (selectedGroup) {
       setGroup(selectedGroup);
       const memberStatus = selectedGroup.members.some(
-        (member) => member._id === userId
+        (member) => member._id === userId,
       );
       if (memberStatus) {
         setIsMember(true);
@@ -71,7 +71,6 @@ export default function GroupPage() {
       }
     }
   }, [selectedGroup, userId]);
-  
 
   const handleJoinGroup = async () => {
     if (existingGroupRequest) {
@@ -157,45 +156,45 @@ export default function GroupPage() {
             </p>
           </div>
           <div className="ml-auto mr-2 flex space-x-2">
-  {isMember || isAdmin ? ( // Show buttons for members or admins
-    <>
-      <button
-        onClick={handleCreatePost}
-        className="rounded-md bg-[#FFC123] px-2 text-sm text-white shadow-md"
-      >
-        Create Post
-      </button>
-      {isMember && ( // Only show if user is a member
-        <button
-          onClick={handleLeaveGroup}
-          className="rounded-md bg-red-600 px-2 text-sm text-white shadow-md"
-        >
-          Leave Group
-        </button>
-      )}
-      {isAdmin && ( // Show if user is an admin
-        <button
-          onClick={handleOpenEditModal}
-          className="rounded-md bg-blue-500 px-2 text-sm text-white shadow-md"
-        >
-          Edit Group
-        </button>
-      )}
-    </>
-  ) : (
-    <button
-      onClick={handleJoinGroup}
-      className={`rounded-md px-4 text-sm text-white shadow-md ${
-        existingGroupRequest || isClick
-          ? "cursor-not-allowed bg-gray-400"
-          : "bg-[#FFC123]"
-      }`}
-      disabled={existingGroupRequest || isClick}
-    >
-      {isClick ? "Request Sent" : "Join"}
-    </button>
-  )}
-</div>
+            {isMember || isAdmin ? ( // Show buttons for members or admins
+              <>
+                <button
+                  onClick={handleCreatePost}
+                  className="rounded-md bg-[#FFC123] px-2 text-sm text-white shadow-md"
+                >
+                  Create Post
+                </button>
+                {isMember && ( // Only show if user is a member
+                  <button
+                    onClick={handleLeaveGroup}
+                    className="rounded-md bg-red-600 px-2 text-sm text-white shadow-md"
+                  >
+                    Leave Group
+                  </button>
+                )}
+                {isAdmin && ( // Show if user is an admin
+                  <button
+                    onClick={handleOpenEditModal}
+                    className="rounded-md bg-blue-500 px-2 text-sm text-white shadow-md"
+                  >
+                    Edit Group
+                  </button>
+                )}
+              </>
+            ) : (
+              <button
+                onClick={handleJoinGroup}
+                className={`rounded-md px-4 text-sm text-white shadow-md ${
+                  existingGroupRequest || isClick
+                    ? "cursor-not-allowed bg-gray-400"
+                    : "bg-[#FFC123]"
+                }`}
+                disabled={existingGroupRequest || isClick}
+              >
+                {isClick ? "Request Sent" : "Join"}
+              </button>
+            )}
+          </div>
         </div>
 
         <nav className="mt-4 border-b border-gray-300 bg-white">

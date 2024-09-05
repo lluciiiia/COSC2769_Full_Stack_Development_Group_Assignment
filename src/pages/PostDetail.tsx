@@ -10,11 +10,12 @@ import { selectAuthState } from "../features/authSlice";
 import { createReaction } from "../controllers/reactions";
 import { selectGroupById } from "../features/groupSlice";
 import { AppState } from "../app/store";
+import AdminNavbar from "../components/AdminNavbar";
 
 const PostDetail: React.FC = () => {
   const [post, setPost] = useState<PostParams | null>(null);
   const { postId } = useParams();
-  const { id } = useSelector(selectAuthState);
+  const { id,isAdmin } = useSelector(selectAuthState);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -45,14 +46,11 @@ const PostDetail: React.FC = () => {
   };
 
   if (!post) return <p>Loading...</p>;
-
-  
   const groupId = post.groupId || "";
-
 
   return (
     <>
-      <Navbar />
+      {isAdmin ? <AdminNavbar /> : <Navbar />}
       <div className="mt-[120px] flex h-full items-center justify-center overflow-y-auto">
         <div className="mr-[300px] flex items-center justify-center gap-28">
           {post && (
