@@ -17,7 +17,8 @@ function PostList() {
 
   useEffect(() => {
     if (firstRender.current) {
-      dispatch(getPosts(id)).finally(() => {
+      console.log("hi");
+      dispatch(getPosts()).finally(() => {
         firstRender.current = false;
         setLoading(false);
       });

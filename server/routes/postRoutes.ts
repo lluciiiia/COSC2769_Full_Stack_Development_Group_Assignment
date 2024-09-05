@@ -21,6 +21,16 @@ router.get("/all", async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  try {
+    const userId = req.session.user.id;
+    const posts = await getPostsForUser(userId);
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
+
 router.get("/profile/:userId", async (req, res) => {
   try {
     const posts = await getPostListByCreatorId(req.params.userId);
