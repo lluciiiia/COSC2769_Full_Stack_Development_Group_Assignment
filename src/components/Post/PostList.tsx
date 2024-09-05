@@ -24,7 +24,7 @@ function PostList() {
       });
     }
   }, [dispatch, id]);
-
+  console.log(posts, "post");
   return (
     <div id="postList" className="space-y-6 pt-20">
       {loading ? (

@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import { selectAuthState } from "../../features/authSlice";
 import { selectGroupById } from "../../features/groupSlice";
-
+import { PostParams } from "../../interfaces/Posts";
 export default function Discussion() {
   const posts = useSelector((state: AppState) => state.posts.groupPost);
   const { groupId } = useParams<{ groupId: string }>();
@@ -48,25 +48,8 @@ export default function Discussion() {
 }, [group, id, isAdmin, canViewPosts]);
 
 
-  const postList = posts.map((p: GroupPostParams) => (
-    <PostContainer
-      key={p._id}
-      _id={p._id}
-      creatorId={p.creatorId?._id || ""}
-      groupId={p.groupId || ""}
-      content={p.content}
-      images={p.images || []}
-      profileSection={{
-        profileImage: p.creatorId?.profilePictureURL,
-        profileName: p.creatorId?.name,
-      }}
-      isDetail={p.isDetail}
-      visibility={p.visibility}
-      createdAt={p.createdAt}
-      comments={p.comments}
-      history={p.history}
-      isDiscussionTab = {isDiscussionTab}
-    />
+  const postList = posts.map((p: PostParams, index: number) => (
+    <PostContainer key={`${p._id}-${index}`} {...p} />
   ));
 
   return (
