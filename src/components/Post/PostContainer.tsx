@@ -272,6 +272,7 @@ const PostContainer: React.FC<PostContainerProps> = ({
                   onReact={(reaction) =>
                     handleCommentReaction(comment._id, reaction)
                   }
+                  groupId={groupId}
                 />
               ))
           )}
