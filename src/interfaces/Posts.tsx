@@ -57,6 +57,7 @@ export interface PostProps {
 export interface PostState {
   posts: PostParams[];
   creatorPost: PostParams[];
+  viewedPosts: PostParams[];
   groupPost: GroupPostParams[];
 }
 

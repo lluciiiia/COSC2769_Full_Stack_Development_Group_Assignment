@@ -8,6 +8,7 @@ import {
   getPostByGroupId,
   getPostsForUser,
   getAllPosts,
+  getViewedUserPosts,
 } from "../services/postServices";
 
 const router = express.Router();
@@ -37,6 +38,20 @@ router.get("/profile/:userId", async (req, res) => {
     res.json(posts);
   } catch (error) {
     res.status(500).json({ error: error });
+  }
+});
+
+//fetch post in profile
+router.get("/view-profile/:viewedUserId", async (req, res) => {
+  try {
+    const userId = req.session.user.id;
+    const viewedUserId = req.params.viewedUserId;
+    const posts = await getViewedUserPosts(userId, viewedUserId);
+    console.log(viewedUserId);
+
+    res.json(posts);
+  } catch (err) {
+    res.status(500).json({ error: err });
   }
 });
 

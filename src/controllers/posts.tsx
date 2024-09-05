@@ -1,5 +1,6 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { combineSlices, createAsyncThunk } from "@reduxjs/toolkit";
 import { PostParams, RevertPostParams } from "../interfaces/Posts";
+import { useContext } from "react";
 
 export const BACKEND_URL = "http://localhost:8080";
 
@@ -27,7 +28,6 @@ export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
       method: "GET",
       credentials: "include",
     });
-    
 
     if (!response.ok) {
       console.error("Failed to fetch posts:", response.statusText);
@@ -35,7 +35,7 @@ export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
     }
 
     const data: PostParams[] = await response.json();
-    console.log(data)
+    console.log(data);
     return data;
   },
 );
@@ -58,6 +58,30 @@ export const getPostById = async (id: String | undefined) => {
   const data: PostParams = await response.json();
   return data;
 };
+
+export const getViewedUserPosts = createAsyncThunk<
+  PostParams[],
+  string | undefined
+>("posts/getViewedUserPosts", async (viewedUserId) => {
+  console.log("hi");
+  const response = await fetch(
+    BACKEND_URL + `/api/posts/view-profile/${viewedUserId}`,
+    {
+      method: "GET",
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    console.error("Failed to fetch posts:", response.statusText);
+    throw new Error("Failed to fetch posts");
+  }
+
+  const data: PostParams[] = await response.json();
+  console.log("think", data);
+  return data;
+});
+
 export const getPostsByCreatorId = createAsyncThunk<
   PostParams[],
   string | undefined
