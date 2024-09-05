@@ -16,13 +16,13 @@ export const createReaction = async ({
   targetType: string;
 }) => {
   try {
-    let isCreator=true;
+    let isCreator = true;
     let target;
     let newNoti;
     if (targetType === "post") {
       target = await Post.findById(postId);
       if (target?.creatorId.toString() !== userId) {
-        isCreator= false;
+        isCreator = false;
         newNoti = {
           senderId: userId,
           receiverId: target?.creatorId,
@@ -33,7 +33,7 @@ export const createReaction = async ({
     } else {
       target = await Comment.findById(postId);
       if (target?.userId.toString() !== userId) {
-        isCreator= false;
+        isCreator = false;
         newNoti = {
           senderId: userId,
           receiverId: target?.userId,
@@ -41,7 +41,7 @@ export const createReaction = async ({
           postId: target?.postId,
         };
       }
-    } 
+    }
 
     const notification = new Notifications(newNoti);
 
@@ -51,9 +51,9 @@ export const createReaction = async ({
       );
     }
 
-    if(isCreator){
-      console.log("Cannot create noti for post owner")
-    }else{
+    if (isCreator) {
+      console.log("Cannot create noti for post owner");
+    } else {
       notification.save();
     }
     let existingReaction = await Reaction.findOne({
@@ -85,10 +85,12 @@ export const createReaction = async ({
   }
 };
 
-
 export const fetchReaction = async (postId: string, userId: string) => {
   try {
-    const existingReaction = await Reaction.findOne({ postId, userId });
+    let existingReaction = await Reaction.findOne({
+      postId: new mongoose.Types.ObjectId(postId),
+      userId,
+    });
 
     if (!existingReaction) {
       return null;
@@ -100,49 +102,25 @@ export const fetchReaction = async (postId: string, userId: string) => {
     throw new Error("Failed to fetch reaction");
   }
 };
-
-export const undoReaction = async (notiId: string) => {
+export const undoReaction = async (postId: string, userId: string) => {
   try {
-    const existingReaction = await Reaction.findById(notiId);
+    // Find the existing reaction
+    console.log(postId, "postOd");
+    console.log(userId, "userOd");
+    const existingReaction = await Reaction.findOne({ postId, userId });
 
     if (!existingReaction) {
       console.log("Cannot find the reaction");
       return null;
     }
 
-    const target =
-      existingReaction.onModel === "Post"
-        ? await Post.findById(existingReaction.postId)
-        : await Comment.findById(existingReaction.postId);
-
-    if (!target) {
-      console.log("Target post or comment not found");
-      return null;
-    }
-
-    // Remove the reaction from the reactions array
-    target.reactions = target.reactions.filter(
-      (reactionId: mongoose.Types.ObjectId) =>
-        !reactionId.equals(existingReaction._id),
-    );
-
-    await target.save();
-    await Reaction.findByIdAndDelete(notiId);
+    await Reaction.findByIdAndDelete(existingReaction._id);
 
     console.log("Reaction deleted successfully");
 
-    return target.reactions;
+    return { message: "Delete successfully" };
   } catch (error) {
     console.error("Error in undoReaction", error);
     throw new Error("Failed to delete reaction");
   }
 };
-
-// export const fetchReactionByPost= async (postId: string)=>{
-//   try{
-//     const existingReaction= await Reaction.findOne({postId});
-//   }catch(error){
-//     console.error("Error fetching reaction", error);
-//     throw new Error("Failed to fetch reaction");
-//   }
-// }
