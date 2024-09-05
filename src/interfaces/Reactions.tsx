@@ -21,6 +21,14 @@ export interface ReactionButtonProps {
   comment?: string;
 }
 
+export interface ReactionForCommentProps{
+  onReact: (reaction: string) => void;
+  initialReaction?: string;
+  isReacted: boolean;
+  reactionType?: string,
+  comment?: Reaction;
+}
+
 export interface PostReactionsProps {
   handleClick: () => void;
   onReact: (reaction: string) => void;

@@ -18,7 +18,6 @@ const PostModal = ({ isOpen, onClose, userId, post, groupId }) => {
   const [groups, setGroups] = useState<GroupType[]>([]);
   const [selectedGroupId, setSelectedGroupId] = useState<string>("");
   const [images, setImages] = useState<string[]>([]);
- console.log("say me",selectedGroupId);
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";

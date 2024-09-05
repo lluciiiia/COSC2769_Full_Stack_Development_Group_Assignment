@@ -36,7 +36,7 @@ const PostDetail: React.FC = () => {
   const handleReaction = async (reaction: string) => {
     if (post) {
       try {
-        await createReaction({ postId: post._id, reactionType: reaction });
+        await createReaction(reaction);
         console.log(`Reaction ${reaction} saved for post ${post._id}`);
       } catch (error) {
         console.error("Error saving reaction:", error);
@@ -48,7 +48,6 @@ const PostDetail: React.FC = () => {
 
   
   const groupId = post.groupId || "";
-  console.log( "day la group ad min", groupId)
 
 
   return (

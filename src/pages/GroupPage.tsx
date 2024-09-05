@@ -13,7 +13,6 @@ import PostModal from "../components/post/modals/PostModal";
 import { selectAuthState } from "../features/authSlice";
 import { sendGroupRequest } from "../controllers/user";
 import { selectGroupRequest } from "../features/notificationSlice";
-import { groupSentRequest } from "../controllers/notification";
 import { leaveGroup } from "../controllers/group";
 import UpdateGroupModal from "../components/group/EditFullGroupModal"; // Import the EditGroupModal
 
