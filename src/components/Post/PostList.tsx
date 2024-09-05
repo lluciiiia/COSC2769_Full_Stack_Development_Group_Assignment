@@ -10,17 +10,16 @@ interface PostListProps {
   isAdmin?: boolean; // Add the isAdmin prop
 }
 
-
 function PostList({ isAdmin = false }: PostListProps) {
   const { id } = useSelector(selectAuthState);
   const dispatch: AppDispatch = useDispatch();
 
   const [loading, setLoading] = useState(true);
   const firstRender = useRef(true);
-  const posts = useSelector((state: AppState) => 
-    isAdmin ? state.admin.posts : state.posts.posts
+  const posts = useSelector((state: AppState) =>
+    isAdmin ? state.admin.posts : state.posts.posts,
   );
-  
+
   useEffect(() => {
     if (!isAdmin && firstRender.current) {
       dispatch(getPosts()).finally(() => {
@@ -48,7 +47,7 @@ function PostList({ isAdmin = false }: PostListProps) {
         </div>
       ) : posts.length > 0 ? (
         posts.map((p: PostParams, index: number) => (
-          <PostContainer key={`${p._id}-${index}`} {...p}  isAdmin = {isAdmin}/>
+          <PostContainer key={`${p._id}-${index}`} {...p} isAdmin={isAdmin} />
         ))
       ) : (
         <div className="flex h-[600px] items-center justify-center">

@@ -1,6 +1,8 @@
+import mongoose from "mongoose";
 import Group from "../models/group";
 import Post from "../models/post";
 import User from "../models/user";
+import { getGroupRequest } from "./notificationsService";
 
 export const getAllPosts = async () => {
   try {
@@ -61,8 +63,13 @@ export const getPostsForUser = async (userId: string) => {
           return await enhancePostWithUser(post);
         } else if (post.visibility === "GROUP") {
           const group = await Group.findById(post.groupId);
-          if (group && group.members.includes(userObjectId) && group.groupAdmin.toString() === userObjectId.toString()) 
+          if (group?.groupAdmin.toString() === userObjectId.toString()) {
+            return enhancePostWithUser(post);
+          } else if (group && group?.visibility === "Public") {
+            return enhancePostWithUser(post);
+          } else if (group && group?.members.includes(userObjectId)) {
             return await enhancePostWithUser(post);
+          }
         } else if (post.visibility === "FRIEND_ONLY") {
           const creator = await User.findById(post.creatorId);
           if (creator && user.friends.includes(creator._id))
@@ -98,7 +105,6 @@ export const getPostListByCreatorId = async (creatorId: string) => {
         select: "userId reactionType postId onModel",
       });
 
-
     // Enhance each post with user information
     const enhancedPosts = await Promise.all(
       posts.map(async (post) => {
@@ -107,6 +113,57 @@ export const getPostListByCreatorId = async (creatorId: string) => {
     );
 
     return enhancedPosts;
+  } catch (error) {
+    console.error("Error fetching posts", error);
+    throw new Error("Failed to fetch posts");
+  }
+};
+
+export const getViewedUserPosts = async (
+  userId: string,
+  viewedUserId: string,
+) => {
+  try {
+    const posts = await Post.find({ creatorId: viewedUserId })
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "comments",
+        populate: {
+          path: "reactions",
+          select: "userId reactionType postId onModel",
+        },
+      })
+      .populate({
+        path: "reactions",
+        select: "userId reactionType postId onModel",
+      });
+
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+    const viewedUser = await User.findById(viewedUserId);
+
+    // Enhance each post with user information
+    const enhancedPosts = await Promise.all(
+      posts.map(async (post) => {
+        if (post.visibility === "PUBLIC") {
+          return await enhancePostWithUser(post);
+        } else if (post.visibility === "GROUP") {
+          const group = await Group.findById(post.groupId);
+          if (group && group?.visibility === "Public") {
+            return enhancePostWithUser(post);
+          } else if (group && group?.members.includes(userObjectId)) {
+            return await enhancePostWithUser(post);
+          }
+        } else if (post.visibility === "FRIEND_ONLY") {
+          if (viewedUser?.friends.includes(userObjectId))
+            return await enhancePostWithUser(post);
+        }
+        return null; // Return null for posts that don't meet visibility criteria
+      }),
+    );
+
+    const validEnhancedPosts = enhancedPosts.filter((post) => post !== null);
+
+    return validEnhancedPosts;
   } catch (error) {
     console.error("Error fetching posts", error);
     throw new Error("Failed to fetch posts");
@@ -222,7 +279,6 @@ export const createPost = async (postData: any) => {
   }
 };
 
-
 export const updatePost = async (postId: string, postData: any) => {
   try {
     // Check if the post exists
@@ -240,9 +296,10 @@ export const updatePost = async (postId: string, postData: any) => {
 
       // Check if the user is a member of the group
       const isMember = group.members.includes(post.creatorId);
-      
+
       // If the user is not a member, check if they are the group admin
-      const isGroupAdmin = group.groupAdmin.toString() === post.creatorId.toString(); // Ensure comparison with proper types
+      const isGroupAdmin =
+        group.groupAdmin.toString() === post.creatorId.toString(); // Ensure comparison with proper types
 
       if (!isMember && !isGroupAdmin) {
         throw new Error("User is neither a member nor the group admin");
@@ -270,7 +327,6 @@ export const updatePost = async (postId: string, postData: any) => {
     throw new Error("Failed to update post");
   }
 };
-
 
 export const deletePostById = async (postId: String) => {
   try {
