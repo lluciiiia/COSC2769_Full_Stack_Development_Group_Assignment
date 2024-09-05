@@ -47,8 +47,6 @@ export const removeMemberFromGroup = async (
   memberId: string,
 ) => {
   try {
-    console.log(groupId);
-    console.log(memberId);
     const groupObjectId = new mongoose.Types.ObjectId(groupId);
     const memberObjectId = new mongoose.Types.ObjectId(memberId);
     const updatedGroup = await Group.findByIdAndUpdate(
@@ -61,7 +59,6 @@ export const removeMemberFromGroup = async (
       throw new Error("Group not found");
     }
 
-    console.log("update", updatedGroup);
     return updatedGroup;
   } catch (error) {
     console.error("Error removing member from group:", error);
