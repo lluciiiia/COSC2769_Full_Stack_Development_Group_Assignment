@@ -14,6 +14,7 @@ export interface RevertPostParams {
 
 export interface PostContainerProps extends PostParams {
   onReact: (reaction: string) => Promise<void>;
+  isDiscussionTab?: boolean;
 }
 export interface PostParams {
   _id: string;
@@ -34,6 +35,7 @@ export interface ProfileSectionParams {
   post?: PostParams;
   profileImage?: string;
   profileName?: string;
+  isDiscussionTab?: boolean;
 }
 
 export interface AdminSectionProps {

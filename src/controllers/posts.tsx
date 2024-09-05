@@ -6,7 +6,7 @@ export const BACKEND_URL = "http://localhost:8080";
 export const getAllPosts = createAsyncThunk<PostParams[]>(
   "posts/getAllPosts",
   async () => {
-    const response = await fetch(BACKEND_URL + `/api/posts/`, {
+    const response = await fetch(BACKEND_URL + `/api/posts/all`, {
       method: "GET",
     });
 
@@ -23,10 +23,11 @@ export const getAllPosts = createAsyncThunk<PostParams[]>(
 export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
   "posts/getPosts",
   async () => {
-    const response = await fetch(BACKEND_URL + `/api/posts/all`, {
+    const response = await fetch(BACKEND_URL + `/api/posts/`, {
       method: "GET",
       credentials: "include",
     });
+    
 
     if (!response.ok) {
       console.error("Failed to fetch posts:", response.statusText);
@@ -34,6 +35,7 @@ export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
     }
 
     const data: PostParams[] = await response.json();
+    console.log(data)
     return data;
   },
 );

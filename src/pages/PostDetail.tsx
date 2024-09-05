@@ -8,6 +8,8 @@ import PostContainer from "../components/post/PostContainer";
 import { useSelector } from "react-redux";
 import { selectAuthState } from "../features/authSlice";
 import { createReaction } from "../controllers/reactions";
+import { selectGroupById } from "../features/groupSlice";
+import { AppState } from "../app/store";
 
 const PostDetail: React.FC = () => {
   const [post, setPost] = useState<PostParams | null>(null);
@@ -44,6 +46,11 @@ const PostDetail: React.FC = () => {
 
   if (!post) return <p>Loading...</p>;
 
+  
+  const groupId = post.groupId || "";
+  console.log( "day la group ad min", groupId)
+
+
   return (
     <>
       <Navbar />
@@ -71,6 +78,7 @@ const PostDetail: React.FC = () => {
                 userId={id}
                 postId={post._id}
                 onReact={handleReaction} // Pass the onReact function
+                groupId={groupId} 
               />
             </>
           )}

@@ -15,6 +15,7 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
   post,
   profileImage,
   profileName,
+  isDiscussionTab,
 }) => {
   if (!post) return <ErrorPage />;
 
@@ -115,6 +116,8 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
             onDelete={handleDelete}
             onViewHistory={handleViewHistory}
             creatorId={post.creatorId}
+            groupId = {post.groupId}
+            isDiscussionTab = {isDiscussionTab}
           />
         )}
       </div>
