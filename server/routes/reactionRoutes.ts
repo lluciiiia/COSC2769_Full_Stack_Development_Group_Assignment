@@ -68,10 +68,11 @@ router.post("/:postId", async (req: Request, res: Response) => {
 //   }
 // })
 
-router.delete("/:id", async (req: Request, res: Response) => {
+router.delete("/:postId/:userId", async (req: Request, res: Response) => {
   try {
-    const reactId = req.params.id;
-    const updatedReactions = await undoReaction(reactId);
+    const postId = req.params.postId;
+    const userId= req.params.userId;
+    const updatedReactions = await undoReaction(postId, userId);
 
     if (!updatedReactions) {
       return res.status(404).json({ error: "Reaction or target not found" });

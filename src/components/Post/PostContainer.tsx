@@ -12,7 +12,8 @@ import {
   saveReactionsToLocal,
   loadReactionsFromLocal,
 } from "../../utils/localStorageUtils";
-import { PostContainerProps } from "../../interfaces/Posts";  // Import the extended interface
+import { deleteReaction } from "../../controllers/reactions";
+import { PostContainerProps } from "../../interfaces/Posts"; // Import the extended interface
 
 const PostContainer: React.FC<PostContainerProps> = ({
   _id,
@@ -48,12 +49,11 @@ const PostContainer: React.FC<PostContainerProps> = ({
 
   // Filter the reactions array to find the initial reaction by the current user
   const userReaction = reactions?.find(
-    (reaction) =>
-      reaction?.userId?.toString() === userId?.toString()
+    (reaction) => reaction?.userId?.toString() === userId?.toString(),
   );
 
   const [initialReaction, setInitialReaction] = useState<string>(
-    userReaction ? userReaction.reactionType : "REACT"
+    userReaction ? userReaction.reactionType : "REACT",
   );
 
   const handleClick = () => {
@@ -61,18 +61,23 @@ const PostContainer: React.FC<PostContainerProps> = ({
   };
 
   const handleReaction = async (reaction: string) => {
-    console.log(`User reacted with: ${reaction} on post ID: ${postId}`);
-    const reactionPayload = {
-      postId: postId,
-      reactionType: reaction,
-      sentFrom: "post",
-    };
-
-    if (navigator.onLine) {
-      await sendReaction(reactionPayload);
+    if (reaction === "UNDO_REACT") {
+      await deleteReact(postId, userId);
+      console.log(`User deleted with: ${reaction} on post ID: ${postId}`);
     } else {
-      setIsOffline(true);
-      queueReaction(reactionPayload);
+      console.log(`User reacted with: ${reaction} on post ID: ${postId}`);
+      const reactionPayload = {
+        postId: postId,
+        reactionType: reaction,
+        sentFrom: "post",
+      };
+
+      if (navigator.onLine) {
+        await sendReaction(reactionPayload);
+      } else {
+        setIsOffline(true);
+        queueReaction(reactionPayload);
+      }
     }
   };
 
@@ -84,6 +89,14 @@ const PostContainer: React.FC<PostContainerProps> = ({
       );
     } catch (error) {
       console.error("Error reacting to post:", error);
+    }
+  };
+
+  const deleteReact = async (postId: string, userId: string) => {
+    try {
+      await dispatch(deleteReaction({ postId, userId }) as any);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -143,10 +156,7 @@ const PostContainer: React.FC<PostContainerProps> = ({
       ? `${content.slice(0, maxLength)}...`
       : content;
 
-  const handleCommentReaction = async (
-    commentId: string,
-    reaction: string,
-  ) => {
+  const handleCommentReaction = async (commentId: string, reaction: string) => {
     const reactionPayload = {
       commentId: commentId,
       reactionType: reaction,
@@ -256,7 +266,7 @@ const PostContainer: React.FC<PostContainerProps> = ({
       {!isDetail && (
         <div className="mt-4">
           {comments?.length === 0 ? (
-            <p className="mb-4 ml-5  text-center text-sm text-gray-500">
+            <p className="mb-4 ml-5 text-center text-sm text-gray-500">
               Write the first comment!
             </p>
           ) : (

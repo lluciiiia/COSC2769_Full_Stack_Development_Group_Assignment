@@ -64,19 +64,23 @@ export const fetchReaction = createAsyncThunk(
 );
 
 
-
-export const deleteReaction= createAsyncThunk("reaction/deleteReaction", 
-async (notiId: string, {rejectWithValue})=>{
-  try{
+export const deleteReaction = createAsyncThunk(
+  "reaction/deleteReaction",
+  async (
+    { postId, userId }: { postId: string; userId: string }, // Wrapping multiple values in an object
+    { rejectWithValue }
+  ) => {
+    try {
       const response = await fetch(
-        `http://localhost:8080/api/reactions/${notiId}`,
+        `http://localhost:8080/api/reactions/${postId}/${userId}`,
         {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
+          
           credentials: "include",
-        },
+        }
       );
 
       if (!response.ok) {
@@ -90,5 +94,5 @@ async (notiId: string, {rejectWithValue})=>{
       console.error("Network error:", error.message);
       return rejectWithValue(error.message || "Network error");
     }
-  },
+  }
 );

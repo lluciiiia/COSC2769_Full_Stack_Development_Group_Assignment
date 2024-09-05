@@ -24,7 +24,6 @@ export const getAllPosts = async () => {
         return await enhancePostWithUser(post);
       }),
     );
-    console.log(enhancedPosts);
     return enhancedPosts;
   } catch (err) {
     console.error(err);
