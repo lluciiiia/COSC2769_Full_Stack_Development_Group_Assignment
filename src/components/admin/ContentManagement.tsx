@@ -17,7 +17,7 @@ const ContentManagement = () => {
   return (
    
       <div >
-        <PostList />
+        <PostList isAdmin = {true}/>
       </div>
   );
 };

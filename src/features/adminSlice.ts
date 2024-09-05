@@ -6,6 +6,7 @@ import {
   fetchGroupWithMembers,
 } from "../controllers/group";
 import { getAllUsers } from "../controllers/user";
+import { getAllPosts } from "../controllers/posts";
 
 const initialState: AdminSliceProps = {
   users: [],
@@ -21,6 +22,9 @@ const adminSlice = createSlice({
     builder
       .addCase(getAllUsers.fulfilled, (state, action) => {
         state.users = action.payload;
+      })
+      builder.addCase(getAllPosts.fulfilled, (state, action) => {
+        state.posts = action.payload;
       })
       .addCase(fetchGroups.pending, (state, action) => {
         console.log("Fetching groups...");
