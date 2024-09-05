@@ -1,25 +1,24 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Comment, CommentContainerProps } from "../../interfaces/Comments.tsx";
-import CommentItem from "./CommentItem.tsx";
-import CommentForm from "./CommentForm.tsx";
+import { Comment, CommentContainerProps } from "../../interfaces/Comments";
+import CommentItem from "./CommentItem";
+import CommentForm from "./CommentForm";
 import { createComment } from "../../controllers/comments";
-import CommentReactions from "../reactions/CommentReactions.js";
-import { createReaction } from "../../controllers/reactions.js";
-import { AppDispatch, AppState } from "../../app/store.js";
-import { createCommentNotification } from "../../controllers/notification.ts";
+import CommentReactions from "../reactions/CommentReactions";
+import { createReaction } from "../../controllers/reactions";
+import { AppDispatch, AppState } from "../../app/store";
+import { createCommentNotification } from "../../controllers/notification";
 import {
   loadReactionsFromLocal,
   saveReactionsToLocal,
-} from "../../utils/localStorageUtils.ts";
-import { ReactionIcons } from "../../interfaces/Reactions.tsx";
-
+} from "../../utils/localStorageUtils";
+import { Reaction, ReactionIcons } from "../../interfaces/Reactions";
+import { deleteReaction } from "../../controllers/reactions";
 const CommentContainer: React.FC<CommentContainerProps> = ({
   initComments,
   userId,
   postId,
-  post,
-  groupId
+  groupId,
 }) => {
   const dispatch: AppDispatch = useDispatch();
   const [comments, setComments] = useState<Comment[]>(initComments || []);
@@ -30,19 +29,40 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   const [isOffline, setIsOffline] = useState<boolean>(false);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const isReacted = useSelector((state: AppState) => state.react.isReacted);
+  const [displayedReactions, setDisplayedReactions] = useState<string[]>([]);
+
+  const handleRenderOutReactions = async (reactions: string[]) => {
+    setDisplayedReactions(reactions);
+  };
 
   const handleReaction = async (reactionType: string, commentId: string) => {
-    const reaction = { postId: commentId, reactionType, sentFrom: "comment", userId };
+  const reaction = {
+    postId: commentId,
+    reactionType,
+    sentFrom: "comment",
+    userId,
+  };
 
+  if (reactionType === "UNDO_REACT") {
+    await deleteReact(commentId, userId);
+    console.log(`User removed reaction from comment ID: ${commentId}`);
+  } else {
     if (navigator.onLine) {
       await sendReaction(reaction);
     } else {
       setIsOffline(true);
       queueReaction(reaction);
     }
-  };
-  console.log("mot lan nua day la group id", groupId);
+  }
+};
 
+  const deleteReact = async (postId: string, userId: string) => {
+    try {
+      await dispatch(deleteReaction({ postId, userId }) as any);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const sendReaction = async (reaction: any) => {
     try {
       if (navigator.onLine) {
@@ -119,7 +139,15 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
       if (!response.ok) throw new Error("Failed to create comment");
 
       const result = await response.json();
-      setComments((prev) => [...prev, result.comment]);
+      const updatedComments = [...comments, result.comment];
+      setComments(updatedComments);
+      handleRenderOutReactions(
+        updatedComments.flatMap((comment) =>
+          comment.reactions.map(
+            (reaction) => ReactionIcons[reaction.reactionType],
+          ),
+        ),
+      ); // Update displayed reactions
       setNewComment("");
     } catch (error) {
       console.error("Error adding comment:", error);
@@ -128,13 +156,13 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
 
   // Function to calculate reaction counts based on reaction types and filter by userId
   const getReactionCounts = (comment) => {
-    const userReactions = comment.reactions.filter(reaction => reaction.userId === userId); // Filter reactions by userId
+    const userReactions = comment.reactions.filter(
+      (reaction) => reaction.userId === userId,
+    );
     const reactionCounts = userReactions.reduce((acc, reaction) => {
       acc[reaction.reactionType] = (acc[reaction.reactionType] || 0) + 1;
       return acc;
     }, {});
-
-    // Get up to 3 unique reactions
     return Object.entries(reactionCounts)
       .slice(0, 3)
       .map(([reactionType, count]) => ({ type: reactionType, count }));
@@ -151,13 +179,15 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
             </div>
           ) : (
             comments.map((comment) => {
-              const reactionCounts = getReactionCounts(comment); // Get reaction counts for the current user
+              const reactionCounts = getReactionCounts(comment);
 
               return (
                 <div key={comment._id} className="mb-4">
-                    <CommentItem comment={comment} groupId={groupId} /> 
+                  <CommentItem
+                    comment={comment}
+                    displayedReactions={displayedReactions} // Pass displayedReactions to CommentItem
+                  />
 
-                  {/* Display the number of reactions with icons */}
                   <div className="flex space-x-2 text-sm text-gray-600">
                     {reactionCounts.map(({ type, count }) => (
                       <span key={type} className="flex items-center">
@@ -168,10 +198,15 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
                   </div>
 
                   <CommentReactions
-                    reactionType={comment.reactions.filter(reaction => reaction.userId === userId)} // Filter reactions by userId
-                    comment={comment._id}
-                    onReact={(reaction) => handleReaction(reaction, comment._id)}
+                    reactionType={comment.reactions.filter(
+                      (reaction) => reaction.userId === userId,
+                    )}
+                    comment={comment}
+                    onReact={(reaction) =>
+                      handleReaction(reaction, comment._id)
+                    }
                     isReacted={isReacted}
+                    onDisplayedReactionsUpdate={handleRenderOutReactions} // Pass callback to CommentReactions
                   />
                 </div>
               );

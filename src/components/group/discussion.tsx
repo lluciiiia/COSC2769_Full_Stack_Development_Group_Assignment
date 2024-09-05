@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import { selectAuthState } from "../../features/authSlice";
 import { selectGroupById } from "../../features/groupSlice";
-
+import { PostParams } from "../../interfaces/Posts";
 export default function Discussion() {
   const posts = useSelector((state: AppState) => state.posts.groupPost);
   const { groupId } = useParams<{ groupId: string }>();
@@ -20,49 +20,36 @@ export default function Discussion() {
   const [canViewPosts, setCanViewPosts] = React.useState(false);
   const [isAdmin, setIsAdmin] = React.useState(false); // State to check if the user is admin
   useEffect(() => {
-    if (group) {
-      // Check if the current user is the admin of the group
-      if (id === group.groupAdmin) {
-        setIsAdmin(true);
-        setCanViewPosts(true); // Admins should always be able to view posts
-        console.log("Welcome, Admin!");
-      } else if (group.visibility === "Public") {
-        // Public groups allow all users to view posts
-        setCanViewPosts(true);
-        console.log("This is public! You can see everything!!");
-      } else if (group.visibility === "Private") {
-        // Private groups require membership to view posts
-        const memberIds = group.members.map((member) => member._id);
-        if (id && memberIds.includes(id)) {
-          setCanViewPosts(true);
-          console.log("You're in the group, you can see the posts.");
-        } else {
-          setCanViewPosts(false);
-          console.log("You're not in the group.");
-        }
+  if (group) {
+    let shouldSetCanViewPosts = false;
+    let shouldSetIsAdmin = false;
+
+    if (id === group.groupAdmin) {
+      shouldSetIsAdmin = true;
+      shouldSetCanViewPosts = true;
+    } else if (group.visibility === "Public") {
+      shouldSetCanViewPosts = true;
+    } else if (group.visibility === "Private") {
+      const memberIds = group.members.map((member) => member._id);
+      if (id && memberIds.includes(id)) {
+        shouldSetCanViewPosts = true;
       }
     }
-  }, [group, id]);
 
-  const postList = posts.map((p: GroupPostParams) => (
-    <PostContainer
-      key={p._id}
-      _id={p._id}
-      creatorId={p.creatorId?._id || ""}
-      groupId={p.groupId || ""}
-      content={p.content}
-      images={p.images || []}
-      profileSection={{
-        profileImage: p.creatorId?.profilePictureURL,
-        profileName: p.creatorId?.name,
-      }}
-      isDetail={p.isDetail}
-      visibility={p.visibility}
-      createdAt={p.createdAt}
-      comments={p.comments}
-      history={p.history}
-      isDiscussionTab = {isDiscussionTab}
-    />
+    // Only set state if necessary to avoid infinite loops
+    if (shouldSetIsAdmin !== isAdmin) {
+      setIsAdmin(shouldSetIsAdmin);
+    }
+
+    if (shouldSetCanViewPosts !== canViewPosts) {
+      setCanViewPosts(shouldSetCanViewPosts);
+    }
+  }
+}, [group, id, isAdmin, canViewPosts]);
+
+
+  const postList = posts.map((p: PostParams, index: number) => (
+    <PostContainer key={`${p._id}-${index}`} {...p} />
   ));
 
   return (

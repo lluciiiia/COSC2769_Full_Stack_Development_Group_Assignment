@@ -200,25 +200,28 @@ export const getPostByGroupId = async (groupId: string) => {
   try {
     // const {groupId}= req.params;
     const posts = await Post.find({ groupId: groupId })
-      .populate({
-        path: "creatorId", // Populate creatorId
-        select: "name profilePictureURL profileName _id", // Select fields you want from creatorId
-      })
+      .sort({ createdAt: -1 })
       .populate({
         path: "comments",
         populate: {
           path: "reactions",
-          populate: {
-            path: "userId",
-            select: "name profilePictureURL", // Select fields you want from userId
-          },
+          select: "userId reactionType postId onModel", // Select only the fields you want
         },
+      })
+      .populate({
+        path: "reactions",
+        select: "userId reactionType postId onModel", // Select only the fields you want
       });
+      const enhancedPosts = await Promise.all(
+        posts.map(async (post) => {
+          return await enhancePostWithUser(post);
+        }),
+      );
     if (!posts) {
       throw new Error("Post not found with id");
     }
 
-    return posts;
+    return enhancedPosts;
   } catch (error) {
     throw new Error("Error ");
   }
