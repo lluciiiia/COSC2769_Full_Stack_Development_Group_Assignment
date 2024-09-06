@@ -14,12 +14,11 @@ import PostModal from "./post/modals/PostModal";
 import NotificationModal from "./notifications/NotificationModal";
 import ProfileButtonModal from "./ProfileButtonModal";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAuthState } from "../features/authSlice";
 import { AppDispatch } from "../app/store";
 import { fetchNotification } from "../controllers/notification";
 import { Notifications } from "../interfaces/Notifications";
 import { selectNotifications } from "../features/notificationSlice";
-
+import { selectAuthState } from "../features/authSlice";
 const Navbar = () => {
   const currentUser = useSelector(selectAuthState);
   const navigate = useNavigate();
