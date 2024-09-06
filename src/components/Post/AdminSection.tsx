@@ -20,13 +20,9 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
       alert("Unable to delete post. Post information is missing.");
       return;
     }
-
     try {
-      console.log("it got here at least")
       dispatch(deletePostById(post._id)).then(() => {
-        console.log("it got here at least bro")
         dispatch(getAllPosts());
-       
       });
     } catch (error) {
       console.error("Error deleting post:", error);

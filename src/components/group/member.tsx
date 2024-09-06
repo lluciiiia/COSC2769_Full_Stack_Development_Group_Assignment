@@ -56,6 +56,15 @@ export default function Member() {
     return <p>Loading group data...</p>;
   }
 
+  const isMember = members.some((member) => member._id === id);
+  if (group.visibility === "Private" && !isAdmin && !isMember) {
+    return (
+      <div className="flex justify-center">
+        <p>This is private, you're not in the group. Please consider signing up.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex justify-center">
       <div className="w-full max-w-xl space-y-4 p-4">
