@@ -49,11 +49,18 @@ const GroupList: React.FC = () => {
 
     try {
       const response = await dispatch(sendGroupRequest(groupId));
-      console.log("Group request response:", response);
+
+      // Check response from the backend
+      if (response.payload === "Notification already sent") {
+        alert(response.payload);
+      } else {
+        console.log("Group request response:", response);
+      }
     } catch (error) {
       console.error("Failed to join group:", error);
     }
   };
+
   console.log(groups, "geroups");
   const filteredGroups = () => {
     return groups.filter((group) => {
@@ -199,7 +206,9 @@ const GroupList: React.FC = () => {
                         {group.members ? group.members.length : 0} members
                       </span>
                       {group.members &&
-                        !group.members.some((memberId) => memberId._id === id) &&
+                        !group.members.some(
+                          (memberId) => memberId._id === id,
+                        ) &&
                         group.groupAdmin !== id && (
                           <button
                             className={`cursor-pointer rounded px-4 py-2 font-bold text-black focus:outline-none ${

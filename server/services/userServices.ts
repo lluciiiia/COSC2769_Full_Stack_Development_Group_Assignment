@@ -66,10 +66,10 @@ export const addFriend = async (userId: string, friendId: string) => {
 export const getViewUserById = async (userId: string) => {
   try {
     const user = await User.findById(userId)
-      .select("-password") // Exclude the password field
+      .select("-password") 
       .populate({
         path: "friends",
-        select: "name profilePictureURL", // Include only specific fields in the friends array
+        select: "name profilePictureURL", 
       });
 
     if (!user) throw new Error("User can not found with the provided id");
@@ -104,8 +104,14 @@ export const groupJoinRequest = async (userId: string, groupId: string) => {
     
     const isMember = group.members.some(member => member._id.equals(userId));
     if (isMember) {
-      throw new Error("User is already a member of the group");
+      return { success: false, message: "User is already a member of the group" };
     }
+
+    const existingNoti = await Notifications.findOne({ senderId: userId, groupId });
+    if (existingNoti) {
+      return { success: false, message: "Notification already sent" };
+    }
+
     const newNoti = {
       senderId: userId,
       receiverId: group?.groupAdmin,
@@ -116,12 +122,13 @@ export const groupJoinRequest = async (userId: string, groupId: string) => {
     const result = new Notifications(newNoti);
     await result.save();
     console.log("Notification created successfully");
-    return result;
+    return { success: true, message: "Notification created successfully" };
   } catch (error) {
-    console.error("Error removing friend", error);
-    throw new Error("Failed to remove friend");
+    console.error("Error sending group join request", error);
+    return { success: false, message: "Failed to send group join request" };
   }
 };
+
 
 export const unfriendById = async (userId: string, friendId: string) => {
   try {

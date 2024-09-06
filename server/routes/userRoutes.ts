@@ -148,22 +148,28 @@ router.delete("/unfriend/:friendId", async (req, res) => {
   }
 });
 
+
 router.post("/sentGroup/:groupId", async (req, res) => {
   try {
-    const userId = req.session.user.id;
+    const userId = req.session.user.id; // Retrieve user ID from the session
     const { groupId } = req.params;
 
-    // Call the createNotification function
+    // Call the groupJoinRequest function
     const result = await groupJoinRequest(userId, groupId);
 
-    // Respondx with success
+    if (!result.success) {
+      return res.status(400).json({ message: result.message }); // Send a custom error message
+    }
+
+    // Respond with success if notification is created
     res.status(200).json({
       message: "Notification sent successfully",
-      notification: result,
+      notification: result.notification,
     });
   } catch (error) {
-    res.status(500).json({ error: error });
+    res.status(500).json({ message: "An error occurred", error });
   }
 });
+
 
 export default router;
