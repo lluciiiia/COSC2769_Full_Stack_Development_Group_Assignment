@@ -9,7 +9,7 @@ import {
 } from "../../../controllers/posts";
 import { GroupType } from "../../../interfaces/Group";
 
-const PostModal = ({ isOpen, onClose, userId, post, groupId }) => {
+const PostModal = ({ isOpen, onClose, userId, post, groupId, isInGroupPage }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [content, setContent] = useState("");
   const [visibility, setVisibility] = useState<
@@ -19,6 +19,7 @@ const PostModal = ({ isOpen, onClose, userId, post, groupId }) => {
   const [selectedGroupId, setSelectedGroupId] = useState<string>("");
   const [images, setImages] = useState<string[]>([]);
   
+  console.log("create group bang post" , isInGroupPage); 
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -67,13 +68,16 @@ const PostModal = ({ isOpen, onClose, userId, post, groupId }) => {
     };
   }, [isOpen, post, userId, groupId]);
 
+
   const handleSubmit = async (e) => {
+
+    const finalGroupId = isInGroupPage ? groupId : (selectedGroupId || undefined);
     const postParams: any = {
       creatorId: userId,
       content: content,
       visibility: visibility,
       images: images,
-      groupId: visibility === "GROUP" ? selectedGroupId : undefined,
+      groupId: visibility === "GROUP" ?  finalGroupId : undefined,
       history: post?.history ? post.history : [],
       comments: post?.comments ? post.comments : [],
       createdAt: post?.createdAt ? post.createdAt : new Date(),

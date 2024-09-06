@@ -244,6 +244,7 @@ export default function GroupPage() {
         userId={userId}
         post={selectedPost}
         groupId={groupId}
+        isInGroupPage = {true}
       />
       <UpdateGroupModal
         isOpen={isEditModalOpen}
