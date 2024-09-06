@@ -3,13 +3,16 @@ import { AdminSectionProps } from '../../interfaces/Posts';
 import { ViewIcon } from '../../assets/icons/ViewIcon';
 import { DeleteIcon } from '../../assets/icons/DeleteIcon';
 import { useNavigate } from 'react-router-dom';
-import { deletePostById } from '../../controllers/posts';
+import { deletePostById, getAllPosts } from '../../controllers/posts';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../app/store';
 
 export const AdminSection: React.FC<AdminSectionProps> = ({
   handleClick,
   post,
 }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleDelete = async () => {
     if (!post || !post._id) {
@@ -19,13 +22,12 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
     }
 
     try {
-      const response = await deletePostById(post._id);
-      if (!response) {
-        alert("Failed to delete the post. Please try again.");
-      } else {
-        navigate('/admin'); // Redirect to admin page or another appropriate page
-        window.location.reload();
-      }
+      console.log("it got here at least")
+      dispatch(deletePostById(post._id)).then(() => {
+        console.log("it got here at least bro")
+        dispatch(getAllPosts());
+       
+      });
     } catch (error) {
       console.error("Error deleting post:", error);
       alert("An error occurred while trying to delete the post.");
