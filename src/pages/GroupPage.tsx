@@ -77,16 +77,18 @@ export default function GroupPage() {
       console.log("Group request already sent");
       return;
     }
-
+  
     try {
-      await dispatch(sendGroupRequest(groupId));
-      setIsClick(true);
-      setIsMember(true);
+      const response = await dispatch(sendGroupRequest(groupId)).unwrap();
+      if (response && response.message === "Notification sent successfully") {
+        setIsClick(true); 
+        setIsMember(true); 
+      }
     } catch (error) {
-      console.error("Failed to join group:", error);
-      setError("Failed to send group request. Please try again later.");
+      alert("You have already sent the request to group admin. Please wait for the response. ");
     }
   };
+  
 
   const handleLeaveGroup = async () => {
     try {
