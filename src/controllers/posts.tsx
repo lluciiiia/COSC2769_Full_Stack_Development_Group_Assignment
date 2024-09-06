@@ -237,14 +237,25 @@ export const revertPost = createAsyncThunk<
   }
 });
 
-export const deletePostById = async (id: string | undefined) => {
-  if (id == undefined) return false;
+export const deletePostById = createAsyncThunk<boolean, string | undefined>(
+  "posts/deletePostById",
+  async (id, { rejectWithValue }) => {
+    if (id === undefined) return rejectWithValue("Post ID is undefined");
 
-  const response = await fetch(BACKEND_URL + `/api/posts/${id}`, {
-    method: "DELETE",
-  });
+    try {
+      const response = await fetch(BACKEND_URL + `/api/posts/${id}`, {
+        method: "DELETE",
+      });
 
-  return response.ok
-    ? true
-    : (console.error("Failed to delete the post", response.statusText), false);
-};
+      if (!response.ok) {
+        console.error("Failed to delete the post", response.statusText);
+        return rejectWithValue(response.statusText);
+      }
+
+      return true; // Success
+    } catch (error) {
+      console.error("Failed to delete the post", error);
+      return rejectWithValue("An error occurred while deleting the post");
+    }
+  }
+);
