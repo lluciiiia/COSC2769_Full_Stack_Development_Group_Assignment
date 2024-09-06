@@ -101,6 +101,11 @@ export const groupJoinRequest = async (userId: string, groupId: string) => {
     if (!group) {
       throw new Error("Group not found");
     }
+    
+    const isMember = group.members.some(member => member._id.equals(userId));
+    if (isMember) {
+      throw new Error("User is already a member of the group");
+    }
     const newNoti = {
       senderId: userId,
       receiverId: group?.groupAdmin,
