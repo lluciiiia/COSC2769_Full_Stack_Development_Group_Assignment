@@ -52,7 +52,7 @@ const GroupList: React.FC = () => {
 
       // Check response from the backend
       if (response.payload === "Notification already sent") {
-        alert(response.payload);
+        alert(response.payload + " Please wait for the group admin to accpet.");
       } else {
         console.log("Group request response:", response);
       }
