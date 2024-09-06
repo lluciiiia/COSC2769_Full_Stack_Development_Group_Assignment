@@ -81,8 +81,6 @@ export default function GroupPage() {
     try {
       const response = await dispatch(sendGroupRequest(groupId)).unwrap();
       if (response && response.message === "Notification sent successfully") {
-        setIsClick(true);
-        setIsMember(true);
         alert("Group request sent successfully!");
       }
     } catch (error) {
