@@ -55,6 +55,7 @@ const GroupList: React.FC = () => {
         alert(response.payload + " Please wait for the group admin to accpet.");
       } else {
         console.log("Group request response:", response);
+        alert("Group request sent successfully!");
       }
     } catch (error) {
       console.error("Failed to join group:", error);
@@ -87,7 +88,7 @@ const GroupList: React.FC = () => {
       return false;
     });
   };
-  console.log(groups, "hello group");
+
 
   return (
     <div className="mt-20 flex h-screen flex-col items-center">

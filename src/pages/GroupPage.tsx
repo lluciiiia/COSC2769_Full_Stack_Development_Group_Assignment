@@ -77,18 +77,20 @@ export default function GroupPage() {
       console.log("Group request already sent");
       return;
     }
-  
+
     try {
       const response = await dispatch(sendGroupRequest(groupId)).unwrap();
       if (response && response.message === "Notification sent successfully") {
-        setIsClick(true); 
-        setIsMember(true); 
+        setIsClick(true);
+        setIsMember(true);
+        alert("Group request sent successfully!");
       }
     } catch (error) {
-      alert("You have already sent the request to group admin. Please wait for the response. ");
+      alert(
+        "You have already sent the request to group admin. Please wait for the response. ",
+      );
     }
   };
-  
 
   const handleLeaveGroup = async () => {
     try {
@@ -244,7 +246,7 @@ export default function GroupPage() {
         userId={userId}
         post={selectedPost}
         groupId={groupId}
-        isInGroupPage = {true}
+        isInGroupPage={true}
       />
       <UpdateGroupModal
         isOpen={isEditModalOpen}
