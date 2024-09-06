@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { createGroup } from "../../controllers/group";
+import { AppDispatch } from "../../app/store";
+import { GroupParams, GroupType } from "../../interfaces/Group";
+
 // import { createGroup } from "../path/to/your/actions"; // adjust the path accordingly
 
 interface CreateGroupModalProps {
@@ -25,7 +28,7 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
     createdAt: "", // Will be set when the group is created
   });
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
     // Disable background scrolling when modal is open
@@ -43,7 +46,9 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
 
   // Handle form input change
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
   ) => {
     const { name, value } = e.target;
     setNewGroup((prevGroup) => ({
@@ -55,7 +60,7 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
   // Handle file input change and convert to Base64
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
-    fieldName: string
+    fieldName: string,
   ) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -79,6 +84,7 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
     };
 
     try {
+      console.log(groupData);
       await dispatch(createGroup(groupData));
       onClose(); // Close modal on submit
     } catch (error) {
@@ -91,15 +97,13 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-      <div className="w-[600px] h-[500px] overflow-y-auto rounded-md bg-white p-6 shadow-xl">
+      <div className="h-[500px] w-[600px] overflow-y-auto rounded-md bg-white p-6 shadow-xl">
         <h2 className="mb-4 text-xl font-bold">Create a New Group</h2>
 
         {/* Flex Container for Two Columns */}
         <div className="flex">
-          
           {/* Left Column */}
-          <div className="w-1/2 pr-4 flex flex-col justify-between">
-
+          <div className="flex w-1/2 flex-col justify-between pr-4">
             {/* Group Name */}
             <div className="mb-4">
               <label className="block text-sm font-semibold">Name</label>
@@ -140,7 +144,9 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
 
             {/* Group Background Image Upload */}
             <div className="mb-4">
-              <label className="block text-sm font-semibold">Background Image</label>
+              <label className="block text-sm font-semibold">
+                Background Image
+              </label>
               <input
                 type="file"
                 accept="image/*"
@@ -150,7 +156,7 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
             </div>
 
             {/* Action Buttons */}
-            <div className="flex space-x-4 mt-4">
+            <div className="mt-4 flex space-x-4">
               <button
                 onClick={onClose}
                 className="w-full rounded-md bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-300"
@@ -167,8 +173,7 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
           </div>
 
           {/* Right Column */}
-          <div className="w-1/2 pl-4 flex flex-col justify-between">
-
+          <div className="flex w-1/2 flex-col justify-between pl-4">
             {/* Group Description */}
             <div className="mb-4">
               <label className="block text-sm font-semibold">Description</label>
@@ -186,7 +191,9 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
             <div className="mb-4">
               {newGroup.imageURL && (
                 <div>
-                  <label className="block text-sm font-semibold">Image Preview</label>
+                  <label className="block text-sm font-semibold">
+                    Image Preview
+                  </label>
                   <img
                     src={newGroup.imageURL}
                     alt="Group Preview"
@@ -200,7 +207,9 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
             <div className="mb-4">
               {newGroup.backgroundImageURL && (
                 <div>
-                  <label className="block text-sm font-semibold">Background Preview</label>
+                  <label className="block text-sm font-semibold">
+                    Background Preview
+                  </label>
                   <img
                     src={newGroup.backgroundImageURL}
                     alt="Background Preview"
@@ -209,7 +218,6 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                 </div>
               )}
             </div>
-
           </div>
         </div>
       </div>

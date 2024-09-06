@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ProfileSectionParams } from "../../interfaces/Posts";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { deletePostById } from "../../controllers/posts";
 import MenuDropDown from "../MenuDropDown";
 import PostModal from "../post/modals/PostModal";
@@ -116,8 +116,8 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
             onDelete={handleDelete}
             onViewHistory={handleViewHistory}
             creatorId={post.creatorId}
-            groupId = {post.groupId}
-            isDiscussionTab = {isDiscussionTab}
+            groupId={post.groupId}
+            isDiscussionTab={isDiscussionTab}
           />
         )}
       </div>

@@ -76,8 +76,11 @@ export const acceptGroupRequest = async (
       console.log("Already in group");
       return;
     }
-    console.log(group, "Member already in group");
+
     await group.save();
+
+    console.log(group.members);
+
     const newNoti = {
       senderId: userId,
       receiverId: oldNoti.senderId,

@@ -61,6 +61,7 @@ router.post("/createGroup", async (req, res) => {
     const newGroupData = {
       groupAdmin: req.body.groupAdmin,
       name: req.body.name,
+      visibility: req.body.visibility,
       imageURL: req.body.imageURL,
       backgroundImageURL: req.body.backgroundImageURL,
       description: req.body.description,
