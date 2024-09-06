@@ -54,7 +54,7 @@ const GroupList: React.FC = () => {
       console.error("Failed to join group:", error);
     }
   };
-
+  console.log(groups, "geroups");
   const filteredGroups = () => {
     return groups.filter((group) => {
       // Ensure the group is accepted before checking other conditions
@@ -67,18 +67,20 @@ const GroupList: React.FC = () => {
           return group.members.includes(id);
         }
         if (activeSubtab === "notJoined") {
-          return !group.members.includes(id);
+          return group.members.includes(id);
         }
         return true; // "all" tab
       }
 
       if (activeTab === "manage") {
+        console.log(group.groupAdmin, "group admin");
         return group.groupAdmin === id;
       }
 
       return false;
     });
   };
+  console.log(groups, "hello group");
 
   return (
     <div className="mt-20 flex h-screen flex-col items-center">
@@ -196,19 +198,24 @@ const GroupList: React.FC = () => {
                       <span className="text-gray text-sm">
                         {group.members ? group.members.length : 0} members
                       </span>
-                      {!group.members.includes(id) && (
-                        <button
-                          className={`cursor-pointer rounded px-4 py-2 font-bold text-black focus:outline-none ${
-                            existingGroupRequest
-                              ? "cursor-not-allowed bg-gray-400"
-                              : "bg-[#FFC123] hover:bg-[#d89e1b]"
-                          }`}
-                          onClick={() => handleJoinGroup(group._id.toString())}
-                          disabled={!!existingGroupRequest}
-                        >
-                          {existingGroupRequest ? "Request Sent" : "Join"}
-                        </button>
-                      )}
+                      {group.members &&
+                        !group.members.some((memberId) => memberId._id === id) &&
+                        group.groupAdmin !== id && (
+                          <button
+                            className={`cursor-pointer rounded px-4 py-2 font-bold text-black focus:outline-none ${
+                              existingGroupRequest
+                                ? "cursor-not-allowed bg-gray-400"
+                                : "bg-[#FFC123] hover:bg-[#d89e1b]"
+                            }`}
+                            onClick={() =>
+                              handleJoinGroup(group._id.toString())
+                            }
+                            disabled={!!existingGroupRequest}
+                          >
+                            {existingGroupRequest ? "Request Sent" : "Join"}
+                          </button>
+                        )}
+
                       <Link to={`/groups/${group._id}/discussion`}>
                         <button className="cursor-pointer rounded bg-gray-300 px-4 py-2 font-bold text-gray-700 hover:bg-gray-500 focus:outline-none">
                           View
