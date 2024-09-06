@@ -8,8 +8,9 @@ import DefaultProfile from "../../assets/icons/DefaultProfile.tsx";
 import PostHistoryModal from "./PostHistoryModal.tsx";
 import { formatRelativeTime } from "../../utils/formatRelativeTime.ts";
 import ErrorPage from "../../pages/ErrorPage.tsx";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectAuthState } from "../../features/authSlice.ts";
+import { AppDispatch } from "../../app/store.ts";
 
 export const ProfileSection: React.FC<ProfileSectionParams> = ({
   post,
@@ -22,7 +23,7 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
-
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { id } = useSelector(selectAuthState);
 
@@ -38,7 +39,7 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
   const handleDelete = async () => {
     setIsDropdownOpen(false);
     try {
-      const response = await deletePostById(post._id);
+      const response = await dispatch(deletePostById(post._id));
       if (!response) {
         alert("Failed to delete the post. Please try again.");
       } else {
