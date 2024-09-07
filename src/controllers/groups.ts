@@ -54,7 +54,7 @@ export const createGroup = createAsyncThunk<GroupType, GroupParams>(
   async (newGroup) => {
     try {
       const response = await fetch(
-        import.meta.env.VITE_BACKEND_URL + `/api/groups/createGroup`,
+        import.meta.env.VITE_BACKEND_URL + `/api/groups`,
         {
           method: "POST",
           headers: {
@@ -96,7 +96,7 @@ export const leaveGroup = createAsyncThunk<GroupType, string>(
   "groups/leaveGroup",
   async (groupId: string) => {
     const response = await fetch(
-      import.meta.env.VITE_BACKEND_URL + `/api/groups/leaveGroup/${groupId}`,
+      import.meta.env.VITE_BACKEND_URL + `/api/groups/leave/${groupId}`,
       {
         method: "PUT",
         headers: {
@@ -120,7 +120,7 @@ export const removeMemberFromGroup = createAsyncThunk<
 >("user/removeMemberFromGroup", async ({ groupId, userId }) => {
   const response = await fetch(
     import.meta.env.VITE_BACKEND_URL +
-      `/api/groups/${groupId}/member/${userId}`,
+      `/api/groups/${groupId}/members/${userId}`,
     {
       method: "DELETE",
       headers: {

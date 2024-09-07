@@ -56,7 +56,7 @@ router.get("/user/:userId", async (req, res) => {
   }
 });
 
-router.post("/createGroup", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const newGroupData = {
       groupAdmin: req.body.groupAdmin,
@@ -85,7 +85,7 @@ router.post("/createGroup", async (req, res) => {
   }
 });
 
-router.put("/leaveGroup/:groupId", async (req, res) => {
+router.put("/leave/:groupId", async (req, res) => {
   try {
     const groupId = req.params.groupId;
     const userId = req.session.user.id;
@@ -142,7 +142,7 @@ router.put("/:id", async (req, res) => {
 });
 
 //delete member out of the group
-router.delete("/:groupId/member/:userId", async (req, res) => {
+router.delete("/:groupId/members/:userId", async (req, res) => {
   try {
     const groupId = req.params.groupId;
     const userId = req.params.userId;
