@@ -61,7 +61,7 @@ const Navbar = () => {
   };
 
   const handleSearchClick = () => {
-    navigate(`/UserSearch`);
+    navigate(`/user-search`);
   };
 
   return (
