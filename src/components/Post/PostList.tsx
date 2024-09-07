@@ -20,6 +20,8 @@ function PostList({ isAdmin = false }: PostListProps) {
     isAdmin ? state.admin.posts : state.posts.posts,
   );
 
+  console.log("from postlist", posts);
+
   useEffect(() => {
     if (!isAdmin && firstRender.current) {
       dispatch(getPosts()).finally(() => {

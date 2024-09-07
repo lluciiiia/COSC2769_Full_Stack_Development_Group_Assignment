@@ -90,11 +90,17 @@ const BackgroundImageModal: React.FC<ModalProps> = ({
 
         {/* Image Preview */}
         <div className="mb-4 flex justify-center">
-          <img
-            src={background}
-            alt="Background Preview"
-            className="h-64 w-full rounded border object-cover"
-          />
+          {background ? (
+            <img
+              src={background}
+              alt="Background Preview"
+              className="h-64 w-full rounded border object-cover"
+            />
+          ) : (
+            <div className="flex h-64 w-full items-center justify-center rounded border bg-gray-300 object-cover">
+              <p className="text-[#606060]">No Background Image</p>
+            </div>
+          )}
         </div>
 
         {/* Image Upload */}
