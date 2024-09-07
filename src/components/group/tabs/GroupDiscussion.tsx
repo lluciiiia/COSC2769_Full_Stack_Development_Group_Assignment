@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import PostContainer from "../../post/PostContainer";
 import { AppState } from "../../../app/store";
 import { useSelector } from "react-redux";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { selectAuthState } from "../../../features/authSlice";
 import { selectGroupById } from "../../../features/groupSlice";
 import { PostParams } from "../../../interfaces/Posts";
@@ -11,7 +11,7 @@ export default function Discussion() {
   const posts = useSelector((state: AppState) => state.posts.groupPost);
   const { groupId } = useParams<{ groupId: string }>();
   const { id } = useSelector(selectAuthState);
-  const location = useLocation();
+
   const group = useSelector((state: AppState) =>
     selectGroupById(state, groupId),
   );
@@ -30,19 +30,14 @@ export default function Discussion() {
         shouldSetCanViewPosts = true;
       } else if (group.visibility === "Private") {
         const memberIds = group.members.map((member) => member._id);
-        if (id && memberIds.includes(id)) {
-          shouldSetCanViewPosts = true;
-        }
+        if (id && memberIds.includes(id)) shouldSetCanViewPosts = true;
       }
 
       // Only set state if necessary to avoid infinite loops
-      if (shouldSetIsAdmin !== isAdmin) {
-        setIsAdmin(shouldSetIsAdmin);
-      }
+      if (shouldSetIsAdmin !== isAdmin) setIsAdmin(shouldSetIsAdmin);
 
-      if (shouldSetCanViewPosts !== canViewPosts) {
+      if (shouldSetCanViewPosts !== canViewPosts)
         setCanViewPosts(shouldSetCanViewPosts);
-      }
     }
   }, [group, id, isAdmin, canViewPosts]);
 
