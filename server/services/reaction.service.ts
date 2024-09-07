@@ -51,11 +51,8 @@ export const createReaction = async ({
       );
     }
 
-    if (isCreator) {
-      console.log("Cannot create noti for post owner");
-    } else {
-      notification.save();
-    }
+    if (!isCreator) notification.save();
+
     let existingReaction = await Reaction.findOne({
       postId: new mongoose.Types.ObjectId(postId),
       userId,
@@ -92,10 +89,8 @@ export const fetchReaction = async (postId: string, userId: string) => {
       userId,
     });
 
-    if (!existingReaction) {
-      return null;
-    }
-    console.log(existingReaction);
+    if (!existingReaction) return null;
+
     return existingReaction;
   } catch (error) {
     console.error("Error fetching reaction", error);
@@ -106,14 +101,9 @@ export const undoReaction = async (postId: string, userId: string) => {
   try {
     const existingReaction = await Reaction.findOne({ postId, userId });
 
-    if (!existingReaction) {
-      console.log("Cannot find the reaction");
-      return null;
-    }
+    if (!existingReaction) return null;
 
     await Reaction.findByIdAndDelete(existingReaction._id);
-
-    console.log("Reaction deleted successfully");
 
     return { message: "Delete successfully" };
   } catch (error) {

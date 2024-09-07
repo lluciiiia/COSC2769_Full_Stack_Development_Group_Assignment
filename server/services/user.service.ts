@@ -124,7 +124,7 @@ export const groupJoinRequest = async (userId: string, groupId: string) => {
 
     const result = new Notifications(newNoti);
     await result.save();
-    console.log("Notification created successfully");
+
     return { success: true, message: "Notification created successfully" };
   } catch (error) {
     console.error("Error sending group join request", error);

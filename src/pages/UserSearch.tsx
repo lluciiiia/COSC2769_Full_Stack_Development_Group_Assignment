@@ -9,7 +9,6 @@ const UserSearch = () => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   const users = useSelector((state: AppState) => state.user.viewUsers);
-  console.log(users);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {

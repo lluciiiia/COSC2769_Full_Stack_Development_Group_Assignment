@@ -33,8 +33,6 @@ export const getAllViewedUsers = createAsyncThunk<ViewedUser[]>(
       },
     );
 
-    console.log(response);
-
     if (!response.ok) {
       console.error("Failed to fetch users:", response.statusText);
       throw new Error("Failed to fetch users");
@@ -211,7 +209,6 @@ export const sendGroupRequest = createAsyncThunk<
     }
 
     const data = await response.json();
-    console.log(data, "data in user controller");
     return data;
   } catch (error) {
     console.error("Error sending group request:", error);

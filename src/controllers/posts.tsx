@@ -38,7 +38,6 @@ export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
     }
 
     const data: PostParams[] = await response.json();
-    console.log(data);
     return data;
   },
 );
@@ -69,7 +68,6 @@ export const getViewedUserPosts = createAsyncThunk<
   PostParams[],
   string | undefined
 >("posts/getViewedUserPosts", async (viewedUserId) => {
-  console.log("hi");
   const response = await fetch(
     import.meta.env.VITE_BACKEND_URL +
       `/api/posts/view-profile/${viewedUserId}`,
@@ -85,7 +83,6 @@ export const getViewedUserPosts = createAsyncThunk<
   }
 
   const data: PostParams[] = await response.json();
-  console.log("think", data);
   return data;
 });
 
@@ -164,7 +161,6 @@ export const getPostsByGroup = createAsyncThunk<PostParams[], string>(
 export const createPost = createAsyncThunk<PostParams, PostParams | undefined>(
   "posts/createPost",
   async (postParams) => {
-    // Log the post parameters being sent
     console.log(
       "Creating post with parameters:",
       JSON.stringify(postParams, null, 2),
@@ -182,21 +178,15 @@ export const createPost = createAsyncThunk<PostParams, PostParams | undefined>(
       },
     );
 
-    // Log the response status and response body
-    console.log("Response status:", response.status);
-
     // Log the raw response before checking if it's okay
     const rawResponseText = await response.text();
-    console.log("Raw response received:", rawResponseText); // Log raw response for debugging
 
     if (!response.ok) {
-      // Log the error response if the creation fails
       console.error("Failed to create post:", rawResponseText);
       throw new Error("Failed to create post");
     }
 
-    const data: PostParams = JSON.parse(rawResponseText); // Parse the raw response text to JSON
-    // Log the created post data
+    const data: PostParams = JSON.parse(rawResponseText);
     console.log("Post created successfully:", JSON.stringify(data, null, 2));
 
     return data;

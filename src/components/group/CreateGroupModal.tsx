@@ -81,7 +81,6 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
     };
 
     try {
-      console.log(groupData);
       await dispatch(createGroup(groupData));
       onClose(); // Close modal on submit
     } catch (error) {

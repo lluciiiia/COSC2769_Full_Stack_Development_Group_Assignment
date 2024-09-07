@@ -62,13 +62,10 @@ const GroupList: React.FC = () => {
     }
   };
 
-  console.log(groups, "geroups");
   const filteredGroups = () => {
     return groups.filter((group) => {
       // Ensure the group is accepted before checking other conditions
-      if (!group.accepted) {
-        return false;
-      }
+      if (!group.accepted) return false;
 
       if (activeTab === "groups") {
         if (activeSubtab === "joined") {
@@ -81,7 +78,6 @@ const GroupList: React.FC = () => {
       }
 
       if (activeTab === "manage") {
-        console.log(group.groupAdmin, "group admin");
         return group.groupAdmin === id;
       }
 

@@ -123,7 +123,6 @@ router.put("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const newUser = new User(req.body);
-    console.log(newUser);
     await newUser.save();
     res.status(201).json({ message: "User created", user: newUser });
   } catch (error: any) {

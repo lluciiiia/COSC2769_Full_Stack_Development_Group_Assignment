@@ -121,7 +121,6 @@ const RequestItems = ({
       <div
         className="flex cursor-pointer items-center gap-2"
         onClick={() => {
-          console.log(postId);
           requestType === "RECEIVE_REACTION" ||
           requestType === "RECEIVE_COMMENT"
             ? navigate(`/posts/${postId}`, { replace: true })

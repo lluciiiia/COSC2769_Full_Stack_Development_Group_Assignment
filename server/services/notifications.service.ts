@@ -47,39 +47,30 @@ export const acceptGroupRequest = async (
 ) => {
   try {
     // Validate ObjectId
-    if (!mongoose.Types.ObjectId.isValid(notiId)) {
+    if (!mongoose.Types.ObjectId.isValid(notiId))
       throw new Error("Invalid ID format");
-    }
 
     const oldNoti = await Notifications.findById(notiId);
-    console.log("oldNoti:", oldNoti);
 
     if (!oldNoti) {
       throw new Error("Notification not found");
     }
-    if (userId === oldNoti.id) {
-      console.log("Can not join owned group");
-      return;
-    }
+    if (userId === oldNoti.id) return;
+
     const groupAdmin = userId;
     const group = await Group.findOne({ groupAdmin: groupAdmin.toString() });
 
-    if (!group) {
-      throw new Error("Group not found");
-    }
+    if (!group) throw new Error("Group not found");
 
     const senderObjectId = new mongoose.Types.ObjectId(oldNoti.senderId);
-    console.log(senderObjectId, "Member already in group");
+
     if (!group.members.includes(senderObjectId)) {
       group.members.push(senderObjectId);
     } else {
-      console.log("Already in group");
       return;
     }
 
     await group.save();
-
-    console.log(group.members);
 
     const newNoti = {
       senderId: userId,

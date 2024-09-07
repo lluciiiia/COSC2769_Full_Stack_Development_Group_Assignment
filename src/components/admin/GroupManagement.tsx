@@ -12,7 +12,6 @@ export const GroupManagement = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const groups = useSelector((state: AppState) => state.admin.groups);
-  console.log("manags: ", groups);
 
   const handleViewGroup = (groupId: string) => {
     navigate(`/groups/${groupId}/discussion`);

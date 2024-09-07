@@ -40,18 +40,13 @@ const groupSlice = createSlice({
           }
         });
       })
-      .addCase(leaveGroup.fulfilled, (state, action) => {
-        console.log(action.payload);
-      });
+      .addCase(leaveGroup.fulfilled, (state, action) => {});
   },
 });
 
 export const selectGroupById = (state: AppState, groupId: string) => {
-  if (!groupId) {
-    console.log("No groupId provided");
-    return undefined;
-  }
-  console.log(`selectGroupById called with groupId: ${groupId}`);
+  if (!groupId) return undefined;
+
   return state.groups.find((group) => group._id === groupId);
 };
 

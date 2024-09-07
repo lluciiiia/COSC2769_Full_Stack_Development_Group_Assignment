@@ -47,7 +47,6 @@ router.get("/view-profile/:viewedUserId", async (req, res) => {
     const userId = req.session.user.id;
     const viewedUserId = req.params.viewedUserId;
     const posts = await getViewedUserPosts(userId, viewedUserId);
-    console.log(viewedUserId);
 
     res.json(posts);
   } catch (err) {

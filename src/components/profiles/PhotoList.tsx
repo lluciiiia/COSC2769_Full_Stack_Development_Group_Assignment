@@ -4,11 +4,8 @@ import { AppState } from "../../app/store";
 
 const PhotoList: React.FC = () => {
   const posts = useSelector((state: AppState) => state.posts.creatorPost);
-  console.log(posts);
 
-  if (posts.length === 0) {
-    return <h1>No photo available</h1>;
-  }
+  if (posts.length === 0) return <h1>No photo available</h1>;
 
   return (
     <div className="grid grid-cols-2 gap-4 p-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">

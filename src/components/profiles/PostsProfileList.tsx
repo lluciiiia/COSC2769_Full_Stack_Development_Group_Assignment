@@ -12,7 +12,6 @@ const PostsProfileList = ({ isAuthenticatedUser }) => {
   const viewedPosts = useSelector((state: AppState) => state.posts.viewedPosts);
 
   const posts: PostParams[] = isAuthenticatedUser ? creatorPosts : viewedPosts;
-  console.log(posts);
 
   const postList = posts.map((p: PostParams) => (
     <PostContainer key={p._id} {...p} />
