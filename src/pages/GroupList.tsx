@@ -150,26 +150,6 @@ const GroupList: React.FC = () => {
               >
                 All Groups
               </button>
-              <button
-                className={`px-4 py-2 font-bold ${
-                  activeSubtab === "joined"
-                    ? "border-b-2 border-[#FFC123] text-[#FFC123]"
-                    : "text-gray-700"
-                }`}
-                onClick={() => setActiveSubtab("joined")}
-              >
-                Joined Groups
-              </button>
-              <button
-                className={`px-4 py-2 font-bold ${
-                  activeSubtab === "notJoined"
-                    ? "border-b-2 border-[#FFC123] text-[#FFC123]"
-                    : "text-gray-700"
-                }`}
-                onClick={() => setActiveSubtab("notJoined")}
-              >
-                Not Joined Groups
-              </button>
             </div>
             {loading ? (
               <div className="flex h-64 items-center justify-center">
