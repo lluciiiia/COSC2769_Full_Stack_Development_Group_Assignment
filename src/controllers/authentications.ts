@@ -5,7 +5,7 @@ export const registerUser = async (userData: {
 }) => {
   try {
     const response = await fetch(
-      import.meta.env.VITE_BACKEND_URL + "/api/user/register",
+      import.meta.env.VITE_BACKEND_URL + "/api/auth/register",
       {
         method: "POST",
         headers: {
@@ -33,7 +33,7 @@ export const loginUser = async (userData: {
 }) => {
   try {
     const response = await fetch(
-      import.meta.env.VITE_BACKEND_URL + "/api/user/login",
+      import.meta.env.VITE_BACKEND_URL + "/api/auth/login",
       {
         method: "POST",
         headers: {
@@ -59,7 +59,7 @@ export const loginUser = async (userData: {
 export const logout = async () => {
   try {
     const response = await fetch(
-      import.meta.env.VITE_BACKEND_URL + "/api/user/logout",
+      import.meta.env.VITE_BACKEND_URL + "/api/auth/logout",
       {
         method: "POST",
         headers: {

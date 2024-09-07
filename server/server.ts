@@ -50,7 +50,7 @@ app.use("/api/posts", postRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/reactions", reactionRoutes);
-app.use("/api/user", authenticationRoutes);
+app.use("/api/auth", authenticationRoutes);
 app.use("/api/session", sessionRoutes);
 app.use("/api/admin", adminRoutes);
 
