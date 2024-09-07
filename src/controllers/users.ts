@@ -1,14 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { UserType, ViewedUser } from "../interfaces/Users";
-import { BACKEND_URL } from "./posts";
 
 export const getAllUsers = createAsyncThunk<UserType[]>(
   "user/getAllUsers",
   async () => {
-    const response = await fetch(BACKEND_URL + `/api/users/`, {
-      method: "GET",
-      credentials: "include",
-    });
+    const response = await fetch(
+      import.meta.env.VITE_BACKEND_URL + `/api/users/`,
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
 
     if (!response.ok) {
       console.error("Failed to fetch users:", response.statusText);
@@ -23,10 +25,13 @@ export const getAllUsers = createAsyncThunk<UserType[]>(
 export const getAllViewedUsers = createAsyncThunk<ViewedUser[]>(
   "user/getAllUsers",
   async () => {
-    const response = await fetch(BACKEND_URL + `/api/users/view-users`, {
-      method: "GET",
-      credentials: "include",
-    });
+    const response = await fetch(
+      import.meta.env.VITE_BACKEND_URL + `/api/users/view-users`,
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
 
     console.log(response);
 
@@ -43,10 +48,13 @@ export const getAllViewedUsers = createAsyncThunk<ViewedUser[]>(
 export const getUser = createAsyncThunk<UserType, string | undefined>(
   "user/getUser",
   async (userId) => {
-    const response = await fetch(BACKEND_URL + `/api/users/${userId}`, {
-      method: "GET",
-      credentials: "include",
-    });
+    const response = await fetch(
+      import.meta.env.VITE_BACKEND_URL + `/api/users/${userId}`,
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
 
     if (!response.ok) {
       console.error("Failed to fetch user:", response.statusText);
@@ -61,10 +69,13 @@ export const getUser = createAsyncThunk<UserType, string | undefined>(
 export const getViewedUser = createAsyncThunk<UserType, string | undefined>(
   "user/getViewedUser",
   async (userId) => {
-    const response = await fetch(BACKEND_URL + `/api/users/view/${userId}`, {
-      method: "GET",
-      credentials: "include",
-    });
+    const response = await fetch(
+      import.meta.env.VITE_BACKEND_URL + `/api/users/view/${userId}`,
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
 
     if (!response.ok) {
       console.error("Failed to fetch viewed user:", response.statusText);
@@ -80,14 +91,17 @@ export const updateUser = createAsyncThunk<
   UserType,
   { userId: string; userData: Partial<UserType> }
 >("user/updateUser", async ({ userId, userData }) => {
-  const response = await fetch(BACKEND_URL + `/api/users/${userId}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
+  const response = await fetch(
+    import.meta.env.VITE_BACKEND_URL + `/api/users/${userId}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(userData),
     },
-    credentials: "include",
-    body: JSON.stringify(userData),
-  });
+  );
 
   if (!response.ok) {
     console.error("Failed to update user:", response.statusText);
@@ -104,7 +118,7 @@ export const sendFriendRequest = createAsyncThunk<
   string | undefined
 >("user/sendFriendRequest", async (friendId) => {
   const response = await fetch(
-    BACKEND_URL + `/api/users/addfriend/${friendId}`,
+    import.meta.env.VITE_BACKEND_URL + `/api/users/addfriend/${friendId}`,
     {
       method: "PUT",
       credentials: "include",
@@ -129,7 +143,8 @@ export const acceptFriendRequest = createAsyncThunk<
   string | undefined
 >("user/acceptFriendRequest", async (friendId) => {
   const response = await fetch(
-    BACKEND_URL + `/api/users/friend-requests/${friendId}/accept`,
+    import.meta.env.VITE_BACKEND_URL +
+      `/api/users/friend-requests/${friendId}/accept`,
     {
       method: "PUT",
       credentials: "include",
@@ -150,7 +165,7 @@ export const unfriendById = createAsyncThunk<{ message: string }, string>(
   "user/updateUser",
   async (friendId) => {
     const response = await fetch(
-      BACKEND_URL + `/api/users/unfriend/${friendId}`,
+      import.meta.env.VITE_BACKEND_URL + `/api/users/unfriend/${friendId}`,
       {
         method: "DELETE",
         headers: {
@@ -179,7 +194,7 @@ export const sendGroupRequest = createAsyncThunk<
 >("user/sendGroupRequest", async (groupId, { rejectWithValue }) => {
   try {
     const response = await fetch(
-      BACKEND_URL + `/api/users/sentGroup/${groupId}`,
+      import.meta.env.VITE_BACKEND_URL + `/api/users/sentGroup/${groupId}`,
       {
         method: "POST",
         headers: {

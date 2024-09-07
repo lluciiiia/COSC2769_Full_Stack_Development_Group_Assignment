@@ -1,14 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Notifications } from "../interfaces/Notifications";
-import { BACKEND_URL } from "./posts";
 
 export const fetchNotification = createAsyncThunk<Notifications[]>(
   "notifications/fetchNotifications",
   async () => {
-    const response = await fetch(BACKEND_URL + `/api/notifications/received`, {
-      method: "GET",
-      credentials: "include",
-    });
+    const response = await fetch(
+      import.meta.env.VITE_BACKEND_URL + `/api/notifications/received`,
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
 
     if (!response.ok) {
       console.error("Failed to fetch notifications:", response.statusText);
@@ -24,10 +26,13 @@ export const fetchSentFriendRequests = createAsyncThunk<Notifications[]>(
   "notifications/fetchSentFriendRequests",
 
   async () => {
-    const response = await fetch(BACKEND_URL + `/api/notifications/sent`, {
-      method: "GET",
-      credentials: "include",
-    });
+    const response = await fetch(
+      import.meta.env.VITE_BACKEND_URL + `/api/notifications/sent`,
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
 
     if (!response.ok) {
       console.error(
@@ -48,7 +53,7 @@ export const groupSentRequest = createAsyncThunk<Notifications[]>(
 
   async () => {
     const response = await fetch(
-      BACKEND_URL + `/api/notifications/groupRequest`,
+      import.meta.env.VITE_BACKEND_URL + `/api/notifications/groupRequest`,
       {
         method: "GET",
         credentials: "include",
@@ -74,7 +79,8 @@ export const acceptFriendRequestNotification = createAsyncThunk<
   string
 >("notifications/acceptFriendRequestNotification", async (notificationId) => {
   const response = await fetch(
-    BACKEND_URL + `/api/notifications/accepted/${notificationId}`,
+    import.meta.env.VITE_BACKEND_URL +
+      `/api/notifications/accepted/${notificationId}`,
     {
       method: "PUT",
       credentials: "include",
@@ -98,7 +104,7 @@ export const acceptGroupRequest = createAsyncThunk<
   { senderId: string; notiId: string }
 >("user/acceptGroupRequest", async ({ senderId, notiId }) => {
   const response = await fetch(
-    `${BACKEND_URL}/api/notifications/acceptRequest`,
+    import.meta.env.VITE_BACKEND_URL + `api/notifications/acceptRequest`,
     {
       method: "PUT",
       headers: {
@@ -126,7 +132,7 @@ export const removeFriendRequestNotification = createAsyncThunk<
   string
 >("notifications/removeFriendRequestNotification", async (notificationId) => {
   const response = await fetch(
-    BACKEND_URL + `/api/notifications/${notificationId}`,
+    import.meta.env.VITE_BACKEND_URL + `/api/notifications/${notificationId}`,
     {
       method: "DELETE",
       credentials: "include",
@@ -147,7 +153,8 @@ export const groupApprovalNotification = createAsyncThunk<
   string
 >("notifications/groupApprovalNotification", async (groupId) => {
   const response = await fetch(
-    BACKEND_URL + `/api/notifications/group-approval/${groupId}`,
+    import.meta.env.VITE_BACKEND_URL +
+      `/api/notifications/group-approval/${groupId}`,
     {
       method: "POST",
       credentials: "include",
@@ -168,7 +175,7 @@ export const createCommentNotification = createAsyncThunk<
   string | undefined
 >("notifications/createCommentNotification", async (postId) => {
   const response = await fetch(
-    BACKEND_URL + `/api/notifications/comment/${postId}`,
+    import.meta.env.VITE_BACKEND_URL + `/api/notifications/comment/${postId}`,
     {
       method: "POST",
       credentials: "include",
