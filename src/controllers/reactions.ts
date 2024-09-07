@@ -8,7 +8,7 @@ export const createReaction = createAsyncThunk(
   ) => {
     try {
       const response = await fetch(
-        import.meta.env.VITE_BACKEND_URL + "api/reactions/userReact",
+        import.meta.env.VITE_BACKEND_URL + "/api/reactions/userReact",
         {
           method: "POST",
           headers: {
@@ -38,7 +38,7 @@ export const fetchReaction = createAsyncThunk(
   async (postId: string, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        import.meta.env.VITE_BACKEND_URL + `api/reactions/${postId}`,
+        import.meta.env.VITE_BACKEND_URL + `/api/reactions/${postId}`,
         {
           method: "POST",
           headers: {
@@ -70,7 +70,7 @@ export const deleteReaction = createAsyncThunk(
   ) => {
     try {
       const response = await fetch(
-        import.meta.env.VITE_BACKEND_URL + `api/reactions/${postId}/${userId}`,
+        import.meta.env.VITE_BACKEND_URL + `/api/reactions/${postId}/${userId}`,
         {
           method: "DELETE",
           headers: {
