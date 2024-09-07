@@ -6,7 +6,7 @@ dotenv.config();
 
 const uri =
   process.env.MONGO_URI ||
-  "mongodb+srv://fullstack:1234@atlascluster.olmxf.mongodb.net/?retryWrites=true&w=majority&appName=AtlasCluster";
+  "mongodb+srv://fullstack:123@atlascluster.wf8n3.mongodb.net/";
 
 const connectDB = async () => {
   try {
