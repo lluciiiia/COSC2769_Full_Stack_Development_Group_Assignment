@@ -65,7 +65,8 @@ router.get("/groups/:groupId", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    const post = await getPostById(req.params.id);
+    const userId = req.session.user.id;
+    const post = await getPostById(req.params.id, userId);
     res.json(post);
   } catch (error) {
     res.status(500).json({ error: error });

@@ -29,6 +29,9 @@ const PostDetail: React.FC = () => {
         }
       } catch (error) {
         console.error("Error fetching post details:", error);
+        alert(
+          "There was an issue fetching the post. This might be due to access permissions or an internal error. Please try again or contact support if the problem persists.",
+        );
       } finally {
         setLoading(false);
       }

@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import Group from "../models/group";
 import Post from "../models/post";
 import User from "../models/user";
+import { Types } from "mongoose";
 
 export const getAllPosts = async () => {
   try {
@@ -169,7 +170,7 @@ export const getViewedUserPosts = async (
   }
 };
 
-export const getPostById = async (postId: string) => {
+export const getPostById = async (postId: string, userId: string) => {
   try {
     const post = await Post.findById(postId)
       .sort({ createdAt: -1 })
@@ -177,14 +178,37 @@ export const getPostById = async (postId: string) => {
         path: "comments",
         populate: {
           path: "reactions",
-          select: "userId reactionType postId onModel", // Select only the fields you want
+          select: "userId reactionType postId onModel",
         },
       })
       .populate({
         path: "reactions",
-        select: "userId reactionType postId onModel", // Select only the fields you want
+        select: "userId reactionType postId onModel",
       });
+
     if (!post) throw new Error("Post not found with the provided id");
+
+    if (post.visibility == "FRIEND_ONLY") {
+      const creator = await User.findById(post.creatorId);
+      if (!creator)
+        throw new Error(`Creator not found for userId: ${post.creatorId}`);
+
+      if (!creator.friends.includes(new Types.ObjectId(userId))) {
+        throw new Error(
+          "Access denied: This post is restricted to friends of the creator.",
+        );
+      }
+    } else if (post.visibility === "GROUP") {
+      const group = await Group.findById(post.groupId);
+      if (!group)
+        throw new Error(`Group not found for groupId: ${post.groupId}`);
+
+      if (!group.members.includes(new Types.ObjectId(userId))) {
+        throw new Error(
+          "Access denied: This post is only visible to members of the group.",
+        );
+      }
+    }
 
     const enhancedPost = await enhancePostWithUser(post);
 
