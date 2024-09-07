@@ -57,7 +57,7 @@ export const logout = async () => {
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include", 
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -75,7 +75,7 @@ export const fetchedSession = async () => {
   try {
     const response = await fetch("http://localhost:8080/api/session", {
       method: "GET",
-      credentials: "include", 
+      credentials: "include",
     });
 
     if (!response.ok) {

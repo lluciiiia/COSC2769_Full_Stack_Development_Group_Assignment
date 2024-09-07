@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-
 export const createReaction = createAsyncThunk(
   "reactions/createReaction",
   async (
@@ -63,12 +62,11 @@ export const fetchReaction = createAsyncThunk(
   },
 );
 
-
 export const deleteReaction = createAsyncThunk(
   "reaction/deleteReaction",
   async (
     { postId, userId }: { postId: string; userId: string }, // Wrapping multiple values in an object
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const response = await fetch(
@@ -78,9 +76,9 @@ export const deleteReaction = createAsyncThunk(
           headers: {
             "Content-Type": "application/json",
           },
-          
+
           credentials: "include",
-        }
+        },
       );
 
       if (!response.ok) {
@@ -94,5 +92,5 @@ export const deleteReaction = createAsyncThunk(
       console.error("Network error:", error.message);
       return rejectWithValue(error.message || "Network error");
     }
-  }
+  },
 );

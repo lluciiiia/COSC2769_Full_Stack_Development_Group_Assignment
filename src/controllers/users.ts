@@ -166,7 +166,7 @@ export const unfriendById = createAsyncThunk<{ message: string }, string>(
     }
 
     const data = await response.json();
-    
+
     return data;
   },
 );
@@ -196,7 +196,7 @@ export const sendGroupRequest = createAsyncThunk<
     }
 
     const data = await response.json();
-    console.log(data, "data in user controller")
+    console.log(data, "data in user controller");
     return data;
   } catch (error) {
     console.error("Error sending group request:", error);

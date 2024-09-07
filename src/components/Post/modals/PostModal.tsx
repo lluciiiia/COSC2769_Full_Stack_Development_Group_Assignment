@@ -9,7 +9,14 @@ import {
 } from "../../../controllers/posts";
 import { GroupType } from "../../../interfaces/Group";
 
-const PostModal = ({ isOpen, onClose, userId, post, groupId, isInGroupPage }) => {
+const PostModal = ({
+  isOpen,
+  onClose,
+  userId,
+  post,
+  groupId,
+  isInGroupPage,
+}) => {
   const dispatch = useDispatch<AppDispatch>();
   const [content, setContent] = useState("");
   const [visibility, setVisibility] = useState<
@@ -18,8 +25,7 @@ const PostModal = ({ isOpen, onClose, userId, post, groupId, isInGroupPage }) =>
   const [groups, setGroups] = useState<GroupType[]>([]);
   const [selectedGroupId, setSelectedGroupId] = useState<string>("");
   const [images, setImages] = useState<string[]>([]);
-  
-  console.log("create group bang post" , isInGroupPage); 
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -31,7 +37,7 @@ const PostModal = ({ isOpen, onClose, userId, post, groupId, isInGroupPage }) =>
       console.log("Editing post:", post);
       setContent(post.content);
       setVisibility(post.visibility);
-      setImages(post.images || []); // Expecting post.images to be string[]
+      setImages(post.images || []);
       setSelectedGroupId(post.groupId || "");
     } else if (isOpen) {
       console.log("Creating new post");
@@ -68,16 +74,14 @@ const PostModal = ({ isOpen, onClose, userId, post, groupId, isInGroupPage }) =>
     };
   }, [isOpen, post, userId, groupId]);
 
-
   const handleSubmit = async (e) => {
-
-    const finalGroupId = isInGroupPage ? groupId : (selectedGroupId || undefined);
+    const finalGroupId = isInGroupPage ? groupId : selectedGroupId || undefined;
     const postParams: any = {
       creatorId: userId,
       content: content,
       visibility: visibility,
       images: images,
-      groupId: visibility === "GROUP" ?  finalGroupId : undefined,
+      groupId: visibility === "GROUP" ? finalGroupId : undefined,
       history: post?.history ? post.history : [],
       comments: post?.comments ? post.comments : [],
       createdAt: post?.createdAt ? post.createdAt : new Date(),
@@ -86,7 +90,7 @@ const PostModal = ({ isOpen, onClose, userId, post, groupId, isInGroupPage }) =>
     try {
       let result;
       if (post) {
-        postParams._id = post._id; // Add the post ID for updates
+        postParams._id = post._id;
         result = await dispatch(updatePost(postParams)).unwrap();
       } else {
         result = await dispatch(createPost(postParams)).unwrap();
@@ -143,14 +147,15 @@ const PostModal = ({ isOpen, onClose, userId, post, groupId, isInGroupPage }) =>
             </label>
             {groupId ? (
               <p className="rounded border border-gray-300 bg-gray-100 p-2">
-                  {groupId ? (
-      <p className="rounded border border-gray-300 bg-gray-100 p-2">
-        {/* Find the group that matches the groupId */}
-        {groups.find(group => group._id === groupId)?.name || "None"}
-      </p>
-    ) : (
-      <p className="text-gray-500">No group selected</p>
-    )}
+                {groupId ? (
+                  <p className="rounded border border-gray-300 bg-gray-100 p-2">
+                    {/* Find the group that matches the groupId */}
+                    {groups.find((group) => group._id === groupId)?.name ||
+                      "None"}
+                  </p>
+                ) : (
+                  <p className="text-gray-500">No group selected</p>
+                )}
               </p>
             ) : (
               <select

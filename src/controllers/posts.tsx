@@ -1,6 +1,5 @@
-import { combineSlices, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import { PostParams, RevertPostParams } from "../interfaces/Posts";
-import { useContext } from "react";
 
 export const BACKEND_URL = "http://localhost:8080";
 
@@ -257,5 +256,5 @@ export const deletePostById = createAsyncThunk<boolean, string | undefined>(
       console.error("Failed to delete the post", error);
       return rejectWithValue("An error occurred while deleting the post");
     }
-  }
+  },
 );

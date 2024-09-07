@@ -6,8 +6,8 @@ export const fetchNotification = createAsyncThunk<Notifications[]>(
   "notifications/fetchNotifications",
   async () => {
     const response = await fetch(BACKEND_URL + `/api/notifications/received`, {
-      method: "GET", // Correct placement of method inside an options object
-      credentials: "include", // Include credentials if you're using cookies for authentication
+      method: "GET",
+      credentials: "include",
     });
 
     if (!response.ok) {
