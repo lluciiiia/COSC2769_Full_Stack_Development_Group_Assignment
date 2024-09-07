@@ -14,7 +14,6 @@ const PostsProfileList = ({ isAuthenticatedUser, loading }) => {
   const viewedPosts = useSelector((state: AppState) => state.posts.viewedPosts);
 
   const posts: PostParams[] = isAuthenticatedUser ? creatorPosts : viewedPosts;
-  console.log(posts);
 
   if (loading) {
     return (

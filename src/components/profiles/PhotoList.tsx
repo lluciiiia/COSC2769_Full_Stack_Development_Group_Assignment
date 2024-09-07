@@ -2,8 +2,9 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { AppState } from "../../app/store";
 import { PostParams } from "../../interfaces/Posts";
+import LoadingSpinner from "../../assets/icons/Loading";
 
-const PhotoList = ({ isAuthenticatedUser }) => {
+const PhotoList = ({ isAuthenticatedUser, loading }) => {
   // const posts = useSelector((state: AppState) => state.posts.creatorPost);
 
   // const posts: PostParams[] = isAuthenticatedUser ? creatorPosts : viewedPosts;
@@ -12,6 +13,14 @@ const PhotoList = ({ isAuthenticatedUser }) => {
       ? state.posts.creatorPost
       : state.posts.viewedPosts;
   });
+
+  if (loading) {
+    return (
+      <div className="flex h-[50%] items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   if (posts.length === 0) {
     return <h1>No photo available</h1>;

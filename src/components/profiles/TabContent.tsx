@@ -39,13 +39,23 @@ const TabContent = ({
 
   switch (activeTab) {
     case "Posts":
-      return <PostsProfileList isAuthenticatedUser={isAuthenticatedUser} loading={loading}/>;
+      return (
+        <PostsProfileList
+          isAuthenticatedUser={isAuthenticatedUser}
+          loading={loading}
+        />
+      );
     case "About":
       return <About isAuthenticatedUser={isAuthenticatedUser} />;
     case "Friends":
       return <ProfileFriendList isAuthenticatedUser={isAuthenticatedUser} />;
     case "Photos":
-      return <PhotoList isAuthenticatedUser={isAuthenticatedUser} />;
+      return (
+        <PhotoList
+          isAuthenticatedUser={isAuthenticatedUser}
+          loading={loading}
+        />
+      );
     default:
       return null;
   }
