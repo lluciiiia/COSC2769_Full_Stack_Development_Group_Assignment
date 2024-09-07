@@ -194,7 +194,7 @@ export const sendGroupRequest = createAsyncThunk<
 >("user/sendGroupRequest", async (groupId, { rejectWithValue }) => {
   try {
     const response = await fetch(
-      import.meta.env.VITE_BACKEND_URL + `/api/users/sentGroup/${groupId}`,
+      import.meta.env.VITE_BACKEND_URL + `/api/users/sent/${groupId}`,
       {
         method: "POST",
         headers: {

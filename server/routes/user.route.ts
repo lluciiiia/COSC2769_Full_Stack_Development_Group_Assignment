@@ -148,7 +148,7 @@ router.delete("/unfriend/:friendId", async (req, res) => {
   }
 });
 
-router.post("/sentGroup/:groupId", async (req, res) => {
+router.post("/sent/:groupId", async (req, res) => {
   try {
     const userId = req.session.user.id; // Retrieve user ID from the session
     const { groupId } = req.params;
