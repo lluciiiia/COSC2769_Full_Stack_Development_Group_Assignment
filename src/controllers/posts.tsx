@@ -25,17 +25,14 @@ export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
   "posts/getPosts",
   async () => {
     const response = await fetch(
-      import.meta.env.VITE_BACKEND_URL + `/api/posts/`,
+      import.meta.env.VITE_BACKEND_URL + "/api/posts",
       {
         method: "GET",
         credentials: "include",
       },
     );
 
-    if (!response.ok) {
-      console.error("Failed to fetch posts:", response.statusText);
-      throw new Error("Failed to fetch posts");
-    }
+    if (!response.ok) throw new Error("Failed to fetch posts");
 
     const data: PostParams[] = await response.json();
     return data;
@@ -134,9 +131,7 @@ export const getPostsByGroup = createAsyncThunk<PostParams[], string>(
   "posts/getPostByGroup",
   async (groupId, { rejectWithValue }) => {
     try {
-      if (!groupId) {
-        throw new Error("No group ID provided");
-      }
+      if (!groupId) throw new Error("No group ID provided");
 
       const response = await fetch(
         import.meta.env.VITE_BACKEND_URL + `/api/posts/groups/${groupId}`,
