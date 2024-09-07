@@ -8,26 +8,29 @@ import PostContainer from "../components/post/PostContainer";
 import { useSelector } from "react-redux";
 import { selectAuthState } from "../features/authSlice";
 import { createReaction } from "../controllers/reactions";
-import { selectGroupById } from "../features/groupSlice";
-import { AppState } from "../app/store";
 import AdminNavbar from "../components/AdminNavbar";
+import LoadingSpinner from "../assets/icons/Loading";
 
 const PostDetail: React.FC = () => {
   const [post, setPost] = useState<PostParams | null>(null);
+  const [loading, setLoading] = useState(true);
   const { postId } = useParams();
-  const { id,isAdmin } = useSelector(selectAuthState);
+  const { id, isAdmin } = useSelector(selectAuthState);
 
   useEffect(() => {
     const fetchPost = async () => {
+      setLoading(true);
       try {
-        const post = await getPostById(postId);
-        if (post) {
-          setPost(post);
+        const fetchedPost = await getPostById(postId);
+        if (fetchedPost) {
+          setPost(fetchedPost);
         } else {
           console.error("Post not found");
         }
       } catch (error) {
         console.error("Error fetching post details:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -45,7 +48,16 @@ const PostDetail: React.FC = () => {
     }
   };
 
-  if (!post) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <LoadingSpinner /> {/* Display loading spinner */}
+      </div>
+    );
+  }
+
+  if (!post) return <p>Post not found.</p>;
+
   const groupId = post.groupId || "";
 
   return (
@@ -75,7 +87,7 @@ const PostDetail: React.FC = () => {
                 userId={id}
                 postId={post._id}
                 onReact={handleReaction} // Pass the onReact function
-                groupId={groupId} 
+                groupId={groupId}
               />
             </>
           )}
