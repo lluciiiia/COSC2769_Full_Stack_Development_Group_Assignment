@@ -111,11 +111,15 @@ const ProfileHeader = ({
 
   return (
     <div className="relative h-72 w-full">
-      <img
-        src={backgroundImage} // Use the state for background image
-        alt="Background"
-        className="absolute inset-0 h-full w-full object-fill"
-      />
+      {backgroundImage ? (
+        <img
+          src={backgroundImage}
+          alt="Background"
+          className="absolute inset-0 h-full w-full object-fill"
+        />
+      ) : (
+        <div className="absolute inset-0 h-full w-full bg-gray-300 object-fill"></div>
+      )}
       {isAuthenticatedUser && (
         <div
           onClick={openBackgroundModal} // Open modal on click
