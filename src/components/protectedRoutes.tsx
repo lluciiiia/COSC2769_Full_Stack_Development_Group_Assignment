@@ -30,17 +30,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     }
   }, [dispatch, auth.isAuthenticated]);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  if (loading) return <p>Loading...</p>;
 
-  if (!auth.isAuthenticated) {
-    return <Navigate to="/" replace />;
-  }
+  if (!auth.isAuthenticated) return <Navigate to="/" replace />;
 
-  if (adminOnly && !auth.isAdmin) {
-    return <Navigate to="/home" replace />;
-  }
+  if (adminOnly && !auth.isAdmin) return <Navigate to="/home" replace />;
 
   return children;
 };
