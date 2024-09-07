@@ -2,11 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../app/store";
 import PostForm from "./PostForm";
-import {
-  createPost,
-  updatePost,
-  getGroupsByUserId,
-} from "../../../controllers/posts";
+import { createPost, updatePost } from "../../../controllers/posts";
+import { getGroupsByUserId } from "../../../controllers/groups";
 import { GroupType } from "../../../interfaces/Group";
 
 const PostModal = ({

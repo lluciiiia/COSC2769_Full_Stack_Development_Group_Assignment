@@ -102,27 +102,6 @@ export const getPostsByCreatorId = createAsyncThunk<
   return data;
 });
 
-export const getGroupsByUserId = async (userId: string | undefined) => {
-  if (!userId) return;
-
-  const response = await fetch(
-    import.meta.env.VITE_BACKEND_URL + `/api/groups/user/${userId}`,
-    {
-      method: "GET",
-      credentials: "include",
-    },
-  );
-
-  if (!response.ok) {
-    console.error("Failed to fetch groups:", response.statusText);
-    throw new Error("Failed to fetch groups");
-  }
-
-  // Parse the JSON response if the fetch is successful
-  const groups = await response.json();
-  return groups;
-};
-
 export const getPostsByGroup = createAsyncThunk<PostParams[], string>(
   "posts/getPostByGroup",
   async (groupId, { rejectWithValue }) => {

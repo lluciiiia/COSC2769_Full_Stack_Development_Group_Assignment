@@ -22,6 +22,26 @@ export const fetchGroups = createAsyncThunk<GroupType[]>(
   },
 );
 
+export const getGroupsByUserId = async (userId: string | undefined) => {
+  if (!userId) return;
+
+  const response = await fetch(
+    import.meta.env.VITE_BACKEND_URL + `/api/groups/user/${userId}`,
+    {
+      method: "GET",
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    console.error("Failed to fetch groups:", response.statusText);
+    throw new Error("Failed to fetch groups");
+  }
+
+  const groups = await response.json();
+  return groups;
+};
+
 export const handleAcceptGroup = async (
   groupId: string,
 ): Promise<GroupType> => {
@@ -77,6 +97,7 @@ export const createGroup = createAsyncThunk<GroupType, GroupParams>(
     }
   },
 );
+
 export const fetchGroupWithMembers = createAsyncThunk<GroupType, string>(
   "groups/fetchGroupWithMembers",
   async (groupId: string) => {
