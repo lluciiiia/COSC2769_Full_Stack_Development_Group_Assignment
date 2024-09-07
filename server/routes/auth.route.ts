@@ -3,7 +3,7 @@ import {
   regisNewAccount,
   loginUser,
   logoutUser,
-} from "../services/authenServices";
+} from "../services/auth.service";
 
 const router = express.Router();
 

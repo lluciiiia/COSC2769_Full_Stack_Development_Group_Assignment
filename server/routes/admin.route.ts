@@ -3,7 +3,7 @@ import {
   createAdmin,
   resumeUser,
   suspendUser,
-} from "../services/adminServices";
+} from "../services/admin.service";
 
 const router = express.Router();
 

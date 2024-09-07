@@ -77,10 +77,10 @@ export const loginUser = async (req: any) => {
     req.session.user = {
       id: user._id,
       isAuthenticated: true,
-      name: user.name || '',
+      name: user.name || "",
       profilePictureURL: user.profilePictureURL || "",
       isAdmin: isAdmin,
-      email: user.email || '',
+      email: user.email || "",
     };
 
     return {

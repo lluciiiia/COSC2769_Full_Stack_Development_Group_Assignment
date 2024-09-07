@@ -104,7 +104,6 @@ export const fetchReaction = async (postId: string, userId: string) => {
 };
 export const undoReaction = async (postId: string, userId: string) => {
   try {
-
     const existingReaction = await Reaction.findOne({ postId, userId });
 
     if (!existingReaction) {

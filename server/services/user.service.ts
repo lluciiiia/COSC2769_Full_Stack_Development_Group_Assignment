@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import User from "../models/user";
 import Notifications from "../models/notification";
-import { createFriendRequestNotification } from "./notificationsService";
+import { createFriendRequestNotification } from "./notifications.service";
 import Group from "../models/group";
 
 export const getAllUsers = async () => {
@@ -24,12 +24,11 @@ export const getAllViewedUsers = async () => {
   try {
     const users = await User.find().select(
       "_id name profilePictureURL location",
-    ); 
+    );
 
     if (users.length === 0) throw new Error("No users found");
 
     return users;
-
   } catch (error) {
     console.error("Error fetching users", error);
     throw new Error("Failed to fetch users");
@@ -65,12 +64,10 @@ export const addFriend = async (userId: string, friendId: string) => {
 
 export const getViewUserById = async (userId: string) => {
   try {
-    const user = await User.findById(userId)
-      .select("-password") 
-      .populate({
-        path: "friends",
-        select: "name profilePictureURL", 
-      });
+    const user = await User.findById(userId).select("-password").populate({
+      path: "friends",
+      select: "name profilePictureURL",
+    });
 
     if (!user) throw new Error("User can not found with the provided id");
     return user;
@@ -101,13 +98,19 @@ export const groupJoinRequest = async (userId: string, groupId: string) => {
     if (!group) {
       throw new Error("Group not found");
     }
-    
-    const isMember = group.members.some(member => member._id.equals(userId));
+
+    const isMember = group.members.some((member) => member._id.equals(userId));
     if (isMember) {
-      return { success: false, message: "User is already a member of the group" };
+      return {
+        success: false,
+        message: "User is already a member of the group",
+      };
     }
 
-    const existingNoti = await Notifications.findOne({ senderId: userId, groupId });
+    const existingNoti = await Notifications.findOne({
+      senderId: userId,
+      groupId,
+    });
     if (existingNoti) {
       return { success: false, message: "Notification already sent" };
     }
@@ -128,7 +131,6 @@ export const groupJoinRequest = async (userId: string, groupId: string) => {
     return { success: false, message: "Failed to send group join request" };
   }
 };
-
 
 export const unfriendById = async (userId: string, friendId: string) => {
   try {

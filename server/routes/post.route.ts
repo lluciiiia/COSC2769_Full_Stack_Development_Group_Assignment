@@ -9,7 +9,7 @@ import {
   getPostsForUser,
   getAllPosts,
   getViewedUserPosts,
-} from "../services/postServices";
+} from "../services/post.service";
 
 const router = express.Router();
 

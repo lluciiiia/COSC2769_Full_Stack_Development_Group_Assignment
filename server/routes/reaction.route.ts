@@ -3,8 +3,8 @@ import Reaction from "../models/reactions";
 import {
   createReaction,
   fetchReaction,
-  undoReaction
-} from "../services/reactionService";
+  undoReaction,
+} from "../services/reaction.service";
 import mongoose from "mongoose";
 import { useParams } from "react-router-dom";
 
@@ -41,7 +41,9 @@ router.post("/:postId", async (req: Request, res: Response) => {
     const { postId } = req.params;
 
     if (!req.session || !req.session.user || !req.session.user.id) {
-      return res.status(401).json({ error: "Unauthorized: User not logged in" });
+      return res
+        .status(401)
+        .json({ error: "Unauthorized: User not logged in" });
     }
     const userId = req.session.user.id;
 
@@ -62,7 +64,6 @@ router.post("/:postId", async (req: Request, res: Response) => {
 //   try{
 //       const {postId}= req.params;
 
-      
 //   }catch(error){
 
 //   }
@@ -71,7 +72,7 @@ router.post("/:postId", async (req: Request, res: Response) => {
 router.delete("/:postId/:userId", async (req: Request, res: Response) => {
   try {
     const postId = req.params.postId;
-    const userId= req.params.userId;
+    const userId = req.params.userId;
     const updatedReactions = await undoReaction(postId, userId);
 
     if (!updatedReactions) {
@@ -84,6 +85,5 @@ router.delete("/:postId/:userId", async (req: Request, res: Response) => {
     res.status(500).json({ error: "Failed to delete reaction" });
   }
 });
-
 
 export default router;

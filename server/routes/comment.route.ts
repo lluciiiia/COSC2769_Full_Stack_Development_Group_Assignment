@@ -4,7 +4,7 @@ import {
   createComment,
   updateComment,
   deleteCommentById,
-} from "../services/commentServices";
+} from "../services/comment.service";
 
 const router = express.Router();
 

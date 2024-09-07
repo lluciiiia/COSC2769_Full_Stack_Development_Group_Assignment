@@ -10,7 +10,7 @@ import {
   acceptFriendRequest,
   groupJoinRequest,
   getAllViewedUsers,
-} from "../services/userServices";
+} from "../services/user.service";
 import { isAuthenticated } from "../middleware/authenticate";
 import mongoose from "mongoose";
 
@@ -148,7 +148,6 @@ router.delete("/unfriend/:friendId", async (req, res) => {
   }
 });
 
-
 router.post("/sentGroup/:groupId", async (req, res) => {
   try {
     const userId = req.session.user.id; // Retrieve user ID from the session
@@ -170,6 +169,5 @@ router.post("/sentGroup/:groupId", async (req, res) => {
     res.status(500).json({ message: "An error occurred", error });
   }
 });
-
 
 export default router;

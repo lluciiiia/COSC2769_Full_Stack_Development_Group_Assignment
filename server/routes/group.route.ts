@@ -6,7 +6,7 @@ import {
   removeMemberFromGroup,
   getGroupsByUserId,
   createGroup,
-} from "../services/groupservice";
+} from "../services/group.service";
 
 const router = express.Router();
 

@@ -9,7 +9,7 @@ import {
   acceptGroupRequest,
   createGroupApprovalNotification,
   createCommentNotification,
-} from "../services/notificationsService";
+} from "../services/notifications.service";
 
 const router = express.Router();
 

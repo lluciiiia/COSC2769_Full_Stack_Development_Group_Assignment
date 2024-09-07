@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import Group from "../models/group";
 import Post from "../models/post";
 import User from "../models/user";
-import { getGroupRequest } from "./notificationsService";
 
 export const getAllPosts = async () => {
   try {
@@ -212,11 +211,11 @@ export const getPostByGroupId = async (groupId: string) => {
         path: "reactions",
         select: "userId reactionType postId onModel", // Select only the fields you want
       });
-      const enhancedPosts = await Promise.all(
-        posts.map(async (post) => {
-          return await enhancePostWithUser(post);
-        }),
-      );
+    const enhancedPosts = await Promise.all(
+      posts.map(async (post) => {
+        return await enhancePostWithUser(post);
+      }),
+    );
     if (!posts) {
       throw new Error("Post not found with id");
     }
