@@ -3,8 +3,9 @@ import { useSelector } from "react-redux";
 import { PostParams } from "../../interfaces/Posts.tsx";
 import { AppState } from "../../app/store.ts";
 import PostContainer from "../posts/PostContainer.tsx";
+import LoadingSpinner from "../../assets/icons/Loading.tsx";
 
-const PostsProfileList = ({ isAuthenticatedUser }) => {
+const PostsProfileList = ({ isAuthenticatedUser, loading }) => {
   const creatorPosts = useSelector(
     (state: AppState) => state.posts.creatorPost,
   );
@@ -12,6 +13,14 @@ const PostsProfileList = ({ isAuthenticatedUser }) => {
   const viewedPosts = useSelector((state: AppState) => state.posts.viewedPosts);
 
   const posts: PostParams[] = isAuthenticatedUser ? creatorPosts : viewedPosts;
+
+  if (loading) {
+    return (
+      <div className="flex h-[50%] items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   const postList = posts.map((p: PostParams) => (
     <PostContainer key={p._id} {...p} />

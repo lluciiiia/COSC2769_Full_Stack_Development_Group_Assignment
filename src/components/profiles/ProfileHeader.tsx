@@ -90,6 +90,7 @@ const ProfileHeader = ({
       dispatch(getViewedUser(friendId));
     });
   };
+  
 
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
   const openAvatarModal = () => setIsAvatarModalOpen(true);
@@ -111,11 +112,15 @@ const ProfileHeader = ({
 
   return (
     <div className="relative h-72 w-full">
-      <img
-        src={backgroundImage} // Use the state for background image
-        alt="Background"
-        className="absolute inset-0 h-full w-full object-fill"
-      />
+      {backgroundImage ? (
+        <img
+          src={backgroundImage}
+          alt="Background"
+          className="absolute inset-0 h-full w-full object-fill"
+        />
+      ) : (
+        <div className="absolute inset-0 h-full w-full bg-gray-300 object-fill"></div>
+      )}
       {isAuthenticatedUser && (
         <div
           onClick={openBackgroundModal} // Open modal on click
@@ -129,7 +134,7 @@ const ProfileHeader = ({
           <img
             src={avatar}
             alt="Profile"
-            className="h-32 w-32 rounded-full border-4 border-white shadow-lg transition-opacity duration-200 hover:opacity-80"
+            className="h-32 w-32 rounded-full border-4 border-white shadow-lg transition-opacity duration-200 "
           />
         ) : (
           <div className="h-32 w-32 rounded-full border-4 border-white shadow-lg">
