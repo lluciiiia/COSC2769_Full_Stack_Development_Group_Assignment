@@ -80,13 +80,12 @@ const PostDetail: React.FC = () => {
                 reactions={post.reactions}
                 isDetail={true}
                 history={post.history}
-                onReact={handleReaction} // Pass the onReact function
+                onReact={handleReaction}
               />
               <CommentContainer
                 initComments={post.comments}
                 userId={id}
                 postId={post._id}
-                onReact={handleReaction} // Pass the onReact function
                 groupId={groupId}
               />
             </>

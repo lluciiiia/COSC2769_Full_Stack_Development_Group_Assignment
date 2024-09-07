@@ -50,8 +50,6 @@ export const getPostById = async (id: String | undefined) => {
     },
   );
 
-  console.log("response: " + JSON.stringify(response));
-
   if (!response.ok) {
     console.error("Failed to fetch posts:", response.statusText);
     throw new Error("Failed to fetch posts");
