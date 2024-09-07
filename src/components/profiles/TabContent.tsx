@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import About from "./About";
@@ -22,25 +22,30 @@ const TabContent = ({
 }) => {
   const dispatch: AppDispatch = useDispatch();
   const firstRender = useRef(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (isAuthenticatedUser) {
-      dispatch(getPostsByCreatorId(userId));
+      dispatch(getPostsByCreatorId(userId)).finally(() => {
+        setLoading(false);
+      });
     } else {
-      dispatch(getViewedUserPosts(userId));
+      dispatch(getViewedUserPosts(userId)).finally(() => {
+        setLoading(false);
+      });
     }
     firstRender.current = false;
   }, [dispatch, userId, isAuthenticatedUser]);
 
   switch (activeTab) {
     case "Posts":
-      return <PostsProfileList isAuthenticatedUser={isAuthenticatedUser}/>;
+      return <PostsProfileList isAuthenticatedUser={isAuthenticatedUser} loading={loading}/>;
     case "About":
       return <About isAuthenticatedUser={isAuthenticatedUser} />;
     case "Friends":
       return <ProfileFriendList isAuthenticatedUser={isAuthenticatedUser} />;
     case "Photos":
-      return <PhotoList />;
+      return <PhotoList isAuthenticatedUser={isAuthenticatedUser} />;
     default:
       return null;
   }

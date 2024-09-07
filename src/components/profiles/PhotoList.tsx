@@ -1,10 +1,17 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { AppState } from "../../app/store";
+import { PostParams } from "../../interfaces/Posts";
 
-const PhotoList: React.FC = () => {
-  const posts = useSelector((state: AppState) => state.posts.creatorPost);
-  console.log(posts);
+const PhotoList = ({ isAuthenticatedUser }) => {
+  // const posts = useSelector((state: AppState) => state.posts.creatorPost);
+
+  // const posts: PostParams[] = isAuthenticatedUser ? creatorPosts : viewedPosts;
+  const posts: PostParams[] = useSelector((state: AppState) => {
+    return isAuthenticatedUser
+      ? state.posts.creatorPost
+      : state.posts.viewedPosts;
+  });
 
   if (posts.length === 0) {
     return <h1>No photo available</h1>;

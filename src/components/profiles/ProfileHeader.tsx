@@ -90,6 +90,7 @@ const ProfileHeader = ({
       dispatch(getViewedUser(friendId));
     });
   };
+  
 
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
   const openAvatarModal = () => setIsAvatarModalOpen(true);
@@ -133,7 +134,7 @@ const ProfileHeader = ({
           <img
             src={avatar}
             alt="Profile"
-            className="h-32 w-32 rounded-full border-4 border-white shadow-lg transition-opacity duration-200 hover:opacity-80"
+            className="h-32 w-32 rounded-full border-4 border-white shadow-lg transition-opacity duration-200 "
           />
         ) : (
           <div className="h-32 w-32 rounded-full border-4 border-white shadow-lg">

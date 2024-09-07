@@ -190,7 +190,10 @@ const RequestItems = ({
           </p>
         ) : requestType === "RECEIVE_COMMENT" ? (
           <p className="text-sm text-gray-700">
-            <span>{name} commented to your post</span>
+            <span>
+              {" "}
+              <span className="font-bold">{name}</span> commented to your post
+            </span>
           </p>
         ) : (
           ""
