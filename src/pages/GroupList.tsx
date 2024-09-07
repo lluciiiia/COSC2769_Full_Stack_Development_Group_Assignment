@@ -6,7 +6,7 @@ import LoadingSpinner from "../assets/icons/Loading";
 import { fetchGroups } from "../controllers/groups";
 import { GroupType } from "../interfaces/Group";
 import { selectAuthState } from "../features/authSlice";
-import CreateGroupModal from "../components/group/CreateGroupModal";
+import CreateGroupModal from "../components/groups/CreateGroupModal";
 import { sendGroupRequest } from "../controllers/users";
 import { selectRequest } from "../features/notificationSlice";
 

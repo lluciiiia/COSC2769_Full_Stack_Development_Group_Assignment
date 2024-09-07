@@ -13,7 +13,7 @@ import PostModal from "../components/post/modals/PostModal";
 import { selectAuthState } from "../features/authSlice";
 import { sendGroupRequest } from "../controllers/users";
 import { selectGroupRequest } from "../features/notificationSlice";
-import UpdateGroupModal from "../components/group/EditFullGroupModal";
+import UpdateGroupModal from "../components/groups/EditFullGroupModal";
 
 export default function GroupPage() {
   const groupId = useParams<{ groupId: string }>().groupId || "";
