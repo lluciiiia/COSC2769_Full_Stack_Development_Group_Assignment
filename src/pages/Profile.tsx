@@ -5,12 +5,12 @@ import React, { useEffect, useState } from "react";
 import TabContent from "../components/profiles/TabContent";
 import ProfileHeader from "../components/profiles/ProfileHeader";
 import TabNavigation from "../components/profiles/TabNavigation";
-import { getUser, getViewedUser } from "../controllers/user";
+import { getUser, getViewedUser } from "../controllers/users";
 import ProfileEditModal from "../components/profiles/ProfileEditModal";
 import LoadingSpinner from "../assets/icons/Loading";
 import { selectAuthState } from "../features/authSlice";
 import { selectCurrentUser, selectViewedUser } from "../features/userSlice";
-import { fetchSentFriendRequests } from "../controllers/notification";
+import { fetchSentFriendRequests } from "../controllers/notifications";
 
 const Profile = () => {
   const dispatch: AppDispatch = useDispatch();

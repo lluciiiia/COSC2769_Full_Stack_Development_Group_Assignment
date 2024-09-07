@@ -7,13 +7,14 @@ import { createComment } from "../../controllers/comments";
 import CommentReactions from "../reactions/CommentReactions";
 import { createReaction } from "../../controllers/reactions";
 import { AppDispatch, AppState } from "../../app/store";
-import { createCommentNotification } from "../../controllers/notification";
+import { createCommentNotification } from "../../controllers/notifications";
 import {
   loadReactionsFromLocal,
   saveReactionsToLocal,
 } from "../../utils/localStorageUtils";
-import { Reaction, ReactionIcons } from "../../interfaces/Reactions";
+import { ReactionIcons } from "../../interfaces/Reactions";
 import { deleteReaction } from "../../controllers/reactions";
+
 const CommentContainer: React.FC<CommentContainerProps> = ({
   initComments,
   userId,
@@ -36,25 +37,25 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   };
 
   const handleReaction = async (reactionType: string, commentId: string) => {
-  const reaction = {
-    postId: commentId,
-    reactionType,
-    sentFrom: "comment",
-    userId,
-  };
+    const reaction = {
+      postId: commentId,
+      reactionType,
+      sentFrom: "comment",
+      userId,
+    };
 
-  if (reactionType === "UNDO_REACT") {
-    await deleteReact(commentId, userId);
-    console.log(`User removed reaction from comment ID: ${commentId}`);
-  } else {
-    if (navigator.onLine) {
-      await sendReaction(reaction);
+    if (reactionType === "UNDO_REACT") {
+      await deleteReact(commentId, userId);
+      console.log(`User removed reaction from comment ID: ${commentId}`);
     } else {
-      setIsOffline(true);
-      queueReaction(reaction);
+      if (navigator.onLine) {
+        await sendReaction(reaction);
+      } else {
+        setIsOffline(true);
+        queueReaction(reaction);
+      }
     }
-  }
-};
+  };
 
   const deleteReact = async (postId: string, userId: string) => {
     try {

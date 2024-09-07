@@ -6,8 +6,9 @@ import { getAllPosts, getPosts } from "../../controllers/posts";
 import PostContainer from "./PostContainer";
 import LoadingSpinner from "../../assets/icons/Loading";
 import { selectAuthState } from "../../features/authSlice";
+
 interface PostListProps {
-  isAdmin?: boolean; // Add the isAdmin prop
+  isAdmin?: boolean;
 }
 
 function PostList({ isAdmin = false }: PostListProps) {

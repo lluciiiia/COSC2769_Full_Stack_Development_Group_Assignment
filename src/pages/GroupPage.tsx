@@ -8,13 +8,12 @@ import ReturnNavbar from "../components/ReturnNavbar";
 import { selectGroupById } from "../features/groupSlice";
 import { getPostsByGroup } from "../controllers/posts";
 import LoadingSpinner from "../assets/icons/Loading";
-import { fetchGroups } from "../controllers/group";
+import { fetchGroups, leaveGroup } from "../controllers/groups";
 import PostModal from "../components/post/modals/PostModal";
 import { selectAuthState } from "../features/authSlice";
-import { sendGroupRequest } from "../controllers/user";
+import { sendGroupRequest } from "../controllers/users";
 import { selectGroupRequest } from "../features/notificationSlice";
-import { leaveGroup } from "../controllers/group";
-import UpdateGroupModal from "../components/group/EditFullGroupModal"; // Import the EditGroupModal
+import UpdateGroupModal from "../components/group/EditFullGroupModal";
 
 export default function GroupPage() {
   const groupId = useParams<{ groupId: string }>().groupId || "";
@@ -22,9 +21,9 @@ export default function GroupPage() {
   const [group, setGroup] = useState<GroupType | null>(null);
   const [loading, setLoading] = useState(true);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State for Edit Group Modal
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
-  const [error, setError] = useState<string | null>(null); // State to handle errors
+  const [error, setError] = useState<string | null>(null);
   const { id: userId } = useSelector(selectAuthState);
   const [isMember, setIsMember] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);

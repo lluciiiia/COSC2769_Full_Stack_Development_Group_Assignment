@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { createGroup } from "../../controllers/group";
+import { createGroup } from "../../controllers/groups";
 import { AppDispatch } from "../../app/store";
-import { GroupParams, GroupType } from "../../interfaces/Group";
-
-// import { createGroup } from "../path/to/your/actions"; // adjust the path accordingly
 
 interface CreateGroupModalProps {
   isOpen: boolean;

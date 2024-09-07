@@ -15,7 +15,7 @@ import NotificationModal from "./notifications/NotificationModal";
 import ProfileButtonModal from "./ProfileButtonModal";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../app/store";
-import { fetchNotification } from "../controllers/notification";
+import { fetchNotification } from "../controllers/notifications";
 import { Notifications } from "../interfaces/Notifications";
 import { selectNotifications } from "../features/notificationSlice";
 import { selectAuthState } from "../features/authSlice";

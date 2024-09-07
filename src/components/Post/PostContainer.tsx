@@ -13,7 +13,7 @@ import {
   loadReactionsFromLocal,
 } from "../../utils/localStorageUtils";
 import { deleteReaction } from "../../controllers/reactions";
-import { PostContainerProps } from "../../interfaces/Posts"; // Import the extended interface
+import { PostContainerProps } from "../../interfaces/Posts";
 
 const PostContainer: React.FC<PostContainerProps> = ({
   _id,
@@ -29,7 +29,7 @@ const PostContainer: React.FC<PostContainerProps> = ({
   isDetail,
   history,
   comments,
-  isDiscussionTab
+  isDiscussionTab,
 }) => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
@@ -181,7 +181,7 @@ const PostContainer: React.FC<PostContainerProps> = ({
       <ProfileSection
         profileImage={profileSection?.profileImage}
         profileName={profileSection?.profileName}
-        isDiscussionTab = { isDiscussionTab}
+        isDiscussionTab={isDiscussionTab}
         post={{
           _id: postId,
           creatorId,
@@ -194,7 +194,6 @@ const PostContainer: React.FC<PostContainerProps> = ({
           isDetail,
           history,
           comments,
-          
         }}
       />
 

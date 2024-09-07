@@ -3,11 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { AppState, AppDispatch } from "../app/store";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../assets/icons/Loading";
-import { fetchGroups } from "../controllers/group";
+import { fetchGroups } from "../controllers/groups";
 import { GroupType } from "../interfaces/Group";
 import { selectAuthState } from "../features/authSlice";
 import CreateGroupModal from "../components/group/CreateGroupModal";
-import { sendGroupRequest } from "../controllers/user";
+import { sendGroupRequest } from "../controllers/users";
 import { selectRequest } from "../features/notificationSlice";
 
 const GroupList: React.FC = () => {
@@ -88,7 +88,6 @@ const GroupList: React.FC = () => {
       return false;
     });
   };
-
 
   return (
     <div className="mt-20 flex h-screen flex-col items-center">

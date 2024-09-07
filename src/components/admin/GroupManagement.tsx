@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "../../app/store";
-import { fetchGroups } from "../../controllers/group";
-import { groupApprovalNotification } from "../../controllers/notification";
-import { acceptGroup, deleteGroup } from "../../controllers/admin";
+import { fetchGroups } from "../../controllers/groups";
+import { groupApprovalNotification } from "../../controllers/notifications";
+import { acceptGroup, deleteGroup } from "../../controllers/admins";
 
 export const GroupManagement = () => {
   const [activeTab, setActiveTab] = useState("groups");

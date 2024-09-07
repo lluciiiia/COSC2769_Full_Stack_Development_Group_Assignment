@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "../../app/store";
-import { updateUser } from "../../controllers/user";
+import { updateUser } from "../../controllers/users";
 import { updateLocalUser } from "../../features/userSlice";
 import { fetchSess } from "../../features/authSlice";
 import imageCompression from "browser-image-compression";

@@ -1,5 +1,5 @@
 import React from "react";
-import { getUser, unfriendById } from "../../controllers/user";
+import { getUser, unfriendById } from "../../controllers/users";
 import { AppDispatch } from "../../app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthState } from "../../features/authSlice";

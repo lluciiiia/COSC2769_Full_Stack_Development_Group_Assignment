@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { GroupType } from "../interfaces/Group";
 import { AppState } from "../app/store";
-import { fetchGroups, fetchGroupWithMembers, leaveGroup } from "../controllers/group";
+import { fetchGroups, leaveGroup } from "../controllers/groups";
 
 const initialState: GroupType[] = [
   {
@@ -29,8 +29,10 @@ const groupSlice = createSlice({
       })
       .addCase(fetchGroups.fulfilled, (state, action) => {
         // Instead of replacing the entire state, merge the new groups
-        action.payload.forEach(group => {
-          const index = state.findIndex(existingGroup => existingGroup._id === group._id);
+        action.payload.forEach((group) => {
+          const index = state.findIndex(
+            (existingGroup) => existingGroup._id === group._id,
+          );
           if (index !== -1) {
             state[index] = group;
           } else {
@@ -38,9 +40,9 @@ const groupSlice = createSlice({
           }
         });
       })
-      .addCase(leaveGroup.fulfilled, (state, action) =>{
-          console.log(action.payload);
-      })
+      .addCase(leaveGroup.fulfilled, (state, action) => {
+        console.log(action.payload);
+      });
   },
 });
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AppDispatch, AppState } from "../app/store";
-import { getAllViewedUsers } from "../controllers/user";
+import { getAllViewedUsers } from "../controllers/users";
 import { ViewedUser } from "../interfaces/Users";
 
 const UserSearch = () => {

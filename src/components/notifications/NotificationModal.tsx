@@ -7,10 +7,10 @@ import {
   acceptFriendRequestNotification,
   fetchNotification,
   removeFriendRequestNotification,
-} from "../../controllers/notification";
-import { acceptFriendRequest } from "../../controllers/user";
+  acceptGroupRequest,
+} from "../../controllers/notifications";
+import { acceptFriendRequest } from "../../controllers/users";
 import { useNavigate } from "react-router-dom";
-import { acceptGroupRequest } from "../../controllers/notification";
 
 const NotificationModal = ({
   isOpen,

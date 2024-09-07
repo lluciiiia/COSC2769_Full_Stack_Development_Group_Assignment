@@ -3,7 +3,7 @@ import {
   fetchNotification,
   fetchSentFriendRequests,
   groupSentRequest,
-} from "../controllers/notification";
+} from "../controllers/notifications";
 import { NotiProps, GroupRequest } from "../interfaces/Notifications";
 import { AppState } from "../app/store";
 

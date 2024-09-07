@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { updateGroup } from "../../controllers/group"; // Adjust the path accordingly
+import { updateGroup } from "../../controllers/groups";
 import { GroupType } from "../../interfaces/Group";
 
 interface UpdateGroupModalProps {
   isOpen: boolean;
   onClose: () => void;
-  group: GroupType; // Pass the existing group data to pre-fill the form
+  group: GroupType;
 }
 
 const UpdateGroupModal: React.FC<UpdateGroupModalProps> = ({
@@ -36,9 +36,10 @@ const UpdateGroupModal: React.FC<UpdateGroupModalProps> = ({
     };
   }, [isOpen]);
 
-
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
   ) => {
     const { name, value } = e.target;
     setUpdatedGroup((prevGroup) => ({
@@ -50,7 +51,7 @@ const UpdateGroupModal: React.FC<UpdateGroupModalProps> = ({
   // Handle file input change and convert to Base64
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
-    fieldName: string
+    fieldName: string,
   ) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -74,7 +75,6 @@ const UpdateGroupModal: React.FC<UpdateGroupModalProps> = ({
     } catch (error) {
       console.error("Failed to update group:", error);
       // Handle error as needed
-      
     }
   };
 
@@ -82,15 +82,13 @@ const UpdateGroupModal: React.FC<UpdateGroupModalProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-      <div className="w-[600px] h-[500px] overflow-y-auto rounded-md bg-white p-6 shadow-xl">
+      <div className="h-[500px] w-[600px] overflow-y-auto rounded-md bg-white p-6 shadow-xl">
         <h2 className="mb-4 text-xl font-bold">Update Group</h2>
 
         {/* Flex Container for Two Columns */}
         <div className="flex">
-          
           {/* Left Column */}
-          <div className="w-1/2 pr-4 flex flex-col justify-between">
-
+          <div className="flex w-1/2 flex-col justify-between pr-4">
             {/* Group Name */}
             <div className="mb-4">
               <label className="block text-sm font-semibold">Name</label>
@@ -131,7 +129,9 @@ const UpdateGroupModal: React.FC<UpdateGroupModalProps> = ({
 
             {/* Group Background Image Upload */}
             <div className="mb-4">
-              <label className="block text-sm font-semibold">Background Image</label>
+              <label className="block text-sm font-semibold">
+                Background Image
+              </label>
               <input
                 type="file"
                 accept="image/*"
@@ -141,7 +141,7 @@ const UpdateGroupModal: React.FC<UpdateGroupModalProps> = ({
             </div>
 
             {/* Action Buttons */}
-            <div className="flex space-x-4 mt-4">
+            <div className="mt-4 flex space-x-4">
               <button
                 onClick={onClose}
                 className="w-full rounded-md bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-300"
@@ -158,8 +158,7 @@ const UpdateGroupModal: React.FC<UpdateGroupModalProps> = ({
           </div>
 
           {/* Right Column */}
-          <div className="w-1/2 pl-4 flex flex-col justify-between">
-
+          <div className="flex w-1/2 flex-col justify-between pl-4">
             {/* Group Description */}
             <div className="mb-4">
               <label className="block text-sm font-semibold">Description</label>
@@ -177,7 +176,9 @@ const UpdateGroupModal: React.FC<UpdateGroupModalProps> = ({
             <div className="mb-4">
               {updatedGroup.imageURL && (
                 <div>
-                  <label className="block text-sm font-semibold">Image Preview</label>
+                  <label className="block text-sm font-semibold">
+                    Image Preview
+                  </label>
                   <img
                     src={updatedGroup.imageURL}
                     alt="Group Preview"
@@ -191,7 +192,9 @@ const UpdateGroupModal: React.FC<UpdateGroupModalProps> = ({
             <div className="mb-4">
               {updatedGroup.backgroundImageURL && (
                 <div>
-                  <label className="block text-sm font-semibold">Background Preview</label>
+                  <label className="block text-sm font-semibold">
+                    Background Preview
+                  </label>
                   <img
                     src={updatedGroup.backgroundImageURL}
                     alt="Background Preview"
@@ -200,7 +203,6 @@ const UpdateGroupModal: React.FC<UpdateGroupModalProps> = ({
                 </div>
               )}
             </div>
-
           </div>
         </div>
       </div>

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "../../app/store";
-import { getAllUsers } from "../../controllers/user";
-import { resumeUser, suspendUser } from "../../controllers/admin";
+import { getAllUsers } from "../../controllers/users";
+import { resumeUser, suspendUser } from "../../controllers/admins";
 
 const UserManagement = () => {
   const dispatch: AppDispatch = useDispatch();

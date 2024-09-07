@@ -5,7 +5,7 @@ import React from "react";
 import { UserType } from "../../interfaces/Users";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { fetchGroups, removeMemberFromGroup } from "../../controllers/group";
+import { fetchGroups, removeMemberFromGroup } from "../../controllers/groups";
 import { selectAuthState } from "../../features/authSlice";
 
 export default function Member() {
@@ -60,7 +60,9 @@ export default function Member() {
   if (group.visibility === "Private" && !isAdmin && !isMember) {
     return (
       <div className="flex justify-center">
-        <p>This is private, you're not in the group. Please consider signing up.</p>
+        <p>
+          This is private, you're not in the group. Please consider signing up.
+        </p>
       </div>
     );
   }

@@ -5,7 +5,7 @@ import renderContent from "./ProfileModalUtils";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "../../app/store";
 import { updateLocalUser } from "../../features/userSlice";
-import { updateUser } from "../../controllers/user";
+import { updateUser } from "../../controllers/users";
 import { fetchSess } from "../../features/authSlice";
 
 interface ModalProps {
