@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import { GroupPostParams } from "../../interfaces/Posts";
-import PostContainer from "../post/PostContainer";
-import { AppState } from "../../app/store";
+import PostContainer from "../../post/PostContainer";
+import { AppState } from "../../../app/store";
 import { useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
-import { selectAuthState } from "../../features/authSlice";
-import { selectGroupById } from "../../features/groupSlice";
-import { PostParams } from "../../interfaces/Posts";
+import { selectAuthState } from "../../../features/authSlice";
+import { selectGroupById } from "../../../features/groupSlice";
+import { PostParams } from "../../../interfaces/Posts";
+
 export default function Discussion() {
   const posts = useSelector((state: AppState) => state.posts.groupPost);
   const { groupId } = useParams<{ groupId: string }>();
@@ -15,38 +15,36 @@ export default function Discussion() {
   const group = useSelector((state: AppState) =>
     selectGroupById(state, groupId),
   );
-  const isDiscussionTab = location.pathname.includes("discussion");
- 
-  const [canViewPosts, setCanViewPosts] = React.useState(false);
-  const [isAdmin, setIsAdmin] = React.useState(false); // State to check if the user is admin
-  useEffect(() => {
-  if (group) {
-    let shouldSetCanViewPosts = false;
-    let shouldSetIsAdmin = false;
 
-    if (id === group.groupAdmin) {
-      shouldSetIsAdmin = true;
-      shouldSetCanViewPosts = true;
-    } else if (group.visibility === "Public") {
-      shouldSetCanViewPosts = true;
-    } else if (group.visibility === "Private") {
-      const memberIds = group.members.map((member) => member._id);
-      if (id && memberIds.includes(id)) {
+  const [canViewPosts, setCanViewPosts] = React.useState(false);
+  const [isAdmin, setIsAdmin] = React.useState(false);
+  useEffect(() => {
+    if (group) {
+      let shouldSetCanViewPosts = false;
+      let shouldSetIsAdmin = false;
+
+      if (id === group.groupAdmin) {
+        shouldSetIsAdmin = true;
         shouldSetCanViewPosts = true;
+      } else if (group.visibility === "Public") {
+        shouldSetCanViewPosts = true;
+      } else if (group.visibility === "Private") {
+        const memberIds = group.members.map((member) => member._id);
+        if (id && memberIds.includes(id)) {
+          shouldSetCanViewPosts = true;
+        }
+      }
+
+      // Only set state if necessary to avoid infinite loops
+      if (shouldSetIsAdmin !== isAdmin) {
+        setIsAdmin(shouldSetIsAdmin);
+      }
+
+      if (shouldSetCanViewPosts !== canViewPosts) {
+        setCanViewPosts(shouldSetCanViewPosts);
       }
     }
-
-    // Only set state if necessary to avoid infinite loops
-    if (shouldSetIsAdmin !== isAdmin) {
-      setIsAdmin(shouldSetIsAdmin);
-    }
-
-    if (shouldSetCanViewPosts !== canViewPosts) {
-      setCanViewPosts(shouldSetCanViewPosts);
-    }
-  }
-}, [group, id, isAdmin, canViewPosts]);
-
+  }, [group, id, isAdmin, canViewPosts]);
 
   const postList = posts.map((p: PostParams, index: number) => (
     <PostContainer key={`${p._id}-${index}`} {...p} />

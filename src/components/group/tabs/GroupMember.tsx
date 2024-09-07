@@ -1,12 +1,15 @@
 import { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { AppDispatch, AppState } from "../../app/store";
+import { AppDispatch, AppState } from "../../../app/store";
 import React from "react";
-import { UserType } from "../../interfaces/Users";
+import { UserType } from "../../../interfaces/Users";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { fetchGroups, removeMemberFromGroup } from "../../controllers/groups";
-import { selectAuthState } from "../../features/authSlice";
+import {
+  fetchGroups,
+  removeMemberFromGroup,
+} from "../../../controllers/groups";
+import { selectAuthState } from "../../../features/authSlice";
 
 export default function Member() {
   const dispatch: AppDispatch = useDispatch();

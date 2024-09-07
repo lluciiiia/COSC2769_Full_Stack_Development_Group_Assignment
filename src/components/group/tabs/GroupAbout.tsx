@@ -1,14 +1,14 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { AppState } from "../../app/store";
-import { selectGroupById } from "../../features/groupSlice";
-import { selectAuthState } from "../../features/authSlice";
+import { AppState } from "../../../app/store";
+import { selectGroupById } from "../../../features/groupSlice";
+import { selectAuthState } from "../../../features/authSlice";
 
 const About: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
   const group = useSelector((state: AppState) =>
-    selectGroupById(state, groupId)
+    selectGroupById(state, groupId ? groupId : ""),
   );
   const { id: currentUserId } = useSelector(selectAuthState);
 
@@ -20,7 +20,7 @@ const About: React.FC = () => {
         Overview
       </div>
 
-      <div className="ml-4 text-gray-800 flex-grow">
+      <div className="ml-4 flex-grow text-gray-800">
         <p>{description}</p>
       </div>
     </div>
