@@ -113,8 +113,6 @@ export const getGroupsByUserId = async (userId: string | undefined) => {
     },
   );
 
-  console.log("response: " + JSON.stringify(response));
-
   if (!response.ok) {
     console.error("Failed to fetch groups:", response.statusText);
     throw new Error("Failed to fetch groups");

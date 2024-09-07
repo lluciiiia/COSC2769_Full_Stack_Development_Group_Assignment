@@ -210,14 +210,14 @@ export const getPostByGroupId = async (groupId: string) => {
         path: "reactions",
         select: "userId reactionType postId onModel",
       });
+
     const enhancedPosts = await Promise.all(
       posts.map(async (post) => {
         return await enhancePostWithUser(post);
       }),
     );
-    if (!posts) {
-      throw new Error("Post not found with id");
-    }
+
+    if (!posts) throw new Error("Post not found with id");
 
     return enhancedPosts;
   } catch (error) {
