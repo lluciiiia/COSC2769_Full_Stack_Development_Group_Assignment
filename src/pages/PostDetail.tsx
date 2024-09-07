@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import { PostParams } from "../interfaces/Posts";
 import CommentContainer from "../components/comments/CommentContainer";
 import { getPostById } from "../controllers/posts";
-import PostContainer from "../components/post/PostContainer";
+import PostContainer from "../components/posts/PostContainer";
 import { useSelector } from "react-redux";
 import { selectAuthState } from "../features/authSlice";
 import { createReaction } from "../controllers/reactions";

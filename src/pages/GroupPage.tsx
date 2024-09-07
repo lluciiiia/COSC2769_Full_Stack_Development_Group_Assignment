@@ -9,7 +9,7 @@ import { selectGroupById } from "../features/groupSlice";
 import { getPostsByGroup } from "../controllers/posts";
 import LoadingSpinner from "../assets/icons/Loading";
 import { fetchGroups, leaveGroup } from "../controllers/groups";
-import PostModal from "../components/post/modals/PostModal";
+import PostModal from "../components/posts/modals/PostModal";
 import { selectAuthState } from "../features/authSlice";
 import { sendGroupRequest } from "../controllers/users";
 import { selectGroupRequest } from "../features/notificationSlice";
