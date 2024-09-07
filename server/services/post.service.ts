@@ -197,19 +197,18 @@ export const getPostById = async (postId: string) => {
 
 export const getPostByGroupId = async (groupId: string) => {
   try {
-    // const {groupId}= req.params;
     const posts = await Post.find({ groupId: groupId })
       .sort({ createdAt: -1 })
       .populate({
         path: "comments",
         populate: {
           path: "reactions",
-          select: "userId reactionType postId onModel", // Select only the fields you want
+          select: "userId reactionType postId onModel",
         },
       })
       .populate({
         path: "reactions",
-        select: "userId reactionType postId onModel", // Select only the fields you want
+        select: "userId reactionType postId onModel",
       });
     const enhancedPosts = await Promise.all(
       posts.map(async (post) => {
