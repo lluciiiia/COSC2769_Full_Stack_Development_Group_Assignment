@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import PostContainer from "../../post/PostContainer";
+import PostContainer from "../../posts/PostContainer";
 import { AppState } from "../../../app/store";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";

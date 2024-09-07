@@ -3,7 +3,7 @@ import { ProfileSectionParams } from "../../interfaces/Posts";
 import { useNavigate } from "react-router-dom";
 import { deletePostById } from "../../controllers/posts";
 import MenuDropDown from "../MenuDropDown";
-import PostModal from "../post/modals/PostModal";
+import PostModal from "../posts/modals/PostModal";
 import DefaultProfile from "../../assets/icons/DefaultProfile.tsx";
 import PostHistoryModal from "./PostHistoryModal.tsx";
 import { formatRelativeTime } from "../../utils/formatRelativeTime.ts";

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ConfirmationModal from "./post/ConfirmationModal";
+import ConfirmationModal from "./posts/ConfirmationModal";
 import { useSelector } from "react-redux";
 import { selectAuthState } from "../features/authSlice";
 import { selectGroupById } from "../features/groupSlice";
@@ -11,7 +11,7 @@ interface MenuDropDownProps {
   onViewHistory: () => void;
   creatorId: string;
   groupId?: string;
-  isDiscussionTab? : boolean;
+  isDiscussionTab?: boolean;
   isAdmin?: boolean;
 }
 
@@ -22,7 +22,7 @@ const MenuDropDown: React.FC<MenuDropDownProps> = ({
   creatorId,
   groupId,
   isDiscussionTab,
-  isAdmin
+  isAdmin,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { id } = useSelector(selectAuthState); // The authenticated user's ID
@@ -30,12 +30,11 @@ const MenuDropDown: React.FC<MenuDropDownProps> = ({
 
   // Fetch the group data using the groupId
   const group = useSelector((state: AppState) =>
-    selectGroupById(state, groupId)
+    selectGroupById(state, groupId),
   );
 
   // Check if the authenticated user is the owner of the post
   const isOwner = id === creatorId;
-  
 
   // Check if the authenticated user is the group admin
   useEffect(() => {
@@ -73,7 +72,7 @@ const MenuDropDown: React.FC<MenuDropDownProps> = ({
         )}
 
         {/* Both the owner and group admin can delete */}
-        {( isOwner || isDiscussionTab && isGroupAdmin || isAdmin) && (
+        {(isOwner || (isDiscussionTab && isGroupAdmin) || isAdmin) && (
           <button
             onClick={handleDeleteClick}
             className="block w-full border-b border-gray-200 px-4 py-2 text-left text-sm text-gray-700 last:rounded-b-md hover:bg-gray-100"

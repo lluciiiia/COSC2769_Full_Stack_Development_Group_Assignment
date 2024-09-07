@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { PostParams } from "../../interfaces/Posts.tsx";
 import { AppState } from "../../app/store.ts";
-import PostContainer from "../Post/PostContainer.tsx";
+import PostContainer from "../posts/PostContainer.tsx";
 
 const PostsProfileList = ({ isAuthenticatedUser }) => {
   const creatorPosts = useSelector(
