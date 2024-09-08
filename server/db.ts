@@ -4,9 +4,8 @@ import mongoose from "mongoose";
 // Load environment variables from .env file
 dotenv.config();
 
-const uri =
-  process.env.MONGO_URI ||
-  "mongodb+srv://fullstack:123@atlascluster.wf8n3.mongodb.net/";
+const uri = process.env.MONGO_URL!;
+
 
 const connectDB = async () => {
   try {

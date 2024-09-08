@@ -83,7 +83,7 @@ const Signup: React.FC = () => {
         }, 2000); // 2 seconds delay for the notification to be visible
       } else {
         console.error("Failed to register:", resultAction.payload);
-        setError("Error to register");
+        setError("User already exists");
       }
     } catch (error) {
       console.error("An unexpected error occurred:", error);
