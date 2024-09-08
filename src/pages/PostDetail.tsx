@@ -7,7 +7,6 @@ import { getPostById } from "../controllers/posts";
 import PostContainer from "../components/posts/PostContainer";
 import { useSelector } from "react-redux";
 import { selectAuthState } from "../features/authSlice";
-import { createReaction } from "../controllers/reactions";
 import AdminNavbar from "../components/AdminNavbar";
 import LoadingSpinner from "../assets/icons/Loading";
 

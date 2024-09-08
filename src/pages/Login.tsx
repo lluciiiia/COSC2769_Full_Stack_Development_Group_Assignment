@@ -12,7 +12,7 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const [loginFailed, setIsLoginFailed] = useState("");
   // Get error message from Redux state
-  const { error } = useSelector(selectAuthState);
+  const { } = useSelector(selectAuthState);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

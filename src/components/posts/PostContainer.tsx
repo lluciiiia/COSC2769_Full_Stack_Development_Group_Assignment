@@ -278,7 +278,7 @@ const PostContainer: React.FC<PostContainerProps> = ({
                 <CommentItem
                   key={comment._id}
                   comment={comment}
-                  onReact={(reaction) =>
+                  onReact={(reaction: string) =>
                     handleCommentReaction(comment._id, reaction)
                   }
                   groupId={String(groupId)}

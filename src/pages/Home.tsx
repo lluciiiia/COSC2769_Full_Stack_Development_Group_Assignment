@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
 import PostList from "../components/posts/PostList";
-
+import React from "react";
 const Home = () => {
   return (
     <>

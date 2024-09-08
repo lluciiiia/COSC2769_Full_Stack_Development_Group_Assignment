@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 import { GroupType } from "../interfaces/Group";
 import { useSelector, useDispatch } from "react-redux";
@@ -23,12 +24,12 @@ export default function GroupPage() {
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
-  const [error, setError] = useState<string | null>(null);
+  const [ setError] = useState<string | null>(null);
   const { id: userId } = useSelector(selectAuthState);
   const [isMember, setIsMember] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [isClick, setIsClick] = useState(false);
-  const [isInGroup, setIsInGroup] = useState(false);
+  const [isClick] = useState(false);
+  const [isIngroup ,setIsInGroup] = useState(false);
 
   const selectedGroup = useSelector((state: AppState) =>
     selectGroupById(state, groupId),
@@ -45,7 +46,6 @@ export default function GroupPage() {
         await dispatch(getPostsByGroup(groupId));
       } catch (error) {
         console.error("Error fetching group data:", error);
-        setError("Failed to load group data. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -99,7 +99,6 @@ export default function GroupPage() {
       setIsInGroup(false);
     } catch (error) {
       console.error("Failed to leave group:", error);
-      setError("Failed to leave group. Please try again later.");
     }
   };
 
