@@ -100,7 +100,7 @@ To run BuZzNet locally, follow these steps:
    ```
 
 7. **Access the application:**
-   Open your browser and go to `http://localhost:3000`.
+   Open your browser and go to `http://localhost:5173`.
 
 ## Contributors
 
