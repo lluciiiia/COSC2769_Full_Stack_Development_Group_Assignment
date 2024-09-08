@@ -22,14 +22,13 @@ export interface CommentContainerProps {
   initComments: Comment[] | undefined;
   userId: string | undefined;
   postId: string | undefined;
-  groupId?:string;
+  groupId?: string;
 }
 
 export interface CommentProps {
-  displayedReactions: string[]; 
+  displayedReactions?: string[];
   comment: Comment;
-  groupId?:string;
-
+  groupId?: string;
 }
 
 export interface CommentFormProps {
