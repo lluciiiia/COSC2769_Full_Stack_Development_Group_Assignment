@@ -111,3 +111,5 @@ This project is a group assignment for the **COSC2769 Full Stack Development** c
 - **Shirin Shujaa (s3983427) <a href="https://github.com/shirin44" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>**
 - **Ngo Van Tai (s3974892) <a href="https://github.com/TaiVanNgo" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>**
 - **Huynh Thai Duong (s3978955) <a href="https://github.com/TDuong04" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>**
+## Demo video
+https://rmiteduau-my.sharepoint.com/personal/s3983427_rmit_edu_vn/_layouts/15/stream.aspx?id=%2Fpersonal%2Fs3983427%5Frmit%5Fedu%5Fvn%2FDocuments%2FBuZzNet%2Emov&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E39f8e123%2D96e4%2D4c83%2D842e%2D449dbb26d946 
