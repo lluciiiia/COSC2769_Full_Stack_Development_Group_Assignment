@@ -25,7 +25,6 @@ const PostContainer: React.FC<PostContainerProps> = ({
   visibility,
   reactions,
   profileSection,
-  onReact,
   isDetail,
   history,
   comments,
@@ -281,7 +280,7 @@ const PostContainer: React.FC<PostContainerProps> = ({
                   onReact={(reaction) =>
                     handleCommentReaction(comment._id, reaction)
                   }
-                  groupId={groupId}
+                  groupId={String(groupId)}
                 />
               ))
           )}

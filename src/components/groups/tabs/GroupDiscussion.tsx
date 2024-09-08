@@ -6,14 +6,14 @@ import { useParams } from "react-router-dom";
 import { selectAuthState } from "../../../features/authSlice";
 import { selectGroupById } from "../../../features/groupSlice";
 import { PostParams } from "../../../interfaces/Posts";
-
+import { GroupPostParams } from "../../../interfaces/Posts";
 export default function Discussion() {
   const posts = useSelector((state: AppState) => state.posts.groupPost);
   const { groupId } = useParams<{ groupId: string }>();
   const { id } = useSelector(selectAuthState);
 
   const group = useSelector((state: AppState) =>
-    selectGroupById(state, groupId),
+    selectGroupById(state, String(groupId)),
   );
 
   const [canViewPosts, setCanViewPosts] = React.useState(false);
@@ -29,7 +29,8 @@ export default function Discussion() {
       } else if (group.visibility === "Public") {
         shouldSetCanViewPosts = true;
       } else if (group.visibility === "Private") {
-        const memberIds = group.members.map((member) => member._id);
+        // Use optional chaining to avoid accessing undefined
+        const memberIds = group.members?.map((member) => member._id) || [];
         if (id && memberIds.includes(id)) shouldSetCanViewPosts = true;
       }
 
@@ -41,9 +42,14 @@ export default function Discussion() {
     }
   }, [group, id, isAdmin, canViewPosts]);
 
-  const postList = posts.map((p: PostParams, index: number) => (
-    <PostContainer key={`${p._id}-${index}`} {...p} />
-  ));
+  const postList = posts.map(
+    (p: PostParams | GroupPostParams, index: number) =>
+      p._id ? (
+        <PostContainer key={`${p._id}-${index}`} {...p} />
+      ) : (
+        <div key={index}>Post ID is missing</div>
+      ),
+  );
 
   return (
     <div>
