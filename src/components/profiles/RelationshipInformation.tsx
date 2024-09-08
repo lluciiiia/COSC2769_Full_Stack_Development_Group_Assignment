@@ -1,3 +1,4 @@
+import React from "react";
 import relationshipIcon from "../../assets/icons/profileIcon/relationshipIcon.png";
 
 const RelationshipInformation = ({ user }) => {
