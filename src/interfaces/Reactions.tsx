@@ -1,4 +1,5 @@
 export interface Reaction{
+  reactions: any;
   userId: string,
   reactionType: string,
   postId: string,

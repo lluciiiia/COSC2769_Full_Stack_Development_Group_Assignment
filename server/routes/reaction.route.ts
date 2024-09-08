@@ -1,16 +1,14 @@
 import express, { Request, Response } from "express";
-import Reaction from "../models/reactions";
 import {
   createReaction,
   fetchReaction,
   undoReaction,
 } from "../services/reaction.service";
 import mongoose from "mongoose";
-import { useParams } from "react-router-dom";
-
+import { isAuthenticated } from "../middleware/authenticate";
 const router = express.Router();
 
-router.post("/userReact", async (req: Request, res: Response) => {
+router.post("/userReact",isAuthenticated ,async (req: Request, res: Response) => {
   try {
     const { postId, reactionType, sentFrom } = req.body;
     const userId = req.session.user.id;
@@ -36,7 +34,7 @@ router.post("/userReact", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/:postId", async (req: Request, res: Response) => {
+router.post("/:postId",isAuthenticated ,async (req: Request, res: Response) => {
   try {
     const { postId } = req.params;
 
@@ -60,16 +58,8 @@ router.post("/:postId", async (req: Request, res: Response) => {
   }
 });
 
-// router.get("/getReaction/:postId", async(req: Request, res: Response)=>{
-//   try{
-//       const {postId}= req.params;
 
-//   }catch(error){
-
-//   }
-// })
-
-router.delete("/:postId/:userId", async (req: Request, res: Response) => {
+router.delete("/:postId/:userId",isAuthenticated ,async (req: Request, res: Response) => {
   try {
     const postId = req.params.postId;
     const userId = req.params.userId;
