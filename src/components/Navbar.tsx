@@ -10,12 +10,12 @@ import groupIcon from "../assets/icons/groupIcon.png";
 import createPostIcon from "../assets/icons/createPostIcon.png";
 
 import { NavItem } from "./NavItem";
-import PostModal from "./post/modals/PostModal";
+import PostModal from "./posts/modals/PostModal";
 import NotificationModal from "./notifications/NotificationModal";
 import ProfileButtonModal from "./ProfileButtonModal";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../app/store";
-import { fetchNotification } from "../controllers/notification";
+import { fetchNotification } from "../controllers/notifications";
 import { Notifications } from "../interfaces/Notifications";
 import { selectNotifications } from "../features/notificationSlice";
 import { selectAuthState } from "../features/authSlice";
@@ -125,6 +125,7 @@ const Navbar = () => {
         userId={currentUser.id}
         post={null}
         groupId={""}
+        isInGroupPage={''}
       />
     </>
   );

@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-
 export const createReaction = createAsyncThunk(
   "reactions/createReaction",
   async (
@@ -8,8 +7,9 @@ export const createReaction = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
+      console.log(reactionData, "data");
       const response = await fetch(
-        "http://localhost:8080/api/reactions/userReact",
+        import.meta.env.VITE_BACKEND_URL + "/api/reactions/userReact",
         {
           method: "POST",
           headers: {
@@ -39,7 +39,7 @@ export const fetchReaction = createAsyncThunk(
   async (postId: string, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/reactions/${postId}`,
+        import.meta.env.VITE_BACKEND_URL + `/api/reactions/${postId}`,
         {
           method: "POST",
           headers: {
@@ -63,24 +63,23 @@ export const fetchReaction = createAsyncThunk(
   },
 );
 
-
 export const deleteReaction = createAsyncThunk(
   "reaction/deleteReaction",
   async (
     { postId, userId }: { postId: string; userId: string }, // Wrapping multiple values in an object
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/reactions/${postId}/${userId}`,
+        import.meta.env.VITE_BACKEND_URL + `/api/reactions/${postId}/${userId}`,
         {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
-          
+
           credentials: "include",
-        }
+        },
       );
 
       if (!response.ok) {
@@ -94,5 +93,5 @@ export const deleteReaction = createAsyncThunk(
       console.error("Network error:", error.message);
       return rejectWithValue(error.message || "Network error");
     }
-  }
+  },
 );

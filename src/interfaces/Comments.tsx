@@ -26,6 +26,7 @@ export interface CommentContainerProps {
 }
 
 export interface CommentProps {
+  displayedReactions: string[]; 
   comment: Comment;
   groupId?:string;
 

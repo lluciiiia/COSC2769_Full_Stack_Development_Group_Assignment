@@ -4,11 +4,12 @@ import { fetchReaction } from "../../controllers/reactions";
 import { ReactionForCommentProps, ReactionIcons, ReactionIconsWithText } from "../../interfaces/Reactions";
 import ReactionIconButton from "./ReactionIconButton";
 import { selectAuthState } from "../../features/authSlice";
-
+import { AppDispatch } from "../../app/store";
 const CommentReactions: React.FC<ReactionForCommentProps> = ({
-  onReact,
   initialReaction = "REACT",
+  reactionType,
   comment,
+  onReact,
 }) => {
   const { id } = useSelector(selectAuthState);
   const [showReactions, setShowReactions] = useState(false);
@@ -16,14 +17,14 @@ const CommentReactions: React.FC<ReactionForCommentProps> = ({
   const [displayedReactions, setDisplayedReactions] = useState<string[]>([]);
   const [isReacted, setIsReacted] = useState(false);
   const [totalReaction, setTotalReaction] = useState(comment ? comment.reactions.length : 0);
-  const dispatch = useDispatch();
+  const dispatch : AppDispatch = useDispatch();
 
   useEffect(() => {
     if (comment) {
       // Update displayed reactions and total reaction count
       const uniqueReactions = Array.from(
         new Set(comment.reactions.map((reaction) => ReactionIcons[reaction.reactionType]))
-      ).slice(0, 3);
+      ).slice(0, 3) as string[];
       setDisplayedReactions(uniqueReactions);
       setTotalReaction(comment.reactions.length);
 
@@ -44,7 +45,7 @@ const CommentReactions: React.FC<ReactionForCommentProps> = ({
 
   useEffect(() => {
     if (isReacted && comment) {
-      dispatch(fetchReaction(comment));
+      dispatch(fetchReaction(comment.postId));
     }
   }, [dispatch, comment, isReacted]);
 

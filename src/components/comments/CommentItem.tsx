@@ -1,4 +1,3 @@
-// CommentItem.tsx
 import React, { useState } from "react";
 import MenuDropDown from "../MenuDropDown";
 import { CommentProps } from "../../interfaces/Comments";
@@ -10,7 +9,10 @@ import CommentEditor from "./CommentEditor";
 import { selectAuthState } from "../../features/authSlice";
 import { useSelector } from "react-redux";
 
-const CommentItem: React.FC<CommentProps & { groupId: string }> = ({ comment, groupId }) => {
+const CommentItem: React.FC<CommentProps & { groupId: string }> = ({
+  comment,
+  groupId,
+}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
@@ -101,9 +103,9 @@ const CommentItem: React.FC<CommentProps & { groupId: string }> = ({ comment, gr
                     onDelete={handleDelete}
                     onViewHistory={handleViewHistory}
                     creatorId={comment.userId}
-                    groupId={groupId} 
-                    isDiscussionTab = {true}
-                    isAdmin = {isAdmin}
+                    groupId={groupId}
+                    isDiscussionTab={true}
+                    isAdmin={isAdmin}
                   />
                 )}
               </div>

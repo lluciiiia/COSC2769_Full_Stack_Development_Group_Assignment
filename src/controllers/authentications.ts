@@ -4,13 +4,16 @@ export const registerUser = async (userData: {
   name?: string;
 }) => {
   try {
-    const response = await fetch("http://localhost:8080/api/user/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      import.meta.env.VITE_BACKEND_URL + "/api/auth/register",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
       },
-      body: JSON.stringify(userData),
-    });
+    );
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -29,14 +32,17 @@ export const loginUser = async (userData: {
   password: string;
 }) => {
   try {
-    const response = await fetch("http://localhost:8080/api/user/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      import.meta.env.VITE_BACKEND_URL + "/api/auth/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+        credentials: "include", // Ensure the session cookie is included
       },
-      body: JSON.stringify(userData),
-      credentials: "include", // Ensure the session cookie is included
-    });
+    );
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -52,13 +58,16 @@ export const loginUser = async (userData: {
 
 export const logout = async () => {
   try {
-    const response = await fetch("http://localhost:8080/api/user/logout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      import.meta.env.VITE_BACKEND_URL + "/api/auth/logout",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
       },
-      credentials: "include", 
-    });
+    );
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -73,10 +82,13 @@ export const logout = async () => {
 
 export const fetchedSession = async () => {
   try {
-    const response = await fetch("http://localhost:8080/api/session", {
-      method: "GET",
-      credentials: "include", 
-    });
+    const response = await fetch(
+      import.meta.env.VITE_BACKEND_URL + "/api/session",
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
 
     if (!response.ok) {
       const errorData = await response.json();

@@ -7,10 +7,10 @@ import {
   acceptFriendRequestNotification,
   fetchNotification,
   removeFriendRequestNotification,
-} from "../../controllers/notification";
-import { acceptFriendRequest } from "../../controllers/user";
+  acceptGroupRequest,
+} from "../../controllers/notifications";
+import { acceptFriendRequest } from "../../controllers/users";
 import { useNavigate } from "react-router-dom";
-import { acceptGroupRequest } from "../../controllers/notification";
 
 const NotificationModal = ({
   isOpen,
@@ -121,7 +121,6 @@ const RequestItems = ({
       <div
         className="flex cursor-pointer items-center gap-2"
         onClick={() => {
-          console.log(postId);
           requestType === "RECEIVE_REACTION" ||
           requestType === "RECEIVE_COMMENT"
             ? navigate(`/posts/${postId}`, { replace: true })

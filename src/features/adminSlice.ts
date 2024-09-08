@@ -4,8 +4,8 @@ import {
   fetchGroups,
   createGroup,
   fetchGroupWithMembers,
-} from "../controllers/group";
-import { getAllUsers } from "../controllers/user";
+} from "../controllers/groups";
+import { getAllUsers } from "../controllers/users";
 import { getAllPosts } from "../controllers/posts";
 
 const initialState: AdminSliceProps = {
@@ -19,11 +19,11 @@ const adminSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(getAllUsers.fulfilled, (state, action) => {
+      state.users = action.payload;
+    });
     builder
-      .addCase(getAllUsers.fulfilled, (state, action) => {
-        state.users = action.payload;
-      })
-      builder.addCase(getAllPosts.fulfilled, (state, action) => {
+      .addCase(getAllPosts.fulfilled, (state, action) => {
         state.posts = action.payload;
       })
       .addCase(fetchGroups.pending, (state, action) => {

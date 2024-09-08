@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PostState } from "../interfaces/Posts";
 import {
-  getAllPosts,
   getPosts,
   getPostsByCreatorId,
   getPostsByGroup,
@@ -12,7 +11,7 @@ const initialState: PostState = {
   posts: [],
   creatorPost: [],
   viewedPosts: [],
-  groupPost: [], // Ensure this is part of the initial state
+  groupPost: [],
 };
 
 const postSlice = createSlice({

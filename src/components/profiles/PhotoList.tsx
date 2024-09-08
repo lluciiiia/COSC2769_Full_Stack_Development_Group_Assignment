@@ -5,9 +5,6 @@ import { PostParams } from "../../interfaces/Posts";
 import LoadingSpinner from "../../assets/icons/Loading";
 
 const PhotoList = ({ isAuthenticatedUser, loading }) => {
-  // const posts = useSelector((state: AppState) => state.posts.creatorPost);
-
-  // const posts: PostParams[] = isAuthenticatedUser ? creatorPosts : viewedPosts;
   const posts: PostParams[] = useSelector((state: AppState) => {
     return isAuthenticatedUser
       ? state.posts.creatorPost
@@ -22,9 +19,7 @@ const PhotoList = ({ isAuthenticatedUser, loading }) => {
     );
   }
 
-  if (posts.length === 0) {
-    return <h1>No photo available</h1>;
-  }
+  if (posts.length === 0) return <h1>No photo available</h1>;
 
   return (
     <div className="grid grid-cols-2 gap-4 p-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">

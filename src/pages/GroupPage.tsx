@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 import { GroupType } from "../interfaces/Group";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,13 +9,12 @@ import ReturnNavbar from "../components/ReturnNavbar";
 import { selectGroupById } from "../features/groupSlice";
 import { getPostsByGroup } from "../controllers/posts";
 import LoadingSpinner from "../assets/icons/Loading";
-import { fetchGroups } from "../controllers/group";
-import PostModal from "../components/post/modals/PostModal";
+import { fetchGroups, leaveGroup } from "../controllers/groups";
+import PostModal from "../components/posts/modals/PostModal";
 import { selectAuthState } from "../features/authSlice";
-import { sendGroupRequest } from "../controllers/user";
+import { sendGroupRequest } from "../controllers/users";
 import { selectGroupRequest } from "../features/notificationSlice";
-import { leaveGroup } from "../controllers/group";
-import UpdateGroupModal from "../components/group/EditFullGroupModal"; // Import the EditGroupModal
+import UpdateGroupModal from "../components/groups/EditFullGroupModal";
 
 export default function GroupPage() {
   const groupId = useParams<{ groupId: string }>().groupId || "";
@@ -22,14 +22,14 @@ export default function GroupPage() {
   const [group, setGroup] = useState<GroupType | null>(null);
   const [loading, setLoading] = useState(true);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State for Edit Group Modal
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
-  const [error, setError] = useState<string | null>(null); // State to handle errors
+  const [ setError] = useState<string | null>(null);
   const { id: userId } = useSelector(selectAuthState);
   const [isMember, setIsMember] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [isClick, setIsClick] = useState(false);
-  const [isInGroup, setIsInGroup] = useState(false);
+  const [isClick] = useState(false);
+  const [isIngroup ,setIsInGroup] = useState(false);
 
   const selectedGroup = useSelector((state: AppState) =>
     selectGroupById(state, groupId),
@@ -46,7 +46,6 @@ export default function GroupPage() {
         await dispatch(getPostsByGroup(groupId));
       } catch (error) {
         console.error("Error fetching group data:", error);
-        setError("Failed to load group data. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -58,9 +57,12 @@ export default function GroupPage() {
   useEffect(() => {
     if (selectedGroup) {
       setGroup(selectedGroup);
-      const memberStatus = selectedGroup.members.some(
+
+      // Check if members exist before trying to access them
+      const memberStatus = selectedGroup.members?.some(
         (member) => member._id === userId,
       );
+
       if (memberStatus) {
         setIsMember(true);
         setIsInGroup(true);
@@ -97,7 +99,6 @@ export default function GroupPage() {
       setIsInGroup(false);
     } catch (error) {
       console.error("Failed to leave group:", error);
-      setError("Failed to leave group. Please try again later.");
     }
   };
 
@@ -191,7 +192,7 @@ export default function GroupPage() {
                     ? "cursor-not-allowed bg-gray-400"
                     : "bg-[#FFC123]"
                 }`}
-                disabled={existingGroupRequest || isClick}
+                disabled={Boolean(existingGroupRequest) || isClick}
               >
                 {isClick ? "Request Sent" : "Join"}
               </button>

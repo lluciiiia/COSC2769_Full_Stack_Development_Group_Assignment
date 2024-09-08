@@ -7,7 +7,7 @@ import {
   getViewedUser,
   sendFriendRequest,
   unfriendById,
-} from "../../controllers/user";
+} from "../../controllers/users";
 import { useParams } from "react-router-dom";
 import { AppDispatch } from "../../app/store";
 import {
@@ -19,7 +19,7 @@ import {
   fetchNotification,
   fetchSentFriendRequests,
   removeFriendRequestNotification,
-} from "../../controllers/notification";
+} from "../../controllers/notifications";
 import ProfilePictureModel from "./ProfilePictureModel";
 import BackgroundImageModal from "./BackgroundImageModal";
 

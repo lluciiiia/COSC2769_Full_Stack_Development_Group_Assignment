@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "../../app/store";
-import { getAllUsers } from "../../controllers/user";
-import { resumeUser, suspendUser } from "../../controllers/admin";
+import { getAllUsers } from "../../controllers/users";
+import { resumeUser, suspendUser } from "../../controllers/admins";
 
 const UserManagement = () => {
   const dispatch: AppDispatch = useDispatch();
   const users = useSelector((state: AppState) => state.admin.users);
-  console.log("user", users);
-
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState<"newest" | "oldest">("newest");
   const [currentPage, setCurrentPage] = useState(1);
@@ -37,21 +35,6 @@ const UserManagement = () => {
         dispatch(getAllUsers());
       });
     }
-    // try {
-    //   console.log(
-    //     `Toggling status for user ${userId}. Current status: ${currentStatus}`,
-    //   );
-    //   const action = updateUser({
-    //     userId,
-    //     userData: { activeStatus: !currentStatus },
-    //   });
-    //   console.log("Dispatching action:", action);
-    //   await dispatch(action as any);
-    //   console.log(`Status for user ${userId} updated successfully.`);
-    //   window.location.reload();
-    // } catch (error) {
-    //   console.error("Failed to update user:", error);
-    // }
   };
 
   const filteredUsers = users

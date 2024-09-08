@@ -1,4 +1,5 @@
 export interface Reaction{
+  reactions: any;
   userId: string,
   reactionType: string,
   postId: string,
@@ -25,8 +26,10 @@ export interface ReactionForCommentProps{
   onReact: (reaction: string) => void;
   initialReaction?: string;
   isReacted: boolean;
-  reactionType?: string,
-  comment?: Reaction;
+  displayedReactions: string[]; 
+  reactionType?: any,
+  comment?: any;
+  onDisplayedReactionsUpdate: (reactions: string[]) => void;
 }
 
 export interface PostReactionsProps {

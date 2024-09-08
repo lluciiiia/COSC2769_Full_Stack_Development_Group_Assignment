@@ -2,11 +2,10 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { PostParams } from "../../interfaces/Posts.tsx";
 import { AppState } from "../../app/store.ts";
-import PostContainer from "../Post/PostContainer.tsx";
+import PostContainer from "../posts/PostContainer.tsx";
 import LoadingSpinner from "../../assets/icons/Loading.tsx";
 
 const PostsProfileList = ({ isAuthenticatedUser, loading }) => {
-  
   const creatorPosts = useSelector(
     (state: AppState) => state.posts.creatorPost,
   );

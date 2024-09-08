@@ -1,15 +1,15 @@
-import { combineSlices, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import { PostParams, RevertPostParams } from "../interfaces/Posts";
-import { useContext } from "react";
-
-export const BACKEND_URL = "http://localhost:8080";
 
 export const getAllPosts = createAsyncThunk<PostParams[]>(
   "posts/getAllPosts",
   async () => {
-    const response = await fetch(BACKEND_URL + `/api/posts/all`, {
-      method: "GET",
-    });
+    const response = await fetch(
+      import.meta.env.VITE_BACKEND_URL + `/api/posts/all`,
+      {
+        method: "GET",
+      },
+    );
 
     if (!response.ok) {
       console.error("Failed to fetch posts:", response.statusText);
@@ -24,18 +24,17 @@ export const getAllPosts = createAsyncThunk<PostParams[]>(
 export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
   "posts/getPosts",
   async () => {
-    const response = await fetch(BACKEND_URL + `/api/posts/`, {
-      method: "GET",
-      credentials: "include",
-    });
+    const response = await fetch(
+      import.meta.env.VITE_BACKEND_URL + "/api/posts",
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
 
-    if (!response.ok) {
-      console.error("Failed to fetch posts:", response.statusText);
-      throw new Error("Failed to fetch posts");
-    }
+    if (!response.ok) throw new Error("Failed to fetch posts");
 
     const data: PostParams[] = await response.json();
-    console.log(data);
     return data;
   },
 );
@@ -43,12 +42,13 @@ export const getPosts = createAsyncThunk<PostParams[], string | undefined>(
 export const getPostById = async (id: String | undefined) => {
   if (id == undefined) return;
 
-  const response = await fetch(BACKEND_URL + `/api/posts/${id}`, {
-    method: "GET",
-    credentials: "include",
-  });
-
-  console.log("response: " + JSON.stringify(response));
+  const response = await fetch(
+    import.meta.env.VITE_BACKEND_URL + `/api/posts/${id}`,
+    {
+      method: "GET",
+      credentials: "include",
+    },
+  );
 
   if (!response.ok) {
     console.error("Failed to fetch posts:", response.statusText);
@@ -63,9 +63,9 @@ export const getViewedUserPosts = createAsyncThunk<
   PostParams[],
   string | undefined
 >("posts/getViewedUserPosts", async (viewedUserId) => {
-  console.log("hi");
   const response = await fetch(
-    BACKEND_URL + `/api/posts/view-profile/${viewedUserId}`,
+    import.meta.env.VITE_BACKEND_URL +
+      `/api/posts/view-profile/${viewedUserId}`,
     {
       method: "GET",
       credentials: "include",
@@ -78,7 +78,6 @@ export const getViewedUserPosts = createAsyncThunk<
   }
 
   const data: PostParams[] = await response.json();
-  console.log("think", data);
   return data;
 });
 
@@ -87,7 +86,7 @@ export const getPostsByCreatorId = createAsyncThunk<
   string | undefined
 >("posts/getPostsByCreatorId", async (creatorId) => {
   const response = await fetch(
-    BACKEND_URL + `/api/posts/profile/${creatorId}`,
+    import.meta.env.VITE_BACKEND_URL + `/api/posts/profile/${creatorId}`,
     {
       method: "GET",
       credentials: "include",
@@ -103,36 +102,14 @@ export const getPostsByCreatorId = createAsyncThunk<
   return data;
 });
 
-export const getGroupsByUserId = async (userId: string | undefined) => {
-  if (!userId) return;
-
-  const response = await fetch(`${BACKEND_URL}/api/groups/user/${userId}`, {
-    method: "GET",
-    credentials: "include",
-  });
-
-  console.log("response: " + JSON.stringify(response));
-
-  if (!response.ok) {
-    console.error("Failed to fetch groups:", response.statusText);
-    throw new Error("Failed to fetch groups");
-  }
-
-  // Parse the JSON response if the fetch is successful
-  const groups = await response.json();
-  return groups;
-};
-
 export const getPostsByGroup = createAsyncThunk<PostParams[], string>(
   "posts/getPostByGroup",
   async (groupId, { rejectWithValue }) => {
     try {
-      if (!groupId) {
-        throw new Error("No group ID provided");
-      }
+      if (!groupId) throw new Error("No group ID provided");
 
       const response = await fetch(
-        BACKEND_URL + `/api/posts/groups/${groupId}`,
+        import.meta.env.VITE_BACKEND_URL + `/api/posts/groups/${groupId}`,
         {
           method: "GET",
           credentials: "include",
@@ -154,36 +131,32 @@ export const getPostsByGroup = createAsyncThunk<PostParams[], string>(
 export const createPost = createAsyncThunk<PostParams, PostParams | undefined>(
   "posts/createPost",
   async (postParams) => {
-    // Log the post parameters being sent
     console.log(
       "Creating post with parameters:",
       JSON.stringify(postParams, null, 2),
     );
 
-    const response = await fetch(`${BACKEND_URL}/api/posts`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json", // Set content type to JSON
+    const response = await fetch(
+      import.meta.env.VITE_BACKEND_URL + `/api/posts`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Set content type to JSON
+        },
+        body: JSON.stringify(postParams), // Send postParams as JSON
+        credentials: "include",
       },
-      body: JSON.stringify(postParams), // Send postParams as JSON
-      credentials: "include",
-    });
-
-    // Log the response status and response body
-    console.log("Response status:", response.status);
+    );
 
     // Log the raw response before checking if it's okay
     const rawResponseText = await response.text();
-    console.log("Raw response received:", rawResponseText); // Log raw response for debugging
 
     if (!response.ok) {
-      // Log the error response if the creation fails
       console.error("Failed to create post:", rawResponseText);
       throw new Error("Failed to create post");
     }
 
-    const data: PostParams = JSON.parse(rawResponseText); // Parse the raw response text to JSON
-    // Log the created post data
+    const data: PostParams = JSON.parse(rawResponseText);
     console.log("Post created successfully:", JSON.stringify(data, null, 2));
 
     return data;
@@ -193,14 +166,17 @@ export const createPost = createAsyncThunk<PostParams, PostParams | undefined>(
 export const updatePost = createAsyncThunk<PostParams, PostParams>(
   "posts/updatePost",
   async (postData) => {
-    const response = await fetch(`${BACKEND_URL}/api/posts/${postData._id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      import.meta.env.VITE_BACKEND_URL + `/api/posts/${postData._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(postData),
       },
-      credentials: "include",
-      body: JSON.stringify(postData),
-    });
+    );
 
     if (!response.ok) throw new Error("Failed to update post");
 
@@ -215,14 +191,17 @@ export const revertPost = createAsyncThunk<
   { rejectValue: string }
 >("posts/revertPost", async (postData, { rejectWithValue }) => {
   try {
-    const response = await fetch(`${BACKEND_URL}/api/posts/${postData._id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      import.meta.env.VITE_BACKEND_URL + `/api/posts/${postData._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(postData),
       },
-      credentials: "include",
-      body: JSON.stringify(postData),
-    });
+    );
 
     if (!response.ok) {
       // Return a custom error message
@@ -243,9 +222,12 @@ export const deletePostById = createAsyncThunk<boolean, string | undefined>(
     if (id === undefined) return rejectWithValue("Post ID is undefined");
 
     try {
-      const response = await fetch(BACKEND_URL + `/api/posts/${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        import.meta.env.VITE_BACKEND_URL + `/api/posts/${id}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (!response.ok) {
         console.error("Failed to delete the post", response.statusText);
@@ -257,5 +239,5 @@ export const deletePostById = createAsyncThunk<boolean, string | undefined>(
       console.error("Failed to delete the post", error);
       return rejectWithValue("An error occurred while deleting the post");
     }
-  }
+  },
 );

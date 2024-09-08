@@ -3,11 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { AppState, AppDispatch } from "../app/store";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../assets/icons/Loading";
-import { fetchGroups } from "../controllers/group";
+import { fetchGroups } from "../controllers/groups";
 import { GroupType } from "../interfaces/Group";
 import { selectAuthState } from "../features/authSlice";
-import CreateGroupModal from "../components/group/CreateGroupModal";
-import { sendGroupRequest } from "../controllers/user";
+import CreateGroupModal from "../components/groups/CreateGroupModal";
+import { sendGroupRequest } from "../controllers/users";
 import { selectRequest } from "../features/notificationSlice";
 
 const GroupList: React.FC = () => {
@@ -62,13 +62,10 @@ const GroupList: React.FC = () => {
     }
   };
 
-  console.log(groups, "geroups");
   const filteredGroups = () => {
     return groups.filter((group) => {
       // Ensure the group is accepted before checking other conditions
-      if (!group.accepted) {
-        return false;
-      }
+      if (!group.accepted) return false;
 
       if (activeTab === "groups") {
         if (activeSubtab === "joined") {
@@ -81,14 +78,12 @@ const GroupList: React.FC = () => {
       }
 
       if (activeTab === "manage") {
-        console.log(group.groupAdmin, "group admin");
         return group.groupAdmin === id;
       }
 
       return false;
     });
   };
-
 
   return (
     <div className="mt-20 flex h-screen flex-col items-center">

@@ -6,7 +6,7 @@ import {
   getViewedUser,
   sendFriendRequest,
   unfriendById,
-} from "../controllers/user";
+} from "../controllers/users";
 import { AppState } from "../app/store";
 
 //current user

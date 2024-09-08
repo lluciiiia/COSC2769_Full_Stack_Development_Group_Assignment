@@ -3,7 +3,7 @@ import {
   fetchNotification,
   fetchSentFriendRequests,
   groupSentRequest,
-} from "../controllers/notification";
+} from "../controllers/notifications";
 import { NotiProps, GroupRequest } from "../interfaces/Notifications";
 import { AppState } from "../app/store";
 
@@ -43,7 +43,6 @@ export const selectGroupRequest = (state: AppState, groupId: string) =>
   );
 
 export const selectRequest = (state: AppState) => {
-  console.log(state.notifications, "alsdjclijasc");
   state.notifications;
 };
 export default notificationSlice.reducer;

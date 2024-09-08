@@ -2,17 +2,16 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import connectDB from "./db";
 import cookieParser from "cookie-parser";
-import bodyParser from "body-parser";
 // Importing Routes
-import groupRoutes from "./routes/groupRoutes";
-import userRoutes from "./routes/userRoutes";
-import postRoutes from "./routes/postRoutes";
-import notificationRoutes from "./routes/notificationRoutes";
-import commentRoutes from "./routes/commentRoutes";
-import reactionRoutes from "./routes/reactionRoutes";
-import authenticationRoutes from "./routes/authenticationRoutes";
-import sessionRoute from "./routes/sessionRoutes";
-import adminRoute from "./routes/adminRoutes";
+import groupRoutes from "./routes/group.route";
+import userRoutes from "./routes/user.route";
+import postRoutes from "./routes/post.route";
+import notificationRoutes from "./routes/notification.route";
+import commentRoutes from "./routes/comment.route";
+import reactionRoutes from "./routes/reaction.route";
+import authenticationRoutes from "./routes/auth.route";
+import sessionRoutes from "./routes/session.route";
+import adminRoutes from "./routes/admin.route";
 import session from "express-session";
 
 const app = express();
@@ -51,9 +50,9 @@ app.use("/api/posts", postRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/reactions", reactionRoutes);
-app.use("/api/user", authenticationRoutes);
-app.use("/api/session", sessionRoute);
-app.use("/api/admin", adminRoute);
+app.use("/api/auth", authenticationRoutes);
+app.use("/api/session", sessionRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.json("From backend side");

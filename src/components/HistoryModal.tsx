@@ -1,7 +1,7 @@
 import React from "react";
 import { RevertIcon } from "../assets/icons/RevertIcon";
 import { updateComment } from "../controllers/comments";
-import { revertPost, updatePost } from "../controllers/posts";
+import { revertPost } from "../controllers/posts";
 import { AsyncThunkAction, UnknownAction } from "@reduxjs/toolkit";
 import { ThunkDispatch } from "redux-thunk";
 import { PostParams, RevertPostParams } from "../interfaces/Posts";

@@ -7,16 +7,17 @@ import { createComment } from "../../controllers/comments";
 import CommentReactions from "../reactions/CommentReactions";
 import { createReaction } from "../../controllers/reactions";
 import { AppDispatch, AppState } from "../../app/store";
-import { createCommentNotification } from "../../controllers/notification";
+import { createCommentNotification } from "../../controllers/notifications";
 import {
   loadReactionsFromLocal,
   saveReactionsToLocal,
 } from "../../utils/localStorageUtils";
-import { Reaction, ReactionIcons } from "../../interfaces/Reactions";
+import { ReactionIcons } from "../../interfaces/Reactions";
 import { deleteReaction } from "../../controllers/reactions";
+
 const CommentContainer: React.FC<CommentContainerProps> = ({
   initComments,
-  userId,
+  userId = "",
   postId,
   groupId,
 }) => {
@@ -36,25 +37,25 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
   };
 
   const handleReaction = async (reactionType: string, commentId: string) => {
-  const reaction = {
-    postId: commentId,
-    reactionType,
-    sentFrom: "comment",
-    userId,
-  };
+    const reaction = {
+      postId: commentId,
+      reactionType,
+      sentFrom: "comment",
+      userId,
+    };
 
-  if (reactionType === "UNDO_REACT") {
-    await deleteReact(commentId, userId);
-    console.log(`User removed reaction from comment ID: ${commentId}`);
-  } else {
-    if (navigator.onLine) {
-      await sendReaction(reaction);
+    if (reactionType === "UNDO_REACT") {
+      await deleteReact(commentId, userId);
+      console.log(`User removed reaction from comment ID: ${commentId}`);
     } else {
-      setIsOffline(true);
-      queueReaction(reaction);
+      if (navigator.onLine) {
+        await sendReaction(reaction);
+      } else {
+        setIsOffline(true);
+        queueReaction(reaction);
+      }
     }
-  }
-};
+  };
 
   const deleteReact = async (postId: string, userId: string) => {
     try {
@@ -184,18 +185,10 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
               return (
                 <div key={comment._id} className="mb-4">
                   <CommentItem
+                    groupId={String(groupId)}
                     comment={comment}
                     displayedReactions={displayedReactions} // Pass displayedReactions to CommentItem
                   />
-
-                  <div className="flex space-x-2 text-sm text-gray-600">
-                    {reactionCounts.map(({ type, count }) => (
-                      <span key={type} className="flex items-center">
-                        <span className="mr-1">{ReactionIcons[type]}</span>
-                        <span className="font-bold">{count}</span>
-                      </span>
-                    ))}
-                  </div>
 
                   <CommentReactions
                     reactionType={comment.reactions.filter(
@@ -205,6 +198,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
                     onReact={(reaction) =>
                       handleReaction(reaction, comment._id)
                     }
+                    displayedReactions={displayedReactions}
                     isReacted={isReacted}
                     onDisplayedReactionsUpdate={handleRenderOutReactions} // Pass callback to CommentReactions
                   />

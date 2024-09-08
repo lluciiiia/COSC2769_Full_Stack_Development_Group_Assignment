@@ -4,11 +4,11 @@ import AdminNavbar from "../components/AdminNavbar";
 import { GroupManagement } from "../components/admin/GroupManagement";
 import UserManagement from "../components/admin/UserManagement";
 import { useDispatch } from "react-redux";
-import { getAllUsers } from "../controllers/user";
+import { getAllUsers } from "../controllers/users";
 import { AppDispatch } from "../app/store";
 import { getAllPosts } from "../controllers/posts";
 import ContentManagement from "../components/admin/ContentManagement";
-import { fetchGroups } from "../controllers/group";
+import { fetchGroups } from "../controllers/groups";
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState<string>("Group");
