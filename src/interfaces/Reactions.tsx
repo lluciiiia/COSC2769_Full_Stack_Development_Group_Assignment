@@ -26,6 +26,7 @@ export interface ReactionForCommentProps{
   onReact: (reaction: string) => void;
   initialReaction?: string;
   isReacted: boolean;
+  displayedReactions: string[]; 
   reactionType?: string,
   comment?: Reaction;
 }

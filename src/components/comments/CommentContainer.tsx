@@ -17,7 +17,7 @@ import { deleteReaction } from "../../controllers/reactions";
 
 const CommentContainer: React.FC<CommentContainerProps> = ({
   initComments,
-  userId= '',
+  userId = "",
   postId,
   groupId,
 }) => {
@@ -185,18 +185,10 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
               return (
                 <div key={comment._id} className="mb-4">
                   <CommentItem
+                    groupId={String(groupId)}
                     comment={comment}
                     displayedReactions={displayedReactions} // Pass displayedReactions to CommentItem
                   />
-
-                  <div className="flex space-x-2 text-sm text-gray-600">
-                    {reactionCounts.map(({ type, count }) => (
-                      <span key={type} className="flex items-center">
-                        <span className="mr-1">{ReactionIcons[type]}</span>
-                        <span className="font-bold">{count}</span>
-                      </span>
-                    ))}
-                  </div>
 
                   <CommentReactions
                     reactionType={comment.reactions.filter(

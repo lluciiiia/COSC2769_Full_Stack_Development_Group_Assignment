@@ -23,7 +23,8 @@ export default function Member() {
   const { id } = useSelector(selectAuthState);
   const isAdmin = id === group?.groupAdmin;
 
-  const members: UserType[] = group ? group.members : [];
+  const members: UserType[] = group?.members || [];
+
 
   const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
