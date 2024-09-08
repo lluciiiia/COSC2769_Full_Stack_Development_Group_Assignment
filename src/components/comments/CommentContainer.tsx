@@ -17,7 +17,7 @@ import { deleteReaction } from "../../controllers/reactions";
 
 const CommentContainer: React.FC<CommentContainerProps> = ({
   initComments,
-  userId,
+  userId= '',
   postId,
   groupId,
 }) => {
