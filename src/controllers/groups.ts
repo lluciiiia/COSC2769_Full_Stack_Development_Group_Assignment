@@ -6,7 +6,10 @@ export const fetchGroups = createAsyncThunk<GroupType[]>(
   async () => {
     try {
       const response = await fetch(
-        import.meta.env.VITE_BACKEND_URL + `/api/groups `,
+        import.meta.env.VITE_BACKEND_URL + `/api/groups`,
+        {
+          credentials: 'include', // This includes credentials like cookies
+        }
       );
       if (!response.ok) {
         console.error("Failed to fetch groups:", response.statusText);
@@ -18,8 +21,9 @@ export const fetchGroups = createAsyncThunk<GroupType[]>(
       console.error("Error in fetchGroups thunk:", error);
       throw error;
     }
-  },
+  }
 );
+
 
 export const getGroupsByUserId = async (userId: string | undefined) => {
   if (!userId) return;
@@ -52,6 +56,7 @@ export const handleAcceptGroup = async (
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: 'include'
       },
     );
 
@@ -80,6 +85,7 @@ export const createGroup = createAsyncThunk<GroupType, GroupParams>(
             "Content-Type": "application/json",
           },
           body: JSON.stringify(newGroup),
+          credentials: 'include'
         },
       );
 
@@ -100,17 +106,26 @@ export const createGroup = createAsyncThunk<GroupType, GroupParams>(
 export const fetchGroupWithMembers = createAsyncThunk<GroupType, string>(
   "groups/fetchGroupWithMembers",
   async (groupId: string) => {
-    const response = await fetch(
-      import.meta.env.VITE_BACKEND_URL + `/api/groups/${groupId}`,
-    );
-    if (!response.ok) {
-      console.error("Failed to fetch group with members:", response.statusText);
-      throw new Error("Failed to fetch group with members");
+    try {
+      const response = await fetch(
+        import.meta.env.VITE_BACKEND_URL + `/api/groups/${groupId}`,
+        {
+          credentials: 'include', // This includes credentials like cookies
+        }
+      );
+      if (!response.ok) {
+        console.error("Failed to fetch group with members:", response.statusText);
+        throw new Error("Failed to fetch group with members");
+      }
+      const data: GroupType = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error in fetchGroupWithMembers thunk:", error);
+      throw error;
     }
-    const data: GroupType = await response.json();
-    return data;
-  },
+  }
 );
+
 
 export const leaveGroup = createAsyncThunk<GroupType, string>(
   "groups/leaveGroup",

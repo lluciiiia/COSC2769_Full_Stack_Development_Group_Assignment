@@ -5,10 +5,10 @@ import {
   updateComment,
   deleteCommentById,
 } from "../services/comment.service";
-
+import { isAuthenticated } from "../middleware/authenticate";
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", isAuthenticated,async (req, res) => {
   try {
     const comments = await getAllComments();
     res.json(comments);
@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/",isAuthenticated ,async (req, res) => {
   try {
     const newComment = await createComment(req.body);
     res.status(201).json({ message: "Comment created", comment: newComment });
@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/", async (req, res) => {
+router.put("/",isAuthenticated ,async (req, res) => {
   try {
     const updatedComment = await updateComment(req.body);
     res.json({ message: "Comment updated", comment: updatedComment });
@@ -38,7 +38,7 @@ router.put("/", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id",isAuthenticated ,async (req, res) => {
   try {
     await deleteCommentById(req.params.id);
     res.json({ message: "Comment deleted" });

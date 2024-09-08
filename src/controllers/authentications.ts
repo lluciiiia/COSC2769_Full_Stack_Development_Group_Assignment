@@ -11,6 +11,7 @@ export const registerUser = async (userData: {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: 'include',
         body: JSON.stringify(userData),
       },
     );

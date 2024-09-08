@@ -10,10 +10,10 @@ import {
   getAllPosts,
   getViewedUserPosts,
 } from "../services/post.service";
-
+import { isAuthenticated } from "../middleware/authenticate";
 const router = express.Router();
 
-router.get("/all", async (req, res) => {
+router.get("/all",isAuthenticated ,async (req, res) => {
   try {
     const posts = await getAllPosts();
     res.json(posts);
@@ -22,7 +22,7 @@ router.get("/all", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/",isAuthenticated ,async (req, res) => {
   try {
     const userId = req.session.user.id;
     const posts = await getPostsForUser(userId);
@@ -32,7 +32,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/profile/:userId", async (req, res) => {
+router.get("/profile/:userId",isAuthenticated ,async (req, res) => {
   try {
     const posts = await getPostListByCreatorId(req.params.userId);
     res.json(posts);
@@ -42,7 +42,7 @@ router.get("/profile/:userId", async (req, res) => {
 });
 
 //fetch post in profile
-router.get("/view-profile/:viewedUserId", async (req, res) => {
+router.get("/view-profile/:viewedUserId",isAuthenticated ,async (req, res) => {
   try {
     const userId = req.session.user.id;
     const viewedUserId = req.params.viewedUserId;
@@ -54,7 +54,7 @@ router.get("/view-profile/:viewedUserId", async (req, res) => {
   }
 });
 
-router.get("/groups/:groupId", async (req, res) => {
+router.get("/groups/:groupId",isAuthenticated ,async (req, res) => {
   try {
     const posts = await getPostByGroupId(req.params.groupId);
     res.json(posts);
@@ -63,7 +63,7 @@ router.get("/groups/:groupId", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id",isAuthenticated ,async (req, res) => {
   try {
     const userId = req.session.user.id;
     const post = await getPostById(req.params.id, userId);
@@ -73,7 +73,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/",isAuthenticated ,async (req, res) => {
   try {
     const newPost = await createPost(req.body);
     res.status(201).json({ message: "Post created", post: newPost });
@@ -83,7 +83,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id",isAuthenticated ,async (req, res) => {
   try {
     const updatedPost = await updatePost(req.params.id, req.body);
     res.json({ message: "Post updated", post: updatedPost });
@@ -92,7 +92,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id",isAuthenticated ,async (req, res) => {
   try {
     await deletePostById(req.params.id);
     res.json({ message: "Post deleted" });
