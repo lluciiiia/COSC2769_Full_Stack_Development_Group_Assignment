@@ -198,6 +198,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
                     onReact={(reaction) =>
                       handleReaction(reaction, comment._id)
                     }
+                    displayedReactions={displayedReactions}
                     isReacted={isReacted}
                     onDisplayedReactionsUpdate={handleRenderOutReactions} // Pass callback to CommentReactions
                   />
