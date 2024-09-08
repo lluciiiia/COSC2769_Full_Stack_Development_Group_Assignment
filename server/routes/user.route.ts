@@ -12,12 +12,11 @@ import {
   getAllViewedUsers,
 } from "../services/user.service";
 import { isAuthenticated } from "../middleware/authenticate";
-import mongoose from "mongoose";
 
 const router = express.Router();
 
 //GET /user- fetch all user
-router.get("/", async (req, res) => {
+router.get("/",isAuthenticated ,async (req, res) => {
   try {
     const users = await getAllUsers();
     res.json(users);
@@ -27,7 +26,7 @@ router.get("/", async (req, res) => {
 });
 
 // get all users for searching (only return neccessary information)
-router.get("/view-users", async (req, res) => {
+router.get("/view-users",isAuthenticated ,async (req, res) => {
   try {
     const users = await getAllViewedUsers();
     res.json(users);
@@ -36,7 +35,7 @@ router.get("/view-users", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id",isAuthenticated ,async (req, res) => {
   try {
     const userId = req.params.id;
     const user = await getUserById(userId);
@@ -46,7 +45,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.get("/view/:id", async (req, res) => {
+router.get("/view/:id",isAuthenticated ,async (req, res) => {
   try {
     const userId = req.params.id;
     const user = await getViewUserById(userId);
@@ -56,7 +55,7 @@ router.get("/view/:id", async (req, res) => {
   }
 });
 
-router.put("/addfriend/:friendId", async (req, res) => {
+router.put("/addfriend/:friendId",isAuthenticated ,async (req, res) => {
   try {
     const userId = req.session.user.id;
     const { friendId } = req.params;
@@ -69,7 +68,7 @@ router.put("/addfriend/:friendId", async (req, res) => {
   }
 });
 
-router.put("/friend-requests/:friendId/accept", async (req, res) => {
+router.put("/friend-requests/:friendId/accept",isAuthenticated ,async (req, res) => {
   try {
     const userId = req.session.user.id;
     const { friendId } = req.params;
@@ -81,7 +80,7 @@ router.put("/friend-requests/:friendId/accept", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id",isAuthenticated, async (req, res) => {
   try {
     const userId = req.params.id;
     const updatedData = req.body;
@@ -120,7 +119,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/",isAuthenticated ,async (req, res) => {
   try {
     const newUser = new User(req.body);
     await newUser.save();
@@ -135,7 +134,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.delete("/unfriend/:friendId", async (req, res) => {
+router.delete("/unfriend/:friendId",isAuthenticated ,async (req, res) => {
   try {
     const userId = req.session.user.id;
     const { friendId } = req.params;
@@ -147,7 +146,7 @@ router.delete("/unfriend/:friendId", async (req, res) => {
   }
 });
 
-router.post("/sent/:groupId", async (req, res) => {
+router.post("/sent/:groupId",isAuthenticated, async (req, res) => {
   try {
     const userId = req.session.user.id; // Retrieve user ID from the session
     const { groupId } = req.params;
@@ -162,7 +161,7 @@ router.post("/sent/:groupId", async (req, res) => {
     // Respond with success if notification is created
     res.status(200).json({
       message: "Notification sent successfully",
-      notification: result.notification,
+      notification: result,
     });
   } catch (error) {
     res.status(500).json({ message: "An error occurred", error });
