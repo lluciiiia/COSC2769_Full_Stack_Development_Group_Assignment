@@ -54,9 +54,15 @@ const PostDetail: React.FC = () => {
 
   const groupId = post.groupId || "";
 
+  function handleReaction(reaction: string): Promise<void> {
+    throw new Error("Function not implemented.");
+  }
+
   return (
     <>
-      {isAdmin ? <AdminNavbar /> : <Navbar />}
+      {isAdmin ? <AdminNavbar setActiveTab={function (arg: string): void {
+        throw new Error("Function not implemented.");
+      } } /> : <Navbar />}
       <div className="mt-[120px] flex h-full items-center justify-center overflow-y-auto">
         <div className="mr-[300px] flex items-center justify-center gap-28">
           {post && (
