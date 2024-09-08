@@ -21,6 +21,7 @@ const PostContainer: React.FC<PostContainerProps> = ({
   groupId,
   content,
   images,
+  onReact,
   createdAt,
   visibility,
   reactions,

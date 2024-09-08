@@ -125,6 +125,7 @@ const Navbar = () => {
         userId={currentUser.id}
         post={null}
         groupId={""}
+        isInGroupPage={''}
       />
     </>
   );

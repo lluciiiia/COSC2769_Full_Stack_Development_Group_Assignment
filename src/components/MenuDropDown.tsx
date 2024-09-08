@@ -30,7 +30,7 @@ const MenuDropDown: React.FC<MenuDropDownProps> = ({
 
   // Fetch the group data using the groupId
   const group = useSelector((state: AppState) =>
-    selectGroupById(state, groupId),
+    selectGroupById(state, String(groupId)),
   );
 
   // Check if the authenticated user is the owner of the post
