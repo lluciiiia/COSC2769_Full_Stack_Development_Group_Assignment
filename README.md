@@ -107,7 +107,7 @@ To run BuZzNet locally, follow these steps:
 This project is a group assignment for the **COSC2769 Full Stack Development** course. 🎓
 
 - **Seokyung Kim (s3939114) <a href="https://github.com/lluciiiia" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>**
-- **Huynh Tan Phat (s3929218) <a href="https://github.com/phatgg221" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>\*\***
-- **Shirin Shujaa (s3983427) <a href="https://github.com/shirin44" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>\*\***
-- **Ngo Van Tai (s3974892) <a href="https://github.com/TaiVanNgo" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>\*\***
-- **Huynh Thai Duong (s3978955) <a href="https://github.com/TDuong04" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>\*\***
+- **Huynh Tan Phat (s3929218) <a href="https://github.com/phatgg221" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>**
+- **Shirin Shujaa (s3983427) <a href="https://github.com/shirin44" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>**
+- **Ngo Van Tai (s3974892) <a href="https://github.com/TaiVanNgo" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>**
+- **Huynh Thai Duong (s3978955) <a href="https://github.com/TDuong04" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>**
