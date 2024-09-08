@@ -16,15 +16,23 @@ const PostForm: React.FC<PostFormProps> = ({
 }) => {
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const postParams = {
-      content,
-      visibility,
-      images,
-    };
-
-    onSubmit(postParams);
+  
+    // Create FormData object
+    const formData = new FormData();
+  
+    // Append the content and visibility to FormData
+    formData.append("content", content);
+    formData.append("visibility", visibility);
+  
+    // Append each image from the images array to FormData
+    images.forEach((image, index) => {
+      formData.append(`images[${index}]`, image);  // Assumes `image` is a file, adjust if it's a URL
+    });
+  
+    // Pass the FormData object to onSubmit
+    onSubmit(formData);
   };
+  
 
   return (
     <form onSubmit={handleFormSubmit}>

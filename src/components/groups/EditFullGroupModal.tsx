@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { updateGroup } from "../../controllers/groups";
 import { GroupType } from "../../interfaces/Group";
-
+import { AppDispatch } from "../../app/store";
 interface UpdateGroupModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -22,7 +22,7 @@ const UpdateGroupModal: React.FC<UpdateGroupModalProps> = ({
     description: group.description,
   });
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
     if (isOpen) {
