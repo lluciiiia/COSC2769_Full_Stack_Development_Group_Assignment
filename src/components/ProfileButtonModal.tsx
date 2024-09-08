@@ -1,11 +1,12 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { logoutUserThunk, fetchSess } from "../features/authSlice"; 
+import { logoutUserThunk, fetchSess } from "../features/authSlice";
 import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "../app/store";
 import { useSelector } from "react-redux";
 import { selectAuthState } from "../features/authSlice";
 import DefaultProfile from "../assets/icons/DefaultProfile";
+
 interface ProfileButtonModalProps {
   isOpen: boolean;
   name: string;

@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { updateGroup } from "../../controllers/groups";
 import { GroupType } from "../../interfaces/Group";
 import { AppDispatch } from "../../app/store";
+
 interface UpdateGroupModalProps {
   isOpen: boolean;
   onClose: () => void;

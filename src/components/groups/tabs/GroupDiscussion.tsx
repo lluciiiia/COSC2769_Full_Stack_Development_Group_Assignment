@@ -7,6 +7,7 @@ import { selectAuthState } from "../../../features/authSlice";
 import { selectGroupById } from "../../../features/groupSlice";
 import { PostParams } from "../../../interfaces/Posts";
 import { GroupPostParams } from "../../../interfaces/Posts";
+
 export default function Discussion() {
   const posts = useSelector((state: AppState) => state.posts.groupPost);
   const { groupId } = useParams<{ groupId: string }>();

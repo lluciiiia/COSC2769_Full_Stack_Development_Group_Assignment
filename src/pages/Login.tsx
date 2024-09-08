@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { loginUserThunk, selectAuthState } from "../features/authSlice";
+import { useDispatch } from "react-redux";
+import { loginUserThunk } from "../features/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/icons/logo.png";
 import { AppDispatch } from "../app/store";
@@ -11,7 +11,6 @@ const Login: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   const [loginFailed, setIsLoginFailed] = useState("");
-  // Get error message from Redux state
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

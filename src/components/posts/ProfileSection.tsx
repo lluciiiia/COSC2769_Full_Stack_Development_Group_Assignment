@@ -128,6 +128,7 @@ export const ProfileSection: React.FC<ProfileSectionParams> = ({
         userId={id}
         post={post}
         groupId={isEditModalOpen ? post.groupId : null}
+        isInGroupPage={false}
       />
 
       {/* Modal for viewing edit history */}

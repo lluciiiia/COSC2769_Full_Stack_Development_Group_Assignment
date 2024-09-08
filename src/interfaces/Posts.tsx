@@ -13,9 +13,10 @@ export interface RevertPostParams {
 }
 
 export interface PostContainerProps extends PostParams {
-  onReact: (reaction: string) => Promise<void>;
+  onReact?: (reaction: string) => Promise<void>;
   isDiscussionTab?: boolean;
 }
+
 export interface PostParams {
   _id: string;
   creatorId: string;

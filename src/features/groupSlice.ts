@@ -24,9 +24,7 @@ const groupSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchGroups.pending, (state) => {
-        console.log("Fetching groups...");
-      })
+      .addCase(fetchGroups.pending, (state) => {})
       .addCase(fetchGroups.fulfilled, (state, action) => {
         // Instead of replacing the entire state, merge the new groups
         action.payload.forEach((group) => {

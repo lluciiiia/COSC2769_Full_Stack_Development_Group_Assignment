@@ -31,13 +31,11 @@ const PostModal = ({
     }
 
     if (isOpen && post) {
-      console.log("Editing post:", post);
       setContent(post.content);
       setVisibility(post.visibility);
       setImages(post.images || []);
       setSelectedGroupId(post.groupId || "");
     } else if (isOpen) {
-      console.log("Creating new post");
       setContent("");
       setImages([]);
       setSelectedGroupId("");
@@ -85,12 +83,11 @@ const PostModal = ({
     };
 
     try {
-      let result;
       if (post) {
         postParams._id = post._id;
-        result = await dispatch(updatePost(postParams)).unwrap();
+        await dispatch(updatePost(postParams)).unwrap();
       } else {
-        result = await dispatch(createPost(postParams)).unwrap();
+        await dispatch(createPost(postParams)).unwrap();
       }
 
       onClose();

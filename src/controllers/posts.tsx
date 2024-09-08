@@ -116,9 +116,8 @@ export const getPostsByGroup = createAsyncThunk<PostParams[], string>(
         },
       );
 
-      if (!response.ok) {
+      if (!response.ok)
         throw new Error("Failed to fetch posts: " + response.statusText);
-      }
 
       const data: PostParams[] = await response.json();
       return data;
@@ -131,19 +130,14 @@ export const getPostsByGroup = createAsyncThunk<PostParams[], string>(
 export const createPost = createAsyncThunk<PostParams, PostParams | undefined>(
   "posts/createPost",
   async (postParams) => {
-    console.log(
-      "Creating post with parameters:",
-      JSON.stringify(postParams, null, 2),
-    );
-
     const response = await fetch(
       import.meta.env.VITE_BACKEND_URL + `/api/posts`,
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", // Set content type to JSON
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(postParams), // Send postParams as JSON
+        body: JSON.stringify(postParams),
         credentials: "include",
       },
     );
@@ -157,8 +151,6 @@ export const createPost = createAsyncThunk<PostParams, PostParams | undefined>(
     }
 
     const data: PostParams = JSON.parse(rawResponseText);
-    console.log("Post created successfully:", JSON.stringify(data, null, 2));
-
     return data;
   },
 );

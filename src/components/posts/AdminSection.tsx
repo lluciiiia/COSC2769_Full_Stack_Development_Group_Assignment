@@ -2,7 +2,6 @@ import React from 'react';
 import { AdminSectionProps } from '../../interfaces/Posts';
 import { ViewIcon } from '../../assets/icons/ViewIcon';
 import { DeleteIcon } from '../../assets/icons/DeleteIcon';
-import { useNavigate } from 'react-router-dom';
 import { deletePostById, getAllPosts } from '../../controllers/posts';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../app/store';
@@ -11,7 +10,6 @@ export const AdminSection: React.FC<AdminSectionProps> = ({
   handleClick,
   post,
 }) => {
-  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
   const handleDelete = async () => {

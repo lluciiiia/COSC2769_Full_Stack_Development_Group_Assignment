@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { GroupType } from "../interfaces/Group";
@@ -24,12 +24,12 @@ export default function GroupPage() {
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
-  const [ setError] = useState<string | null>(null);
+  const [setError] = useState<string | null>(null);
   const { id: userId } = useSelector(selectAuthState);
   const [isMember, setIsMember] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isClick] = useState(false);
-  const [isIngroup ,setIsInGroup] = useState(false);
+  const [isIngroup, setIsInGroup] = useState(false);
 
   const selectedGroup = useSelector((state: AppState) =>
     selectGroupById(state, groupId),
@@ -250,7 +250,7 @@ export default function GroupPage() {
       <UpdateGroupModal
         isOpen={isEditModalOpen}
         onClose={handleCloseEditModal}
-        group={group} // Passing the group data to the modal
+        group={group}
       />
     </div>
   );

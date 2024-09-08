@@ -259,7 +259,7 @@ const PostContainer: React.FC<PostContainerProps> = ({
           onReact={handleReaction}
           initialReaction={initialReaction}
           isReacted={isReacted}
-          reactions={reactions}
+          reactions={reactions ? reactions : []}
           commentCount={comments?.length || 0}
         />
       )}
@@ -278,9 +278,6 @@ const PostContainer: React.FC<PostContainerProps> = ({
                 <CommentItem
                   key={comment._id}
                   comment={comment}
-                  onReact={(reaction: string) =>
-                    handleCommentReaction(comment._id, reaction)
-                  }
                   groupId={String(groupId)}
                 />
               ))

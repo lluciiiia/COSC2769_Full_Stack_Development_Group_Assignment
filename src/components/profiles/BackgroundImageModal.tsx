@@ -10,14 +10,14 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   currentBackground: string;
-  onSave: (newBackground: string) => void; // Add this prop
+  onSave: (newBackground: string) => void;
 }
 
 const BackgroundImageModal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
   currentBackground,
-  onSave, // Use the onSave prop to handle background updates
+  onSave,
 }) => {
   const dispatch: AppDispatch = useDispatch();
   const user = useSelector((state: AppState) => state.user.currentUser);
@@ -73,11 +73,11 @@ const BackgroundImageModal: React.FC<ModalProps> = ({
       dispatch(updateUser({ userId: user._id, userData: updatedUser })).then(
         () => {
           dispatch(fetchSess());
-          onSave(background); // Call the onSave function to update the background
-          window.location.reload(); // Reload the page to reflect changes
+          onSave(background);
+          window.location.reload();
         },
       );
-      onClose(); // Close the modal after saving
+      onClose();
     }
   };
 
