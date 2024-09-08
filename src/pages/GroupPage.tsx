@@ -57,9 +57,12 @@ export default function GroupPage() {
   useEffect(() => {
     if (selectedGroup) {
       setGroup(selectedGroup);
-      const memberStatus = selectedGroup.members.some(
+
+      // Check if members exist before trying to access them
+      const memberStatus = selectedGroup.members?.some(
         (member) => member._id === userId,
       );
+
       if (memberStatus) {
         setIsMember(true);
         setIsInGroup(true);
@@ -190,7 +193,7 @@ export default function GroupPage() {
                     ? "cursor-not-allowed bg-gray-400"
                     : "bg-[#FFC123]"
                 }`}
-                disabled={existingGroupRequest || isClick}
+                disabled={Boolean(existingGroupRequest) || isClick}
               >
                 {isClick ? "Request Sent" : "Join"}
               </button>
