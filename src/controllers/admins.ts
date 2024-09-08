@@ -9,6 +9,7 @@ export const acceptGroup = createAsyncThunk<
     {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
+      credentials: 'include'
     },
   );
 
@@ -30,6 +31,7 @@ export const deleteGroup = createAsyncThunk<{ message: string }, string>(
       {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
+        credentials: 'include'
       },
     );
 
@@ -48,7 +50,7 @@ export const suspendUser = createAsyncThunk<{ message: string }, string>(
   async (userId) => {
     const response = await fetch(
       import.meta.env.VITE_BACKEND_URL + `/api/admin/suspend/${userId}`,
-      { method: "PUT", headers: { "Content-Type": "application/json" } },
+      { method: "PUT", headers: { "Content-Type": "application/json" },credentials: 'include' },
     );
 
     if (!response.ok) {
@@ -70,7 +72,7 @@ export const resumeUser = createAsyncThunk<{ message: string }, string>(
   async (userId) => {
     const response = await fetch(
       import.meta.env.VITE_BACKEND_URL + `/api/admin/resume/${userId}`,
-      { method: "PUT", headers: { "Content-Type": "application/json" } },
+      { method: "PUT", headers: { "Content-Type": "application/json" }, credentials: 'include' },
     );
 
     if (!response.ok) {

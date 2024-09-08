@@ -7,10 +7,10 @@ import {
   getGroupsByUserId,
   createGroup,
 } from "../services/group.service";
-
+import { isAuthenticated } from "../middleware/authenticate";
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/",isAuthenticated ,async (req, res) => {
   try {
     const groups = await Group.find().populate({
       path: "members",
@@ -24,7 +24,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:groupId", async (req, res) => {
+router.get("/:groupId",isAuthenticated ,async (req, res) => {
   try {
     const group = await Group.findById(req.params.groupId);
 
@@ -35,7 +35,7 @@ router.get("/:groupId", async (req, res) => {
   }
 });
 
-router.get("/all", async (req, res) => {
+router.get("/all",isAuthenticated ,async (req, res) => {
   try {
     const groups = await getAllGroups();
     res.json(groups);
@@ -45,7 +45,7 @@ router.get("/all", async (req, res) => {
   }
 });
 
-router.get("/user/:userId", async (req, res) => {
+router.get("/user/:userId",isAuthenticated ,async (req, res) => {
   try {
     const userId = req.params.userId;
     const groups = await getGroupsByUserId(userId);
@@ -56,7 +56,7 @@ router.get("/user/:userId", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/",isAuthenticated ,async (req, res) => {
   try {
     const newGroupData = {
       groupAdmin: req.body.groupAdmin,
@@ -85,7 +85,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/leave/:groupId", async (req, res) => {
+router.put("/leave/:groupId",isAuthenticated, async (req, res) => {
   try {
     const groupId = req.params.groupId;
     const userId = req.session.user.id;
@@ -105,7 +105,7 @@ router.put("/leave/:groupId", async (req, res) => {
   }
 });
 
-router.put("/accepted/:id", async (req, res) => {
+router.put("/accepted/:id",isAuthenticated ,async (req, res) => {
   try {
     const groupId = req.params.id;
     const updatedGroup = await acceptGroup(groupId); // Call the service function
@@ -121,7 +121,7 @@ router.put("/accepted/:id", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id",isAuthenticated ,async (req, res) => {
   try {
     const groupId = req.params.id;
     const updatedData = req.body;
@@ -142,7 +142,7 @@ router.put("/:id", async (req, res) => {
 });
 
 //delete member out of the group
-router.delete("/:groupId/members/:userId", async (req, res) => {
+router.delete("/:groupId/members/:userId",isAuthenticated ,async (req, res) => {
   try {
     const groupId = req.params.groupId;
     const userId = req.params.userId;
@@ -155,7 +155,7 @@ router.delete("/:groupId/members/:userId", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id",isAuthenticated ,async (req, res) => {
   try {
     const groupId = req.params.id;
     await Group.findByIdAndDelete(groupId);

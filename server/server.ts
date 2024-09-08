@@ -16,7 +16,7 @@ import session from "express-session";
 
 const app = express();
 
-const secret = "your-secret-key";
+const secret = process.env.YOUR_SECRET_KEY!;
 app.use(cookieParser(secret));
 
 // CORS configuration

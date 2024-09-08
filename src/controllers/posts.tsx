@@ -8,6 +8,7 @@ export const getAllPosts = createAsyncThunk<PostParams[]>(
       import.meta.env.VITE_BACKEND_URL + `/api/posts/all`,
       {
         method: "GET",
+        credentials:'include'
       },
     );
 
@@ -218,6 +219,7 @@ export const deletePostById = createAsyncThunk<boolean, string | undefined>(
         import.meta.env.VITE_BACKEND_URL + `/api/posts/${id}`,
         {
           method: "DELETE",
+          credentials:'include'
         },
       );
 

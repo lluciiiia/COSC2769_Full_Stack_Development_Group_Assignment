@@ -4,6 +4,7 @@ export const createComment = async (comment: any) => {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: 'include',
     body: JSON.stringify(comment),
   });
 };
@@ -37,6 +38,7 @@ export const deleteCommentById = async (id: String | undefined) => {
     import.meta.env.VITE_BACKEND_URL + `/api/comments/${id}`,
     {
       method: "DELETE",
+      credentials: 'include'
     },
   );
 

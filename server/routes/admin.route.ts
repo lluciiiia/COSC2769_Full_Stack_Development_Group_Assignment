@@ -4,10 +4,10 @@ import {
   resumeUser,
   suspendUser,
 } from "../services/admin.service";
-
+import { isAuthenticated } from "../middleware/authenticate";
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/",isAuthenticated ,async (req, res) => {
   try {
     const result = await createAdmin(req.body);
     res.status(200).json({ message: result.message, user: result.admin });
@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/suspend/:userId", async (req, res) => {
+router.put("/suspend/:userId",isAuthenticated ,async (req, res) => {
   try {
     const { userId } = req.params;
 
@@ -29,7 +29,7 @@ router.put("/suspend/:userId", async (req, res) => {
   }
 });
 
-router.put("/resume/:userId", async (req, res) => {
+router.put("/resume/:userId",isAuthenticated ,async (req, res) => {
   try {
     const { userId } = req.params;
 
