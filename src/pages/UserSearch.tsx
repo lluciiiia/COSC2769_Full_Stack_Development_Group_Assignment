@@ -22,7 +22,7 @@ const UserSearch = () => {
 
   // Handle user card click
   const handleUserClick = (userId: string) => {
-    navigate(`/profile/${userId}`); // Navigate to user profile page
+    navigate(`/profile/${userId}`);
   };
 
   // Filter users based on search query

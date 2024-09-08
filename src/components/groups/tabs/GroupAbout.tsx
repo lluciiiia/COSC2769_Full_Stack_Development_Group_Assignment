@@ -3,14 +3,12 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { AppState } from "../../../app/store";
 import { selectGroupById } from "../../../features/groupSlice";
-import { selectAuthState } from "../../../features/authSlice";
 
 const About: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
   const group = useSelector((state: AppState) =>
     selectGroupById(state, groupId ? groupId : ""),
   );
-  const { id: currentUserId } = useSelector(selectAuthState);
 
   const description = group?.description || "No description available.";
 

@@ -2,7 +2,7 @@ import React from "react";
 
 type TabNavigationProps = {
   activeTab: string;
-  setActiveTab: (tab: string) => void; // Correct the type of setActiveTab
+  setActiveTab: (tab: string) => void;
 };
 
 const TabNavigation: React.FC<TabNavigationProps> = ({
