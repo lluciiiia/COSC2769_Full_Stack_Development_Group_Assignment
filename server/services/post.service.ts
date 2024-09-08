@@ -203,7 +203,10 @@ export const getPostById = async (postId: string, userId: string) => {
       if (!group)
         throw new Error(`Group not found for groupId: ${post.groupId}`);
 
-      if (!group.members.includes(new Types.ObjectId(userId))) {
+      if (
+        group.visibility != "Public" &&
+        !group.members.includes(new Types.ObjectId(userId))
+      ) {
         throw new Error(
           "Access denied: This post is only visible to members of the group.",
         );
