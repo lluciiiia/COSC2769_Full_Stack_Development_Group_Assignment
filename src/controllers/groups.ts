@@ -13,7 +13,6 @@ export const fetchGroups = createAsyncThunk<GroupType[]>(
         throw new Error("Failed to fetch groups");
       }
       const data: GroupType[] = await response.json();
-      console.log("Fetched groups successfully:", data);
       return data;
     } catch (error) {
       console.error("Error in fetchGroups thunk:", error);

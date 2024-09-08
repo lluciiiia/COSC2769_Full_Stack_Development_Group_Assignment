@@ -21,8 +21,6 @@ function PostList({ isAdmin = false }: PostListProps) {
     isAdmin ? state.admin.posts : state.posts.posts,
   );
 
-  console.log("from postlist", posts);
-
   useEffect(() => {
     if (!isAdmin && firstRender.current) {
       dispatch(getPosts()).finally(() => {
@@ -50,7 +48,7 @@ function PostList({ isAdmin = false }: PostListProps) {
         </div>
       ) : posts.length > 0 ? (
         posts.map((p: PostParams, index: number) => (
-          <PostContainer key={`${p._id}-${index}`} {...p} isAdmin={isAdmin} />
+          <PostContainer key={`${p._id}-${index}`} {...p} />
         ))
       ) : (
         <div className="flex h-[600px] items-center justify-center">
