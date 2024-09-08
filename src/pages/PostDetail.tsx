@@ -40,16 +40,7 @@ const PostDetail: React.FC = () => {
     fetchPost();
   }, [postId]);
 
-  const handleReaction = async (reaction: string) => {
-    if (post) {
-      try {
-        await createReaction(reaction);
-        console.log(`Reaction ${reaction} saved for post ${post._id}`);
-      } catch (error) {
-        console.error("Error saving reaction:", error);
-      }
-    }
-  };
+  
 
   if (loading) {
     return (

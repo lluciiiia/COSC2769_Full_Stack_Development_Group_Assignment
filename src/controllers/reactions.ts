@@ -7,6 +7,7 @@ export const createReaction = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
+      console.log(reactionData, "data");
       const response = await fetch(
         import.meta.env.VITE_BACKEND_URL + "/api/reactions/userReact",
         {
