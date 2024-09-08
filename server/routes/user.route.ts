@@ -162,7 +162,7 @@ router.post("/sent/:groupId", async (req, res) => {
     // Respond with success if notification is created
     res.status(200).json({
       message: "Notification sent successfully",
-      notification: result.notification,
+      notification: result,
     });
   } catch (error) {
     res.status(500).json({ message: "An error occurred", error });
